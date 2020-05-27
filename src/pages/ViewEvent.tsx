@@ -1,15 +1,17 @@
-import React, { Component, useState } from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import { IonContent, IonPage, IonHeader, IonToolbar, IonButtons, IonBackButton, IonSegment, IonSegmentButton, IonLabel } from '@ionic/react';
 import { RouteComponentProps } from 'react-router';
 import { EventDetails } from '../constants/types';
 import EventDescription from '../components/EventDescription';
+import "./ViewEvent.css";
 
 
-const loremIpsum = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam hendrerit justo vel dolor consectetur efficitur. Donec nec sollicitudin augue, non sollicitudin eros. Pellentesque tincidunt dolor quam, in porttitor neque rhoncus a. In hac habitasse platea dictumst. Cras at tortor ex. Aliquam urna leo, convallis eget vehicula et, egestas nec eros. Donec ipsum leo, faucibus non nulla non, accumsan fermentum ligula. Mauris sit amet diam eu purus tincidunt vulputate. Aliquam in nisl id augue consequat aliquet. Phasellus porttitor sed risus quis ultrices. Ut ut risus orci. Sed facilisis erat sed vestibulum bibendum. Interdum et malesuada fames ac ante ipsum primis in faucibus. In consequat ipsum eros, at malesuada libero ullamcorper vel. Quisque bibendum nulla augue, eu tincidunt tellus malesuada in. Phasellus sed est lorem.
-Vestibulum a justo ligula. Integer euismod nibh vitae nulla commodo rhoncus. Phasellus purus leo, interdum et tellus ut, condimentum varius eros. Sed vulputate nulla in sem faucibus, ut mattis odio fermentum. Morbi maximus faucibus justo ac iaculis. Quisque luctus, sapien vel auctor varius, ipsum lacus venenatis elit, a laoreet augue velit volutpat nisi. Suspendisse vitae augue eros. Nunc sit amet semper massa, eget eleifend nisl. Quisque pretium pulvinar justo id suscipit. Integer ullamcorper dolor ut ipsum faucibus, rutrum commodo mauris aliquet. Aliquam scelerisque metus pretium sem pellentesque interdum. Cras rutrum accumsan nunc et consectetur.
-Duis pretium, turpis ac commodo mollis, nunc nulla feugiat nulla, sit amet imperdiet elit mauris eget ligula. Ut ornare dignissim nisi, et vestibulum massa posuere sit amet. Vivamus maximus eros quis leo fermentum, sed suscipit tortor accumsan. Nam eget enim a metus blandit convallis. Fusce sit amet erat vitae augue commodo congue. In non quam ullamcorper, gravida turpis at, posuere neque. Aenean pulvinar et metus eget pharetra. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec laoreet tincidunt auctor. Ut quis accumsan tellus.
-Quisque maximus, tortor mollis rutrum faucibus, lorem nisl consequat leo, in pretium nulla mi vel neque. Donec malesuada mattis luctus. Curabitur lorem purus, volutpat vestibulum elit vulputate, mollis tempor erat. Nulla facilisi. Maecenas sollicitudin pellentesque ligula eget eleifend. In est quam, dignissim non risus a, laoreet hendrerit neque. Aliquam dolor quam, lobortis sit amet interdum in, ultrices eu sem. Aliquam sagittis odio nec dapibus bibendum. Proin urna massa, sodales at mollis id, finibus id dui. Donec faucibus fringilla volutpat. Sed lobortis ante in magna feugiat luctus. Praesent orci sem, lobortis id ipsum rhoncus, eleifend facilisis odio.
-Proin in volutpat leo, non pretium ligula. Nam in scelerisque ex, non congue tellus. Nulla sed elementum nunc. Nunc auctor commodo sapien, eget imperdiet augue dignissim nec. Duis fermentum tincidunt leo, sit amet sollicitudin arcu gravida in. Donec eu nibh in risus congue tristique sed sed quam. Mauris ullamcorper, urna eget pharetra aliquam, velit sapien finibus tellus, non egestas nisi lacus eget diam. Curabitur placerat rutrum risus, a eleifend elit interdum malesuada. Integer ac enim leo. Nunc pretium justo at vehicula tempor. Duis venenatis arcu urna, sit amet pharetra diam interdum et. Suspendisse nec blandit metus. Sed quis nibh ex. Phasellus quis diam arcu.`
+type dummyJSON = {
+   userId: string,
+   id: string,
+   title: string,
+   body: string
+}
 
 
 interface OwnProps extends RouteComponentProps {
@@ -30,59 +32,27 @@ const ViewEvent: React.FC<ViewEventProps> = ({ event }) => {
    const [postsY, setPostsY] = useState<number>(0);
    const [resourcesY, setResourcesY] = useState<number>(0);
  
+   const [dummy, setDummy] = useState<dummyJSON[]>([]);
  
    const details = segment === 'details';
    const posts = segment === 'posts';
    const resources = segment === 'resources';
- 
-   // const suggestedEvents: EventMiniCardProps[] = [
-   //   {
-   //     eventName: "DoCSoc Goes to Book of Mormon and goes to chinese afterwards",
-   //     organiser: "RandomSoc",
-   //     image: "https://m.atcdn.co.uk/ect/media/w1024/brand-store/volkswagen/golf/hero.jpg",
-   //     eventTime: "Some day"
-   //   },
-   //   {
-   //     eventName: "DoCSoc Goes to Book of Mormon and goes to chinese afterwards",
-   //     organiser: "RandomSoc",
-   //     image: "https://images.unsplash.com/photo-1494253109108-2e30c049369b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80",
-   //     eventTime: "Some day"
-   //   },
-   //   {
-   //     eventName: "DoCSoc Goes to Book of Mormon and goes to chinese afterwards",
-   //     organiser: "RandomSoc",
-   //     image: "https://upload.wikimedia.org/wikipedia/commons/f/f5/Poster-sized_portrait_of_Barack_Obama.jpg",
-   //     eventTime: "Some day"
-   //   },
-   //   {
-   //     eventName: "DoCSoc Goes to Book of Mormon and goes to chinese afterwards",
-   //     organiser: "RandomSoc",
-   //     image: "https://m.atcdn.co.uk/ect/media/w1024/brand-store/volkswagen/golf/hero.jpg",
-   //     eventTime: "Some day"
-   //   },
-   //   {
-   //     eventName: "DoCSoc Goes to Book of Mormon and goes to chinese afterwards",
-   //     organiser: "RandomSoc",
-   //     image: "https://hackernoon.com/hn-images/1*jFyawcsqoYctkTuZg6wQ1A.jpeg",
-   //     eventTime: "Some day"
-   //   }
- 
-   // ]
- 
-   // const eventPosts: EventPostProps[] = [{postContent: "hello", postTime: "time", organiserName: "generic society", organiserLogo: "https://upload.wikimedia.org/wikipedia/commons/f/f5/Poster-sized_portrait_of_Barack_Obama.jpg"},
-   // {postContent: loremIpsum, postTime: "time", organiserName: "generic society", organiserLogo: "https://upload.wikimedia.org/wikipedia/commons/f/f5/Poster-sized_portrait_of_Barack_Obama.jpg"},
-   // {postContent: "hello", postTime: "time", organiserName: "generic society", organiserLogo: "https://upload.wikimedia.org/wikipedia/commons/f/f5/Poster-sized_portrait_of_Barack_Obama.jpg"},
-   // {postContent: "hello", postTime: "time", organiserName: "generic society", organiserLogo: "https://upload.wikimedia.org/wikipedia/commons/f/f5/Poster-sized_portrait_of_Barack_Obama.jpg"},
-   // {postContent: "hello", postTime: "time", organiserName: "generic society", organiserLogo: "https://upload.wikimedia.org/wikipedia/commons/f/f5/Poster-sized_portrait_of_Barack_Obama.jpg"},
-   // {postContent: "hello", postTime: "time", organiserName: "generic society", organiserLogo: "https://upload.wikimedia.org/wikipedia/commons/f/f5/Poster-sized_portrait_of_Barack_Obama.jpg"},
-   // {postContent: "hello", postTime: "time", organiserName: "generic society", organiserLogo: "https://upload.wikimedia.org/wikipedia/commons/f/f5/Poster-sized_portrait_of_Barack_Obama.jpg"}]
- 
-   // const eventResources: EventResourceProps[] = [{name:"pdf1.pdf", type:"pdf", url:"https://github.com/lin-e/cv/raw/master/main.pdf"},
-   // {name:"test.zip", type:"zip", url:"http://dev.eugenel.in/pika.zip"},
-   // {name:"test.pdf", type:"pdf", url:"https://github.com/lin-e/cv/raw/master/main.pdf"},
-   // {name:"test.pdf", type:"pdf", url:"https://github.com/lin-e/cv/raw/master/main.pdf"}];
- 
- 
+
+   useEffect(() => {
+      console.log("32")
+      fetch('https://jsonplaceholder.typicode.com/posts')
+      .then(response => response.json())
+      .then(data => {
+         const dummyList: dummyJSON[] = [];
+         (data as dummyJSON[]).forEach(element => {
+            dummyList.push(element);
+         });
+         setDummy(dummyList)
+      })
+   }, []);
+
+
+
    const contentRef = React.useRef<HTMLIonContentElement>(null);
  
    const changeTab = (e: { detail: { value: any; }; }) => {
@@ -124,9 +94,8 @@ const ViewEvent: React.FC<ViewEventProps> = ({ event }) => {
        <IonHeader>
          <IonToolbar>
             <IonButtons slot="start">
-               <IonBackButton defaultHref="/discover" />
+               <IonBackButton text="" defaultHref="/discover" />
             </IonButtons>
- 
            <IonSegment value={segment} onIonChange={changeTab}>
              <IonSegmentButton value="details">
                <IonLabel>Details</IonLabel>
@@ -142,18 +111,20 @@ const ViewEvent: React.FC<ViewEventProps> = ({ event }) => {
        </IonHeader>
  
        <IonContent ref={contentRef} scrollEvents={true} onIonScroll={(e) => saveY(e.detail.currentY)}>
+          {dummy.length > 0 &&
  
          <EventDescription 
-           title="Event name" 
-           organiser="some society"
+           title={dummy[0].title} 
+           organiser={dummy[0].userId}
            location="location"
-           time="time"
-           description={loremIpsum}
+           time={dummy[0].id}
+           description={dummy[0].body}
            hide={!details}
            image="https://upload.wikimedia.org/wikipedia/commons/f/f5/Poster-sized_portrait_of_Barack_Obama.jpg"
          //   suggestedEvents={suggestedEvents}
          //   moreFromOrganiser={suggestedEvents}
          />
+          }
  
          {/* <EventPostsList posts={eventPosts} hide={!posts} />
  
