@@ -56,7 +56,8 @@ class ExploreEventsList extends Component<{}, ExploreEventsListState> {
                         <ExploreEventCard 
                            id={event.id} 
                            eventName={event.name}
-                           eventTime={getTime(event.datetimeStart)}
+                           startTime={event.datetimeStart}
+                           endTime={event.datetimeEnd}
                            eventLocation={event.location}
                            image={event.image}
                            tags={event.tags}
