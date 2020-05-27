@@ -7,53 +7,36 @@ import { IonButton } from '@ionic/react';
 import { Society } from '../models/Profile';
 
 interface ExploreEventsListProps {
-   filters: any[];
+   events: EventCardDetails[];
 }
 
 interface ExploreEventsListState {
-   events: EventCardDetails[]
+   events: EventCardDetails[];
 }
 
 const aSociety: Society = {id:"100", name:"Some Society", colour:"#eb3434", imageSrc:"https://cgcu.net/images/cgcu_logo_small.jpg"}
 
 // const event: EventCardDetails = {event_id:"1", name:"test event", organiser: aSociety, image:"https://m.atcdn.co.uk/ect/media/w1024/brand-store/volkswagen/golf/hero.jpg", location:"somewhere in imperial", datetimeStart: new Date(2020, 4, 28, 12, 0), datetimeEnd: new Date(2020, 4, 29, 1, 0), tags:["test", "test1", "test2"]}
 
-class ExploreEventsList extends Component<{}, ExploreEventsListState> {
+class ExploreEventsList extends Component<ExploreEventsListProps> {
 
-   constructor(props: {}) {
+   constructor(props: ExploreEventsListProps) {
       super(props)
-      this.state = {events: []}
-   }
-
-   componentDidMount() {
-      fetch("https://endpoint.drp.social/event-card-details")
-      .then(res => res.json())
-      .then(data => {
-         console.log(data)
-         const events: EventCardDetails[] = [];
-         (data as EventCardDetails[]).forEach(event => {
-            console.log(typeof event.end_datetime)
-            events.push(event);
-         });
-         this.setState({events: events})}
-      )
-
    }
 
    render() {
       return (
-
          <Container>
             <Row>
-               {this.state.events.length == 0  && [1,2,3,4,5,6].map(x =>
+               {this.props.events.length == 0  && [1,2,3,4,5,6].map(x =>
                   <Col lg={4} md={6} key={x.toString()}>
                       <SkeletonTextEventCard />
                   </Col>
                   )
                }
 
-               {this.state.events.length > 0  &&
-                  this.state.events.map(event => 
+               {this.props.events.length > 0  &&
+                  this.props.events.map(event => 
                      <Col id={event.event_id} lg={4} md={6}>
                         <ExploreEventCard 
                            id={event.event_id} 
