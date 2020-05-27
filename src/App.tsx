@@ -41,7 +41,6 @@ const App: React.FC = () => (
       <IonTabs>
         <IonRouterOutlet>
           <Route path="/events" component={Events} exact={true} />
-          <Route path="/events/event/:id" component={ViewEvent} exact={true} />
           <Route path="/discover" component={Discover} exact={true} />
           <Route path="/event/:id" component={ViewEvent} exact={true} />
           <Route path="/profile" component={Profile} />
