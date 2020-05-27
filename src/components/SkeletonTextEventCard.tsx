@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCardContent, IonGrid, IonRow, IonCol, IonIcon, IonChip, IonSkeletonText } from '@ionic/react';
+import { IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCardContent, IonGrid, IonRow, IonCol, IonIcon, IonSkeletonText } from '@ionic/react';
 import { time, pricetags, location } from 'ionicons/icons';
 import "./ExploreEventCard.css";
 
