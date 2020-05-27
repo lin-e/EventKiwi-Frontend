@@ -1,0 +1,14 @@
+.banner {
+    float: center;
+    width: fit-content;
+    height: 200px;
+    object-fit: cover;
+}
+
+.mini_description {
+    padding: 5px;
+}
+
+.icon_item {
+    vertical-align: text-bottom;
+}

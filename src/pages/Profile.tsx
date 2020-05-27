@@ -1,26 +1,29 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import ExploreContainer from '../components/ExploreContainer';
 import './Profile.css';
 
-const Profile: React.FC = () => {
-  return (
-    <IonPage>
+
+class Profile extends Component {
+  render() {
+    return (
+      <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Tab 3</IonTitle>
+          <IonTitle>Profile</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent>
         <IonHeader collapse="condense">
           <IonToolbar>
-            <IonTitle size="large">Tab 3</IonTitle>
+            <IonTitle size="large">Profile</IonTitle>
           </IonToolbar>
         </IonHeader>
         <ExploreContainer name="Tab 3 page" />
       </IonContent>
     </IonPage>
-  );
-};
+    );
+  }
+}
 
 export default Profile;

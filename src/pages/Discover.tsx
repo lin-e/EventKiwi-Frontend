@@ -1,26 +1,32 @@
-import React from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import ExploreContainer from '../components/ExploreContainer';
+import React, { Component } from 'react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonSearchbar } from '@ionic/react';
 import './Discover.css';
+import ExploreEventsList from '../components/ExploreEventsList';
 
-const Discover: React.FC = () => {
-  return (
-    <IonPage>
+
+class Discover extends Component {
+  render() {
+    return (
+      <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Tab 2</IonTitle>
+          <IonTitle>Discover</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent>
         <IonHeader collapse="condense">
           <IonToolbar>
-            <IonTitle size="large">Tab 2</IonTitle>
+            <IonTitle size="large">Discover</IonTitle>
           </IonToolbar>
-        </IonHeader>
-        <ExploreContainer name="Tab 2 page" />
+        </IonHeader>  
+        
+        <IonSearchbar onIonChange={e => console.log(e.detail.value!)} />
+        <ExploreEventsList />
+        
       </IonContent>
     </IonPage>
-  );
-};
+    );
+  }
+}
 
 export default Discover;

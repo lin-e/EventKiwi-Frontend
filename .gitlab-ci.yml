@@ -1,0 +1,13 @@
+image: line5/drp-backend:latest
+
+stages:
+  - deploy
+
+production:
+  type: deploy
+  stage: deploy
+  script:
+    - dpl --provider=heroku --app=$HEROKU_APP_PRODUCTION --api-key=$HEROKU_API_KEY
+  only:
+    - pipeline
+    - master
