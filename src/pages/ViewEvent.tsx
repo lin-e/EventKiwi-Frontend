@@ -93,7 +93,7 @@ const ViewEvent: React.FC<ViewEventProps> = ({ match, event }) => {
        <IonHeader>
          <IonToolbar>
             <IonButtons slot="start">
-               <IonBackButton text="" defaultHref="/discover" />
+               <IonBackButton text="" defaultHref="/events" />
             </IonButtons>
            <IonSegment value={segment} onIonChange={changeTab}>
              <IonSegmentButton value="details">
