@@ -1,0 +1,7 @@
+{
+  "name": "imperial-events",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
