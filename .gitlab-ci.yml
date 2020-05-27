@@ -6,6 +6,8 @@ stages:
 
 build:
   stage: build
+  variables:
+    CI: ""
   script:
     - npm install
     - npm run build
