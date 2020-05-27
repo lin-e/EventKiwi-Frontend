@@ -28,6 +28,9 @@ class ExploreEventsList extends Component<{}, ExploreEventsListState> {
    }
 
    componentDidMount() {
+      fetch("https://endpoint.drp.social/eventCardDetails")
+      .then(res => res.json())
+      .then(events => console.log(events))
    }
 
    addEvent() {
@@ -44,7 +47,7 @@ class ExploreEventsList extends Component<{}, ExploreEventsListState> {
             <IonButton onClick={this.addEvent}>click</IonButton>
             <Row>
                {this.state.events.length == 0  && [1,2,3,4,5,6].map(x =>
-                  <Col lg={4} md={6}>
+                  <Col lg={4} md={6} key={x.toString()}>
                       <SkeletonTextEventCard />
                   </Col>
                   )

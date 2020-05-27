@@ -14,8 +14,8 @@ type dummyJSON = {
 }
 
 
-interface OwnProps extends RouteComponentProps {
-   event?: EventDetails;
+interface OwnProps extends RouteComponentProps<{ id: string }> {
+   event?: string;
  };
  
  interface StateProps {};
@@ -25,7 +25,7 @@ interface OwnProps extends RouteComponentProps {
  interface ViewEventProps extends OwnProps, StateProps, DispatchProps {};
 
 
-const ViewEvent: React.FC<ViewEventProps> = ({ event }) => {
+const ViewEvent: React.FC<ViewEventProps> = ({ match, event }) => {
    const [segment, setSegment] = useState<'details' | 'posts' | 'resources'>('details');
    
    const [detailsY, setDetailsY] = useState<number>(0);
@@ -39,7 +39,7 @@ const ViewEvent: React.FC<ViewEventProps> = ({ event }) => {
    const resources = segment === 'resources';
 
    useEffect(() => {
-      console.log("32")
+      console.log(`event id ${match.params.id}`)
       fetch('https://jsonplaceholder.typicode.com/posts')
       .then(response => response.json())
       .then(data => {
@@ -86,7 +86,6 @@ const ViewEvent: React.FC<ViewEventProps> = ({ event }) => {
          break;
      }
    }
- 
  
    return (
      <IonPage>
