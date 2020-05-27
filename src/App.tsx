@@ -43,7 +43,7 @@ const App: React.FC = () => (
           <Route path="/events" component={Events} exact={true} />
           <Route path="/events/event/:id" component={ViewEvent} exact={true} />
           <Route path="/discover" component={Discover} exact={true} />
-          <Route path="/discover/event/:id" component={ViewEvent} exact={true} />
+          <Route path="/event/:id" component={ViewEvent} exact={true} />
           <Route path="/profile" component={Profile} />
           <Route path="/" render={() => <Redirect to="/events" />} exact={true} />
         </IonRouterOutlet>
