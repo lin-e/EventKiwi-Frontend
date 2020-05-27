@@ -1,5 +1,5 @@
-import React, { MouseEvent } from 'react';
-import { EventDetails, EventCardDetails } from '../constants/types'
+import React from 'react';
+import { EventCardDetails } from '../constants/types'
 import { IonItemSliding, IonGrid, IonCol, IonRow, IonItem, IonLabel, IonCardTitle, IonCardHeader, IonText, IonItemOptions } from '@ionic/react';
 import { getTime, getShortDate, sameDay } from '../utils/DateTimeTools'
 import './CalendarEventItem.css'
@@ -13,7 +13,7 @@ const CalendarEventItem: React.FC<CalendarEventItemProps> = ({ event: event }) =
 
   return (
     <IonItemSliding>
-      <IonItem detail={true}>
+      <IonItem detail={true} routerLink={`/discover/event/${event.id}`}>
         <IonGrid className="eventItem" style={barCol}>
           <IonRow className="eventName">
             <div>
