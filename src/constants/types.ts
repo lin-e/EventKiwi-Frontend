@@ -2,20 +2,21 @@ import { Society } from "../models/Profile"
 
 export interface EventCardDetails {
    id: string;
-   eventName: string, 
-   organiser: string, 
+   name: string, 
+   organiser: Society, 
    image: string, 
-   eventLocation: string, 
-   eventTime: string,
+   location: string, 
+   datetimeStart: Date,
+   datetimeEnd: Date,
    tags: string[],
 }
 
 export interface EventDetails {
-   id: number,
-   eventName: string,
+   id: string,
+   name: string,
    organiser: Society,
    images: string[],
-   eventLocation: string,
+   location: string,
    datetimeStart: Date,
    datetimeEnd: Date,
    tags: string[],

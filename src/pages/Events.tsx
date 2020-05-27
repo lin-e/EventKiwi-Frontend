@@ -9,7 +9,7 @@ class Events extends Component {
       <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Events</IonTitle>
+          <IonTitle>Your Events</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent>
