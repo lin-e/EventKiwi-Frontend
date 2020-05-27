@@ -18,3 +18,11 @@ export const getShortDate = (date: Date) => {
     `${date.getDate()} ${abrevMonths[date.getMonth()]}`
   )
 }
+
+export const sameDay = (date1: Date, date2: Date) => {
+  return (
+    date1.getUTCDate() === date2.getUTCDate()) &&
+      (date1.getUTCMonth() === date2.getUTCMonth()) &&
+      (date1.getUTCFullYear() === date2.getUTCFullYear()
+  )
+}
