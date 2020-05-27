@@ -1,0 +1,33 @@
+.eventItem {
+    border-left: 2px solid var(--socCol, #a7bdd2);
+    padding-left: 8px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    margin-left: 0px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.eventName {
+    font-size: medium;
+    margin-bottom: 0px;
+    margin-top: 0px;
+}
+
+.eventDateTime {
+    font-size: small;
+    margin-bottom: 0px;
+    margin-top: 0px;
+    text-align: start;
+}
+
+.eventLocation {
+    font-size: small;
+    margin-bottom: 0px;
+    margin-top: 0px;
+    text-align: end;
+}
+
+.detailCol {
+    padding: 0px;
+}
