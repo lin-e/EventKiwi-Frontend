@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import './Discover.css';
-import ExploreEventCard from '../components/ExploreEventCard';
 
 
 class Discover extends Component {
