@@ -9,7 +9,8 @@ interface ExploreEventCardProps {
   image: string, 
   eventLocation: string, 
   eventTime: string,
-  tags: string[];
+  tags: string[],
+  id: string;
 }
 
 const ExploreEventCard: React.FC<ExploreEventCardProps> = ({ eventName, organiser, image, eventLocation, eventTime, tags }) => {
@@ -45,8 +46,6 @@ const ExploreEventCard: React.FC<ExploreEventCardProps> = ({ eventName, organise
             </IonCol>
           </IonRow>
 
-
-    
           <IonRow>
           <IonCol size="1">
           <IonIcon icon={pricetags} />
