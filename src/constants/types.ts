@@ -1,7 +1,7 @@
 import { Society } from "../models/Profile"
 
 export interface EventCardDetails {
-   id: number;
+   id: string;
    name: string, 
    organiser: Society, 
    image: string, 
@@ -12,7 +12,7 @@ export interface EventCardDetails {
 }
 
 export interface EventDetails {
-   id: number,
+   id: string,
    name: string,
    organiser: Society,
    images: string[],
