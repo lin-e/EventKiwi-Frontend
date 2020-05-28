@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { IonContent, IonPage, IonHeader, IonToolbar, IonButtons, IonBackButton, IonSegment, IonSegmentButton, IonLabel, useIonViewWillEnter } from '@ionic/react';
+import { IonContent, IonPage, IonHeader, IonToolbar, IonButtons, IonBackButton, IonSegment, IonSegmentButton, IonLabel, useIonViewWillEnter, IonButton } from '@ionic/react';
 import { RouteComponentProps } from 'react-router';
 import EventDescription from '../components/EventDescription';
 import "./ViewEvent.css";
@@ -20,17 +20,19 @@ interface OwnProps extends RouteComponentProps<{ id: string }> {
 
 
 const ViewEvent: React.FC<ViewEventProps> = ({ match, event }) => {
-   const [segment, setSegment] = useState<'details' | 'posts' | 'resources'>('details');
-   
-   const [detailsY, setDetailsY] = useState<number>(0);
-   const [postsY, setPostsY] = useState<number>(0);
-   const [resourcesY, setResourcesY] = useState<number>(0);
+  const [segment, setSegment] = useState<'details' | 'posts' | 'resources'>('details');
+  
+  const [detailsY, setDetailsY] = useState<number>(0);
+  const [postsY, setPostsY] = useState<number>(0);
+  const [resourcesY, setResourcesY] = useState<number>(0);
 
-   const [eventDetails, setEventDetails] = useState<EventDetails>({} as EventDetails);
- 
-   const details = segment === 'details';
-   const posts = segment === 'posts';
-   const resources = segment === 'resources';
+  const [eventDetails, setEventDetails] = useState<EventDetails>({} as EventDetails);
+
+  const details = segment === 'details';
+  const posts = segment === 'posts';
+  const resources = segment === 'resources';
+
+  const [visible, setVisible] = useState<boolean>(true);
 
   const convertResToEventDetails = (res: resp_event_details) => {
     return {
@@ -81,6 +83,7 @@ const ViewEvent: React.FC<ViewEventProps> = ({ match, event }) => {
   // });
 
    useEffect(() => {
+    setVisible(false);
     fetch(`https://endpoint.drp.social/event-details/${match.params.id}`)
     .then(response => response.json())
     .then(res => {
@@ -90,6 +93,10 @@ const ViewEvent: React.FC<ViewEventProps> = ({ match, event }) => {
     .then(resDetails => {
       setEventDetails(convertResToEventDetails(resDetails));
       contentRef.current!.scrollToPoint(0, 0);
+      setTimeout(() => {
+        setVisible(true);
+      }, 0.5);
+
     })
    }, [match.params.id]);
 
@@ -152,6 +159,7 @@ const ViewEvent: React.FC<ViewEventProps> = ({ match, event }) => {
  
        <IonContent ref={contentRef} scrollEvents={true} onIonScroll={(e) => saveY(e.detail.currentY)}>
         {eventDetails.name !== undefined &&
+        <div className={visible ? 'fadeIn' : 'fadeOut'}>
           <EventDescription 
             id={eventDetails.id}
             name={eventDetails.name} 
@@ -165,7 +173,8 @@ const ViewEvent: React.FC<ViewEventProps> = ({ match, event }) => {
             tags={eventDetails.tags}
             sameSocEvents={eventDetails.sameSocEvents}
             similarEvents={eventDetails.similarEvents} 
-          />}
+          />
+          </div>}
  
          {/* <EventPostsList posts={eventPosts} hide={!posts} />
  
