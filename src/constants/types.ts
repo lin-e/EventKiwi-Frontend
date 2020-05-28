@@ -1,5 +1,5 @@
 import { Society } from "../models/Profile"
-import { resp_event_details, resp_event_card_details, resp_society } from "./RequestInterfaces";
+import { resp_event_details, resp_event_card_details, resp_society, resp_resource } from "./RequestInterfaces";
 
 export interface EventCardDetails {
    id: string;
@@ -29,7 +29,14 @@ export interface EventDetails {
 
 export interface Resource {
    name: string,
-   
+   id: string
+}
+
+export const convertResToResource = (res: resp_resource) => {
+   return {
+      name: res.display_name,
+      id: res.bucket_key
+   }
 }
 
 export const convertResToEventDetails = (res: resp_event_details) => {

@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { IonContent, IonPage, IonHeader, IonToolbar, IonButtons, IonBackButton, IonSegment, IonSegmentButton, IonLabel, useIonViewWillEnter, IonButton, IonFooter, IonTitle, IonIcon } from '@ionic/react';
+import { IonContent, IonPage, IonHeader, IonToolbar, IonButtons, IonBackButton, IonSegment, IonSegmentButton, IonLabel, IonButton, IonFooter, IonIcon } from '@ionic/react';
 import { RouteComponentProps } from 'react-router';
 import EventDescription from '../components/EventDescription';
 import "./ViewEvent.css";
-import { EventDetails, convertResToEventDetails } from '../constants/types';
-import { resp_society, resp_event_card_details, resp_event_details } from '../constants/RequestInterfaces';
+import { EventDetails, convertResToEventDetails, Resource, convertResToResource } from '../constants/types';
 import EventPostsList from '../components/EventPostsList';
 import { EventPostProps } from '../components/EventPost';
 import EventResourcesList from '../components/EventResourcesList';
@@ -26,10 +25,10 @@ const eventPosts: EventPostProps[] = [{postContent: "hello", postTime: "time", o
   {postContent: "hello", postTime: "time", organiserName: "generic society", organiserLogo: "https://upload.wikimedia.org/wikipedia/commons/f/f5/Poster-sized_portrait_of_Barack_Obama.jpg"},
   {postContent: "hello", postTime: "time", organiserName: "generic society", organiserLogo: "https://upload.wikimedia.org/wikipedia/commons/f/f5/Poster-sized_portrait_of_Barack_Obama.jpg"}]
 
-  const eventResources: EventResourceProps[] = [{name:"pdf1.pdf", type:"pdf", url:"https://github.com/lin-e/cv/raw/master/main.pdf"},
-  {name:"test.zip", type:"zip", url:"http://dev.eugenel.in/pika.zip"},
-  {name:"test.pdf", type:"pdf", url:"https://github.com/lin-e/cv/raw/master/main.pdf"},
-  {name:"test.pdf", type:"pdf", url:"https://github.com/lin-e/cv/raw/master/main.pdf"}];
+  // const eventResources: EventResourceProps[] = [{name:"pdf1.pdf", type:"pdf", url:"https://github.com/lin-e/cv/raw/master/main.pdf"},
+  // {name:"test.zip", type:"zip", url:"http://dev.eugenel.in/pika.zip"},
+  // {name:"test.pdf", type:"pdf", url:"https://github.com/lin-e/cv/raw/master/main.pdf"},
+  // {name:"test.pdf", type:"pdf", url:"https://github.com/lin-e/cv/raw/master/main.pdf"}];
 
 
 interface OwnProps extends RouteComponentProps<{ id: string }> {
@@ -51,6 +50,7 @@ const ViewEvent: React.FC<ViewEventProps> = ({ match, event }) => {
   const [resourcesY, setResourcesY] = useState<number>(0);
 
   const [eventDetails, setEventDetails] = useState<EventDetails>({} as EventDetails);
+  const [eventResources, setEventResources] = useState<Resource[]>([]);
 
   const [going, setGoing] = useState<boolean>(false);
   const [interested, setInterested] = useState<boolean>(false);
@@ -80,7 +80,7 @@ const ViewEvent: React.FC<ViewEventProps> = ({ match, event }) => {
 
     fetch(`${eventResourcesURL}${match.params.id}`)
     .then(response => response.json())
-    .then(data => console.log(data))
+    .then(data => setEventResources(data.map(convertResToResource)))
     }, [match.params.id]
   );
 
