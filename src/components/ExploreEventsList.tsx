@@ -33,8 +33,8 @@ class ExploreEventsList extends Component<ExploreEventsListProps> {
 
                {this.props.events.length > 0  &&
                   this.props.events.map(event => 
-                     <Col key={"eventCardCol" + event.id.toString()} lg={4} md={6}>
-                        <ExploreEventCard key={"eventCard" + event.id.toString()}
+                     <Col key={"eventCardCol" + event.id} lg={4} md={6}>
+                        <ExploreEventCard key={"eventCard" + event.id}
                            id={event.id} 
                            name={event.name}
                            datetimeStart={event.datetimeStart}

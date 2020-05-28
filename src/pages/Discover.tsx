@@ -45,14 +45,14 @@ class Discover extends Component<{}, DiscoverState> {
          (data as resp_event_card_details[]).forEach(resEvent => {
 
           let society: Society = {
-            id: resEvent.society.id,
+            id: resEvent.society.society_id,
             name: resEvent.society.society_name,
             imageSrc: resEvent.society.society_image_src,
             colour: resEvent.society.colour
           };
 
           let event: EventCardDetails = {
-            id: resEvent.id,
+            id: resEvent.event_id,
             name: resEvent.event_name,
             organiser: society,
             image: resEvent.event_image_src, 
