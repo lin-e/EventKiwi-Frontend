@@ -1,5 +1,5 @@
 export interface resp_event_card_details {
-  id: string,
+  event_id: string,
   event_name: string,
   start_datetime: string,
   end_datetime: string,
@@ -10,7 +10,7 @@ export interface resp_event_card_details {
 }
 
 export interface resp_event_details {
-  id: string,
+  event_id: string,
   event_name: string,
   start_datetime: string,
   end_datetime: string,
@@ -23,8 +23,14 @@ export interface resp_event_details {
 }
 
 export interface resp_society {
-  id: string,
+  society_id: string,
   society_name: string,
   society_image_src: string,
-  colour: string
+  colour: string,
+  short_name: string
+}
+
+export interface resp_resource {
+  display_name: string,
+  bucket_key: string
 }

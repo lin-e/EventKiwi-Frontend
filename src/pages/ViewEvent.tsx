@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { IonContent, IonPage, IonHeader, IonToolbar, IonButtons, IonBackButton, IonSegment, IonSegmentButton, IonLabel, useIonViewWillEnter, IonButton, IonFooter, IonTitle, IonIcon } from '@ionic/react';
+import { IonContent, IonPage, IonHeader, IonToolbar, IonButtons, IonBackButton, IonSegment, IonSegmentButton, IonLabel, IonButton, IonFooter, IonIcon } from '@ionic/react';
 import { RouteComponentProps } from 'react-router';
 import EventDescription from '../components/EventDescription';
 import "./ViewEvent.css";
-import { EventDetails } from '../constants/types';
-import { resp_society, resp_event_card_details, resp_event_details } from '../constants/RequestInterfaces';
+import { EventDetails, convertResToEventDetails, Resource, convertResToResource } from '../constants/types';
 import EventPostsList from '../components/EventPostsList';
 import { EventPostProps } from '../components/EventPost';
 import EventResourcesList from '../components/EventResourcesList';
-import { EventResourceProps } from '../components/EventResource';
 import { checkmarkCircleOutline, helpCircleOutline, checkmarkCircle, helpCircle } from 'ionicons/icons';
-import { endpointURL } from '../constants/endpoints';
+import { eventDetailsURL, eventResourcesURL } from '../constants/endpoints';
 
 const loremIpsum = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam hendrerit justo vel dolor consectetur efficitur. Donec nec sollicitudin augue, non sollicitudin eros. Pellentesque tincidunt dolor quam, in porttitor neque rhoncus a. In hac habitasse platea dictumst. Cras at tortor ex. Aliquam urna leo, convallis eget vehicula et, egestas nec eros. Donec ipsum leo, faucibus non nulla non, accumsan fermentum ligula. Mauris sit amet diam eu purus tincidunt vulputate. Aliquam in nisl id augue consequat aliquet. Phasellus porttitor sed risus quis ultrices. Ut ut risus orci. Sed facilisis erat sed vestibulum bibendum. Interdum et malesuada fames ac ante ipsum primis in faucibus. In consequat ipsum eros, at malesuada libero ullamcorper vel. Quisque bibendum nulla augue, eu tincidunt tellus malesuada in. Phasellus sed est lorem.
 Vestibulum a justo ligula. Integer euismod nibh vitae nulla commodo rhoncus. Phasellus purus leo, interdum et tellus ut, condimentum varius eros. Sed vulputate nulla in sem faucibus, ut mattis odio fermentum. Morbi maximus faucibus justo ac iaculis. Quisque luctus, sapien vel auctor varius, ipsum lacus venenatis elit, a laoreet augue velit volutpat nisi. Suspendisse vitae augue eros. Nunc sit amet semper massa, eget eleifend nisl. Quisque pretium pulvinar justo id suscipit. Integer ullamcorper dolor ut ipsum faucibus, rutrum commodo mauris aliquet. Aliquam scelerisque metus pretium sem pellentesque interdum. Cras rutrum accumsan nunc et consectetur.
@@ -25,12 +23,6 @@ const eventPosts: EventPostProps[] = [{postContent: "hello", postTime: "time", o
   {postContent: "hello", postTime: "time", organiserName: "generic society", organiserLogo: "https://upload.wikimedia.org/wikipedia/commons/f/f5/Poster-sized_portrait_of_Barack_Obama.jpg"},
   {postContent: "hello", postTime: "time", organiserName: "generic society", organiserLogo: "https://upload.wikimedia.org/wikipedia/commons/f/f5/Poster-sized_portrait_of_Barack_Obama.jpg"},
   {postContent: "hello", postTime: "time", organiserName: "generic society", organiserLogo: "https://upload.wikimedia.org/wikipedia/commons/f/f5/Poster-sized_portrait_of_Barack_Obama.jpg"}]
-
-  const eventResources: EventResourceProps[] = [{name:"pdf1.pdf", type:"pdf", url:"https://github.com/lin-e/cv/raw/master/main.pdf"},
-  {name:"test.zip", type:"zip", url:"http://dev.eugenel.in/pika.zip"},
-  {name:"test.pdf", type:"pdf", url:"https://github.com/lin-e/cv/raw/master/main.pdf"},
-  {name:"test.pdf", type:"pdf", url:"https://github.com/lin-e/cv/raw/master/main.pdf"}];
-
 
 interface OwnProps extends RouteComponentProps<{ id: string }> {
    event?: string;
@@ -51,6 +43,7 @@ const ViewEvent: React.FC<ViewEventProps> = ({ match, event }) => {
   const [resourcesY, setResourcesY] = useState<number>(0);
 
   const [eventDetails, setEventDetails] = useState<EventDetails>({} as EventDetails);
+  const [eventResources, setEventResources] = useState<Resource[]>([]);
 
   const [going, setGoing] = useState<boolean>(false);
   const [interested, setInterested] = useState<boolean>(false);
@@ -61,57 +54,9 @@ const ViewEvent: React.FC<ViewEventProps> = ({ match, event }) => {
 
   const [visible, setVisible] = useState<boolean>(true);
 
-  const convertResToEventDetails = (res: resp_event_details) => {
-    return {
-      id: res.id,
-      name: res.event_name,
-      organiser: convertResToSoc(res.society),
-      images: [res.event_image_src],
-      location: res.location,
-      datetimeStart: new Date(res.start_datetime),
-      datetimeEnd: new Date(res.end_datetime),
-      tags: res.tags,
-      description: res.description,
-      sameSocEvents: res.same_society_events.map(convertResToEventCard),
-      similarEvents: res.same_society_events.map(convertResToEventCard) // TODO: chamge this to similar events when it is implemented
-    }
-  }
-
-
-  const convertResToEventCard = (res: resp_event_card_details) => {
-    return {
-      id: res.id,
-      name: res.event_name,
-      organiser: convertResToSoc(res.society),
-      image: res.event_image_src, 
-      location: res.location, 
-      datetimeStart: new Date(res.start_datetime),
-      datetimeEnd: new Date(res.end_datetime),
-      tags: res.tags
-    };
-
-  }
-
-  const convertResToSoc = (res: resp_society) => {
-    return {
-      id: res.id,
-      name: res.society_name,
-      imageSrc: res.society_image_src,
-      colour: res.colour
-    }
-  }
-
-  // useIonViewWillEnter(() => {
-  //   fetch(`https://endpoint.drp.social/event-details/${match.params.id}`)
-  //   .then(response => response.json())
-  //   .then(resDetails => {
-  //     setEventDetails(convertResToEventDetails(resDetails));
-  //   })
-  // });
-
-   useEffect(() => {
+  useEffect(() => {
     setVisible(false);
-    fetch(`${endpointURL}/events/details/${match.params.id}`)
+    fetch(`${eventDetailsURL}${match.params.id}`)
     .then(response => response.json())
     .then(res => {
       setEventDetails({} as EventDetails); 
@@ -125,7 +70,12 @@ const ViewEvent: React.FC<ViewEventProps> = ({ match, event }) => {
       }, 0.5);
 
     })
-   }, [match.params.id]);
+
+    fetch(`${eventResourcesURL}${match.params.id}`)
+    .then(response => response.json())
+    .then(data => setEventResources(data.map(convertResToResource)))
+    }, [match.params.id]
+  );
 
 
    const contentRef = React.useRef<HTMLIonContentElement>(null);
