@@ -7,3 +7,9 @@
    opacity: 1;
    transition: opacity 0.1s;
 }
+
+.restrictedWidth {
+   width: 90%;
+   margin-left: auto;
+   margin-right: auto;
+}
