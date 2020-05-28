@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { IonContent, IonPage, IonHeader, IonToolbar, IonButtons, IonBackButton, IonSegment, IonSegmentButton, IonLabel } from '@ionic/react';
+import { IonContent, IonPage, IonHeader, IonToolbar, IonButtons, IonBackButton, IonSegment, IonSegmentButton, IonLabel, useIonViewWillEnter } from '@ionic/react';
 import { RouteComponentProps } from 'react-router';
 import EventDescription from '../components/EventDescription';
 import "./ViewEvent.css";
@@ -50,7 +50,6 @@ const ViewEvent: React.FC<ViewEventProps> = ({ match, event }) => {
 
 
   const convertResToEventCard = (res: resp_event_card_details) => {
-    console.log(res.id)
     return {
       id: res.id,
       name: res.event_name,
@@ -73,12 +72,25 @@ const ViewEvent: React.FC<ViewEventProps> = ({ match, event }) => {
     }
   }
 
+  // useIonViewWillEnter(() => {
+  //   fetch(`https://endpoint.drp.social/event-details/${match.params.id}`)
+  //   .then(response => response.json())
+  //   .then(resDetails => {
+  //     setEventDetails(convertResToEventDetails(resDetails));
+  //   })
+  // });
+
    useEffect(() => {
-      fetch(`https://endpoint.drp.social/event-details/${match.params.id}`)
-      .then(response => response.json())
-      .then(resDetails => {
-        setEventDetails(convertResToEventDetails(resDetails));
-      })
+    fetch(`https://endpoint.drp.social/event-details/${match.params.id}`)
+    .then(response => response.json())
+    .then(res => {
+      setEventDetails({} as EventDetails); 
+      return res
+    })
+    .then(resDetails => {
+      setEventDetails(convertResToEventDetails(resDetails));
+      contentRef.current!.scrollToPoint(0, 0);
+    })
    }, [match.params.id]);
 
 
