@@ -34,7 +34,7 @@ const ViewEvent: React.FC<ViewEventProps> = ({ match, event }) => {
 
   const convertResToEventDetails = (res: resp_event_details) => {
     return {
-      id: res.id,
+      id: res.event_id,
       name: res.event_name,
       organiser: convertResToSoc(res.society),
       images: [res.event_image_src],
@@ -51,7 +51,7 @@ const ViewEvent: React.FC<ViewEventProps> = ({ match, event }) => {
 
   const convertResToEventCard = (res: resp_event_card_details) => {
     return {
-      id: res.id,
+      id: res.event_id,
       name: res.event_name,
       organiser: convertResToSoc(res.society),
       image: res.event_image_src, 
@@ -65,7 +65,7 @@ const ViewEvent: React.FC<ViewEventProps> = ({ match, event }) => {
 
   const convertResToSoc = (res: resp_society) => {
     return {
-      id: res.id,
+      id: res.society_id,
       name: res.society_name,
       imageSrc: res.society_image_src,
       colour: res.colour,
