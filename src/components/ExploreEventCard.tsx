@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './ExploreEventCard.css';
-import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonIcon, IonChip, IonGrid, IonRow, IonCol } from '@ionic/react';
+import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonIcon, IonChip, IonGrid, IonRow, IonCol, useIonViewDidEnter } from '@ionic/react';
 import { time, location as locationIcon, pricetags } from "ionicons/icons";
 import { getTime, sameDay, getShortDate, getDateRange } from '../utils/DateTimeTools';
 import { EventCardDetails } from '../constants/types';
@@ -17,6 +17,10 @@ interface ExploreEventCardProps {
 }
 
 const ExploreEventCard: React.FC<EventCardDetails> = ({ name, organiser, image, location, datetimeStart, datetimeEnd, tags, id }) => {
+
+  const [visible, setVisible] = useState<boolean>(false);
+
+  useIonViewDidEnter(() => {setVisible(true)});
   return (
     <IonCard routerLink={`/discover/event/${id}`}>
 
@@ -29,7 +33,7 @@ const ExploreEventCard: React.FC<EventCardDetails> = ({ name, organiser, image, 
 
       <IonCardContent>
         
-        <IonGrid className="grid">
+        <IonGrid className={"grid" + (visible ? 'fadeIn' : 'fadeOut')}>
 
           <IonRow>
             <IonCol size="1">

@@ -25,18 +25,7 @@ class Discover extends Component<{}, DiscoverState> {
   componentDidMount() {
     this.refresh();
   }
-
-//   export interface EventCardDetails {
-//     id: string;
-//     name: string, 
-//     organiser: Society, 
-//     image: string, 
-//     location: string, 
-//     datetimeStart: Date,
-//     datetimeEnd: Date,
-//     tags: string[]
-//  }
-
+  
   refresh() {
     fetch(discoverEventCardURL)
       .then(res => res.json())

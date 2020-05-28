@@ -22,3 +22,14 @@
    padding: auto;
    margin: 10px;
 }
+
+
+.fadeOut{
+   opacity: 0;
+   transition: opacity 0s;
+
+}
+.fadeIn{
+   opacity: 1;
+   transition: opacity 1s;
+}
