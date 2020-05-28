@@ -3,7 +3,6 @@ import { IonContent, IonPage, IonHeader, IonToolbar, IonButtons, IonBackButton, 
 import { RouteComponentProps } from 'react-router';
 import EventDescription from '../components/EventDescription';
 import "./ViewEvent.css";
-import { Society } from '../models/Profile';
 import { EventDetails } from '../constants/types';
 import { resp_society, resp_event_card_details, resp_event_details } from '../constants/RequestInterfaces';
 
@@ -51,6 +50,7 @@ const ViewEvent: React.FC<ViewEventProps> = ({ match, event }) => {
 
 
   const convertResToEventCard = (res: resp_event_card_details) => {
+    console.log(res.id)
     return {
       id: res.id,
       name: res.event_name,
@@ -79,7 +79,7 @@ const ViewEvent: React.FC<ViewEventProps> = ({ match, event }) => {
       .then(resDetails => {
         setEventDetails(convertResToEventDetails(resDetails));
       })
-   }, []);
+   }, [match.params.id]);
 
 
    const contentRef = React.useRef<HTMLIonContentElement>(null);
@@ -139,26 +139,21 @@ const ViewEvent: React.FC<ViewEventProps> = ({ match, event }) => {
        </IonHeader>
  
        <IonContent ref={contentRef} scrollEvents={true} onIonScroll={(e) => saveY(e.detail.currentY)}>
-          {eventDetails.name !== undefined &&
- 
-
-
-        <EventDescription 
-          id={eventDetails.id}
-          name={eventDetails.name} 
-          organiser={eventDetails.organiser}
-          location={eventDetails.location}
-          datetimeStart={eventDetails.datetimeStart}
-          datetimeEnd={eventDetails.datetimeEnd}
-          description={eventDetails.description}
-          hide={!details}
-          images={eventDetails.images}
-          tags={eventDetails.tags}
-          sameSocEvents={eventDetails.sameSocEvents}
-          similarEvents={eventDetails.similarEvents}
-          
-        />
-          }
+        {eventDetails.name !== undefined &&
+          <EventDescription 
+            id={eventDetails.id}
+            name={eventDetails.name} 
+            organiser={eventDetails.organiser}
+            location={eventDetails.location}
+            datetimeStart={eventDetails.datetimeStart}
+            datetimeEnd={eventDetails.datetimeEnd}
+            description={eventDetails.description}
+            hide={!details}
+            images={eventDetails.images}
+            tags={eventDetails.tags}
+            sameSocEvents={eventDetails.sameSocEvents}
+            similarEvents={eventDetails.similarEvents} 
+          />}
  
          {/* <EventPostsList posts={eventPosts} hide={!posts} />
  
