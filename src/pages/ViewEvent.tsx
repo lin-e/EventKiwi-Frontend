@@ -1,16 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { IonContent, IonPage, IonHeader, IonToolbar, IonButtons, IonBackButton, IonSegment, IonSegmentButton, IonLabel } from '@ionic/react';
+import { IonContent, IonPage, IonHeader, IonToolbar, IonButtons, IonBackButton, IonSegment, IonSegmentButton, IonLabel, useIonViewWillEnter } from '@ionic/react';
 import { RouteComponentProps } from 'react-router';
 import EventDescription from '../components/EventDescription';
 import "./ViewEvent.css";
+import { EventDetails } from '../constants/types';
+import { resp_society, resp_event_card_details, resp_event_details } from '../constants/RequestInterfaces';
 
-
-type dummyJSON = {
-   userId: string,
-   id: string,
-   title: string,
-   body: string
-}
 
 
 interface OwnProps extends RouteComponentProps<{ id: string }> {
@@ -30,21 +25,73 @@ const ViewEvent: React.FC<ViewEventProps> = ({ match, event }) => {
    const [detailsY, setDetailsY] = useState<number>(0);
    const [postsY, setPostsY] = useState<number>(0);
    const [resourcesY, setResourcesY] = useState<number>(0);
- 
-   const [dummy, setDummy] = useState<dummyJSON[]>([]);
+
+   const [eventDetails, setEventDetails] = useState<EventDetails>({} as EventDetails);
  
    const details = segment === 'details';
    const posts = segment === 'posts';
    const resources = segment === 'resources';
 
-   useEffect(() => {
-      fetch(`https://endpoint.drp.social/event-details/${match.params.id}`)
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-      })
-   }, []);
+  const convertResToEventDetails = (res: resp_event_details) => {
+    return {
+      id: res.id,
+      name: res.event_name,
+      organiser: convertResToSoc(res.society),
+      images: [res.event_image_src],
+      location: res.location,
+      datetimeStart: new Date(res.start_datetime),
+      datetimeEnd: new Date(res.end_datetime),
+      tags: res.tags,
+      description: res.description,
+      sameSocEvents: res.same_society_events.map(convertResToEventCard),
+      similarEvents: res.same_society_events.map(convertResToEventCard) // TODO: chamge this to similar events when it is implemented
+    }
+  }
 
+
+  const convertResToEventCard = (res: resp_event_card_details) => {
+    return {
+      id: res.id,
+      name: res.event_name,
+      organiser: convertResToSoc(res.society),
+      image: res.event_image_src, 
+      location: res.location, 
+      datetimeStart: new Date(res.start_datetime),
+      datetimeEnd: new Date(res.end_datetime),
+      tags: res.tags
+    };
+
+  }
+
+  const convertResToSoc = (res: resp_society) => {
+    return {
+      id: res.id,
+      name: res.society_name,
+      imageSrc: res.society_image_src,
+      colour: res.colour
+    }
+  }
+
+  // useIonViewWillEnter(() => {
+  //   fetch(`https://endpoint.drp.social/event-details/${match.params.id}`)
+  //   .then(response => response.json())
+  //   .then(resDetails => {
+  //     setEventDetails(convertResToEventDetails(resDetails));
+  //   })
+  // });
+
+   useEffect(() => {
+    fetch(`https://endpoint.drp.social/event-details/${match.params.id}`)
+    .then(response => response.json())
+    .then(res => {
+      setEventDetails({} as EventDetails); 
+      return res
+    })
+    .then(resDetails => {
+      setEventDetails(convertResToEventDetails(resDetails));
+      contentRef.current!.scrollToPoint(0, 0);
+    })
+   }, [match.params.id]);
 
 
    const contentRef = React.useRef<HTMLIonContentElement>(null);
@@ -104,20 +151,21 @@ const ViewEvent: React.FC<ViewEventProps> = ({ match, event }) => {
        </IonHeader>
  
        <IonContent ref={contentRef} scrollEvents={true} onIonScroll={(e) => saveY(e.detail.currentY)}>
-          {dummy.length > 0 &&
- 
-         <EventDescription 
-           title={dummy[0].title} 
-           organiser={dummy[0].userId}
-           location="location"
-           time={dummy[0].id}
-           description={dummy[0].body}
-           hide={!details}
-           image="https://upload.wikimedia.org/wikipedia/commons/f/f5/Poster-sized_portrait_of_Barack_Obama.jpg"
-         //   suggestedEvents={suggestedEvents}
-         //   moreFromOrganiser={suggestedEvents}
-         />
-          }
+        {eventDetails.name !== undefined &&
+          <EventDescription 
+            id={eventDetails.id}
+            name={eventDetails.name} 
+            organiser={eventDetails.organiser}
+            location={eventDetails.location}
+            datetimeStart={eventDetails.datetimeStart}
+            datetimeEnd={eventDetails.datetimeEnd}
+            description={eventDetails.description}
+            hide={!details}
+            images={eventDetails.images}
+            tags={eventDetails.tags}
+            sameSocEvents={eventDetails.sameSocEvents}
+            similarEvents={eventDetails.similarEvents} 
+          />}
  
          {/* <EventPostsList posts={eventPosts} hide={!posts} />
  

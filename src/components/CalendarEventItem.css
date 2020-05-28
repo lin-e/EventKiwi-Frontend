@@ -31,3 +31,17 @@
 .detailCol {
     padding: 0px;
 }
+
+.heartIcon {
+    color: #ffffff !important;
+    size: 36px;
+}
+
+.ion-color-favourite {
+    --ion-color-base: #ff97c1;
+    --ion-color-base-rgb: 255, 151, 193;
+    --ion-color-contrast: #ffffff;
+    --ion-color-contrast-rgb: 0, 0, 0;
+    --ion-color-shade: #e085aa;
+    --ion-color-tint: #ffa1c7;
+}

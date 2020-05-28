@@ -1,68 +1,131 @@
-import React, { Component } from 'react';
-import { IonText, IonCard, IonCardSubtitle } from '@ionic/react';
+import React, { Component, createRef } from 'react';
+import { IonText, IonCard, IonCardSubtitle, IonButton, IonActionSheet, IonFabButton, IonIcon, IonFab } from '@ionic/react';
+import { helpOutline, close, starOutline, checkmark } from 'ionicons/icons'
 import './EventDescription.css';
 import { Container, Row, Col } from 'react-grid-system';
 import ExpandTextView from './ExpandTextView';
-// import ItemSlider from './ItemSlider';
-// import EventMiniCard, { EventMiniCardProps } from './EventMiniCard';
+import { EventDetails } from '../constants/types';
+import ItemSlider from './ItemSlider';
+import EventMiniCard from './EventMiniCard';
+import { getTime, getLongDate, getDateRange } from '../utils/DateTimeTools';
 
-interface EventDescriptionProps {
-  title: string,
-  organiser: string,
-  location: string,
-  time: string,
-  description: string,
-  hide: boolean,
-  image: string,
-//   moreFromOrganiser: EventMiniCardProps[],
-//   suggestedEvents: EventMiniCardProps[]
+interface EventDescriptionProps extends EventDetails {
+   hide: boolean;
 }
 
-class EventDescription extends Component<EventDescriptionProps> {
+interface EventDescriptionState {
+   attending: string;
+   showActionSheet: boolean
+}
+
+class EventDescription extends Component<EventDescriptionProps, EventDescriptionState> {
+
+   constructor(props: EventDescriptionProps) {
+      super(props);
+      this.state = {
+         attending: helpOutline,
+         showActionSheet: false
+      }
+   }
 
    render() {   
+
       return (
       <div style={this.props.hide ? {display: "none"} : {}}>
          <Container>
-            <IonText><h1>{this.props.title}</h1></IonText>
+            <IonText><h1>{this.props.name}</h1></IonText>
 
             <Row>
                <Col md={6} sm={12}>
                   <IonCard className="eventImageCard">
-                     <img className="eventImage" src={this.props.image} alt={this.props.title}></img>
+                     <img className="eventImage" src={this.props.images[0]} alt={this.props.name}></img>
                   </IonCard>
                </Col>
                
                <Col md={6} sm={12}>
-                  <IonCardSubtitle>By {this.props.organiser}</IonCardSubtitle>
-                  <IonCardSubtitle>{this.props.time}, {this.props.location}</IonCardSubtitle>
+                  <IonCardSubtitle>By {this.props.organiser.name},</IonCardSubtitle>
+                  <IonCardSubtitle>{`${getDateRange(this.props.datetimeStart, this.props.datetimeEnd)},`}</IonCardSubtitle>
+                  <IonCardSubtitle>{this.props.location}</IonCardSubtitle>
                   <ExpandTextView limit={450} text={this.props.description} />
                </Col>
             </Row>
 
-            <IonText><h2>More from {this.props.organiser}</h2></IonText>
-            <div className="suggestedEvents">
-            {/* <ItemSlider width={250}>
-               {this.props.moreFromOrganiser.map(event => {
-                  return <EventMiniCard eventName={event.eventName}
-                                        eventTime={event.eventTime}
-                                        organiser={event.organiser}
-                                        image={event.image} />})}
-            </ItemSlider> */}
-            </div>
+            {this.props.sameSocEvents.length > 0 && 
+            <div>
+               <IonText><h2>More from {this.props.organiser.name}</h2></IonText>
+               <div className="suggestedEvents">
+                  
+                  <ItemSlider width={250}>
+                     {this.props.sameSocEvents.map(event => {
+                        return <EventMiniCard 
+                                 eventId={event.id}
+                                 eventName={event.name}
+                                 eventStart={event.datetimeStart}
+                                 eventEnd={event.datetimeEnd}
+                                 organiser={event.organiser.name}
+                                 image={event.image} />
+                        })}
+                  </ItemSlider>
+               </div>
+            </div>}
 
-            <IonText><h2>Suggested Events</h2></IonText>
-            <div className="suggestedEvents">
-            {/* <ItemSlider width={250}>
-               {this.props.suggestedEvents.map(event => {
-                  return <EventMiniCard eventName={event.eventName}
-                                        eventTime={event.eventTime}
-                                        organiser={event.organiser}
-                                        image={event.image} />})}
-            </ItemSlider> */}
-            </div>
-
+            {this.props.sameSocEvents.length > 0 && 
+            <div>
+               <IonText><h2>Suggested events</h2></IonText>
+               <div className="suggestedEvents">
+                  <ItemSlider width={250}>
+                     {this.props.similarEvents.map(event => {
+                        return <EventMiniCard 
+                                 eventId={event.id}
+                                 eventName={event.name}
+                                 eventStart={event.datetimeStart}
+                                 eventEnd={event.datetimeEnd}
+                                 organiser={event.organiser.name}
+                                 image={event.image} />
+                        })}
+                  </ItemSlider>
+               </div>
+            </div>}
+            
+            <IonFab vertical="top" horizontal="end" slot="fixed">
+               <IonFabButton onClick={() => this.setState({showActionSheet: true})}>
+                  <IonIcon icon={this.state.attending}/>
+               </IonFabButton>
+            </IonFab>
+            <IonActionSheet 
+               isOpen={this.state.showActionSheet}
+               onDidDismiss={() => this.setState({showActionSheet: false})}
+               buttons={[
+                  {
+                     text: "Going",
+                     icon: checkmark,
+                     handler: () => {
+                        this.setState({attending: checkmark})
+                     }
+                  },
+                  {
+                     text: "Interested",
+                     icon: starOutline,
+                     handler: () => {
+                        this.setState({attending: starOutline})
+                     }
+                  },
+                  {
+                     text: "Not Going",
+                     role: "destructive",
+                     icon: close,
+                     handler: () => {
+                        this.setState({attending: close})
+                     }
+                  },
+                  {
+                     text: "Cancel",
+                     role: "cancel"
+                  }
+               ]}
+            />
          </Container>
+
       </div>
       )
    }
