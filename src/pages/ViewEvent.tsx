@@ -1,7 +1,6 @@
-import React, { Component, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { IonContent, IonPage, IonHeader, IonToolbar, IonButtons, IonBackButton, IonSegment, IonSegmentButton, IonLabel } from '@ionic/react';
 import { RouteComponentProps } from 'react-router';
-import { EventDetails } from '../constants/types';
 import EventDescription from '../components/EventDescription';
 import "./ViewEvent.css";
 
@@ -39,15 +38,10 @@ const ViewEvent: React.FC<ViewEventProps> = ({ match, event }) => {
    const resources = segment === 'resources';
 
    useEffect(() => {
-      console.log(`event id ${match.params.id}`)
-      fetch('https://jsonplaceholder.typicode.com/posts')
+      fetch(`https://endpoint.drp.social/event-details/${match.params.id}`)
       .then(response => response.json())
       .then(data => {
-         const dummyList: dummyJSON[] = [];
-         (data as dummyJSON[]).forEach(element => {
-            dummyList.push(element);
-         });
-         setDummy(dummyList)
+        console.log(data);
       })
    }, []);
 

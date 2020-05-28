@@ -20,10 +20,6 @@ interface EventDescriptionProps {
 
 class EventDescription extends Component<EventDescriptionProps> {
 
-   constructor(props: EventDescriptionProps) {
-      super(props);
-   }
-
    render() {   
       return (
       <div style={this.props.hide ? {display: "none"} : {}}>
@@ -33,7 +29,7 @@ class EventDescription extends Component<EventDescriptionProps> {
             <Row>
                <Col md={6} sm={12}>
                   <IonCard className="eventImageCard">
-                     <img className="eventImage" src={this.props.image}></img>
+                     <img className="eventImage" src={this.props.image} alt={this.props.title}></img>
                   </IonCard>
                </Col>
                

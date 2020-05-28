@@ -11,10 +11,6 @@ class ExpandTextView extends Component<ExpandTextViewProps> {
    showMore = () => this.setState({showAll: true}); 
    showLess = () => this.setState({showAll: false});
 
-   constructor(props: ExpandTextViewProps) {
-      super(props);
-   }
-
    render() {   
       
       const limited = this.props.text.substring(0, this.props.limit)+"...";

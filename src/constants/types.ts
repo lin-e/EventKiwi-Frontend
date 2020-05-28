@@ -1,14 +1,14 @@
 import { Society } from "../models/Profile"
 
 export interface EventCardDetails {
-   event_id: string;
-   name: string, 
-   // organiser: Society, 
-   image_src: string, 
+   id: string;
+   event_name: string, 
+   event_image_src: string, 
    location: string, 
    start_datetime: Date,
    end_datetime: Date,
    tags: string[],
+   // society: Society
    society_id: string
 }
 

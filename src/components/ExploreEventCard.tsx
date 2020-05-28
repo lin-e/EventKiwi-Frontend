@@ -19,7 +19,7 @@ const ExploreEventCard: React.FC<ExploreEventCardProps> = ({ eventName, organise
   return (
     <IonCard routerLink={`/event/${id}`}>
 
-      <img src={image} className="banner"/>
+      <img src={image} className="banner" alt={eventName}/>
 
       <IonCardHeader>
         <IonCardSubtitle>By {organiser}</IonCardSubtitle>
@@ -54,8 +54,8 @@ const ExploreEventCard: React.FC<ExploreEventCardProps> = ({ eventName, organise
           <IonCol size="1">
           <IonIcon icon={pricetags} />
           </IonCol>
-          {tags.map(tag => (
-              <IonChip>{tag}</IonChip>
+          {tags.map((tag, index) => (
+              <IonChip key={index}>{tag}</IonChip>
           ))}
           </IonRow>
 

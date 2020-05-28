@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonSearchbar } from '@ionic/react';
+import React, { Component, createRef } from 'react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonSearchbar, IonRefresher, IonRefresherContent } from '@ionic/react';
 import './Discover.css';
 import ExploreEventsList from '../components/ExploreEventsList';
 import { EventCardDetails } from '../constants/types';
@@ -10,24 +10,30 @@ interface DiscoverState {
 }
 
 class Discover extends Component<{}, DiscoverState> {
+  refresherRef: React.RefObject<HTMLIonRefresherElement>;
 
   constructor(props: {}) {
     super(props);
     this.state = { events: [] }
+    this.refresherRef = createRef<HTMLIonRefresherElement>();
+    this.refresh = this.refresh.bind(this);
   }
 
   componentDidMount() {
-    fetch("https://endpoint.drp.social/event-card-details")
+    this.refresh();
+  }
+
+  refresh() {
+    fetch("https://staging.drp.social/event-card-details")
       .then(res => res.json())
       .then(data => {
-         console.log(data)
          const events: EventCardDetails[] = [];
          (data as EventCardDetails[]).forEach(event => {
-            console.log(typeof event.end_datetime)
             events.push(event);
          });
          this.setState({events: events})}
       )
+      .then(() => this.refresherRef.current!.complete())
   }
 
   render() {
@@ -44,6 +50,10 @@ class Discover extends Component<{}, DiscoverState> {
             <IonTitle size="large">Discover</IonTitle>
           </IonToolbar>
         </IonHeader>  
+
+        <IonRefresher ref={this.refresherRef} slot="fixed" onIonRefresh={this.refresh}>
+          <IonRefresherContent></IonRefresherContent>
+        </IonRefresher>
         
         <IonSearchbar onIonChange={e => console.log(e.detail.value!)} />
         <ExploreEventsList events={this.state.events}/>
