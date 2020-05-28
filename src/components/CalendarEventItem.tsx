@@ -1,4 +1,5 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, MouseEvent } from 'react';
+import {} from '@fortawesome/fontawesome-svg-core';
 import { EventCardDetails } from '../constants/types'
 import { IonItemSliding, IonGrid, IonCol, IonRow, IonItem, IonLabel, IonCardTitle, IonCardHeader, IonText, IonItemOptions, IonItemOption } from '@ionic/react';
 import { getTime, getShortDate, sameDay } from '../utils/DateTimeTools'
@@ -14,7 +15,13 @@ const CalendarEventItem: React.FC<CalendarEventItemProps> = ({ event, isFavourit
 
   const [fav, setfav] = useState(isFavourite);
 
-  const favouriteSlider = useRef(null)
+  const favouriteSlider = useRef<HTMLIonItemSlidingElement>(null)
+
+  const toggleFavourite = (e: MouseEvent) => {
+    e.preventDefault();
+    favouriteSlider.current!.close();
+    setfav(!fav)
+  }
 
   return (
     <IonItemSliding ref={favouriteSlider}>
@@ -44,8 +51,8 @@ const CalendarEventItem: React.FC<CalendarEventItemProps> = ({ event, isFavourit
         </IonGrid>
       </IonItem>
       <IonItemOptions side="start">
-        <IonItemOption color="favourite">
-          {fav ? "Unfavourite" : "Favourite"}
+        <IonItemOption color="favourite" onClick={toggleFavourite}>
+          {fav ? "Fav" : "Not-Fav"}
         </IonItemOption>
       </IonItemOptions>
     </IonItemSliding>
