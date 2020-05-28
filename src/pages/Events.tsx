@@ -37,7 +37,7 @@ const exampleSchedule = [
         id: "2",
         datetimeStart: new Date(2020, 4, 27, 12, 0),
         datetimeEnd: new Date(2020, 4, 27, 15, 0),
-        name: "CGCU Meet the candidates for some reason and try not to elect a corrupt member",
+        name: "CGCU Meet the candidates",
         location: "City and Guilds Building - 461",
         tags: ["CGCU", "elections"],
         image: "https://images.unsplash.com/photo-1540910419892-4a36d2c3266c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2550&q=80",
