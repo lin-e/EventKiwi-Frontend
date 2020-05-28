@@ -9,6 +9,7 @@ const docsoc: Society = {
   id: "400",
   name: "Department of Computing Society",
   colour: "#343deb",
+  shortName: "DoCSoc",
   imageSrc: "https://d33wubrfki0l68.cloudfront.net/ae969c99f655993c0c12a272626abba129e3b112/adbf3/img/imperial-docsoc-logo.png"
 }
 
@@ -16,6 +17,7 @@ const cgcu: Society = {
   id: "401",
   name: "City and Guilds Constituent Union",
   colour: "#eb3434",
+  shortName: "CGCU",
   imageSrc: "https://cgcu.net/images/cgcu_logo_small.jpg"
 }
 
