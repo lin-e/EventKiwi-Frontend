@@ -26,3 +26,15 @@ export const sameDay = (date1: Date, date2: Date) => {
       (date1.getUTCFullYear() === date2.getUTCFullYear()
   )
 }
+
+export const getDateRange = (dateStart: Date, dateEnd: Date) => {
+  return (
+    `${getShortDate(dateStart)}, ${getTime(dateEnd)} — ${(!sameDay(dateStart, dateEnd) ? getShortDate(dateEnd) + ", " : "") + getTime(dateEnd)}`
+  )
+}
+
+export const getDateRangeNoStartDate = (dateStart: Date, dateEnd: Date) => {
+  return (
+    `${getTime(dateEnd)} — ${(!sameDay(dateStart, dateEnd) ? getShortDate(dateEnd) + ", " : "") + getTime(dateEnd)}`
+  )
+}
