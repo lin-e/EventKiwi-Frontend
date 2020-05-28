@@ -1,6 +1,4 @@
-import { Society } from '../models/Profile'
-
-interface resp_event_card_details {
+export interface resp_event_card_details {
   id: string,
   event_name: string,
   start_datetime: string,
@@ -11,7 +9,7 @@ interface resp_event_card_details {
   tags: string[]
 }
 
-interface resp_event_details {
+export interface resp_event_details {
   id: string,
   event_name: string,
   start_datetime: string,
@@ -24,7 +22,7 @@ interface resp_event_details {
   society: resp_society
 }
 
-interface resp_society {
+export interface resp_society {
   id: string,
   society_name: string,
   society_image_src: string,

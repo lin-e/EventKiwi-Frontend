@@ -8,7 +8,7 @@ const SkeletonTextEventCard: React.FC= ({}) => {
   return (
       <IonCard>
 
-      <img className="banner" alt="blank"/>
+      <img className="banner" />
 
       <IonCardHeader>
         <IonCardSubtitle><IonSkeletonText animated style={{ width: '40%' }} /></IonCardSubtitle>

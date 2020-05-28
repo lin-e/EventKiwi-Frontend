@@ -25,7 +25,7 @@ class ExploreEventsList extends Component<ExploreEventsListProps> {
          <Container>
             <Row>
                {this.props.events.length === 0  && [1,2,3,4,5,6].map(x =>
-                  <Col lg={4} md={6} key={x.toString()}>
+                  <Col lg={4} md={6} key={"skeleton" + x.toString()}>
                       <SkeletonTextEventCard />
                   </Col>
                   )
@@ -33,16 +33,16 @@ class ExploreEventsList extends Component<ExploreEventsListProps> {
 
                {this.props.events.length > 0  &&
                   this.props.events.map(event => 
-                     <Col key={event.id} lg={4} md={6}>
-                        <ExploreEventCard key={event.id}
+                     <Col key={"eventCardCol" + event.id.toString()} lg={4} md={6}>
+                        <ExploreEventCard key={"eventCard" + event.id.toString()}
                            id={event.id} 
-                           eventName={event.event_name}
-                           startTime={new Date(event.start_datetime)}
-                           endTime={new Date(event.end_datetime)}
-                           eventLocation={event.location}
-                           image={event.event_image_src}
+                           name={event.name}
+                           datetimeStart={event.datetimeStart}
+                           datetimeEnd={event.datetimeEnd}
+                           location={event.location}
+                           image={event.image}
                            tags={event.tags}
-                           organiser={event.society_id}
+                           organiser={event.organiser}
                         />
                      </Col>
                   )

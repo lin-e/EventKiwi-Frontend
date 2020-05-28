@@ -3,6 +3,8 @@ import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonSearchbar, Ion
 import './Discover.css';
 import ExploreEventsList from '../components/ExploreEventsList';
 import { EventCardDetails } from '../constants/types';
+import { resp_event_card_details } from '../constants/RequestInterfaces';
+import { Society } from '../models/Profile';
 
 
 interface DiscoverState {
@@ -23,13 +25,44 @@ class Discover extends Component<{}, DiscoverState> {
     this.refresh();
   }
 
+//   export interface EventCardDetails {
+//     id: string;
+//     name: string, 
+//     organiser: Society, 
+//     image: string, 
+//     location: string, 
+//     datetimeStart: Date,
+//     datetimeEnd: Date,
+//     tags: string[]
+//  }
+
   refresh() {
     fetch("https://staging.drp.social/event-card-details")
       .then(res => res.json())
       .then(data => {
          const events: EventCardDetails[] = [];
-         (data as EventCardDetails[]).forEach(event => {
-            events.push(event);
+         (data as resp_event_card_details[]).forEach(resEvent => {
+
+          let society: Society = {
+            id: resEvent.society.id,
+            name: resEvent.society.society_name,
+            imageSrc: resEvent.society.society_image_src,
+            colour: resEvent.society.colour
+          };
+
+          let event: EventCardDetails = {
+            id: resEvent.id,
+            name: resEvent.event_name,
+            organiser: society,
+            image: resEvent.event_image_src, 
+            location: resEvent.location, 
+            datetimeStart: new Date(resEvent.start_datetime),
+            datetimeEnd: new Date(resEvent.end_datetime),
+            tags: resEvent.tags
+          };
+
+          events.push(event);
+
          });
          this.setState({events: events})}
       )
