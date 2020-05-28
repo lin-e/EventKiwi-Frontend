@@ -1,7 +1,6 @@
 import React from 'react';
 import './EventMiniCard.css';
-import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonIcon, IonChip, IonGrid, IonRow, IonCol } from '@ionic/react';
-import { time, location } from "ionicons/icons";
+import { IonCard, IonCardContent, IonCardSubtitle, IonCardTitle, IonGrid, IonRow } from '@ionic/react';
 import { getDateRange } from '../utils/DateTimeTools';
 
 export interface EventMiniCardProps {
@@ -14,8 +13,19 @@ export interface EventMiniCardProps {
 }
 
 const EventMiniCard: React.FC<EventMiniCardProps> = ({ eventName, organiser, image, eventStart, eventEnd, eventId }) => {
+  const urlPrefix = () => {
+    switch (window.location.pathname.split("/")[1]) {
+      case "events":
+        return "/events";
+      case "discover":
+        return "/discover";
+      default:
+        return "";
+    }
+  };
+
   return (
-    <IonCard className="mini_card" routerLink={`/event/${eventId}`}>
+    <IonCard className="mini_card" routerLink={`${urlPrefix()}/event/${eventId}`}>
 
       <img src={image} className="mini_banner"/>
 
