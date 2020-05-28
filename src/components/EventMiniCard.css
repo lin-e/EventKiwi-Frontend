@@ -1,0 +1,61 @@
+.mini_card {
+    max-width: 250px !important;
+    min-width: 200px !important;
+    margin-left: 20px !important;
+    margin-right: 10px !important;
+}
+
+.mini_banner {
+    float: center !important;
+    width: fit-content !important;
+    height: 100px !important;
+    object-fit: cover !important;
+}
+
+.mini_header {
+    text-align: left !important;
+    font-size: larger !important;
+}
+
+/* One line solution */
+
+
+/* .truncate {
+    width: 250px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+} */
+
+
+/* Over complicated and hacky way for multiline solution */
+
+
+/* html {
+    --lh: 1.25rem;
+    line-height: var(--lh);
+}
+
+.truncate-overflow {
+    --max-lines: 2;
+    position: relative;
+    max-height: calc(var(--lh) * var(--max-lines));
+    overflow: hidden;
+    padding-right: 1rem;
+}
+
+.truncate-overflow::before {
+    position: absolute;
+    content: "...";
+    inset-block-end: 0;
+    inset-inline-end: 0;
+}
+
+.truncate-overflow::after {
+    content: "";
+    position: absolute;
+    inset-inline-end: 0;
+    width: 1rem;
+    height: 1rem;
+    background: white;
+} */
