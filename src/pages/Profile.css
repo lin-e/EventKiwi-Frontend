@@ -1,0 +1,21 @@
+.profileTitle {
+    padding: 0px;
+    text-align: left;
+    font-size: 20px;
+}
+
+.profileBtn {
+    padding: 0px;
+    float: right;
+}
+
+@media only screen and (max-width: 900px) {
+    .slider {
+        width: fit-content;
+    }
+}
+
+.slider {
+    overflow: hidden;
+    margin-left: -20px;
+}
