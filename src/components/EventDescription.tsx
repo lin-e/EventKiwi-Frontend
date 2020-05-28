@@ -1,13 +1,13 @@
 import React, { Component, createRef } from 'react';
-import { IonText, IonCard, IonCardSubtitle, IonButton, IonActionSheet } from '@ionic/react';
-import { close, starOutline, checkmark } from 'ionicons/icons'
+import { IonText, IonCard, IonCardSubtitle, IonButton, IonActionSheet, IonFabButton, IonIcon, IonFab } from '@ionic/react';
+import { helpOutline, close, starOutline, checkmark } from 'ionicons/icons'
 import './EventDescription.css';
 import { Container, Row, Col } from 'react-grid-system';
 import ExpandTextView from './ExpandTextView';
 import { EventDetails } from '../constants/types';
 import ItemSlider from './ItemSlider';
 import EventMiniCard from './EventMiniCard';
-import { getTime, getLongDate } from '../utils/DateTimeTools';
+import { getTime, getLongDate, getDateRange } from '../utils/DateTimeTools';
 
 interface EventDescriptionProps extends EventDetails {
    hide: boolean;
@@ -23,7 +23,7 @@ class EventDescription extends Component<EventDescriptionProps, EventDescription
    constructor(props: EventDescriptionProps) {
       super(props);
       this.state = {
-         attending: "Not Going",
+         attending: helpOutline,
          showActionSheet: false
       }
    }
@@ -40,46 +40,12 @@ class EventDescription extends Component<EventDescriptionProps, EventDescription
                   <IonCard className="eventImageCard">
                      <img className="eventImage" src={this.props.images[0]} alt={this.props.name}></img>
                   </IonCard>
-                  <IonButton onClick={() => this.setState({showActionSheet: true})}>
-                     {this.state.attending}
-                  </IonButton>
-                  <IonActionSheet 
-                     isOpen={this.state.showActionSheet}
-                     onDidDismiss={() => this.setState({showActionSheet: false})}
-                     buttons={[
-                        {
-                           text: "Going",
-                           icon: checkmark,
-                           handler: () => {
-                              this.setState({attending: "Going"})
-                           }
-                        },
-                        {
-                           text: "Interested",
-                           icon: starOutline,
-                           handler: () => {
-                              this.setState({attending: "Interested"})
-                           }
-                        },
-                        {
-                           text: "Not Going",
-                           role: "destructive",
-                           icon: close,
-                           handler: () => {
-                              this.setState({attending: "Not Going"})
-                           }
-                        },
-                        {
-                           text: "Cancel",
-                           role: "cancel"
-                        }
-                     ]}
-                  />
                </Col>
                
                <Col md={6} sm={12}>
                   <IonCardSubtitle>By {this.props.organiser.name},</IonCardSubtitle>
-                  <IonCardSubtitle>{getLongDate(this.props.datetimeStart)}, {this.props.location}</IonCardSubtitle> {/* Convert time using the util, give end time too */}
+                  <IonCardSubtitle>{`${getDateRange(this.props.datetimeStart, this.props.datetimeEnd)},`}</IonCardSubtitle>
+                  <IonCardSubtitle>{this.props.location}</IonCardSubtitle>
                   <ExpandTextView limit={450} text={this.props.description} />
                </Col>
             </Row>
@@ -122,6 +88,44 @@ class EventDescription extends Component<EventDescriptionProps, EventDescription
 
 
          </Container>
+
+         <IonFab vertical="bottom" horizontal="end" slot="fixed">
+            <IonFabButton onClick={() => this.setState({showActionSheet: true})}>
+               <IonIcon icon={this.state.attending}/>
+            </IonFabButton>
+         </IonFab>
+         <IonActionSheet 
+            isOpen={this.state.showActionSheet}
+            onDidDismiss={() => this.setState({showActionSheet: false})}
+            buttons={[
+               {
+                  text: "Going",
+                  icon: checkmark,
+                  handler: () => {
+                     this.setState({attending: checkmark})
+                  }
+               },
+               {
+                  text: "Interested",
+                  icon: starOutline,
+                  handler: () => {
+                     this.setState({attending: starOutline})
+                  }
+               },
+               {
+                  text: "Not Going",
+                  role: "destructive",
+                  icon: close,
+                  handler: () => {
+                     this.setState({attending: close})
+                  }
+               },
+               {
+                  text: "Cancel",
+                  role: "cancel"
+               }
+            ]}
+         />
       </div>
       )
    }
