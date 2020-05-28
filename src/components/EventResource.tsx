@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import './EventResource.css';
-import { IonGrid, IonRow, IonCol, IonCardSubtitle, IonCardHeader, IonCardTitle, IonText } from '@ionic/react';
-import ExpandTextView from './ExpandTextView';
+import { IonGrid, IonRow, IonCol, IonText } from '@ionic/react';
 import { faFilePdf, faFileWord, faFileExcel, faFilePowerpoint, faLink, faFileArchive, faFileImage, faFile } from '@fortawesome/free-solid-svg-icons';
 import { faPython, faJava } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
