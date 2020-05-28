@@ -110,7 +110,7 @@ const ViewEvent: React.FC<ViewEventProps> = ({ match, event }) => {
 
    useEffect(() => {
     setVisible(false);
-    fetch(`https://endpoint.drp.social/event-details/${match.params.id}`)
+    fetch(`${endpointURL}/events/details/${match.params.id}`)
     .then(response => response.json())
     .then(res => {
       setEventDetails({} as EventDetails); 

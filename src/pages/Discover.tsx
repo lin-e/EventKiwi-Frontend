@@ -5,6 +5,7 @@ import ExploreEventsList from '../components/ExploreEventsList';
 import { EventCardDetails } from '../constants/types';
 import { resp_event_card_details } from '../constants/RequestInterfaces';
 import { Society } from '../models/Profile';
+import { endpointURL } from '../constants/endpoints';
 
 
 interface DiscoverState {
@@ -37,7 +38,7 @@ class Discover extends Component<{}, DiscoverState> {
 //  }
 
   refresh() {
-    fetch("https://staging.drp.social/event-card-details")
+    fetch(`${endpointURL}/events/cards/all`)
       .then(res => res.json())
       .then(data => {
          const events: EventCardDetails[] = [];
