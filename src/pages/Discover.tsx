@@ -2,7 +2,7 @@ import React, { Component, createRef } from 'react';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonSearchbar, IonRefresher, IonRefresherContent } from '@ionic/react';
 import './Discover.css';
 import ExploreEventsList from '../components/ExploreEventsList';
-import { EventCardDetails } from '../constants/types';
+import { EventCardDetails, convertResToEventCard } from '../constants/types';
 import { resp_event_card_details } from '../constants/RequestInterfaces';
 import { Society } from '../models/Profile';
 import { discoverEventCardURL } from '../constants/endpoints';
@@ -43,27 +43,7 @@ class Discover extends Component<{}, DiscoverState> {
       .then(data => {
          const events: EventCardDetails[] = [];
          (data as resp_event_card_details[]).forEach(resEvent => {
-
-          let society: Society = {
-            id: resEvent.society.society_id,
-            name: resEvent.society.society_name,
-            imageSrc: resEvent.society.society_image_src,
-            colour: resEvent.society.colour
-          };
-
-          let event: EventCardDetails = {
-            id: resEvent.event_id,
-            name: resEvent.event_name,
-            organiser: society,
-            image: resEvent.event_image_src, 
-            location: resEvent.location, 
-            datetimeStart: new Date(resEvent.start_datetime),
-            datetimeEnd: new Date(resEvent.end_datetime),
-            tags: resEvent.tags
-          };
-
-          events.push(event);
-
+          events.push(convertResToEventCard(resEvent));
          });
          this.setState({events: events})}
       )
