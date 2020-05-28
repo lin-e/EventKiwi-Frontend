@@ -13,9 +13,9 @@ export interface EventMiniCardProps {
   eventEnd: Date
 }
 
-const EventMiniCard: React.FC<EventMiniCardProps> = ({ eventName, organiser, image, eventStart, eventEnd }) => {
+const EventMiniCard: React.FC<EventMiniCardProps> = ({ eventName, organiser, image, eventStart, eventEnd, eventId }) => {
   return (
-    <IonCard className="mini_card">
+    <IonCard className="mini_card" routerLink={`/event/${eventId}`}>
 
       <img src={image} className="mini_banner"/>
 
