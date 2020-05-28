@@ -2,7 +2,7 @@ import React, { useState, useRef, MouseEvent } from 'react';
 import {} from '@fortawesome/fontawesome-svg-core';
 import { EventCardDetails } from '../constants/types'
 import { IonItemSliding, IonGrid, IonCol, IonRow, IonItem, IonLabel, IonCardTitle, IonCardHeader, IonText, IonItemOptions, IonItemOption } from '@ionic/react';
-import { getTime, getShortDate, sameDay } from '../utils/DateTimeTools'
+import { getTime, getShortDate, sameDay, getDateRangeNoStartDate } from '../utils/DateTimeTools'
 import './CalendarEventItem.css'
 
 interface CalendarEventItemProps {
@@ -36,9 +36,7 @@ const CalendarEventItem: React.FC<CalendarEventItemProps> = ({ event, isFavourit
             <IonCol size="6" className="detailCol">
               <IonText color="medium">
                 <p className="eventDateTime">
-                  {getTime(event.datetimeStart)}
-                  &nbsp;&mdash;&nbsp;
-                  {(!sameDay(event.datetimeStart, event.datetimeEnd) ? getShortDate(event.datetimeEnd) + ", " : "") + getTime(event.datetimeEnd)}
+                  {getDateRangeNoStartDate(event.datetimeStart, event.datetimeEnd)}
                 </p>
               </IonText>
             </IonCol>
