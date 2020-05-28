@@ -1,14 +1,16 @@
 import React from 'react';
-import { IonList, IonListHeader } from '@ionic/react'
+import { IonList, IonListHeader, IonItemGroup, IonItemDivider, IonLabel } from '@ionic/react'
 import './CalendarEventView.css'
 import { EventCardDetails } from '../constants/types';
+import { sameDay, getLongDate } from '../utils/DateTimeTools';
+import CalendarEventItem from './CalendarEventItem';
 
 interface CalendarEventViewProps {
   futureEvents: EventGroupByDate[];
 }
 
 interface EventGroupByDate {
-  day: Date,
+  date: Date,
   events: EventCardDetails[]
 }
   
@@ -23,10 +25,23 @@ const CalendarEventView: React.FC<CalendarEventViewProps> = ({ futureEvents }) =
       </IonList>
     )
   }
+
+  const currDate = new Date(Date.now())
   
   return (
     <IonList>
-      Empty
+      {futureEvents.map((eventGroup) => (
+        <IonItemGroup key={`date-${eventGroup.date.getDate()}-${eventGroup.date.getMonth() + 1}`}>
+        <IonItemDivider sticky color="imperial">
+          <IonLabel>
+            {(sameDay(eventGroup.date, currDate) ? "Today - " : "") + getLongDate(eventGroup.date)}
+          </IonLabel>
+        </IonItemDivider>
+        {eventGroup.events.map((eventOnDay) => (
+          <CalendarEventItem event={eventOnDay} />
+        ))}
+      </IonItemGroup>
+      ))}
     </IonList>
   )
 }
