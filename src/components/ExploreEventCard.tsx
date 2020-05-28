@@ -1,27 +1,30 @@
 import React from 'react';
 import './ExploreEventCard.css';
 import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonIcon, IonChip, IonGrid, IonRow, IonCol } from '@ionic/react';
-import { time, location, pricetags } from "ionicons/icons";
+import { time, location as locationIcon, pricetags } from "ionicons/icons";
+import { getTime, sameDay, getShortDate } from '../utils/DateTimeTools';
+import { EventCardDetails } from '../constants/types';
 
 interface ExploreEventCardProps {
   eventName: string, 
   organiser: string, 
   image: string, 
   eventLocation: string, 
-  eventTime: string,
+  startTime: Date,
+  endTime: Date,
   tags: string[],
   id: string;
 }
 
-const ExploreEventCard: React.FC<ExploreEventCardProps> = ({ eventName, organiser, image, eventLocation, eventTime, tags }) => {
+const ExploreEventCard: React.FC<EventCardDetails> = ({ name, organiser, image, location, datetimeStart, datetimeEnd, tags, id }) => {
   return (
-    <IonCard>
+    <IonCard routerLink={`/event/${id}`}>
 
-      <img src={image} className="banner"/>
+      <img src={image} className="banner" alt={name}/>
 
       <IonCardHeader>
-        <IonCardSubtitle>By {organiser}</IonCardSubtitle>
-        <IonCardTitle>{eventName}</IonCardTitle>
+        <IonCardSubtitle>By {organiser.name}</IonCardSubtitle>
+        <IonCardTitle>{name}</IonCardTitle>
       </IonCardHeader>
 
       <IonCardContent>
@@ -30,10 +33,10 @@ const ExploreEventCard: React.FC<ExploreEventCardProps> = ({ eventName, organise
 
           <IonRow>
             <IonCol size="1">
-              <IonIcon icon={location} size="small"/> 
+              <IonIcon icon={locationIcon} size="small"/> 
             </IonCol>
             <IonCol size="11">
-              {eventLocation}
+              {location}
             </IonCol>
           </IonRow>
 
@@ -42,7 +45,9 @@ const ExploreEventCard: React.FC<ExploreEventCardProps> = ({ eventName, organise
               <IonIcon icon={time} size="small"/> 
             </IonCol>
             <IonCol size="11">
-              {eventTime}
+              {`${getShortDate(datetimeStart)}, ${getTime(datetimeEnd)}`}
+              &nbsp;&mdash;&nbsp;
+              {(!sameDay(datetimeStart, datetimeEnd) ? getShortDate(datetimeEnd) + ", " : "") + getTime(datetimeEnd)}
             </IonCol>
           </IonRow>
 
@@ -50,8 +55,8 @@ const ExploreEventCard: React.FC<ExploreEventCardProps> = ({ eventName, organise
           <IonCol size="1">
           <IonIcon icon={pricetags} />
           </IonCol>
-          {tags.map(tag => (
-              <IonChip>{tag}</IonChip>
+          {tags.map((tag, index) => (
+              <IonChip key={"tag chip " + index.toString()}>{tag}</IonChip>
           ))}
           </IonRow>
 

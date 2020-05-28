@@ -33,6 +33,7 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import ViewEvent from './pages/ViewEvent';
 
 const App: React.FC = () => (
   <IonApp>
@@ -41,6 +42,7 @@ const App: React.FC = () => (
         <IonRouterOutlet>
           <Route path="/events" component={Events} exact={true} />
           <Route path="/discover" component={Discover} exact={true} />
+          <Route path="/event/:id" component={ViewEvent} exact={true} />
           <Route path="/profile" component={Profile} />
           <Route path="/" render={() => <Redirect to="/events" />} exact={true} />
         </IonRouterOutlet>

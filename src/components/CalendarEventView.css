@@ -1,0 +1,17 @@
+.ion-color-imperial {
+    --ion-color-base: #02407b;
+    --ion-color-base-rgb: 2, 64, 123;
+    --ion-color-contrast: #ffffff;
+    --ion-color-contrast-rgb: 255, 255, 255;
+    --ion-color-shade: #02386c;
+    --ion-color-tint: #1b5388;
+}
+
+.ion-color-imperialLight {
+    --ion-color-base: #a7bdd2;
+    --ion-color-base-rgb: 167, 189, 210;
+    --ion-color-contrast: #000000;
+    --ion-color-contrast-rgb: 0, 0, 0;
+    --ion-color-shade: #93a6b9;
+    --ion-color-tint: #b0c4d7;
+}
