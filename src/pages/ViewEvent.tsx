@@ -68,7 +68,8 @@ const ViewEvent: React.FC<ViewEventProps> = ({ match, event }) => {
       id: res.id,
       name: res.society_name,
       imageSrc: res.society_image_src,
-      colour: res.colour
+      colour: res.colour,
+      shortName: res.short_name
     }
   }
 

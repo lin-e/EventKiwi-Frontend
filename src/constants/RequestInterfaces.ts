@@ -26,5 +26,6 @@ export interface resp_society {
   id: string,
   society_name: string,
   society_image_src: string,
-  colour: string
+  colour: string,
+  short_name: string
 }

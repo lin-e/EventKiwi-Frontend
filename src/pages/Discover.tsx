@@ -47,7 +47,8 @@ class Discover extends Component<{}, DiscoverState> {
             id: resEvent.society.id,
             name: resEvent.society.society_name,
             imageSrc: resEvent.society.society_image_src,
-            colour: resEvent.society.colour
+            colour: resEvent.society.colour,
+            shortName: resEvent.society.short_name
           };
 
           let event: EventCardDetails = {
