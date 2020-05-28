@@ -51,7 +51,7 @@ const exampleSchedule = [
     date: new Date(2020, 5, 28),
     events: [
       {
-        id: "1",
+        id: "3",
         datetimeStart: new Date(2020, 5, 28, 17, 0),
         datetimeEnd: new Date(2020, 5, 28, 19, 30),
         name: "DoCSoc Board and Card game night",
@@ -61,7 +61,7 @@ const exampleSchedule = [
         organiser: docsoc
       },
       {
-        id: "2",
+        id: "4",
         datetimeStart: new Date(2020, 5, 28, 20, 0),
         datetimeEnd: new Date(2020, 5, 29, 1, 0),
         name: "CGCU Pub Crawl",

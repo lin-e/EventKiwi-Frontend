@@ -1,11 +1,13 @@
-import React, { Component } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonGrid, IonRow, IonCol, IonButton } from '@ionic/react';
+import React, { Component, MouseEvent } from 'react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonGrid, IonRow, IonCol, IonButton, IonChip, IonLabel, IonIcon } from '@ionic/react';
 import ExploreContainer from '../components/ExploreContainer';
 import './Profile.css';
 import ItemSlider from '../components/ItemSlider';
 import { Society } from '../models/Profile';
 import ProfileSocietyIcon from '../components/ProfileSocietyIcon';
 import { Container } from 'react-grid-system';
+import { InterestChip } from '../components/InterestChip';
+import { closeCircle } from 'ionicons/icons';
 
 const docsoc: Society = {
   id: "400",
@@ -73,7 +75,19 @@ const abacus: Society = {
 
 const mySocs = [docsoc, cgcu, kabaddiSoc, algoSoc, icEsports, droneSoc, sikhSoc, abacus, docsoc, cgcu, kabaddiSoc, algoSoc, icEsports, droneSoc, sikhSoc, abacus];
 
-class Profile extends Component {
+interface ProfileState {
+  myInterests: string[]
+}
+
+class Profile extends Component<{}, ProfileState> {
+  
+  constructor(props: {}) {
+    super(props);
+    this.state = {
+      myInterests: ["Programming", "Computer Science", "Chess", "Video Games", "Baking", "Contact Sports", "Pubs", "Bars", "Kabaddi", "Drones", "Astronomy", "Space", "Theoretical Physics"]
+    }
+  }
+
   render() {
     return (
       <IonPage>
@@ -83,29 +97,52 @@ class Profile extends Component {
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">Profile</IonTitle>
-          </IonToolbar>
-        </IonHeader>  
-        <Container>
+        <Container className="profileContainer">
+
           <IonGrid>
             <IonRow>
-              <IonCol size="8">
+              <IonCol className="sectionHeader" size="8">
                 <IonTitle className="profileTitle">My Societies</IonTitle>
               </IonCol>
               <IonCol size="4">
-                <IonButton  className="profileBtn">Edit</IonButton>
+                <IonButton  className="profileBtn">Manage</IonButton>
               </IonCol>
             </IonRow>
+            <IonRow>
+              <div className="sectionContent">
+                <ItemSlider width={130}>
+                  {mySocs.map((soc) => (
+                    <ProfileSocietyIcon name={soc.shortName} logo={soc.imageSrc} />
+                    ))}
+                </ItemSlider>
+              </div>
+            </IonRow>
+
+            <IonRow>
+              <IonCol className="sectionHeader" size="8">
+                <IonTitle className="profileTitle">My Interests</IonTitle>
+              </IonCol>
+              <IonCol size="4">
+                <IonButton  className="profileBtn">Manage</IonButton>
+              </IonCol>
+            </IonRow>
+            <IonRow>
+              <div className="sectionContent interests">
+                {this.state.myInterests.map((interest) => {
+                  
+                    const removeInterest: ((e: MouseEvent<HTMLIonIconElement>) => void) = (e: MouseEvent) => {
+                      e.preventDefault();
+                      this.setState({myInterests: this.state.myInterests.filter((intr) => (intr !== interest))})
+                    }
+
+                    return (
+                      <InterestChip interest={interest} removeBtn={true} removeBtnFunc={removeInterest}/>
+                    )
+                  })}
+              </div>
+            </IonRow>
           </IonGrid>
-          <div className="slider">
-            <ItemSlider width={150}>
-              {mySocs.map((soc) => (
-                <ProfileSocietyIcon name={soc.shortName} logo={soc.imageSrc} />
-              ))}
-            </ItemSlider>
-          </div>
+
         </Container>
       </IonContent>
     </IonPage>
