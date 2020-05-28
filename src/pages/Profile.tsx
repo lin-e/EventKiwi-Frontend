@@ -102,7 +102,7 @@ class Profile extends Component {
           <div className="slider">
             <ItemSlider width={150}>
               {mySocs.map((soc) => (
-                <ProfileSocietyIcon name={soc.id} logo={soc.imageSrc} />
+                <ProfileSocietyIcon name={soc.shortName} logo={soc.imageSrc} />
               ))}
             </ItemSlider>
           </div>
