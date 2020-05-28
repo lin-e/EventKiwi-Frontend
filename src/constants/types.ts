@@ -74,7 +74,8 @@ export const convertResToEventDetails = (res: resp_event_details) => {
    return {
      id: res.society_id,
      name: res.society_name,
-     imageSrc: res.society_image_src,
-     colour: res.colour
+     colour: res.colour,
+     shortName: res.short_name,
+     imageSrc: res.society_image_src
    }
  }

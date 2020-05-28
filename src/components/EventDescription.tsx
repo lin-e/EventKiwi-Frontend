@@ -12,12 +12,12 @@ interface EventDescriptionProps extends EventDetails {
    hide: boolean;
 }
 
-interface EventDescriptionState {
-   attending: string;
-   showActionSheet: boolean
-}
+class EventDescription extends Component<EventDescriptionProps> {
 
-class EventDescription extends Component<EventDescriptionProps, EventDescriptionState> {
+   constructor(props: EventDescriptionProps) {
+      super(props);
+   }
+
    render() {   
       return (
       <div style={this.props.hide ? {display: "none"} : {}}>

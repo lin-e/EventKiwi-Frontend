@@ -1,0 +1,23 @@
+.socLogo {
+    height: 75px !important;
+    width: 75px !important;
+    border-radius: 50% !important;
+    object-fit: cover !important;
+}
+
+.socBody {
+    align-content: center;
+    text-align: center;
+    max-width: 150px;
+    background-blend-mode: color-dodge;
+    object-fit: contain;
+}
+
+.truncate {
+    margin-top: -2px;
+    margin-bottom: 8px;
+    width: 100%;
+    white-space: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

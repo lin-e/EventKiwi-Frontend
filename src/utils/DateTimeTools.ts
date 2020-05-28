@@ -29,12 +29,12 @@ export const sameDay = (date1: Date, date2: Date) => {
 
 export const getDateRange = (dateStart: Date, dateEnd: Date) => {
   return (
-    `${getShortDate(dateStart)}, ${getTime(dateEnd)} — ${(!sameDay(dateStart, dateEnd) ? getShortDate(dateEnd) + ", " : "") + getTime(dateEnd)}`
+    `${getShortDate(dateStart)}, ${getTime(dateStart)} — ${(!sameDay(dateStart, dateEnd) ? getShortDate(dateEnd) + ", " : "") + getTime(dateEnd)}`
   )
 }
 
 export const getDateRangeNoStartDate = (dateStart: Date, dateEnd: Date) => {
   return (
-    `${getTime(dateEnd)} — ${(!sameDay(dateStart, dateEnd) ? getShortDate(dateEnd) + ", " : "") + getTime(dateEnd)}`
+    `${getTime(dateStart)} — ${(!sameDay(dateStart, dateEnd) ? getShortDate(dateEnd) + ", " : "") + getTime(dateEnd)}`
   )
 }
