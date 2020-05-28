@@ -25,7 +25,7 @@ const CalendarEventItem: React.FC<CalendarEventItemProps> = ({ event, isFavourit
 
   return (
     <IonItemSliding ref={favouriteSlider}>
-      <IonItem detail={true} routerLink={`/event/${event.id}`}>
+      <IonItem detail={true} routerLink={`/events/event/${event.id}`}>
         <IonGrid className="eventItem" style={barCol}>
           <IonRow className="eventName">
             <div>

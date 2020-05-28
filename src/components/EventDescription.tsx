@@ -7,7 +7,11 @@ import ExpandTextView from './ExpandTextView';
 import { EventDetails } from '../constants/types';
 import ItemSlider from './ItemSlider';
 import EventMiniCard from './EventMiniCard';
+<<<<<<< HEAD
 import { getTime, getLongDate, getDateRange } from '../utils/DateTimeTools';
+=======
+import { getDateRange } from '../utils/DateTimeTools';
+>>>>>>> d14b14081a93af80326c26b1a4fd0f4dd077baa1
 
 interface EventDescriptionProps extends EventDetails {
    hide: boolean;
@@ -60,7 +64,8 @@ class EventDescription extends Component<EventDescriptionProps, EventDescription
                         return <EventMiniCard 
                                  eventId={event.id}
                                  eventName={event.name}
-                                 eventTime={event.datetimeStart.toString()}
+                                 eventStart={event.datetimeStart}
+                                 eventEnd={event.datetimeEnd}
                                  organiser={event.organiser.name}
                                  image={event.image} />
                         })}
@@ -77,7 +82,8 @@ class EventDescription extends Component<EventDescriptionProps, EventDescription
                         return <EventMiniCard 
                                  eventId={event.id}
                                  eventName={event.name}
-                                 eventTime={event.datetimeStart.toString()}
+                                 eventStart={event.datetimeStart}
+                                 eventEnd={event.datetimeEnd}
                                  organiser={event.organiser.name}
                                  image={event.image} />
                         })}

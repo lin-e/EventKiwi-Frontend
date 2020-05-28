@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { IonSlides, IonSlide } from '@ionic/react';
+import "./ItemSlider.css";
 
 interface ItemSliderProps {
   width: number,
@@ -19,7 +20,7 @@ class ItemSlider extends Component<ItemSliderProps> {
     };
     
     return (
-      <IonSlides pager={false} options={slideOpts}>
+      <IonSlides className="fullWidth" pager={false} options={slideOpts}>
         {React.Children.map(children, (child, i) => {
           return (
             <IonSlide>
