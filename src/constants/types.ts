@@ -8,7 +8,7 @@ export interface EventCardDetails {
    location: string, 
    datetimeStart: Date,
    datetimeEnd: Date,
-   tags: string[],
+   tags: string[]
 }
 
 export interface EventDetails {
