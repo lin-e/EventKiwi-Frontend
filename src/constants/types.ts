@@ -1,4 +1,5 @@
 import { Society } from "../models/Profile"
+import { resp_event_details, resp_event_card_details, resp_society, resp_resource } from "./RequestInterfaces";
 
 export interface EventCardDetails {
    id: string;
@@ -24,3 +25,57 @@ export interface EventDetails {
    sameSocEvents: EventCardDetails[],
    similarEvents: EventCardDetails[]
 }
+
+
+export interface Resource {
+   name: string,
+   id: string
+}
+
+export const convertResToResource = (res: resp_resource) => {
+   return {
+      name: res.display_name,
+      id: res.bucket_key
+   }
+}
+
+export const convertResToEventDetails = (res: resp_event_details) => {
+   return {
+     id: res.event_id,
+     name: res.event_name,
+     organiser: convertResToSoc(res.society),
+     images: [res.event_image_src],
+     location: res.location,
+     datetimeStart: new Date(res.start_datetime),
+     datetimeEnd: new Date(res.end_datetime),
+     tags: res.tags,
+     description: res.description,
+     sameSocEvents: res.same_society_events.map(convertResToEventCard),
+     similarEvents: res.same_society_events.map(convertResToEventCard) // TODO: chamge this to similar events when it is implemented
+   }
+ }
+
+
+ export const convertResToEventCard = (res: resp_event_card_details) => {
+   return {
+     id: res.event_id,
+     name: res.event_name,
+     organiser: convertResToSoc(res.society),
+     image: res.event_image_src, 
+     location: res.location, 
+     datetimeStart: new Date(res.start_datetime),
+     datetimeEnd: new Date(res.end_datetime),
+     tags: res.tags
+   };
+
+ }
+
+ export const convertResToSoc = (res: resp_society) => {
+   return {
+     id: res.society_id,
+     name: res.society_name,
+     colour: res.colour,
+     shortName: res.short_name,
+     imageSrc: res.society_image_src
+   }
+ }

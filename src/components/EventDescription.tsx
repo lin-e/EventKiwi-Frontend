@@ -1,13 +1,12 @@
-import React, { Component, createRef } from 'react';
-import { IonText, IonCard, IonCardSubtitle, IonButton, IonActionSheet, IonFabButton, IonIcon, IonFab } from '@ionic/react';
-import { helpOutline, close, starOutline, checkmark } from 'ionicons/icons'
+import React, { Component } from 'react';
+import { IonText, IonCard, IonCardSubtitle } from '@ionic/react';
 import './EventDescription.css';
 import { Container, Row, Col } from 'react-grid-system';
 import ExpandTextView from './ExpandTextView';
 import { EventDetails } from '../constants/types';
 import ItemSlider from './ItemSlider';
 import EventMiniCard from './EventMiniCard';
-import { getTime, getLongDate, getDateRange } from '../utils/DateTimeTools';
+import { getDateRange } from '../utils/DateTimeTools';
 
 interface EventDescriptionProps extends EventDetails {
    hide: boolean;
@@ -20,7 +19,6 @@ class EventDescription extends Component<EventDescriptionProps> {
    }
 
    render() {   
-
       return (
       <div style={this.props.hide ? {display: "none"} : {}}>
          <Container>
@@ -77,9 +75,7 @@ class EventDescription extends Component<EventDescriptionProps> {
                   </ItemSlider>
                </div>
             </div>}
-            
          </Container>
-
       </div>
       )
    }

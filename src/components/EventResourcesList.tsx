@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import './EventResourcesList.css';
 import { IonList, IonItem, IonItemSliding, IonItemOptions, IonItemOption } from '@ionic/react';
-import { Container } from 'react-grid-system';
-import EventResource, { EventResourceProps } from './EventResource';
+import EventResource from './EventResource';
 import CentredTextContainer from './CentredTextContainer';
+import { Resource } from '../constants/types';
+import { resourceDownloadURL } from '../constants/endpoints';
 
 interface EventResourcesListProps {
-  resources: EventResourceProps[],
+  resources: Resource[],
   hide: boolean,
   societyName: string
 }
@@ -24,9 +25,9 @@ class EventResourcesList extends Component<EventResourcesListProps> {
                {this.props.resources.map(resource => {
                   return (
                   <IonItemSliding>
-                     <IonItem href={resource.url} detail download={resource.name}>
+                     <IonItem href={`${resourceDownloadURL}${resource.id}`} detail download={resource.name}>
                         <div className="restrictedWidth">
-                           <EventResource name={resource.name} type={resource.type} url={resource.url}/>
+                           <EventResource name={resource.name} />
                         </div>
                      </IonItem>
                  

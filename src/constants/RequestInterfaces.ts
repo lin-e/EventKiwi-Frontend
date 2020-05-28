@@ -29,3 +29,8 @@ export interface resp_society {
   colour: string,
   short_name: string
 }
+
+export interface resp_resource {
+  display_name: string,
+  bucket_key: string
+}
