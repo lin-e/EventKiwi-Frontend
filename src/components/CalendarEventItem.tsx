@@ -1,18 +1,23 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import { EventCardDetails } from '../constants/types'
-import { IonItemSliding, IonGrid, IonCol, IonRow, IonItem, IonLabel, IonCardTitle, IonCardHeader, IonText, IonItemOptions } from '@ionic/react';
+import { IonItemSliding, IonGrid, IonCol, IonRow, IonItem, IonLabel, IonCardTitle, IonCardHeader, IonText, IonItemOptions, IonItemOption } from '@ionic/react';
 import { getTime, getShortDate, sameDay } from '../utils/DateTimeTools'
 import './CalendarEventItem.css'
 
 interface CalendarEventItemProps {
   event: EventCardDetails
+  isFavourite: boolean
 }
 
-const CalendarEventItem: React.FC<CalendarEventItemProps> = ({ event: event }) => {
+const CalendarEventItem: React.FC<CalendarEventItemProps> = ({ event, isFavourite }) => {
   const barCol = {"--socCol" : event.organiser.colour}
 
+  const [fav, setfav] = useState(isFavourite);
+
+  const favouriteSlider = useRef(null)
+
   return (
-    <IonItemSliding>
+    <IonItemSliding ref={favouriteSlider}>
       <IonItem detail={true} routerLink={`/event/${event.id}`}>
         <IonGrid className="eventItem" style={barCol}>
           <IonRow className="eventName">
@@ -38,6 +43,11 @@ const CalendarEventItem: React.FC<CalendarEventItemProps> = ({ event: event }) =
           </IonRow>
         </IonGrid>
       </IonItem>
+      <IonItemOptions side="start">
+        <IonItemOption color="favourite">
+          {fav ? "Unfavourite" : "Favourite"}
+        </IonItemOption>
+      </IonItemOptions>
     </IonItemSliding>
   )
 }
