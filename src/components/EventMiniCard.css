@@ -12,11 +12,19 @@
     object-fit: cover !important;
 }
 
+.mini_organiser_name {
+    text-align: left !important;
+}
+
+
 .mini_header {
     text-align: left !important;
     font-size: larger !important;
 }
 
+.mini_time {
+    text-align: left !important;
+}
 /* One line solution */
 
 
