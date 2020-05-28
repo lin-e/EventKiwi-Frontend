@@ -13,19 +13,10 @@ interface EventDescriptionProps extends EventDetails {
    hide: boolean;
 }
 
-interface EventDescriptionState {
-   attending: string;
-   showActionSheet: boolean
-}
-
-class EventDescription extends Component<EventDescriptionProps, EventDescriptionState> {
+class EventDescription extends Component<EventDescriptionProps> {
 
    constructor(props: EventDescriptionProps) {
       super(props);
-      this.state = {
-         attending: helpOutline,
-         showActionSheet: false
-      }
    }
 
    render() {   
@@ -87,43 +78,6 @@ class EventDescription extends Component<EventDescriptionProps, EventDescription
                </div>
             </div>}
             
-            <IonFab vertical="top" horizontal="end" slot="fixed">
-               <IonFabButton onClick={() => this.setState({showActionSheet: true})}>
-                  <IonIcon icon={this.state.attending}/>
-               </IonFabButton>
-            </IonFab>
-            <IonActionSheet 
-               isOpen={this.state.showActionSheet}
-               onDidDismiss={() => this.setState({showActionSheet: false})}
-               buttons={[
-                  {
-                     text: "Going",
-                     icon: checkmark,
-                     handler: () => {
-                        this.setState({attending: checkmark})
-                     }
-                  },
-                  {
-                     text: "Interested",
-                     icon: starOutline,
-                     handler: () => {
-                        this.setState({attending: starOutline})
-                     }
-                  },
-                  {
-                     text: "Not Going",
-                     role: "destructive",
-                     icon: close,
-                     handler: () => {
-                        this.setState({attending: close})
-                     }
-                  },
-                  {
-                     text: "Cancel",
-                     role: "cancel"
-                  }
-               ]}
-            />
          </Container>
 
       </div>
