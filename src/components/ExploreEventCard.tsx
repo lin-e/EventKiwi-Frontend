@@ -18,7 +18,7 @@ interface ExploreEventCardProps {
 
 const ExploreEventCard: React.FC<EventCardDetails> = ({ name, organiser, image, location, datetimeStart, datetimeEnd, tags, id }) => {
   return (
-    <IonCard routerLink={`/event/${id}`}>
+    <IonCard routerLink={`/discover/event/${id}`}>
 
       <img src={image} className="banner" alt={name}/>
 
