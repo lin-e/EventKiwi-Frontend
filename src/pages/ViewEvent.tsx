@@ -3,7 +3,7 @@ import { IonContent, IonPage, IonHeader, IonToolbar, IonButtons, IonBackButton, 
 import { RouteComponentProps } from 'react-router';
 import EventDescription from '../components/EventDescription';
 import "./ViewEvent.css";
-import { EventDetails } from '../constants/types';
+import { EventDetails, convertResToEventDetails } from '../constants/types';
 import { resp_society, resp_event_card_details, resp_event_details } from '../constants/RequestInterfaces';
 import EventPostsList from '../components/EventPostsList';
 import { EventPostProps } from '../components/EventPost';
@@ -61,55 +61,7 @@ const ViewEvent: React.FC<ViewEventProps> = ({ match, event }) => {
 
   const [visible, setVisible] = useState<boolean>(true);
 
-  const convertResToEventDetails = (res: resp_event_details) => {
-    return {
-      id: res.event_id,
-      name: res.event_name,
-      organiser: convertResToSoc(res.society),
-      images: [res.event_image_src],
-      location: res.location,
-      datetimeStart: new Date(res.start_datetime),
-      datetimeEnd: new Date(res.end_datetime),
-      tags: res.tags,
-      description: res.description,
-      sameSocEvents: res.same_society_events.map(convertResToEventCard),
-      similarEvents: res.same_society_events.map(convertResToEventCard) // TODO: chamge this to similar events when it is implemented
-    }
-  }
-
-
-  const convertResToEventCard = (res: resp_event_card_details) => {
-    return {
-      id: res.event_id,
-      name: res.event_name,
-      organiser: convertResToSoc(res.society),
-      image: res.event_image_src, 
-      location: res.location, 
-      datetimeStart: new Date(res.start_datetime),
-      datetimeEnd: new Date(res.end_datetime),
-      tags: res.tags
-    };
-
-  }
-
-  const convertResToSoc = (res: resp_society) => {
-    return {
-      id: res.society_id,
-      name: res.society_name,
-      imageSrc: res.society_image_src,
-      colour: res.colour
-    }
-  }
-
-  // useIonViewWillEnter(() => {
-  //   fetch(`https://endpoint.drp.social/event-details/${match.params.id}`)
-  //   .then(response => response.json())
-  //   .then(resDetails => {
-  //     setEventDetails(convertResToEventDetails(resDetails));
-  //   })
-  // });
-
-   useEffect(() => {
+  useEffect(() => {
     setVisible(false);
     fetch(`${eventDetailsURL}${match.params.id}`)
     .then(response => response.json())
@@ -129,7 +81,8 @@ const ViewEvent: React.FC<ViewEventProps> = ({ match, event }) => {
     fetch(`${eventResourcesURL}${match.params.id}`)
     .then(response => response.json())
     .then(data => console.log(data))
-   }, [match.params.id]);
+    }, [match.params.id]
+  );
 
 
    const contentRef = React.useRef<HTMLIonContentElement>(null);
