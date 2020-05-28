@@ -7,7 +7,6 @@ import { EventDetails, convertResToEventDetails, Resource, convertResToResource 
 import EventPostsList from '../components/EventPostsList';
 import { EventPostProps } from '../components/EventPost';
 import EventResourcesList from '../components/EventResourcesList';
-import { EventResourceProps } from '../components/EventResource';
 import { checkmarkCircleOutline, helpCircleOutline, checkmarkCircle, helpCircle } from 'ionicons/icons';
 import { eventDetailsURL, eventResourcesURL } from '../constants/endpoints';
 
@@ -24,12 +23,6 @@ const eventPosts: EventPostProps[] = [{postContent: "hello", postTime: "time", o
   {postContent: "hello", postTime: "time", organiserName: "generic society", organiserLogo: "https://upload.wikimedia.org/wikipedia/commons/f/f5/Poster-sized_portrait_of_Barack_Obama.jpg"},
   {postContent: "hello", postTime: "time", organiserName: "generic society", organiserLogo: "https://upload.wikimedia.org/wikipedia/commons/f/f5/Poster-sized_portrait_of_Barack_Obama.jpg"},
   {postContent: "hello", postTime: "time", organiserName: "generic society", organiserLogo: "https://upload.wikimedia.org/wikipedia/commons/f/f5/Poster-sized_portrait_of_Barack_Obama.jpg"}]
-
-  // const eventResources: EventResourceProps[] = [{name:"pdf1.pdf", type:"pdf", url:"https://github.com/lin-e/cv/raw/master/main.pdf"},
-  // {name:"test.zip", type:"zip", url:"http://dev.eugenel.in/pika.zip"},
-  // {name:"test.pdf", type:"pdf", url:"https://github.com/lin-e/cv/raw/master/main.pdf"},
-  // {name:"test.pdf", type:"pdf", url:"https://github.com/lin-e/cv/raw/master/main.pdf"}];
-
 
 interface OwnProps extends RouteComponentProps<{ id: string }> {
    event?: string;
