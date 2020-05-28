@@ -10,6 +10,7 @@ import { EventPostProps } from '../components/EventPost';
 import EventResourcesList from '../components/EventResourcesList';
 import { EventResourceProps } from '../components/EventResource';
 import { checkmarkCircleOutline, helpCircleOutline, checkmarkCircle, helpCircle } from 'ionicons/icons';
+import { endpointURL } from '../constants/endpoints';
 
 const loremIpsum = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam hendrerit justo vel dolor consectetur efficitur. Donec nec sollicitudin augue, non sollicitudin eros. Pellentesque tincidunt dolor quam, in porttitor neque rhoncus a. In hac habitasse platea dictumst. Cras at tortor ex. Aliquam urna leo, convallis eget vehicula et, egestas nec eros. Donec ipsum leo, faucibus non nulla non, accumsan fermentum ligula. Mauris sit amet diam eu purus tincidunt vulputate. Aliquam in nisl id augue consequat aliquet. Phasellus porttitor sed risus quis ultrices. Ut ut risus orci. Sed facilisis erat sed vestibulum bibendum. Interdum et malesuada fames ac ante ipsum primis in faucibus. In consequat ipsum eros, at malesuada libero ullamcorper vel. Quisque bibendum nulla augue, eu tincidunt tellus malesuada in. Phasellus sed est lorem.
 Vestibulum a justo ligula. Integer euismod nibh vitae nulla commodo rhoncus. Phasellus purus leo, interdum et tellus ut, condimentum varius eros. Sed vulputate nulla in sem faucibus, ut mattis odio fermentum. Morbi maximus faucibus justo ac iaculis. Quisque luctus, sapien vel auctor varius, ipsum lacus venenatis elit, a laoreet augue velit volutpat nisi. Suspendisse vitae augue eros. Nunc sit amet semper massa, eget eleifend nisl. Quisque pretium pulvinar justo id suscipit. Integer ullamcorper dolor ut ipsum faucibus, rutrum commodo mauris aliquet. Aliquam scelerisque metus pretium sem pellentesque interdum. Cras rutrum accumsan nunc et consectetur.
@@ -232,10 +233,9 @@ const ViewEvent: React.FC<ViewEventProps> = ({ match, event }) => {
         }
  
        </IonContent>
-       {eventDetails.name !== undefined &&
-        <IonFooter>
-          <IonToolbar className="restrictedWidth">
-            <IonButtons >
+        <IonFooter className="footer"> {/* This class is a temporary fix for the toolbar appearing too tall on an iphone display */}
+          <IonToolbar>
+            <IonButtons className="buttons">
               <IonButton color={goingColour} onClick={goingClicked}>
                 Going <IonIcon icon={goingIcon} />
               </IonButton>
@@ -245,7 +245,6 @@ const ViewEvent: React.FC<ViewEventProps> = ({ match, event }) => {
             </IonButtons>
           </IonToolbar>
         </IonFooter>
-      }
      </IonPage>
    );
  };
