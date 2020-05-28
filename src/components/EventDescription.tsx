@@ -7,11 +7,7 @@ import ExpandTextView from './ExpandTextView';
 import { EventDetails } from '../constants/types';
 import ItemSlider from './ItemSlider';
 import EventMiniCard from './EventMiniCard';
-<<<<<<< HEAD
 import { getTime, getLongDate, getDateRange } from '../utils/DateTimeTools';
-=======
-import { getDateRange } from '../utils/DateTimeTools';
->>>>>>> d14b14081a93af80326c26b1a4fd0f4dd077baa1
 
 interface EventDescriptionProps extends EventDetails {
    hide: boolean;
