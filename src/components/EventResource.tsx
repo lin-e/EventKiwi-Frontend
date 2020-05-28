@@ -21,6 +21,7 @@ const EventResource: React.FC<EventResourceProps> = ({ name }) => {
       case "java":
         return faJava
       case "doc":
+      case "docx":
         return faFileWord
       case "xslx":
         return faFileExcel
@@ -30,7 +31,9 @@ const EventResource: React.FC<EventResourceProps> = ({ name }) => {
         return faLink
       case "zip":
         return faFileArchive
-      case "img":
+      case "jpeg":
+      case "png":
+      case "jpg":
         return faFileImage
       default:
         return faFile
