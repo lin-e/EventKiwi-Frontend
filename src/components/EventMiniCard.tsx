@@ -20,21 +20,17 @@ const EventMiniCard: React.FC<EventMiniCardProps> = ({ eventName, organiser, ima
       <IonCardContent className="mini_description">
         <IonGrid>
           <IonRow>
-            <IonCardSubtitle>By {organiser}</IonCardSubtitle>
+            <IonCardSubtitle className="mini_organiser_name">By {organiser}</IonCardSubtitle>
           </IonRow>
           <IonRow>
             <IonCardTitle className="mini_header">
             {eventName}
             </IonCardTitle>
           </IonRow>
-          <IonRow>
-            <IonCol size="1">
-              <IonIcon icon={time} size="small" className="icon_item"/>
-            </IonCol>
-            <IonCol size="10" push="1" className="testts">
+            <IonRow className="mini_time">
                 {eventTime}
-            </IonCol>
-          </IonRow>
+            </IonRow>
+
 
         </IonGrid>
         
