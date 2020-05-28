@@ -6,7 +6,7 @@ import ExpandTextView from './ExpandTextView';
 import { EventDetails } from '../constants/types';
 import ItemSlider from './ItemSlider';
 import EventMiniCard from './EventMiniCard';
-import { getTime, getLongDate } from '../utils/DateTimeTools';
+import { getTime, getLongDate, getDateRange } from '../utils/DateTimeTools';
 
 interface EventDescriptionProps extends EventDetails {
    hide: boolean;
@@ -31,7 +31,8 @@ class EventDescription extends Component<EventDescriptionProps> {
                
                <Col md={6} sm={12}>
                   <IonCardSubtitle>By {this.props.organiser.name},</IonCardSubtitle>
-                  <IonCardSubtitle>{getLongDate(this.props.datetimeStart)}, {this.props.location}</IonCardSubtitle> {/* Convert time using the util, give end time too */}
+                  <IonCardSubtitle>{getDateRange(this.props.datetimeStart, this.props.datetimeEnd)},</IonCardSubtitle>
+                  <IonCardSubtitle>{this.props.location}</IonCardSubtitle> {/* Convert time using the util, give end time too */}
                   <ExpandTextView limit={450} text={this.props.description} />
                </Col>
             </Row>
@@ -46,7 +47,8 @@ class EventDescription extends Component<EventDescriptionProps> {
                         return <EventMiniCard 
                                  eventId={event.id}
                                  eventName={event.name}
-                                 eventTime={event.datetimeStart.toString()}
+                                 eventStart={event.datetimeStart}
+                                 eventEnd={event.datetimeEnd}
                                  organiser={event.organiser.name}
                                  image={event.image} />
                         })}
@@ -63,7 +65,8 @@ class EventDescription extends Component<EventDescriptionProps> {
                         return <EventMiniCard 
                                  eventId={event.id}
                                  eventName={event.name}
-                                 eventTime={event.datetimeStart.toString()}
+                                 eventStart={event.datetimeStart}
+                                 eventEnd={event.datetimeEnd}
                                  organiser={event.organiser.name}
                                  image={event.image} />
                         })}

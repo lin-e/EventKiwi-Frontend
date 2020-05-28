@@ -2,16 +2,18 @@ import React from 'react';
 import './EventMiniCard.css';
 import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonIcon, IonChip, IonGrid, IonRow, IonCol } from '@ionic/react';
 import { time, location } from "ionicons/icons";
+import { getDateRange } from '../utils/DateTimeTools';
 
 export interface EventMiniCardProps {
   eventId: string,
   eventName: string, 
   organiser: string, 
   image: string, 
-  eventTime: string,
+  eventStart: Date,
+  eventEnd: Date
 }
 
-const EventMiniCard: React.FC<EventMiniCardProps> = ({ eventName, organiser, image, eventTime }) => {
+const EventMiniCard: React.FC<EventMiniCardProps> = ({ eventName, organiser, image, eventStart, eventEnd }) => {
   return (
     <IonCard className="mini_card">
 
@@ -28,7 +30,7 @@ const EventMiniCard: React.FC<EventMiniCardProps> = ({ eventName, organiser, ima
             </IonCardTitle>
           </IonRow>
             <IonRow className="mini_time">
-                {eventTime}
+                {getDateRange(eventStart, eventEnd)}
             </IonRow>
 
 
