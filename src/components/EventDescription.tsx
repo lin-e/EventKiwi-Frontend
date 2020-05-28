@@ -85,47 +85,45 @@ class EventDescription extends Component<EventDescriptionProps, EventDescription
                </div>
             </div>}
             
-
-
+            <IonFab vertical="top" horizontal="end" slot="fixed">
+               <IonFabButton onClick={() => this.setState({showActionSheet: true})}>
+                  <IonIcon icon={this.state.attending}/>
+               </IonFabButton>
+            </IonFab>
+            <IonActionSheet 
+               isOpen={this.state.showActionSheet}
+               onDidDismiss={() => this.setState({showActionSheet: false})}
+               buttons={[
+                  {
+                     text: "Going",
+                     icon: checkmark,
+                     handler: () => {
+                        this.setState({attending: checkmark})
+                     }
+                  },
+                  {
+                     text: "Interested",
+                     icon: starOutline,
+                     handler: () => {
+                        this.setState({attending: starOutline})
+                     }
+                  },
+                  {
+                     text: "Not Going",
+                     role: "destructive",
+                     icon: close,
+                     handler: () => {
+                        this.setState({attending: close})
+                     }
+                  },
+                  {
+                     text: "Cancel",
+                     role: "cancel"
+                  }
+               ]}
+            />
          </Container>
 
-         <IonFab vertical="bottom" horizontal="end" slot="fixed">
-            <IonFabButton onClick={() => this.setState({showActionSheet: true})}>
-               <IonIcon icon={this.state.attending}/>
-            </IonFabButton>
-         </IonFab>
-         <IonActionSheet 
-            isOpen={this.state.showActionSheet}
-            onDidDismiss={() => this.setState({showActionSheet: false})}
-            buttons={[
-               {
-                  text: "Going",
-                  icon: checkmark,
-                  handler: () => {
-                     this.setState({attending: checkmark})
-                  }
-               },
-               {
-                  text: "Interested",
-                  icon: starOutline,
-                  handler: () => {
-                     this.setState({attending: starOutline})
-                  }
-               },
-               {
-                  text: "Not Going",
-                  role: "destructive",
-                  icon: close,
-                  handler: () => {
-                     this.setState({attending: close})
-                  }
-               },
-               {
-                  text: "Cancel",
-                  role: "cancel"
-               }
-            ]}
-         />
       </div>
       )
    }
