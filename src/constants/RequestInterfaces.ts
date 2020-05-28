@@ -28,3 +28,8 @@ export interface resp_society {
   society_image_src: string,
   colour: string
 }
+
+export interface resp_resource {
+  display_name: string,
+  bucket_key: string
+}

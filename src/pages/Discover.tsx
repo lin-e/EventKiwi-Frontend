@@ -5,7 +5,7 @@ import ExploreEventsList from '../components/ExploreEventsList';
 import { EventCardDetails } from '../constants/types';
 import { resp_event_card_details } from '../constants/RequestInterfaces';
 import { Society } from '../models/Profile';
-import { endpointURL } from '../constants/endpoints';
+import { discoverEventCardURL } from '../constants/endpoints';
 
 
 interface DiscoverState {
@@ -38,7 +38,7 @@ class Discover extends Component<{}, DiscoverState> {
 //  }
 
   refresh() {
-    fetch(`${endpointURL}/events/cards/all`)
+    fetch(discoverEventCardURL)
       .then(res => res.json())
       .then(data => {
          const events: EventCardDetails[] = [];

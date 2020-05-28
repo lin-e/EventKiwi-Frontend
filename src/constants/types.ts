@@ -24,3 +24,9 @@ export interface EventDetails {
    sameSocEvents: EventCardDetails[],
    similarEvents: EventCardDetails[]
 }
+
+
+export interface Resource {
+   name: string,
+   
+}
