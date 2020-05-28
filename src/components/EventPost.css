@@ -1,0 +1,19 @@
+.profilePhoto {
+   height: 50px !important;
+   width: 50px !important;
+   border-radius: 50% !important;
+   object-fit:cover !important;
+}
+
+.postContent {
+   text-align: left !important;
+   padding: 0%;
+   margin-left: 0px !important;
+}
+
+.verticalCentre {
+   text-align: left !important;
+   position: relative;
+   margin-top: 10px;
+   margin-left: 0px !important;
+}
