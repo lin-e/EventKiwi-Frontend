@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './ExploreEventCard.css';
 import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonIcon, IonChip, IonGrid, IonRow, IonCol, useIonViewDidEnter } from '@ionic/react';
 import { time, location as locationIcon, pricetags } from "ionicons/icons";
-import { getTime, sameDay, getShortDate, getDateRange } from '../utils/DateTimeTools';
+import { getDateRange } from '../utils/DateTimeTools';
 import { EventCardDetails } from '../constants/types';
 
 interface ExploreEventCardProps {
@@ -33,7 +33,7 @@ const ExploreEventCard: React.FC<EventCardDetails> = ({ name, organiser, image, 
 
       <IonCardContent>
         
-        <IonGrid className={"grid" + (visible ? 'fadeIn' : 'fadeOut')}>
+        <IonGrid className="grid">
 
           <IonRow>
             <IonCol size="1">

@@ -4,12 +4,13 @@ import './Discover.css';
 import ExploreEventsList from '../components/ExploreEventsList';
 import { EventCardDetails, convertResToEventCard } from '../constants/types';
 import { resp_event_card_details } from '../constants/RequestInterfaces';
-import { Society } from '../models/Profile';
 import { discoverEventCardURL } from '../constants/endpoints';
+import { threadId } from 'worker_threads';
 
 
 interface DiscoverState {
-  events: EventCardDetails[];
+  events: EventCardDetails[],
+  showEvents: boolean
 }
 
 class Discover extends Component<{}, DiscoverState> {
@@ -17,7 +18,10 @@ class Discover extends Component<{}, DiscoverState> {
 
   constructor(props: {}) {
     super(props);
-    this.state = { events: [] }
+    this.state = { 
+      events: [],
+      showEvents: false
+    }
     this.refresherRef = createRef<HTMLIonRefresherElement>();
     this.refresh = this.refresh.bind(this);
   }
@@ -34,7 +38,10 @@ class Discover extends Component<{}, DiscoverState> {
          (data as resp_event_card_details[]).forEach(resEvent => {
           events.push(convertResToEventCard(resEvent));
          });
-         this.setState({events: events})}
+         this.setState({
+           events: events,
+           showEvents: true
+          })}
       )
       .then(() => this.refresherRef.current!.complete())
   }
@@ -59,7 +66,7 @@ class Discover extends Component<{}, DiscoverState> {
         </IonRefresher>
         
         <IonSearchbar onIonChange={e => console.log(e.detail.value!)} />
-        <ExploreEventsList events={this.state.events}/>
+        <ExploreEventsList show={this.state.showEvents} events={this.state.events}/>
         
       </IonContent>
     </IonPage>

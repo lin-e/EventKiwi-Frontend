@@ -3,10 +3,12 @@ import ExploreEventCard from './ExploreEventCard';
 import {Container, Row, Col} from "react-grid-system";
 import SkeletonTextEventCard from './SkeletonTextEventCard';
 import { EventCardDetails } from '../constants/types';
-import { Society } from '../models/Profile';
+
+import "./ExploreEventsList.css";
 
 interface ExploreEventsListProps {
    events: EventCardDetails[];
+   show: boolean
 }
 
 
@@ -15,14 +17,9 @@ interface ExploreEventsListProps {
 // const event: EventCardDetails = {event_id:"1", name:"test event", organiser: aSociety, image:"https://m.atcdn.co.uk/ect/media/w1024/brand-store/volkswagen/golf/hero.jpg", location:"somewhere in imperial", datetimeStart: new Date(2020, 4, 28, 12, 0), datetimeEnd: new Date(2020, 4, 29, 1, 0), tags:["test", "test1", "test2"]}
 
 class ExploreEventsList extends Component<ExploreEventsListProps> {
-
-   constructor(props: ExploreEventsListProps) {
-      super(props)
-   }
-
    render() {
       return (
-         <Container>
+         <Container className={this.props.show ? "fadeIn" : "fadeOut"}>
             <Row>
                {this.props.events.length === 0  && [1,2,3,4,5,6].map(x =>
                   <Col lg={4} md={6} key={"skeleton" + x.toString()}>
