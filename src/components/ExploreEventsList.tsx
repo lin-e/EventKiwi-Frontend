@@ -14,21 +14,13 @@ const mapStateToProps = (state: RootState) => {
    }
 };
 
-const connector = connect(
-   mapStateToProps,
-   { fetchEventCards }
-)
+const connector = connect(mapStateToProps)
 
 type PropsFromRedux = ConnectedProps<typeof connector>
 type ExploreEventsListProps = PropsFromRedux;
 
 
 class ExploreEventsList extends Component<ExploreEventsListProps> {
-
-   componentDidMount() {
-      this.props.fetchEventCards();
-   }
-
    render() {
       return (
          <Container>

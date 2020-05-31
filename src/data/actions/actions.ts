@@ -9,7 +9,7 @@ import { convertResToEventCard } from "../../constants/types"
 
 
 
-export const fetchEventCards = (refresher: HTMLIonRefresherElement | null = null)
+export const fetchEventCards = (refresher: HTMLIonRefresherElement)
    : ThunkAction<void, RootState, unknown, Action<{}>> => async dispatch => {
    fetch(discoverEventCardURL)
    .then(response => response.json())

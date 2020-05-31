@@ -15,7 +15,6 @@ type PropsFromRedux = ConnectedProps<typeof connector>
 type DiscoverProps = PropsFromRedux;
 
 
-
 class Discover extends Component<DiscoverProps> {
   refresherRef: React.RefObject<HTMLIonRefresherElement>;
 
@@ -25,6 +24,9 @@ class Discover extends Component<DiscoverProps> {
     this.refresh = this.refresh.bind(this);
   }
 
+  componentDidMount() {
+    this.refresh();
+  }
 
   refresh() {
     this.props.fetchEventCards(this.refresherRef.current!);
