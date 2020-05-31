@@ -1,5 +1,5 @@
 import React from 'react';
-import { Redirect, Route } from 'react-router-dom';
+import { Redirect, Route, RouteComponentProps } from 'react-router-dom';
 import {
   IonApp,
   IonIcon,
@@ -37,15 +37,17 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 
-const App: React.FC = () => (
-  <IonApp>
-    <IonReactRouter>
-      <IonRouterOutlet>
+const App: React.FC = () => {
+  return (
+    <IonApp>
+      <IonReactRouter>
+        <IonRouterOutlet>
           <Route path="/login" component={Login} exact={true} />
-          <Route path="/" component={HomeOrLogin} />
-      </IonRouterOutlet>
-    </IonReactRouter>
-  </IonApp>
-);
+          <Route path="/" render={(props) => <HomeOrLogin {...props} redirect={window.location.pathname}/>} />
+        </IonRouterOutlet>
+      </IonReactRouter>
+    </IonApp>
+  )  
+};
 
 export default App;
