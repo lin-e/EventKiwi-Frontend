@@ -14,6 +14,9 @@ import { compass, calendar, person } from 'ionicons/icons';
 import Events from './pages/Events';
 import Discover from './pages/Discover';
 import Profile from './pages/Profile';
+import ViewEvent from './pages/ViewEvent';
+import HomeOrLogin from './components/HomeOrLogin';
+import Login from './pages/Login';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -33,11 +36,14 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
-import ViewEvent from './pages/ViewEvent';
 
 const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
+      <IonRouterOutlet>
+          <Route path="/login" component={Login} />
+          <Route path="/" component={HomeOrLogin} exact />
+      </IonRouterOutlet>
       <IonTabs>
         <IonRouterOutlet>
           <Route path="/events" component={Events} exact={true} />
@@ -46,7 +52,6 @@ const App: React.FC = () => (
           <Route path="/discover/event/:id" component={ViewEvent} exact={true} />
           <Route path="/events/event/:id" component={ViewEvent} exact={true} />
           <Route path="/profile" component={Profile} />
-          <Route path="/" render={() => <Redirect to="/events" />} exact={true} />
         </IonRouterOutlet>
         <IonTabBar slot="bottom">
           <IonTabButton tab="events" href="/events">

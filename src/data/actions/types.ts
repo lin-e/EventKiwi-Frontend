@@ -8,3 +8,14 @@ interface FetchEventCardsAction {
 }
 
 export type FetchEventType = FetchEventCardsAction;
+
+
+
+export const USER_LOGIN = "USER_LOGIN";
+
+interface LoginAction {
+   type: typeof USER_LOGIN,
+   payload: boolean
+}
+
+export type UserType = LoginAction;
