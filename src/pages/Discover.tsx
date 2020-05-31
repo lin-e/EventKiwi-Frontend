@@ -2,9 +2,6 @@ import React, { Component, createRef } from 'react';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonSearchbar, IonRefresher, IonRefresherContent } from '@ionic/react';
 import './Discover.css';
 import ExploreEventsList from '../components/ExploreEventsList';
-import { EventCardDetails, convertResToEventCard } from '../constants/types';
-import { resp_event_card_details } from '../constants/RequestInterfaces';
-import { discoverEventCardURL } from '../constants/endpoints';
 import { connect, ConnectedProps } from 'react-redux';
 import { fetchEventCards } from "../data/actions/actions";
 
@@ -53,7 +50,6 @@ class Discover extends Component<DiscoverProps> {
           <IonRefresherContent></IonRefresherContent>
         </IonRefresher>
 
-        
         <IonSearchbar onIonChange={e => console.log(e.detail.value!)} />
         
         <ExploreEventsList />
