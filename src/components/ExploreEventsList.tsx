@@ -3,13 +3,31 @@ import ExploreEventCard from './ExploreEventCard';
 import {Container, Row, Col} from "react-grid-system";
 import SkeletonTextEventCard from './SkeletonTextEventCard';
 import { EventCardDetails } from '../constants/types';
-
+import { fetchEventCards } from "../data/actions/actions";
 import "./ExploreEventsList.css";
+import { RootState } from '../data/reducers';
+import { connect, ConnectedProps } from 'react-redux';
 
-interface ExploreEventsListProps {
-   events: EventCardDetails[];
-   show: boolean
-}
+// interface ExploreEventsListProps {
+//    events: EventCardDetails[];
+//    show: boolean
+// }
+
+const mapStateToProps = (state: RootState) => {
+   return {
+      events: state.eventCards.events
+   }
+};
+
+const connector = connect(
+   mapStateToProps,
+   { fetchEventCards }
+)
+
+type PropsFromRedux = ConnectedProps<typeof connector>
+
+type ExploreEventsListProps = PropsFromRedux;
+
 
 
 // const aSociety: Society = {id:"100", name:"Some Society", colour:"#eb3434", imageSrc:"https://cgcu.net/images/cgcu_logo_small.jpg"}
@@ -17,9 +35,14 @@ interface ExploreEventsListProps {
 // const event: EventCardDetails = {event_id:"1", name:"test event", organiser: aSociety, image:"https://m.atcdn.co.uk/ect/media/w1024/brand-store/volkswagen/golf/hero.jpg", location:"somewhere in imperial", datetimeStart: new Date(2020, 4, 28, 12, 0), datetimeEnd: new Date(2020, 4, 29, 1, 0), tags:["test", "test1", "test2"]}
 
 class ExploreEventsList extends Component<ExploreEventsListProps> {
+
+   componentDidMount() {
+      this.props.fetchEventCards();
+   }
+
    render() {
       return (
-         <Container className={this.props.show ? "fadeIn" : "fadeOut"}>
+         <Container>
             <Row>
                {this.props.events.length === 0  && [1,2,3,4,5,6].map(x =>
                   <Col lg={4} md={6} key={"skeleton" + x.toString()}>
@@ -50,4 +73,4 @@ class ExploreEventsList extends Component<ExploreEventsListProps> {
    }
 }
 
-export default ExploreEventsList;
+export default connector(ExploreEventsList);

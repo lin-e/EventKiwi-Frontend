@@ -66,7 +66,8 @@ class Discover extends Component<{}, DiscoverState> {
         </IonRefresher>
         
         <IonSearchbar onIonChange={e => console.log(e.detail.value!)} />
-        <ExploreEventsList show={this.state.showEvents} events={this.state.events}/>
+        {/* <ExploreEventsList show={this.state.showEvents} events={this.state.events}/> */}
+        <ExploreEventsList />
         
       </IonContent>
     </IonPage>
