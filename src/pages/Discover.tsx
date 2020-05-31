@@ -27,8 +27,7 @@ class Discover extends Component<DiscoverProps> {
 
 
   refresh() {
-    this.props.fetchEventCards();
-    this.refresherRef.current!.complete();
+    this.props.fetchEventCards(this.refresherRef.current!);
   }
 
   render() {

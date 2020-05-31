@@ -9,13 +9,19 @@ import { convertResToEventCard } from "../../constants/types"
 
 
 
-export const fetchEventCards = (): ThunkAction<void, RootState, unknown, Action<{}>> => async dispatch => {
+export const fetchEventCards = (refresher: HTMLIonRefresherElement | null = null)
+   : ThunkAction<void, RootState, unknown, Action<{}>> => async dispatch => {
    fetch(discoverEventCardURL)
    .then(response => response.json())
-   .then(cards => (dispatch({
-      type: FETCH_EVENTS_CARDS,
-      payload: (cards as resp_event_card_details[]).map(convertResToEventCard)
-   })))
+   .then(cards => {
+      if (refresher !== null) {
+         refresher.complete();
+      }
+      return (dispatch({
+         type: FETCH_EVENTS_CARDS,
+         payload: (cards as resp_event_card_details[]).map(convertResToEventCard)
+      })
+   )})
 }
 
 
