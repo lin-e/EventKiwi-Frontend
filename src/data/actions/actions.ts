@@ -6,11 +6,15 @@ import { discoverEventCardURL } from "../../constants/endpoints"
 import { resp_event_card_details } from "../../constants/RequestInterfaces"
 import { convertResToEventCard } from "../../constants/types"
 
-
-
+export type AppThunk<ReturnType = void> = ThunkAction<
+  ReturnType,
+  RootState,
+  unknown,
+  Action<string>
+>
 
 export const fetchEventCards = (refresher: HTMLIonRefresherElement)
-   : ThunkAction<void, RootState, unknown, Action<{}>> => async dispatch => {
+   : AppThunk => async dispatch => {
    fetch(discoverEventCardURL)
    .then(response => response.json())
    .then(cards => {
@@ -23,15 +27,3 @@ export const fetchEventCards = (refresher: HTMLIonRefresherElement)
       })
    )})
 }
-
-
-
-
-// export const fetchPosts = (): ThunkAction<void, RootState, unknown, Action<{}>> => async dispatch => {
-//    fetch('https://jsonplaceholder.typicode.com/posts')
-//    .then(response => response.json())
-//    .then(posts => (dispatch({
-//       type: FETCH_POSTS,
-//       payload: posts
-//    })))
-// }
