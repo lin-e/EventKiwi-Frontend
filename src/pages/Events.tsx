@@ -1,12 +1,33 @@
-import React, { Component } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import ExploreContainer from '../components/ExploreContainer';
+import React, { Component, createRef } from 'react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonRefresher, IonRefresherContent } from '@ionic/react';
 import './Events.css';
 import CalendarEventView from '../components/CalendarEventView';
-import { Society } from '../models/Profile';
 import { exampleSchedule } from '../data/dummy/calendarDummy'
+import { ThunkDispatch } from 'redux-thunk';
+import { AppActions } from '../data/actions/types';
+import { startFetchCalEvents } from '../data/actions/actions';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 
-class Events extends Component {
+type Props = LinkDispatchProps;
+
+class Events extends Component<Props> {
+  refresherRef: React.RefObject<HTMLIonRefresherElement>;
+
+  constructor(props: Props) {
+    super(props);
+    this.refresherRef = createRef<HTMLIonRefresherElement>();
+    this.refresh = this.refresh.bind(this);
+  }
+
+  componentDidMount() {
+    this.refresh();
+  }
+
+  refresh() {
+    this.props.startFetchCalEvents();
+  }
+
   render() {
     return (
       <IonPage>
@@ -16,11 +37,23 @@ class Events extends Component {
         </IonToolbar>
       </IonHeader>
       <IonContent>
-       <CalendarEventView futureEvents={exampleSchedule}/>
+        {/* <IonRefresher ref={this.refresherRef} slot="fixed" onIonRefresh={this.refresh}>
+          <IonRefresherContent></IonRefresherContent>
+        </IonRefresher> */}
+
+       <CalendarEventView />
       </IonContent>
     </IonPage>
     );
   }
 }
 
-export default Events;
+interface LinkDispatchProps {
+  startFetchCalEvents: () => void;
+}
+
+const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>): LinkDispatchProps => ({
+  startFetchCalEvents: bindActionCreators(startFetchCalEvents, dispatch)
+})
+
+export default connect(null, mapDispatchToProps)(Events);

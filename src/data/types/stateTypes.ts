@@ -5,5 +5,5 @@ export interface EventCardState {
 }
 
 export interface CalendarEventsState {
-   events: EventCardDetails[]
+   events: EventCardDetails[];
 }

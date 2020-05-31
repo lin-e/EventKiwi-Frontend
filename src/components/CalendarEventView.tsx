@@ -4,18 +4,48 @@ import './CalendarEventView.css'
 import { EventCardDetails } from '../constants/types';
 import { sameDay, getLongDate } from '../utils/DateTimeTools';
 import CalendarEventItem from './CalendarEventItem';
+import { RootState } from '../data/reducers';
+import { connect } from 'react-redux';
 
-interface CalendarEventViewProps {
-  futureEvents: EventGroupByDate[];
-}
+// interface CalendarEventViewProps {
+//   futureEvents: EventGroupByDate[];
+// }
 
 interface EventGroupByDate {
   date: Date,
   events: EventCardDetails[]
 }
   
-const CalendarEventView: React.FC<CalendarEventViewProps> = ({ futureEvents }) => {
-  if (futureEvents.length === 0) {
+function groupByDate(events: EventCardDetails[]) {
+  if (events.length == 0) {
+    return [];
+  }
+
+  let currDate = events[0].datetimeStart
+  const groupedItems: EventGroupByDate[] = [{
+    date: currDate,
+    events: []
+  }];
+
+  events.forEach((event) => {
+    if (sameDay(currDate, event.datetimeStart)) {
+      groupedItems[groupedItems.length - 1].events.push(event);
+    } else {
+      currDate = event.datetimeStart
+      groupedItems.push({
+        date: currDate,
+        events: [event]
+      })
+    }
+  })
+
+  return groupedItems;
+}
+
+type Props = LinkStateProps
+
+const CalendarEventView: React.FC<Props> = ({groupedEvents}) => {
+  if (groupedEvents.length === 0) {
     return (
       <IonList>
         <IonListHeader>
@@ -30,7 +60,7 @@ const CalendarEventView: React.FC<CalendarEventViewProps> = ({ futureEvents }) =
   
   return (
     <IonList>
-      {futureEvents.map((eventGroup) => (
+      {groupedEvents.map((eventGroup) => (
         <IonItemGroup key={`date-${eventGroup.date.getDate()}-${eventGroup.date.getMonth() + 1}`}>
         <IonItemDivider sticky color="imperial">
           <IonLabel>
@@ -46,4 +76,15 @@ const CalendarEventView: React.FC<CalendarEventViewProps> = ({ futureEvents }) =
   )
 }
 
-export default CalendarEventView;
+interface LinkStateProps {
+  groupedEvents: EventGroupByDate[]
+}
+
+
+const mapStateToProps = (state: RootState): LinkStateProps => {
+  return {
+    groupedEvents: groupByDate(state.calEvents.events)
+  }
+}
+
+export default connect(mapStateToProps)(CalendarEventView);

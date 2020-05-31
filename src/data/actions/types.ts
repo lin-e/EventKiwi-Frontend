@@ -10,7 +10,7 @@ interface FetchEventCardsAction {
 
 export interface FetchCalendarEventsAction {
    type: typeof FETCH_CAL_EVENTS,
-   events: EventCardDetails[]
+   payload: EventCardDetails[]
 }
 
 export type FetchEventType = FetchEventCardsAction;

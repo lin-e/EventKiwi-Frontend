@@ -8,7 +8,7 @@ export const calEventReducer = (state = initialState, action: FetchCalType): Cal
     case FETCH_CAL_EVENTS:
       return {
         ...state,
-        events: state.events
+        events: action.payload
       };
     default:
       return state;

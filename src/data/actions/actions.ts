@@ -32,7 +32,7 @@ export const fetchEventCards = (refresher: HTMLIonRefresherElement)
 
 export const fetchCalEvents = (): AppActions => ({
    type: FETCH_CAL_EVENTS,
-   events: eventList
+   payload: eventList
 })
 
 export const startFetchCalEvents = () => {
