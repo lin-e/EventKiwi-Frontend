@@ -32,14 +32,14 @@ export interface Resource {
    id: string
 }
 
-export const convertResToResource = (res: resp_resource) => {
+export const convertResToResource = (res: resp_resource): Resource => {
    return {
       name: res.display_name,
       id: res.bucket_key
    }
 }
 
-export const convertResToEventDetails = (res: resp_event_details) => {
+export const convertResToEventDetails = (res: resp_event_details): EventDetails => {
    return {
      id: res.event_id,
      name: res.event_name,
@@ -56,7 +56,7 @@ export const convertResToEventDetails = (res: resp_event_details) => {
  }
 
 
- export const convertResToEventCard = (res: resp_event_card_details) => {
+ export const convertResToEventCard = (res: resp_event_card_details): EventCardDetails => {
    return {
      id: res.event_id,
      name: res.event_name,
@@ -70,7 +70,7 @@ export const convertResToEventDetails = (res: resp_event_details) => {
 
  }
 
- export const convertResToSoc = (res: resp_society) => {
+ export const convertResToSoc = (res: resp_society): Society => {
    return {
      id: res.society_id,
      name: res.society_name,

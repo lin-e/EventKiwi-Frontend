@@ -2,26 +2,24 @@ import React, { Component, createRef } from 'react';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonSearchbar, IonRefresher, IonRefresherContent } from '@ionic/react';
 import './Discover.css';
 import ExploreEventsList from '../components/ExploreEventsList';
-import { EventCardDetails, convertResToEventCard } from '../constants/types';
-import { resp_event_card_details } from '../constants/RequestInterfaces';
-import { discoverEventCardURL } from '../constants/endpoints';
-import { threadId } from 'worker_threads';
+import { connect, ConnectedProps } from 'react-redux';
+import { fetchEventCards } from "../data/actions/actions";
 
 
-interface DiscoverState {
-  events: EventCardDetails[],
-  showEvents: boolean
-}
+const connector = connect(
+  null,
+  { fetchEventCards }
+)
 
-class Discover extends Component<{}, DiscoverState> {
+type PropsFromRedux = ConnectedProps<typeof connector>
+type DiscoverProps = PropsFromRedux;
+
+
+class Discover extends Component<DiscoverProps> {
   refresherRef: React.RefObject<HTMLIonRefresherElement>;
 
-  constructor(props: {}) {
+  constructor(props: DiscoverProps) {
     super(props);
-    this.state = { 
-      events: [],
-      showEvents: false
-    }
     this.refresherRef = createRef<HTMLIonRefresherElement>();
     this.refresh = this.refresh.bind(this);
   }
@@ -29,21 +27,9 @@ class Discover extends Component<{}, DiscoverState> {
   componentDidMount() {
     this.refresh();
   }
-  
+
   refresh() {
-    fetch(discoverEventCardURL)
-      .then(res => res.json())
-      .then(data => {
-         const events: EventCardDetails[] = [];
-         (data as resp_event_card_details[]).forEach(resEvent => {
-          events.push(convertResToEventCard(resEvent));
-         });
-         this.setState({
-           events: events,
-           showEvents: true
-          })}
-      )
-      .then(() => this.refresherRef.current!.complete())
+    this.props.fetchEventCards(this.refresherRef.current!);
   }
 
   render() {
@@ -64,9 +50,10 @@ class Discover extends Component<{}, DiscoverState> {
         <IonRefresher ref={this.refresherRef} slot="fixed" onIonRefresh={this.refresh}>
           <IonRefresherContent></IonRefresherContent>
         </IonRefresher>
-        
+
         <IonSearchbar onIonChange={e => console.log(e.detail.value!)} />
-        <ExploreEventsList show={this.state.showEvents} events={this.state.events}/>
+        
+        <ExploreEventsList />
         
       </IonContent>
     </IonPage>
@@ -74,4 +61,4 @@ class Discover extends Component<{}, DiscoverState> {
   }
 }
 
-export default Discover;
+export default connector(Discover);
