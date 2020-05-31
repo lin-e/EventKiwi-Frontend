@@ -1,4 +1,4 @@
-import { FetchEventType, FETCH_EVENTS_CARDS, USER_LOGIN, UserType,  } from "../actions/types";
+import { USER_LOGIN, UserType,  } from "../actions/types";
 import { UserState } from "../types/stateTypes";
 
 const initialState: UserState = {

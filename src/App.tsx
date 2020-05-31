@@ -1,20 +1,10 @@
 import React from 'react';
-import { Redirect, Route, RouteComponentProps } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import {
   IonApp,
-  IonIcon,
-  IonLabel,
-  IonRouterOutlet,
-  IonTabBar,
-  IonTabButton,
-  IonTabs
+  IonRouterOutlet
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { compass, calendar, person } from 'ionicons/icons';
-import Events from './pages/Events';
-import Discover from './pages/Discover';
-import Profile from './pages/Profile';
-import ViewEvent from './pages/ViewEvent';
 import HomeOrLogin from './components/HomeOrLogin';
 import Login from './pages/Login';
 
