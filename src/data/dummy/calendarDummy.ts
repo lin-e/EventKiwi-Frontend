@@ -1,4 +1,4 @@
-import { Society } from "../../models/Profile"
+import { Society } from "../../constants/types"
 
 const docsoc: Society = {
   id: "400",

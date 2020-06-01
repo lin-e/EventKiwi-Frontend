@@ -1,5 +1,15 @@
-import { Society } from "../models/Profile"
 import { resp_event_details, resp_event_card_details, resp_society, resp_resource } from "./RequestInterfaces";
+
+export interface Profile {
+  id: string;
+  name: string;
+  imageSrc: string;
+  shortName: string;
+}
+
+export interface Society extends Profile {
+  colour: string;
+}
 
 export interface EventCardDetails {
    id: string;

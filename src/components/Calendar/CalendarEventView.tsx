@@ -1,10 +1,10 @@
 import React from 'react';
 import { IonList, IonListHeader, IonItemGroup, IonItemDivider, IonLabel } from '@ionic/react'
 import './CalendarEventView.css'
-import { EventCardDetails } from '../constants/types';
-import { sameDay, getLongDate } from '../utils/DateTimeTools';
+import { EventCardDetails } from '../../constants/types';
+import { sameDay, getLongDate } from '../../utils/DateTimeTools';
 import CalendarEventItem from './CalendarEventItem';
-import { RootState } from '../data/reducers';
+import { RootState } from '../../data/reducers';
 import { connect } from 'react-redux';
 
 // interface CalendarEventViewProps {

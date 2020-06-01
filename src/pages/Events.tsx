@@ -1,7 +1,7 @@
 import React, { Component, createRef } from 'react';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonRefresher, IonRefresherContent } from '@ionic/react';
 import './Events.css';
-import CalendarEventView from '../components/CalendarEventView';
+import CalendarEventView from '../components/Calendar/CalendarEventView';
 import { exampleSchedule } from '../data/dummy/calendarDummy'
 import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../data/actions/types';
