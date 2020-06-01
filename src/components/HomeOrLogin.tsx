@@ -11,10 +11,7 @@ const mapStateToProps = (state: RootState) => ({
 const connector = connect(mapStateToProps)
 type PropsFromRedux = ConnectedProps<typeof connector>
 
-interface HomeOrLoginProps extends PropsFromRedux, RouteComponentProps {
-   redirect: string
-};
-
+interface HomeOrLoginProps extends PropsFromRedux {};
 const HomeOrLogin: React.FC<HomeOrLoginProps> = (props) => {
    return props.loggedIn ? <Tabs /> : <Redirect to="/auth" />
 };

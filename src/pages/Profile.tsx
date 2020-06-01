@@ -1,23 +1,25 @@
-import React, { Component, MouseEvent } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonGrid, IonRow, IonCol, IonButton, IonChip, IonLabel, IonIcon, IonText, IonModal } from '@ionic/react';
+import React, { Component } from 'react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonGrid, IonRow, IonCol, IonButton, IonModal } from '@ionic/react';
 import './Profile.css';
 import ItemSlider from '../components/ItemSlider';
 import { Society } from '../constants/types';
 import ProfileSocietyIcon from '../components/Profile/ProfileSocietyIcon';
 import { Container } from 'react-grid-system';
 import InterestChip from '../components/InterestChip';
-import { closeCircle } from 'ionicons/icons';
 import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../data/actions/types';
 import { bindActionCreators } from 'redux';
-import { startFetchProfileInterests, startRemoveProfileInterest, startFetchProfileSocs } from '../data/actions/actions';
+import { startFetchProfileInterests, startFetchProfileSocs } from '../data/actions/actions';
 import { RootState } from '../data/reducers';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router';
+import { UserProfile } from '../data/types/dataInterfaces';
 
 interface LinkStateProps {
   interests: string[],
-  societies: Society[]
-  name: string
+  societies: Society[],
+  profile: UserProfile,
+  isLoggedIn: boolean
 }
 
 interface LinkDispatchProps {
@@ -53,17 +55,22 @@ class Profile extends Component<ProfileProps, ProfileState> {
   }
 
   render() {
+
+    if (!this.props.isLoggedIn) {
+      return <Redirect to="/auth" />
+    }
+
     return (
       <IonPage>
         <IonHeader>
           <IonToolbar>
-            <IonTitle>{this.props.name}</IonTitle>
+            <IonTitle>{this.props.profile ? this.props.profile.firstname : "Profile"}</IonTitle>
           </IonToolbar>
         </IonHeader>
         <IonContent>
           <IonHeader collapse="condense">
             <IonToolbar>
-              <IonTitle size="large">{this.props.name}</IonTitle>
+              <IonTitle size="large">{this.props.profile ? this.props.profile.firstname : "Profile"}</IonTitle>
             </IonToolbar>
           </IonHeader>
           <Container className="profileContainer">
@@ -139,7 +146,8 @@ const mapStateToProps = (state: RootState): LinkStateProps => {
   return {
     interests: state.profileInterests.interests,
     societies: state.profileSocs.societies,
-    name: state.userDetails.profile.firstname
+    profile: state.userDetails.profile,
+    isLoggedIn: state.userDetails.isLoggedIn
   }
 }
 

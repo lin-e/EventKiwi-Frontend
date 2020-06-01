@@ -28,6 +28,7 @@ import '@ionic/react/css/display.css';
 import './theme/variables.css';
 import { connect, ConnectedProps } from 'react-redux';
 import { loadUserData } from "./data/actions/userActions";
+import Tabs from './pages/Tabs';
 
 const connector = connect(
   null,
@@ -47,8 +48,8 @@ const App: React.FC<AppProps> = (props) => {
     <IonApp>
       <IonReactRouter>
         <IonRouterOutlet>
-          <Route path="/auth" component={Login} exact={true} />
-          <Route path="/" render={(props) => <HomeOrLogin {...props} redirect={window.location.pathname}/>} />
+          <Route path="/auth" component={Login} exact />
+          <Route path="/" render={() => <Tabs />} />
         </IonRouterOutlet>
       </IonReactRouter>
     </IonApp>
