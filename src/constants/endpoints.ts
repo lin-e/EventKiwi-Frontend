@@ -8,3 +8,7 @@ export const discoverEventCardURL = `${endpointURL}/events/cards/all`
 export const eventDetailsURL = `${endpointURL}/events/details/`
 export const eventResourcesURL = `${stagingURL}/events/resources/`
 export const resourceDownloadURL = `${productionURL}/file/get/`
+
+
+export const authEndpoint = "https://staging.drp.social/auth/new/";
+export const deAuthEndpoint = "https://staging.drp.social/auth/end/";
