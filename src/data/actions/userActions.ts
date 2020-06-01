@@ -11,32 +11,20 @@ const IS_LOGGED_IN = 'isLoggedIn';
 const USER_TOKEN = 'userToken';
 const PROFILE = 'profile';
 
-export type AppThunk<ReturnType = void> = ThunkAction<
-  ReturnType,
-  RootState,
-  unknown,
-  Action<string>
->
+export type AppThunk<ReturnType = void> =
+   ThunkAction<
+      ReturnType,
+      RootState,
+      unknown,
+      Action<string>
+   >
 
-// export const fetchEventCards = (refresher: HTMLIonRefresherElement)
-//    : AppThunk => async dispatch => {
-//    fetch(discoverEventCardURL)
-//    .then(response => response.json())
-//    .then(cards => {
-//       if (refresher !== null) {
-//          refresher.complete();
-//       }
-//       return (dispatch({
-//          type: FETCH_EVENTS_CARDS,
-//          payload: (cards as resp_event_card_details[]).map(convertResToEventCard)
-//       })
-//    )})
-// }
 
-const saveUserData = (data: AuthResponse, login: boolean) => {
-   Storage.set({key: IS_LOGGED_IN, value:JSON.stringify(login)});
-   Storage.set({key: USER_TOKEN, value:JSON.stringify(data.body.token)});
-   Storage.set({key: PROFILE, value:JSON.stringify(data.body.profile)});
+
+const saveUserData = async (data: AuthResponse, login: boolean) => {
+   await Storage.set({ key: IS_LOGGED_IN, value: JSON.stringify(login) });
+   await Storage.set({ key: USER_TOKEN, value: JSON.stringify(data.body.token) });
+   await Storage.set({ key: PROFILE, value: JSON.stringify(data.body.profile) });
 }
 
 
@@ -55,27 +43,28 @@ export const loadUserData = (): AppThunk => async dispatch => {
       type: LOAD_USER_DATA,
       payload: data
    });
- }
- 
- export const setData = (data: Partial<UserState>) => ({
+}
+
+export const setData = (data: Partial<UserState>) => ({
    type: LOAD_USER_DATA,
    data
- } as const);
+} as const);
 
 
-
- export const getUserData = async () => {
+export const getUserData = async () => {
    const response = await Promise.all([
-     Storage.get({ key: IS_LOGGED_IN }),
-     Storage.get({ key: USER_TOKEN }),
-     Storage.get({ key: PROFILE })]);
+      Storage.get({ key: IS_LOGGED_IN }),
+      Storage.get({ key: USER_TOKEN }),
+      Storage.get({ key: PROFILE })]);
+
    const isLoggedin = await response[0].value === 'true';
    const userToken = await response[1].value || undefined;
-   const profile = await response[2].value || undefined;
-   const data = {
+   const profileString = await response[2].value;
+   let profile = profileString ? JSON.parse(profileString) : undefined;
+
+   return {
       isLoggedIn: isLoggedin,
       userToken: userToken,
       profile: profile
    }
-   return data;
- }
+}
