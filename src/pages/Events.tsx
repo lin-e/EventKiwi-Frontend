@@ -41,7 +41,7 @@ class Events extends Component<Props> {
           <IonRefresherContent></IonRefresherContent>
         </IonRefresher> */}
 
-       <CalendarEventView />
+          <CalendarEventView />
       </IonContent>
     </IonPage>
     );

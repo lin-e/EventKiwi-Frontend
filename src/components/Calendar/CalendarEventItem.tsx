@@ -25,7 +25,7 @@ const CalendarEventItem: React.FC<CalendarEventItemProps> = ({ event, isFavourit
 
   return (
     <IonItemSliding ref={favouriteSlider}>
-      <IonItem detail={true} routerLink={`/events/event/${event.id}`}>
+      <IonItem routerLink={`/events/event/${event.id}`}>
         <IonGrid className="eventItem" style={barCol}>
           <IonRow className="eventName">
             <div>
@@ -33,14 +33,14 @@ const CalendarEventItem: React.FC<CalendarEventItemProps> = ({ event, isFavourit
             </div>
           </IonRow>
           <IonRow>
-            <IonCol size="6" className="detailCol">
+            <IonCol size="5" className="detailCol">
               <IonText color="medium">
                 <p className="eventDateTime">
                   {getDateRangeNoStartDate(event.datetimeStart, event.datetimeEnd)}
                 </p>
               </IonText>
             </IonCol>
-            <IonCol size="6" className="detailCol">
+            <IonCol size="7" className="detailCol">
               <IonText color="medium">
                 <p className="eventLocation">{event.location}</p>
               </IonText>

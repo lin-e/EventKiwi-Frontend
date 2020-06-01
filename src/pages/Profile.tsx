@@ -13,6 +13,7 @@ import { bindActionCreators } from 'redux';
 import { startFetchProfileInterests, startRemoveProfileInterest, startFetchProfileSocs } from '../data/actions/actions';
 import { RootState } from '../data/reducers';
 import { connect } from 'react-redux';
+import EmptySectionText from '../components/EmptySectionText';
 
 interface LinkStateProps {
   interests: string[],
@@ -79,7 +80,7 @@ class Profile extends Component<ProfileProps, ProfileState> {
                       <ProfileSocietyIcon name={soc.shortName} logo={soc.imageSrc} />
                     ))}
                   </ItemSlider>) :
-                  <p className="emptyText">Try following or joining some societies to see what is on!</p>
+                  <EmptySectionText mainText="No followed societies" subText="Try following or joining some societies to see what is on!"/>
                 }
               </div>
             </IonRow>
@@ -98,7 +99,8 @@ class Profile extends Component<ProfileProps, ProfileState> {
                   (this.props.interests.map((interest) => (
                     <InterestChip interest={interest} removeBtn={true} />
                   ))) :
-                  <p className="emptyText">Try adding some interests to find more of what you like!</p>
+                  // <p className="emptyText">Try adding some interests to find more of what you like!</p>
+                  <EmptySectionText mainText="No followed interests" subText="Try adding some interests to find more of what you like!"/>
                 }
               </div>
             </IonRow>
