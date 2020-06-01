@@ -4,6 +4,15 @@ export interface EventCardState {
    events: EventCardDetails[]
 }
 
+interface UserProfile {
+   firstname: string,
+   surname: string,
+   email: string
+}
+
+
 export interface UserState {
-   isLoggedIn: boolean
+   isLoggedIn: boolean,
+   userToken: string,
+   profile: UserProfile
 }
