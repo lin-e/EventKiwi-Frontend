@@ -45,12 +45,6 @@ export const loadUserData = (): AppThunk => async dispatch => {
    });
 }
 
-export const setData = (data: Partial<UserState>) => ({
-   type: LOAD_USER_DATA,
-   data
-} as const);
-
-
 export const getUserData = async () => {
    const response = await Promise.all([
       Storage.get({ key: IS_LOGGED_IN }),
@@ -65,6 +59,7 @@ export const getUserData = async () => {
    return {
       isLoggedIn: isLoggedin,
       userToken: userToken,
-      profile: profile
+      profile: profile,
+      loading: false
    }
 }

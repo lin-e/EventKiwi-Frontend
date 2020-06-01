@@ -19,7 +19,8 @@ interface LinkStateProps {
   interests: string[],
   societies: Society[],
   profile: UserProfile,
-  isLoggedIn: boolean
+  isLoggedIn: boolean,
+  isLoading: boolean
 }
 
 interface LinkDispatchProps {
@@ -56,7 +57,7 @@ class Profile extends Component<ProfileProps, ProfileState> {
 
   render() {
 
-    if (!this.props.isLoggedIn) {
+    if (!this.props.isLoggedIn && !this.props.isLoading) {
       return <Redirect to="/auth" />
     }
 
@@ -147,7 +148,8 @@ const mapStateToProps = (state: RootState): LinkStateProps => {
     interests: state.profileInterests.interests,
     societies: state.profileSocs.societies,
     profile: state.userDetails.profile,
-    isLoggedIn: state.userDetails.isLoggedIn
+    isLoggedIn: state.userDetails.isLoggedIn,
+    isLoading: state.userDetails.loading
   }
 }
 

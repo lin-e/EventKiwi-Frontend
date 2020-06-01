@@ -8,6 +8,7 @@ export interface EventCardState {
 
 
 export interface UserState {
+   loading: boolean,
    isLoggedIn: boolean,
    userToken: string,
    profile: UserProfile
