@@ -1,15 +1,19 @@
 import React, { Component, createRef } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonRefresher, IonRefresherContent } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import './Events.css';
 import CalendarEventView from '../components/Calendar/CalendarEventView';
-import { exampleSchedule } from '../data/dummy/calendarDummy'
 import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../data/actions/types';
 import { startFetchCalEvents } from '../data/actions/actions';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { RootState } from '../data/reducers';
+import { Redirect } from 'react-router';
 
-type Props = LinkDispatchProps;
+type Props = LinkDispatchProps & {
+  isLoggedIn: boolean,
+  isLoading: boolean
+};
 
 class Events extends Component<Props> {
   refresherRef: React.RefObject<HTMLIonRefresherElement>;
@@ -29,6 +33,11 @@ class Events extends Component<Props> {
   }
 
   render() {
+
+    if (!this.props.isLoggedIn && !this.props.isLoading) {
+      return <Redirect to="/auth" />
+    }
+
     return (
       <IonPage>
       <IonHeader>
@@ -52,8 +61,15 @@ interface LinkDispatchProps {
   startFetchCalEvents: () => void;
 }
 
+const mapStateToProps = (state: RootState) => {
+  return {
+    isLoggedIn: state.userDetails.isLoggedIn,
+    isLoading: state.userDetails.loading
+  }
+}
+
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>): LinkDispatchProps => ({
   startFetchCalEvents: bindActionCreators(startFetchCalEvents, dispatch)
 })
 
-export default connect(null, mapDispatchToProps)(Events);
+export default connect(mapStateToProps, mapDispatchToProps)(Events);

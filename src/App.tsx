@@ -1,19 +1,12 @@
-import React from 'react';
-import { Redirect, Route } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Route } from 'react-router-dom';
 import {
   IonApp,
-  IonIcon,
-  IonLabel,
-  IonRouterOutlet,
-  IonTabBar,
-  IonTabButton,
-  IonTabs
+  IonRouterOutlet
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { compass, calendar, person } from 'ionicons/icons';
-import Events from './pages/Events';
-import Discover from './pages/Discover';
-import Profile from './pages/Profile';
+import HomeOrLogin from './components/HomeOrLogin';
+import Login from './pages/Login';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -33,38 +26,34 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
-import ViewEvent from './pages/ViewEvent';
+import { connect, ConnectedProps } from 'react-redux';
+import { loadUserData } from "./data/actions/userActions";
+import Tabs from './pages/Tabs';
 
-const App: React.FC = () => (
-  <IonApp>
-    <IonReactRouter>
-      <IonTabs>
-        <IonRouterOutlet>
-          <Route path="/events" component={Events} exact={true} />
-          <Route path="/discover" component={Discover} exact={true} />
-          <Route path="/event/:id" component={ViewEvent} exact={true} />
-          <Route path="/discover/event/:id" component={ViewEvent} exact={true} />
-          <Route path="/events/event/:id" component={ViewEvent} exact={true} />
-          <Route path="/profile" component={Profile} />
-          <Route path="/" render={() => <Redirect to="/events" />} exact={true} />
-        </IonRouterOutlet>
-        <IonTabBar slot="bottom">
-          <IonTabButton tab="events" href="/events">
-            <IonIcon icon={calendar} />
-            <IonLabel>Events</IonLabel>
-          </IonTabButton>
-          <IonTabButton tab="discover" href="/discover">
-            <IonIcon icon={compass} />
-            <IonLabel>Discover</IonLabel>
-          </IonTabButton>
-          <IonTabButton tab="profile" href="/profile">
-            <IonIcon icon={person} />
-            <IonLabel>Profile</IonLabel>
-          </IonTabButton>
-        </IonTabBar>
-      </IonTabs>
-    </IonReactRouter>
-  </IonApp>
+const connector = connect(
+  null,
+  { loadUserData }
 );
 
-export default App;
+type PropsFromRedux = ConnectedProps<typeof connector>
+type AppProps = PropsFromRedux;
+
+
+const App: React.FC<AppProps> = (props) => {
+  useEffect(() => {
+    props.loadUserData()
+  }, []);
+  
+  return (
+    <IonApp>
+      <IonReactRouter>
+        <IonRouterOutlet>
+          <Route path="/auth" component={Login} exact />
+          <Route path="/" render={() => <Tabs />} />
+        </IonRouterOutlet>
+      </IonReactRouter>
+    </IonApp>
+  )  
+};
+
+export default connector(App);

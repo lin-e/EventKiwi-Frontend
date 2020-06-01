@@ -1,5 +1,5 @@
 {
-  "appId": "io.ionic.starter",
+  "appId": "social.drp.events",
   "appName": "imperial-events",
   "bundledWebRuntime": false,
   "npmClient": "npm",
