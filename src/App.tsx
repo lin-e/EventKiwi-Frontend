@@ -29,6 +29,13 @@ import {OAuth2Client} from '@byteowls/capacitor-oauth2';
 
 /* Theme variables */
 import './theme/variables.css';
+import { connect } from 'react-redux';
+import { fetchEventCards } from "./data/actions/actions";
+
+const connector = connect(
+  null,
+  { fetchEventCards }
+);
 
 const App: React.FC = () => {
   registerWebPlugin(OAuth2Client);
@@ -44,4 +51,4 @@ const App: React.FC = () => {
   )  
 };
 
-export default App;
+export default connector(App);

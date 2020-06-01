@@ -6,7 +6,7 @@ import { RootState } from '../data/reducers';
 import { Redirect, RouteComponentProps } from 'react-router';
 import { Plugins } from '@capacitor/core';
 import MicrosoftLogin from "react-microsoft-login";
-import { logIn } from "../data/actions/actions";
+import { logIn } from "../data/actions/userActions";
 const { Browser } = Plugins;
 
 

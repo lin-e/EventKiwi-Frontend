@@ -1,7 +1,6 @@
 import { ThunkAction } from "redux-thunk"
 import { RootState } from "../reducers"
 import { Action } from "redux"
-import { UserType, USER_LOGIN, AuthResponse } from "./types"
 import { FETCH_EVENTS_CARDS, FETCH_CAL_EVENTS, AppActions, FETCH_PROFILE_INTERESTS, FETCH_PROFILE_SOCS, REMOVE_PROFILE_INTEREST } from "./types"
 import { discoverEventCardURL } from "../../constants/endpoints"
 import { resp_event_card_details } from "../../constants/RequestInterfaces"
@@ -32,10 +31,6 @@ export const fetchEventCards = (refresher: HTMLIonRefresherElement)
    )})
 }
 
-export const logIn = (user: AuthResponse): UserType => ({
-   type: USER_LOGIN,
-   payload: user
-})
 
 export const fetchCalEvents = (): AppActions => ({
    type: FETCH_CAL_EVENTS,

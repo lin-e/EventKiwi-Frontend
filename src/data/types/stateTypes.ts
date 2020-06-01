@@ -1,14 +1,10 @@
 import { EventCardDetails, Society } from "../../constants/types";
+import { UserProfile } from "./dataInterfaces";
 
 export interface EventCardState {
    events: EventCardDetails[]
 }
 
-interface UserProfile {
-   firstname: string,
-   surname: string,
-   email: string
-}
 
 
 export interface UserState {
