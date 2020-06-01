@@ -6,10 +6,8 @@ import { sameDay, getLongDate } from '../../utils/DateTimeTools';
 import CalendarEventItem from './CalendarEventItem';
 import { RootState } from '../../data/reducers';
 import { connect } from 'react-redux';
-
-// interface CalendarEventViewProps {
-//   futureEvents: EventGroupByDate[];
-// }
+import EmptySectionText from '../EmptySectionText';
+import { Container } from 'react-grid-system';
 
 interface EventGroupByDate {
   date: Date,
@@ -47,32 +45,29 @@ type Props = LinkStateProps
 const CalendarEventView: React.FC<Props> = ({groupedEvents}) => {
   if (groupedEvents.length === 0) {
     return (
-      <IonList>
-        <IonListHeader>
-          No Events Found
-          Find some events and societies in the Discover tab!
-        </IonListHeader>
-      </IonList>
+      <EmptySectionText mainText="No Events Found" subText="Find some events and societies in the Discover tab!" />
     )
   }
 
   const currDate = new Date(Date.now())
   
   return (
-    <IonList>
-      {groupedEvents.map((eventGroup) => (
-        <IonItemGroup key={`date-${eventGroup.date.getDate()}-${eventGroup.date.getMonth() + 1}`}>
-        <IonItemDivider sticky color="imperial">
-          <IonLabel>
-            {(sameDay(eventGroup.date, currDate) ? "Today - " : "") + getLongDate(eventGroup.date)}
-          </IonLabel>
-        </IonItemDivider>
-        {eventGroup.events.map((eventOnDay) => (
-          <CalendarEventItem event={eventOnDay} isFavourite={false} />
+    <Container className="calendarContainer">
+      <IonList>
+        {groupedEvents.map((eventGroup) => (
+          <IonItemGroup key={`date-${eventGroup.date.getDate()}-${eventGroup.date.getMonth() + 1}`}>
+          <IonItemDivider sticky color="imperial">
+            <IonLabel>
+              {(sameDay(eventGroup.date, currDate) ? "Today - " : "") + getLongDate(eventGroup.date)}
+            </IonLabel>
+          </IonItemDivider>
+          {eventGroup.events.map((eventOnDay) => (
+            <CalendarEventItem event={eventOnDay} isFavourite={false} />
+          ))}
+        </IonItemGroup>
         ))}
-      </IonItemGroup>
-      ))}
-    </IonList>
+      </IonList>
+    </Container>
   )
 }
 

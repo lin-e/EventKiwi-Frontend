@@ -10,6 +10,7 @@ import { startFetchProfileInterests, startFetchProfileSocs } from '../data/actio
 import { logOut } from '../data/actions/userActions';
 import { RootState } from '../data/reducers';
 import { connect } from 'react-redux';
+import EmptySectionText from '../components/EmptySectionText';
 import { Redirect } from 'react-router';
 import { UserProfile } from '../data/types/dataInterfaces';
 import { Plugins } from '@capacitor/core';
@@ -97,12 +98,13 @@ class Profile extends Component<ProfileProps, ProfileState> {
               <IonRow>
                 <div className="sectionContent">
                   {this.props.societies.length !== 0 ?
-                    (<ItemSlider width={130}>
+                    <ItemSlider width={130}>
                       {this.props.societies.map((soc) => (
                         <ProfileSocietyIcon name={soc.shortName} logo={soc.imageSrc} />
                       ))}
-                    </ItemSlider>) :
-                    <p className="emptyText">Try following or joining some societies to see what is on!</p>
+                    </ItemSlider> :
+                    <EmptySectionText mainText="No followed societies" subText="Try following or joining some societies to see what is on!"/>
+
                   }
                 </div>
               </IonRow>
@@ -121,7 +123,7 @@ class Profile extends Component<ProfileProps, ProfileState> {
                     (this.props.interests.map((interest) => (
                       <InterestChip interest={interest} removeBtn={true} />
                     ))) :
-                    <p className="emptyText">Try adding some interests to find more of what you like!</p>
+                    <EmptySectionText mainText="No followed interests" subText="Try adding some interests to find more of what you like!"/>
                   }
                 </div>
               </IonRow>
