@@ -1,5 +1,5 @@
 import React, { Component, MouseEvent } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonGrid, IonRow, IonCol, IonButton, IonChip, IonLabel, IonIcon } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonGrid, IonRow, IonCol, IonButton, IonChip, IonLabel, IonIcon, IonText } from '@ionic/react';
 import './Profile.css';
 import ItemSlider from '../components/ItemSlider';
 import { Society } from '../constants/types';
@@ -16,10 +16,19 @@ import { connect } from 'react-redux';
 
 type Props = LinkStateProps & LinkDispatchProps
 
-class Profile extends Component<Props> {
+interface ProfileState {
+  showSocietyModal: boolean,
+  showInterestModal: boolean
+}
+
+class Profile extends Component<Props, ProfileState> {
 
   constructor(props: Props) {
     super(props);
+    this.state = {
+      showSocietyModal: false,
+      showInterestModal: false
+    }
     this.refresh = this.refresh.bind(this);
   }
 
@@ -49,16 +58,19 @@ class Profile extends Component<Props> {
                 <IonTitle className="profileTitle">My Societies</IonTitle>
               </IonCol>
               <IonCol size="4">
-                <IonButton  className="profileBtn">Manage</IonButton>
+                <IonButton  className="profileBtn" color="transparent">Manage</IonButton>
               </IonCol>
             </IonRow>
             <IonRow>
               <div className="sectionContent">
-                <ItemSlider width={130}>
-                  {this.props.societies.map((soc) => (
-                    <ProfileSocietyIcon name={soc.shortName} logo={soc.imageSrc} />
-                  ))}
-                </ItemSlider>
+                {this.props.societies.length !== 0 ?
+                  (<ItemSlider width={130}>
+                    {this.props.societies.map((soc) => (
+                      <ProfileSocietyIcon name={soc.shortName} logo={soc.imageSrc} />
+                    ))}
+                  </ItemSlider>) :
+                  <p className="emptyText">Try following or joining some societies to see what is on!</p>
+                }
               </div>
             </IonRow>
 
@@ -67,14 +79,17 @@ class Profile extends Component<Props> {
                 <IonTitle className="profileTitle">My Interests</IonTitle>
               </IonCol>
               <IonCol size="4">
-                <IonButton  className="profileBtn">Manage</IonButton>
+                <IonButton  className="profileBtn" color="transparent">Manage</IonButton>
               </IonCol>
             </IonRow>
             <IonRow>
               <div className="sectionContent interests">
-                {this.props.interests.map((interest) => (
-                  <InterestChip interest={interest} removeBtn={true} />
-                ))}
+                {this.props.interests.length !== 0 ?
+                  (this.props.interests.map((interest) => (
+                    <InterestChip interest={interest} removeBtn={true} />
+                  ))) :
+                  <p className="emptyText">Try adding some interests to find more of what you like!</p>
+                }
               </div>
             </IonRow>
           </IonGrid>
