@@ -17,6 +17,7 @@ import { connect } from 'react-redux';
 interface LinkStateProps {
   interests: string[],
   societies: Society[]
+  name: string
 }
 
 interface LinkDispatchProps {
@@ -50,72 +51,77 @@ class Profile extends Component<ProfileProps, ProfileState> {
     this.props.startFetchInterests();
     this.props.startFetchSocs();
   }
-  
+
   render() {
     return (
       <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Profile</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent>
-        <Container className="profileContainer">
+        <IonHeader>
+          <IonToolbar>
+            <IonTitle>{this.props.name}</IonTitle>
+          </IonToolbar>
+        </IonHeader>
+        <IonContent>
+          <IonHeader collapse="condense">
+            <IonToolbar>
+              <IonTitle size="large">{this.props.name}</IonTitle>
+            </IonToolbar>
+          </IonHeader>
+          <Container className="profileContainer">
 
-          <IonGrid>
-            <IonRow>
-              <IonCol className="sectionHeader" size="8">
-                <IonTitle className="profileTitle">My Societies</IonTitle>
-              </IonCol>
-              <IonCol size="4">
-                <IonButton  className="profileBtn" color="transparent" onClick={() => this.setState({showSocietyModal: true})}>Manage</IonButton>
-              </IonCol>
-            </IonRow>
-            <IonRow>
-              <div className="sectionContent">
-                {this.props.societies.length !== 0 ?
-                  (<ItemSlider width={130}>
-                    {this.props.societies.map((soc) => (
-                      <ProfileSocietyIcon name={soc.shortName} logo={soc.imageSrc} />
-                    ))}
-                  </ItemSlider>) :
-                  <p className="emptyText">Try following or joining some societies to see what is on!</p>
-                }
-              </div>
-            </IonRow>
+            <IonGrid>
+              <IonRow>
+                <IonCol className="sectionHeader" size="8">
+                  <IonTitle className="profileTitle">My Societies</IonTitle>
+                </IonCol>
+                <IonCol size="4">
+                  <IonButton className="profileBtn" color="transparent" onClick={() => this.setState({ showSocietyModal: true })}>Manage</IonButton>
+                </IonCol>
+              </IonRow>
+              <IonRow>
+                <div className="sectionContent">
+                  {this.props.societies.length !== 0 ?
+                    (<ItemSlider width={130}>
+                      {this.props.societies.map((soc) => (
+                        <ProfileSocietyIcon name={soc.shortName} logo={soc.imageSrc} />
+                      ))}
+                    </ItemSlider>) :
+                    <p className="emptyText">Try following or joining some societies to see what is on!</p>
+                  }
+                </div>
+              </IonRow>
 
-            <IonRow>
-              <IonCol className="sectionHeader" size="8">
-                <IonTitle className="profileTitle">My Interests</IonTitle>
-              </IonCol>
-              <IonCol size="4">
-                <IonButton  className="profileBtn" color="transparent" onClick={() => this.setState({showInterestModal: true})}>Manage</IonButton>
-              </IonCol>
-            </IonRow>
-            <IonRow>
-              <div className="sectionContent interests">
-                {this.props.interests.length !== 0 ?
-                  (this.props.interests.map((interest) => (
-                    <InterestChip interest={interest} removeBtn={true} />
-                  ))) :
-                  <p className="emptyText">Try adding some interests to find more of what you like!</p>
-                }
-              </div>
-            </IonRow>
-          </IonGrid>
+              <IonRow>
+                <IonCol className="sectionHeader" size="8">
+                  <IonTitle className="profileTitle">My Interests</IonTitle>
+                </IonCol>
+                <IonCol size="4">
+                  <IonButton className="profileBtn" color="transparent" onClick={() => this.setState({ showInterestModal: true })}>Manage</IonButton>
+                </IonCol>
+              </IonRow>
+              <IonRow>
+                <div className="sectionContent interests">
+                  {this.props.interests.length !== 0 ?
+                    (this.props.interests.map((interest) => (
+                      <InterestChip interest={interest} removeBtn={true} />
+                    ))) :
+                    <p className="emptyText">Try adding some interests to find more of what you like!</p>
+                  }
+                </div>
+              </IonRow>
+            </IonGrid>
 
-        </Container>
+          </Container>
 
-        <IonModal isOpen={this.state.showSocietyModal}>
-          <p>This is the society modal</p>
-          <IonButton onClick={() => this.setState({showSocietyModal: false})}>Close modal</IonButton>
-        </IonModal>
-        <IonModal isOpen={this.state.showInterestModal}>
-          <p>This is the interest modal</p>
-          <IonButton onClick={() => this.setState({showInterestModal: false})}>Close modal</IonButton>
-        </IonModal>
-      </IonContent>
-    </IonPage>
+          <IonModal isOpen={this.state.showSocietyModal}>
+            <p>This is the society modal</p>
+            <IonButton onClick={() => this.setState({ showSocietyModal: false })}>Close modal</IonButton>
+          </IonModal>
+          <IonModal isOpen={this.state.showInterestModal}>
+            <p>This is the interest modal</p>
+            <IonButton onClick={() => this.setState({ showInterestModal: false })}>Close modal</IonButton>
+          </IonModal>
+        </IonContent>
+      </IonPage>
     );
   }
 }
@@ -123,7 +129,8 @@ class Profile extends Component<ProfileProps, ProfileState> {
 const mapStateToProps = (state: RootState): LinkStateProps => {
   return {
     interests: state.profileInterests.interests,
-    societies: state.profileSocs.societies
+    societies: state.profileSocs.societies,
+    name: state.userDetails.profile.firstname
   }
 }
 
