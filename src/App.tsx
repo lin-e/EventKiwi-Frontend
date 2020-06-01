@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Route } from 'react-router-dom';
 import {
   IonApp,
@@ -24,21 +24,25 @@ import '@ionic/react/css/text-transformation.css';
 import '@ionic/react/css/flex-utils.css';
 import '@ionic/react/css/display.css';
 
-import {registerWebPlugin} from "@capacitor/core";
-import {OAuth2Client} from '@byteowls/capacitor-oauth2';
-
 /* Theme variables */
 import './theme/variables.css';
-import { connect } from 'react-redux';
-import { fetchEventCards } from "./data/actions/actions";
+import { connect, ConnectedProps } from 'react-redux';
+import { loadUserData } from "./data/actions/userActions";
 
 const connector = connect(
   null,
-  { fetchEventCards }
+  { loadUserData }
 );
 
-const App: React.FC = () => {
-  registerWebPlugin(OAuth2Client);
+type PropsFromRedux = ConnectedProps<typeof connector>
+type AppProps = PropsFromRedux;
+
+
+const App: React.FC<AppProps> = (props) => {
+  useEffect(() => {
+    props.loadUserData()
+  }, []);
+  
   return (
     <IonApp>
       <IonReactRouter>

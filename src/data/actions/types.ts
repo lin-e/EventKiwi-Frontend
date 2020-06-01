@@ -1,5 +1,6 @@
 import { EventCardDetails, Society } from "../../constants/types";
 import { AuthResponse } from "../types/dataInterfaces";
+import { UserState } from "../types/stateTypes";
 
 export const FETCH_EVENTS_CARDS = "FETCH_EVENTS_CARDS";
 
@@ -16,18 +17,6 @@ interface FetchEventCardsAction {
 
 
 export type FetchEventType = FetchEventCardsAction;
-
-
-
-
-export const USER_LOGIN = "USER_LOGIN";
-
-interface LoginAction {
-   type: typeof USER_LOGIN,
-   payload: AuthResponse
-}
-
-export type UserType = LoginAction;
 
 export interface FetchCalendarEventsAction {
    type: typeof FETCH_CAL_EVENTS,
@@ -56,3 +45,22 @@ export type FetchCalType = FetchCalendarEventsAction;
 export type FetchProfileType =  FetchProfileInterestsAction | RemoveProfileInterestAction | FetchProfileSocsAction;
 
 export type AppActions = FetchEventType | FetchCalType | FetchProfileType;
+
+
+
+
+
+export const USER_LOGIN = "USER_LOGIN";
+export const LOAD_USER_DATA = "LOAD_USER_DATA";
+
+interface LoginAction {
+   type: typeof USER_LOGIN,
+   payload: AuthResponse
+}
+
+interface LoadUserDataAction {
+   type: typeof LOAD_USER_DATA,
+   payload: UserState
+}
+
+export type UserType = LoginAction | LoadUserDataAction;
