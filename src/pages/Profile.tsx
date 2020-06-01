@@ -108,6 +108,15 @@ class Profile extends Component<ProfileProps, ProfileState> {
                   }
                 </div>
               </IonRow>
+              <IonRow>
+                <IonCol>
+                  <IonButton expand="block" color="danger">Log out</IonButton>
+                </IonCol>
+                <IonCol>
+                  <IonButton expand="block">My Union</IonButton>
+                </IonCol>
+
+              </IonRow>
             </IonGrid>
 
           </Container>
