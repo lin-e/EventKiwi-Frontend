@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import './Discover.css';
+import React from 'react';
+import { IonContent, IonPage, IonGrid, IonRow, IonCol, IonCardContent, IonCard, IonCardHeader, IonCardTitle } from '@ionic/react';
+import './Login.css';
 import { connect, ConnectedProps } from 'react-redux';
 import { RootState } from '../data/reducers';
 import { Redirect, RouteComponentProps } from 'react-router';
-import { Plugins } from '@capacitor/core';
 import MicrosoftLogin from "react-microsoft-login";
 import { logIn } from "../data/actions/userActions";
 
@@ -34,30 +33,40 @@ const Login: React.FC<LoginProps> = (props, state) => {
          let msToken = data.authResponseWithAccessToken.accessToken
          fetch(authEndpoint, {
             method: 'post',
-            body: JSON.stringify({token: msToken}),
+            body: JSON.stringify({ token: msToken }),
             headers: { 'Content-Type': 'application/json' }
-          })
-         .then(res => res.json())
-         .then(data => props.logIn(data))
+         })
+            .then(res => res.json())
+            .then(data => props.logIn(data))
 
+      } if (err) {
+         console.error("Error:", err)
       }
    }
 
    return (
       <IonPage>
-         <IonHeader>
-            <IonToolbar>
-               <IonTitle>Imperial Events</IonTitle>
-            </IonToolbar>
-         </IonHeader>
-         <IonContent>
-            <IonHeader collapse="condense">
-               <IonToolbar>
-                  <IonTitle size="large">Imperial Events</IonTitle>
-               </IonToolbar>
-            </IonHeader>
-            <MicrosoftLogin clientId="2e0eaa17-56a7-48a7-9a41-1757cc5e120e" authCallback={authHandler} />
-
+         <IonContent className="sk">
+            <IonGrid className="test">
+               <IonRow>
+                  <IonCol sizeLg="4" pushLg="4" sizeMd="8" pushMd="2">
+                     <IonCard color="imperial">
+                        <IonCardHeader>
+                           <br />
+                           <IonRow>
+                              <IonCardTitle className="horizontalCentre">Imperial Events</IonCardTitle>
+                           </IonRow>
+                        </IonCardHeader>
+                        <IonCardContent>
+                           <IonRow>
+                              <MicrosoftLogin className="horizontalCentre" clientId="2e0eaa17-56a7-48a7-9a41-1757cc5e120e" authCallback={authHandler} />
+                           </IonRow>
+                        </IonCardContent>
+                        <br />
+                     </IonCard>
+                  </IonCol>
+               </IonRow>
+            </IonGrid>
          </IonContent>
       </IonPage>
    );
