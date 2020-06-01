@@ -16,9 +16,6 @@ interface HomeOrLoginProps extends PropsFromRedux, RouteComponentProps {
 };
 
 const HomeOrLogin: React.FC<HomeOrLoginProps> = (props) => {
-   if (!props.redirect.includes("/auth")) {
-      props.history.push(props.redirect);
-   }
    return props.loggedIn ? <Tabs /> : <Redirect to="/auth" />
 };
 
