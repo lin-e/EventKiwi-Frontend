@@ -1,23 +1,12 @@
 import { USER_LOGIN, LOAD_USER_DATA, USER_LOGOUT } from "./types";
-import { AuthResponse } from "../types/dataInterfaces";
+import { AuthResponse, blankProfile, AppThunk } from "../types/dataInterfaces";
 import { Plugins } from '@capacitor/core';
-import { ThunkAction } from "redux-thunk";
-import { RootState } from "../reducers";
-import { Action } from "redux";
+import { authEndpoint, deAuthEndpoint } from "../../constants/endpoints";
 const { Storage } = Plugins;
 
 const IS_LOGGED_IN = 'isLoggedIn';
 const USER_TOKEN = 'userToken';
 const PROFILE = 'profile';
-
-export type AppThunk<ReturnType = void> =
-   ThunkAction<
-      ReturnType,
-      RootState,
-      unknown,
-      Action<string>
-   >
-
 
 
 const saveUserData = async (data: AuthResponse, login: boolean) => {
@@ -26,13 +15,23 @@ const saveUserData = async (data: AuthResponse, login: boolean) => {
    await Storage.set({ key: PROFILE, value: JSON.stringify(data.body.profile) });
 }
 
-
-export const logIn = (user: AuthResponse): AppThunk => async dispatch => {
-   await saveUserData(user, true)
-   dispatch({
-      type: USER_LOGIN,
-      payload: user
+export const logIn = (msToken: string): AppThunk => async dispatch => {
+   fetch(authEndpoint, {
+      method: 'post',
+      body: JSON.stringify({ token: msToken }),
+      headers: { 'Content-Type': 'application/json' }
    })
+   .then(res => res.json())
+   .then(data => {
+      saveUserData(data, true)
+      return data
+   })
+   .then(user => (
+      dispatch({
+         type: USER_LOGIN,
+         payload: user
+      })
+   ))
 }
 
 
@@ -63,30 +62,23 @@ const getUserData = async () => {
    }
 }
 
-const deAuthEndpoint = "https://staging.drp.social/auth/end/";
 
 export const logOut = (userToken: string): AppThunk => async dispatch => {
    fetch(deAuthEndpoint, {
       method: "get",
-      headers: { 'Authorization': `Bearer ${userToken}`}
+      headers: { 'Authorization': `Bearer ${userToken}` }
    })
-   .then(res => console.log(res))
-   .then(() => clearUserData())
-   .then(() => (
-      dispatch({
-         type: USER_LOGOUT
-      })
-   ))
+      .then(res => console.log(res))
+      .then(() => clearUserData())
+      .then(() => (
+         dispatch({
+            type: USER_LOGOUT
+         })
+      ))
 }
 
 const clearUserData = async () => {
    await Storage.set({ key: IS_LOGGED_IN, value: JSON.stringify(false) });
    await Storage.set({ key: USER_TOKEN, value: JSON.stringify("") });
    await Storage.set({ key: PROFILE, value: JSON.stringify(blankProfile) });
-}
-
-const blankProfile =  {
-   firstname: "",
-   surname: "",
-   email: ""
 }

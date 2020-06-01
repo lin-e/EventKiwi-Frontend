@@ -7,8 +7,6 @@ import { Redirect, RouteComponentProps } from 'react-router';
 import MicrosoftLogin from "react-microsoft-login";
 import { logIn } from "../data/actions/userActions";
 
-const authEndpoint = "https://staging.drp.social/auth/new/";
-
 const mapStateToProps = (state: RootState) => ({
    loggedIn: state.userDetails.isLoggedIn
 });
@@ -24,21 +22,13 @@ type LoginProps = PropsFromRedux & RouteComponentProps<any>;
 const Login: React.FC<LoginProps> = (props, state) => {
 
    if (props.loggedIn) {
-      return <Redirect to="/" />
+      return <Redirect to="/events" />
    }
-
 
    const authHandler = (err: any, data: any) => {
       if (data) {
-         let msToken = data.authResponseWithAccessToken.accessToken
-         fetch(authEndpoint, {
-            method: 'post',
-            body: JSON.stringify({ token: msToken }),
-            headers: { 'Content-Type': 'application/json' }
-         })
-            .then(res => res.json())
-            .then(data => props.logIn(data))
-
+         let msToken = data.authResponseWithAccessToken.accessToken;
+         props.logIn(msToken);
       } if (err) {
          console.error("Error:", err)
       }
@@ -59,7 +49,10 @@ const Login: React.FC<LoginProps> = (props, state) => {
                         </IonCardHeader>
                         <IonCardContent>
                            <IonRow>
-                              <MicrosoftLogin className="horizontalCentre" clientId="2e0eaa17-56a7-48a7-9a41-1757cc5e120e" authCallback={authHandler} />
+                              <MicrosoftLogin
+                                 className="horizontalCentre"
+                                 clientId="2e0eaa17-56a7-48a7-9a41-1757cc5e120e"
+                                 authCallback={authHandler} />
                            </IonRow>
                         </IonCardContent>
                         <br />
