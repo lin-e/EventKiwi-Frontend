@@ -14,6 +14,10 @@ import { RootState } from '../data/reducers';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
 import { UserProfile } from '../data/types/dataInterfaces';
+import { Plugins } from '@capacitor/core';
+
+const { Browser } = Plugins;
+
 
 interface LinkStateProps {
   interests: string[],
@@ -53,6 +57,11 @@ class Profile extends Component<ProfileProps, ProfileState> {
   refresh() {
     this.props.startFetchInterests();
     this.props.startFetchSocs();
+  }
+
+
+  async openUnionWebsite() {
+    await Browser.open({ url: "https://www.imperialcollegeunion.org/" });
   }
 
   render() {
@@ -121,7 +130,7 @@ class Profile extends Component<ProfileProps, ProfileState> {
                   <IonButton expand="block" color="danger">Log out</IonButton>
                 </IonCol>
                 <IonCol>
-                  <IonButton expand="block">My Union</IonButton>
+                  <IonButton expand="block" onClick={this.openUnionWebsite}>My Union</IonButton>
                 </IonCol>
 
               </IonRow>
