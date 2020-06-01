@@ -1,5 +1,5 @@
 import React, { Component, MouseEvent } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonGrid, IonRow, IonCol, IonButton, IonChip, IonLabel, IonIcon, IonText } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonGrid, IonRow, IonCol, IonButton, IonChip, IonLabel, IonIcon, IonText, IonModal } from '@ionic/react';
 import './Profile.css';
 import ItemSlider from '../components/ItemSlider';
 import { Society } from '../constants/types';
@@ -14,16 +14,26 @@ import { startFetchProfileInterests, startRemoveProfileInterest, startFetchProfi
 import { RootState } from '../data/reducers';
 import { connect } from 'react-redux';
 
-type Props = LinkStateProps & LinkDispatchProps
+interface LinkStateProps {
+  interests: string[],
+  societies: Society[]
+}
+
+interface LinkDispatchProps {
+  startFetchInterests: () => void;
+  startFetchSocs: () => void;
+}
+
+type ProfileProps = LinkStateProps & LinkDispatchProps
 
 interface ProfileState {
   showSocietyModal: boolean,
   showInterestModal: boolean
 }
 
-class Profile extends Component<Props, ProfileState> {
+class Profile extends Component<ProfileProps, ProfileState> {
 
-  constructor(props: Props) {
+  constructor(props: ProfileProps) {
     super(props);
     this.state = {
       showSocietyModal: false,
@@ -58,7 +68,7 @@ class Profile extends Component<Props, ProfileState> {
                 <IonTitle className="profileTitle">My Societies</IonTitle>
               </IonCol>
               <IonCol size="4">
-                <IonButton  className="profileBtn" color="transparent">Manage</IonButton>
+                <IonButton  className="profileBtn" color="transparent" onClick={() => this.setState({showSocietyModal: true})}>Manage</IonButton>
               </IonCol>
             </IonRow>
             <IonRow>
@@ -79,7 +89,7 @@ class Profile extends Component<Props, ProfileState> {
                 <IonTitle className="profileTitle">My Interests</IonTitle>
               </IonCol>
               <IonCol size="4">
-                <IonButton  className="profileBtn" color="transparent">Manage</IonButton>
+                <IonButton  className="profileBtn" color="transparent" onClick={() => this.setState({showInterestModal: true})}>Manage</IonButton>
               </IonCol>
             </IonRow>
             <IonRow>
@@ -95,20 +105,19 @@ class Profile extends Component<Props, ProfileState> {
           </IonGrid>
 
         </Container>
+
+        <IonModal isOpen={this.state.showSocietyModal}>
+          <p>This is the society modal</p>
+          <IonButton onClick={() => this.setState({showSocietyModal: false})}>Close modal</IonButton>
+        </IonModal>
+        <IonModal isOpen={this.state.showInterestModal}>
+          <p>This is the interest modal</p>
+          <IonButton onClick={() => this.setState({showInterestModal: false})}>Close modal</IonButton>
+        </IonModal>
       </IonContent>
     </IonPage>
     );
   }
-}
-
-interface LinkStateProps {
-  interests: string[],
-  societies: Society[]
-}
-
-interface LinkDispatchProps {
-  startFetchInterests: () => void;
-  startFetchSocs: () => void;
 }
 
 const mapStateToProps = (state: RootState): LinkStateProps => {
