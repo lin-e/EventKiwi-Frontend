@@ -24,15 +24,19 @@ import '@ionic/react/css/text-transformation.css';
 import '@ionic/react/css/flex-utils.css';
 import '@ionic/react/css/display.css';
 
+import {registerWebPlugin} from "@capacitor/core";
+import {OAuth2Client} from '@byteowls/capacitor-oauth2';
+
 /* Theme variables */
 import './theme/variables.css';
 
 const App: React.FC = () => {
+  registerWebPlugin(OAuth2Client);
   return (
     <IonApp>
       <IonReactRouter>
         <IonRouterOutlet>
-          <Route path="/login" component={Login} exact={true} />
+          <Route path="/auth" component={Login} exact={true} />
           <Route path="/" render={(props) => <HomeOrLogin {...props} redirect={window.location.pathname}/>} />
         </IonRouterOutlet>
       </IonReactRouter>

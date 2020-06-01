@@ -1,10 +1,12 @@
-import React, { Component, createRef } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonSearchbar, IonRefresher, IonRefresherContent, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonInput, IonButton, IonList, IonItem, IonLabel, IonRow, IonCol, IonGrid } from '@ionic/react';
+import React, { Component, useState } from 'react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton } from '@ionic/react';
 import './Discover.css';
 import { connect, ConnectedProps } from 'react-redux';
 import { RootState } from '../data/reducers';
 import { Redirect } from 'react-router';
-import { Container } from 'react-grid-system';
+import { Plugins } from '@capacitor/core';
+
+const { Browser } = Plugins;
 
 
 
@@ -17,84 +19,98 @@ const connector = connect(mapStateToProps)
 type PropsFromRedux = ConnectedProps<typeof connector>
 type LoginProps = PropsFromRedux;
 
+const Login: React.FC<LoginProps> = (props) => {
+   const [token, setToken] = useState<string>("not clicked");
 
-class Login extends Component<LoginProps> {
 
-   constructor(props: LoginProps) {
-      super(props)
+   // const oAuthClicked = () => {
+   //    Plugins.OAuth2Client.authenticate(
+   //       {
+   //          appId: "2e0eaa17-56a7-48a7-9a41-1757cc5e120e",
+   //          authorizationBaseUrl: "https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
+   //          responseType: "code",
+   //          redirectUrl: "https://login.microsoftonline.com/common/oauth2/nativeclient",
+   //          scope: "openid email profile",
+   //          pkceEnabled: true,
+   //          accessTokenEndpoint: "https://login.microsoftonline.com/pwcastro.onmicrosoft.com/oauth2/v2.0/token"
+   //          // windowOptions: "height=600,left=0,top=0"
+   //       }
+   //    )
+   //       .then((response: { [x: string]: any; }) => {
+   //          console.log(response)
+   //          let accessToken = response["access_token"];
+   //          setToken(accessToken)
+   //          // this.refreshToken = response["refresh_token"];
+
+   //          // only if you include a resourceUrl protected user values are included in the response!
+   //          let oauthUserId = response["id"];
+   //          let name = response["name"];
+
+   //          // go to backend
+   //       }).catch((reason: any) => {
+   //          console.error("OAuth rejected", reason);
+   //       });
+   // }
+
+   const azureLogin = () => {
+      Plugins.OAuth2Client.authenticate({
+         appId: "2e0eaa17-56a7-48a7-9a41-1757cc5e120e",
+         authorizationBaseUrl: "https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
+         accessTokenEndpoint: "https://login.microsoftonline.com/common/oauth2/v2.0/token",
+         scope: "openid email profile",
+         web: {
+            accessTokenEndpoint: "",
+            responseType: "token",
+            redirectUrl: "http://localhost:8100/auth",
+         },
+         ios: {
+            pkceEnabled: true,
+            responseType: "code",
+            redirectUrl: "msauth.social.drp.events://auth",
+         }
+      })
+      .then((response: any) => {
+         setToken(response["access_token"])
+      })
+      .catch((reason: any) => {
+         console.error("OAuth rejected", reason);
+      });
+    }
+
+
+
+   if (props.loggedIn) {
+      return <Redirect to="/events" />
    }
 
-   render() {
-
-      if (this.props.loggedIn) {
-         return <Redirect to="/events" />
-      }
+   const open = async (url: string) => {
+      await Browser.open({ url: url });
+   }
 
 
-      return (
-         <IonPage>
-            <IonHeader>
+   return (
+      <IonPage>
+         <IonHeader>
+            <IonToolbar>
+               <IonTitle>Imperial Events</IonTitle>
+            </IonToolbar>
+         </IonHeader>
+         <IonContent>
+            <IonHeader collapse="condense">
                <IonToolbar>
-                  <IonTitle>Imperial Events</IonTitle>
+                  <IonTitle size="large">Imperial Events</IonTitle>
                </IonToolbar>
             </IonHeader>
-            <IonContent>
-               <IonHeader collapse="condense">
-                  <IonToolbar>
-                     <IonTitle size="large">Imperial Events</IonTitle>
-                  </IonToolbar>
-               </IonHeader>
 
-               <IonGrid>
-                  <IonRow>
-                     <IonCol sizeSm="12" sizeMd="10" pushMd="1" sizeLg="8" pushLg="2">
-                        <IonCard>
-                           <IonCardContent>
-                              <IonCardTitle>Login</IonCardTitle>
-                              
-                              <form noValidate >
-                                 <IonList>
-                                    <IonItem>
-                                       <IonLabel position="floating" color="primary">Username</IonLabel>
-                                       <IonInput name="username" type="text" spellCheck={false} autocapitalize="off" required>
-                                       </IonInput>
-                                    </IonItem>
+            <IonButton onClick={azureLogin}>auth</IonButton>
+            <IonButton onClick={() => open('http://capacitor.ionicframework.com/')}>refresh</IonButton>
+            <IonButton onClick={() => open('http://capacitor.ionicframework.com/')}>logout</IonButton>
+            <h1>{token}</h1>
 
-                                    {/* {formSubmitted && usernameError && <IonText color="danger">
-              <p className="ion-padding-start">
-                Username is required
-              </p>
-            </IonText>} */}
-
-                                    <IonItem>
-                                       <IonLabel position="floating" color="primary">Password</IonLabel>
-                                       <IonInput name="password" type="password"  >
-                                       </IonInput>
-                                    </IonItem>
-
-                                    {/* {formSubmitted && passwordError && <IonText color="danger">
-              <p className="ion-padding-start">
-                Password is required
-              </p>
-            </IonText>} */}
-                                 </IonList>
-                                 <br />
-                                 <IonRow>
-                                    <IonCol>
-                                       <IonButton type="submit" expand="block">Login</IonButton>
-                                    </IonCol>
-                                 </IonRow>
-                              </form>
-                           </IonCardContent>
-                        </IonCard>
-                     </IonCol>
-                  </IonRow>
-               </IonGrid>
-
-            </IonContent>
-         </IonPage>
-      );
-   }
+         </IonContent>
+      </IonPage>
+   );
 }
+
 
 export default connector(Login);
