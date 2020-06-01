@@ -1,8 +1,8 @@
 import React, { useState, useRef, MouseEvent } from 'react';
 import {} from '@fortawesome/fontawesome-svg-core';
-import { EventCardDetails } from '../constants/types'
+import { EventCardDetails } from '../../constants/types'
 import { IonItemSliding, IonGrid, IonCol, IonRow, IonItem, IonLabel, IonCardTitle, IonCardHeader, IonText, IonItemOptions, IonItemOption } from '@ionic/react';
-import { getTime, getShortDate, sameDay, getDateRangeNoStartDate } from '../utils/DateTimeTools'
+import { getTime, getShortDate, sameDay, getDateRangeNoStartDate } from '../../utils/DateTimeTools'
 import './CalendarEventItem.css'
 
 interface CalendarEventItemProps {
