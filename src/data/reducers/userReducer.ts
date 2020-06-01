@@ -29,7 +29,7 @@ export function userReducer(state = initialState, action: UserType): UserState {
             isLoggedIn: action.payload.isLoggedIn,
             userToken: action.payload.userToken,
             profile: action.payload.profile,
-            loading: false
+            loading: action.payload.loading
          }
       default:
          return state;
