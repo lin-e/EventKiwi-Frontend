@@ -4,6 +4,7 @@ const productionURL = "https://endpoint.drp.social";
 export const endpointURL = stagingURL;
 
 export const discoverEventCardURL = `${endpointURL}/events/cards/all`
+export const discoverSeachEventCardURL = `${endpointURL}/events/search`
 
 export const eventDetailsURL = `${endpointURL}/events/details/`
 export const eventResourcesURL = `${stagingURL}/events/resources/`

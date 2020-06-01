@@ -1,8 +1,8 @@
 import { ThunkAction } from "redux-thunk"
 import { RootState } from "../reducers"
 import { Action } from "redux"
-import { FETCH_EVENTS_CARDS, FETCH_CAL_EVENTS, AppActions, FETCH_PROFILE_INTERESTS, FETCH_PROFILE_SOCS, REMOVE_PROFILE_INTEREST } from "./types"
-import { discoverEventCardURL } from "../../constants/endpoints"
+import { FETCH_EVENTS_CARDS, FETCH_SEARCH_EVENT_CARDS, FETCH_CAL_EVENTS, AppActions, FETCH_PROFILE_INTERESTS, FETCH_PROFILE_SOCS, REMOVE_PROFILE_INTEREST } from "./types"
+import { discoverEventCardURL, discoverSeachEventCardURL } from "../../constants/endpoints"
 import { resp_event_card_details } from "../../constants/RequestInterfaces"
 import { convertResToEventCard } from "../../constants/types"
 import { eventList, exampleSchedule } from '../dummy/calendarDummy'
@@ -27,8 +27,25 @@ export const fetchEventCards = (refresher: HTMLIonRefresherElement)
       return (dispatch({
          type: FETCH_EVENTS_CARDS,
          payload: (cards as resp_event_card_details[]).map(convertResToEventCard)
-      })
-   )})
+      }))
+   })
+}
+
+export const fetchSearchEventCards = (searchTerm: string, refresher: HTMLIonRefresherElement): AppThunk => async dispatch => {
+   let url = new URL(discoverSeachEventCardURL);
+   url.searchParams.append("q", searchTerm);
+   console.log(url.toString())
+   fetch(url.toString())
+   .then(response => response.json())
+   .then(cards => {
+      if (refresher !== null) {
+         refresher.complete();
+      }
+      return (dispatch({
+         type: FETCH_SEARCH_EVENT_CARDS,
+         payload: (cards as resp_event_card_details[]).map(convertResToEventCard)
+      }))
+   })
 }
 
 

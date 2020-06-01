@@ -3,33 +3,52 @@ import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonSearchbar, Ion
 import './Discover.css';
 import ExploreEventsList from '../components/ExploreEventsList';
 import { connect, ConnectedProps } from 'react-redux';
-import { fetchEventCards } from "../data/actions/actions";
+import { fetchEventCards, fetchSearchEventCards } from "../data/actions/actions";
 
 
 const connector = connect(
   null,
-  { fetchEventCards }
+  { fetchEventCards, fetchSearchEventCards }
 )
 
 type PropsFromRedux = ConnectedProps<typeof connector>
 type DiscoverProps = PropsFromRedux;
 
+interface DiscoverState {
+  searchTerm: string
+}
 
-class Discover extends Component<DiscoverProps> {
+class Discover extends Component<DiscoverProps, DiscoverState> {
   refresherRef: React.RefObject<HTMLIonRefresherElement>;
+  searchBar: React.RefObject<HTMLIonSearchbarElement>;
 
   constructor(props: DiscoverProps) {
     super(props);
+    this.state = {
+      searchTerm: ""
+    }
+    this.searchBar = createRef<HTMLIonSearchbarElement>();
     this.refresherRef = createRef<HTMLIonRefresherElement>();
-    this.refresh = this.refresh.bind(this);
+    this.search = this.search.bind(this);
+    this.searchBarUpdate = this.searchBarUpdate.bind(this);
   }
 
   componentDidMount() {
-    this.refresh();
+    this.search("");
   }
 
-  refresh() {
-    this.props.fetchEventCards(this.refresherRef.current!);
+  searchBarUpdate(e: CustomEvent) {
+    this.setState({searchTerm: e.detail.value!});
+    this.search(this.state.searchTerm)
+
+  }
+
+  search(searchTerm: string) {
+    if (searchTerm === "") {
+      this.props.fetchEventCards(this.refresherRef.current!);
+    } else {
+      this.props.fetchSearchEventCards(searchTerm, this.refresherRef.current!);
+    }
   }
 
   render() {
@@ -47,11 +66,11 @@ class Discover extends Component<DiscoverProps> {
           </IonToolbar>
         </IonHeader>  
 
-        <IonRefresher ref={this.refresherRef} slot="fixed" onIonRefresh={this.refresh}>
+        <IonRefresher ref={this.refresherRef} slot="fixed" onIonRefresh={this.searchBarUpdate}>
           <IonRefresherContent></IonRefresherContent>
         </IonRefresher>
 
-        <IonSearchbar onIonChange={e => console.log(e.detail.value!)} />
+        <IonSearchbar ref={this.searchBar} onIonChange={this.searchBarUpdate} debounce={500} enterkeyhint="search" type="search"/>
         
         <ExploreEventsList />
         

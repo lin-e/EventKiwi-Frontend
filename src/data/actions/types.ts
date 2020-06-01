@@ -3,6 +3,7 @@ import { AuthResponse } from "../types/dataInterfaces";
 import { UserState } from "../types/stateTypes";
 
 export const FETCH_EVENTS_CARDS = "FETCH_EVENTS_CARDS";
+export const FETCH_SEARCH_EVENT_CARDS = "FETCH_SEARCH_EVENT_CARDS"
 
 export const FETCH_CAL_EVENTS = "FETCH_CAL_EVENTS";
 
@@ -15,8 +16,11 @@ interface FetchEventCardsAction {
    payload: EventCardDetails[]
 }
 
+interface FetchSearchEventCardsAction {
+   type: typeof FETCH_SEARCH_EVENT_CARDS,
+   payload: EventCardDetails[]
+}
 
-export type FetchEventType = FetchEventCardsAction;
 
 export interface FetchCalendarEventsAction {
    type: typeof FETCH_CAL_EVENTS,
@@ -40,13 +44,13 @@ export interface FetchProfileSocsAction {
 
 
 
+export type FetchEventType = FetchEventCardsAction | FetchSearchEventCardsAction;
+
 export type FetchCalType = FetchCalendarEventsAction;
 
 export type FetchProfileType =  FetchProfileInterestsAction | RemoveProfileInterestAction | FetchProfileSocsAction;
 
-export type AppActions = FetchEventType | FetchCalType | FetchProfileType;
-
-
+export type AppActions = FetchEventType | FetchCalType | FetchProfileType | UserType;
 
 
 
