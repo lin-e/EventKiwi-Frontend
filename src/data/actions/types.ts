@@ -52,10 +52,15 @@ export type AppActions = FetchEventType | FetchCalType | FetchProfileType;
 
 export const USER_LOGIN = "USER_LOGIN";
 export const LOAD_USER_DATA = "LOAD_USER_DATA";
+export const USER_LOGOUT = "USER_LOGOUT";
 
 interface LoginAction {
    type: typeof USER_LOGIN,
    payload: AuthResponse
+}
+
+interface LogoutAction {
+   type: typeof USER_LOGOUT
 }
 
 interface LoadUserDataAction {
@@ -63,4 +68,4 @@ interface LoadUserDataAction {
    payload: UserState
 }
 
-export type UserType = LoginAction | LoadUserDataAction;
+export type UserType = LoginAction | LoadUserDataAction | LogoutAction;

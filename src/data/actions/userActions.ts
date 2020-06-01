@@ -1,6 +1,5 @@
-import { UserType, USER_LOGIN, LOAD_USER_DATA } from "./types";
+import { USER_LOGIN, LOAD_USER_DATA, USER_LOGOUT } from "./types";
 import { AuthResponse } from "../types/dataInterfaces";
-import { UserState } from "../types/stateTypes";
 import { Plugins } from '@capacitor/core';
 import { ThunkAction } from "redux-thunk";
 import { RootState } from "../reducers";
@@ -45,7 +44,7 @@ export const loadUserData = (): AppThunk => async dispatch => {
    });
 }
 
-export const getUserData = async () => {
+const getUserData = async () => {
    const response = await Promise.all([
       Storage.get({ key: IS_LOGGED_IN }),
       Storage.get({ key: USER_TOKEN }),
@@ -62,4 +61,32 @@ export const getUserData = async () => {
       profile: profile,
       loading: false
    }
+}
+
+const deAuthEndpoint = "https://staging.drp.social/auth/end/";
+
+export const logOut = (userToken: string): AppThunk => async dispatch => {
+   fetch(deAuthEndpoint, {
+      method: "get",
+      headers: { 'Authorization': `Bearer ${userToken}`}
+   })
+   .then(res => console.log(res))
+   .then(() => clearUserData())
+   .then(() => (
+      dispatch({
+         type: USER_LOGOUT
+      })
+   ))
+}
+
+const clearUserData = async () => {
+   await Storage.set({ key: IS_LOGGED_IN, value: JSON.stringify(false) });
+   await Storage.set({ key: USER_TOKEN, value: JSON.stringify("") });
+   await Storage.set({ key: PROFILE, value: JSON.stringify(blankProfile) });
+}
+
+const blankProfile =  {
+   firstname: "",
+   surname: "",
+   email: ""
 }

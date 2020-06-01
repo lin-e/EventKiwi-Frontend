@@ -6,10 +6,8 @@ import { Society } from '../constants/types';
 import ProfileSocietyIcon from '../components/Profile/ProfileSocietyIcon';
 import { Container } from 'react-grid-system';
 import InterestChip from '../components/InterestChip';
-import { ThunkDispatch } from 'redux-thunk';
-import { AppActions } from '../data/actions/types';
-import { bindActionCreators } from 'redux';
 import { startFetchProfileInterests, startFetchProfileSocs } from '../data/actions/actions';
+import { logOut } from '../data/actions/userActions';
 import { RootState } from '../data/reducers';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
@@ -24,12 +22,14 @@ interface LinkStateProps {
   societies: Society[],
   profile: UserProfile,
   isLoggedIn: boolean,
-  isLoading: boolean
+  isLoading: boolean,
+  userToken: string
 }
 
 interface LinkDispatchProps {
-  startFetchInterests: () => void;
-  startFetchSocs: () => void;
+  startFetchProfileInterests: () => void;
+  startFetchProfileSocs: () => void;
+  logOut: (token: string) => void;
 }
 
 type ProfileProps = LinkStateProps & LinkDispatchProps
@@ -55,8 +55,8 @@ class Profile extends Component<ProfileProps, ProfileState> {
   }
 
   refresh() {
-    this.props.startFetchInterests();
-    this.props.startFetchSocs();
+    this.props.startFetchProfileSocs();
+    this.props.startFetchProfileInterests();
   }
 
 
@@ -127,7 +127,7 @@ class Profile extends Component<ProfileProps, ProfileState> {
               </IonRow>
               <IonRow>
                 <IonCol>
-                  <IonButton expand="block" color="danger">Log out</IonButton>
+                  <IonButton expand="block" color="danger" onClick={() => this.props.logOut(this.props.userToken)}>Log out</IonButton>
                 </IonCol>
                 <IonCol>
                   <IonButton expand="block" onClick={this.openUnionWebsite}>My Union</IonButton>
@@ -158,13 +158,14 @@ const mapStateToProps = (state: RootState): LinkStateProps => {
     societies: state.profileSocs.societies,
     profile: state.userDetails.profile,
     isLoggedIn: state.userDetails.isLoggedIn,
-    isLoading: state.userDetails.loading
+    isLoading: state.userDetails.loading,
+    userToken: state.userDetails.userToken
   }
 }
 
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>): LinkDispatchProps => ({
-  startFetchInterests: bindActionCreators(startFetchProfileInterests, dispatch),
-  startFetchSocs: bindActionCreators(startFetchProfileSocs, dispatch)
-})
 
-export default connect(mapStateToProps, mapDispatchToProps)(Profile);
+
+export default connect(
+  mapStateToProps,
+  { startFetchProfileInterests, startFetchProfileSocs, logOut }
+)(Profile);

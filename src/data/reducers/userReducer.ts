@@ -1,4 +1,4 @@
-import { USER_LOGIN, UserType, LOAD_USER_DATA,  } from "../actions/types";
+import { USER_LOGIN, UserType, LOAD_USER_DATA, USER_LOGOUT,  } from "../actions/types";
 import { UserState } from "../types/stateTypes";
 
 const initialState: UserState = {
@@ -30,6 +30,14 @@ export function userReducer(state = initialState, action: UserType): UserState {
             userToken: action.payload.userToken,
             profile: action.payload.profile,
             loading: action.payload.loading
+         }
+      case USER_LOGOUT:
+         return {
+            ...state,
+            isLoggedIn: false,
+            userToken: initialState.userToken,
+            profile: initialState.profile,
+            loading: false
          }
       default:
          return state;
