@@ -4,10 +4,19 @@ import './Discover.css';
 import ExploreEventsList from '../components/ExploreEventsList';
 import { connect, ConnectedProps } from 'react-redux';
 import { fetchEventCards, fetchSearchEventCards } from "../data/actions/actions";
+import { RootState } from '../data/reducers';
+import { Redirect } from 'react-router';
 
+const mapStateToProps = (state: RootState) => {
+  return {
+    isLoggedIn: state.userDetails.isLoggedIn,
+    isLoading: state.userDetails.loading,
+    userToken: state.userDetails.userToken
+  }
+}
 
 const connector = connect(
-  null,
+  mapStateToProps,
   { fetchEventCards, fetchSearchEventCards }
 )
 
@@ -52,6 +61,11 @@ class Discover extends Component<DiscoverProps, DiscoverState> {
   }
 
   render() {
+
+    if (!this.props.isLoggedIn && !this.props.isLoading) {
+      return <Redirect to="/auth" />
+    }
+
     return (
       <IonPage>
       <IonHeader>
