@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { IonText, IonCard, IonCardSubtitle } from '@ionic/react';
 import './EventDescription.css';
 import { Container, Row, Col } from 'react-grid-system';
-import ExpandTextView from './ExpandTextView';
-import ItemSlider from './ItemSlider';
-import EventMiniCard from './EventMiniCard';
-import { getDateRange } from '../utils/DateTimeTools';
-import { RootState } from '../data/reducers';
+import ExpandTextView from '../ExpandTextView';
+import ItemSlider from '../ItemSlider';
+import EventMiniCard from '../EventMiniCard';
+import { getDateRange } from '../../utils/DateTimeTools';
+import { RootState } from '../../data/reducers';
 import { ConnectedProps, connect } from 'react-redux';
 
 const mapStateToProps = (state: RootState) => ({

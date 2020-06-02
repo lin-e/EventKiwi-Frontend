@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import './EventResourcesList.css';
 import { IonList, IonItem, IonItemSliding, IonItemOptions, IonItemOption } from '@ionic/react';
 import EventResource from './EventResource';
-import CentredTextContainer from './CentredTextContainer';
-import { Resource } from '../constants/types';
-import { resourceDownloadURL } from '../constants/endpoints';
+import CentredTextContainer from '../CentredTextContainer';
+import { Resource } from '../../constants/types';
+import { resourceDownloadURL } from '../../constants/endpoints';
 
 interface EventResourcesListProps {
   resources: Resource[],

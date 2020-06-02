@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './EventPostsList.css';
 import EventPost, { EventPostProps } from './EventPost';
 import { IonList, IonItem } from '@ionic/react';
-import CentredTextContainer from './CentredTextContainer';
+import CentredTextContainer from '../CentredTextContainer';
 
 interface EventPostsListProps {
   posts: EventPostProps[],
