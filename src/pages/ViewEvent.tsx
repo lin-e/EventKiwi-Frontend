@@ -8,7 +8,7 @@ import { EventPostProps } from '../components/ViewEventComponents/EventPost';
 import EventResourcesList from '../components/ViewEventComponents/EventResourcesList';
 import { checkmarkCircleOutline, caretUp, bulbOutline, shareOutline } from 'ionicons/icons';
 import { connect, ConnectedProps } from 'react-redux';
-import { loadEventDetails, loadingEvent } from '../data/actions/viewEventActions';
+import { loadEventDetails, loadingEvent, goingToEvent, interestedInEvent, notGoingToEvent } from '../data/actions/viewEventActions';
 import { RootState } from '../data/reducers';
 import { NOT_GOING, GOING, INTERESTED } from '../constants/constants';
 
@@ -38,7 +38,7 @@ const mapStateToProps = (state: RootState) => ({
   goingStatus: state.viewEventReducer.event.goingStatus
 })
 
-const connector = connect(mapStateToProps, { loadEventDetails, loadingEvent })
+const connector = connect(mapStateToProps, { loadEventDetails, loadingEvent, goingToEvent, interestedInEvent, notGoingToEvent })
 type PropsFromRedux = ConnectedProps<typeof connector>
 
 type ViewEventProps = OwnProps & PropsFromRedux;
@@ -127,11 +127,23 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
   }
 
   const interestedClicked = () => {
-    showInterestedToast(true);
+    if (props.goingStatus !== INTERESTED) {
+      props.interestedInEvent(props.match.params.id, props.userToken);
+      showInterestedToast(true);
+    } else {
+      props.notGoingToEvent(props.match.params.id, props.userToken);
+      showNotGoingToast(true);
+    }
   }
 
   const goingClicked = () => {
-    showGoingToast(true);
+    if (props.goingStatus !== GOING) {
+      props.goingToEvent(props.match.params.id, props.userToken);
+      showGoingToast(true)
+    } else {
+      props.notGoingToEvent(props.match.params.id, props.userToken);
+      showNotGoingToast(true);
+    }
   }
 
   const shareClicked = () => {
