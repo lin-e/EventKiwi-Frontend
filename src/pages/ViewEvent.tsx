@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { IonContent, IonPage, IonHeader, IonToolbar, IonButtons, IonBackButton, IonSegment, IonSegmentButton, IonLabel, IonButton, IonFooter, IonIcon } from '@ionic/react';
+import { IonContent, IonPage, IonHeader, IonToolbar, IonButtons, IonBackButton, IonSegment, IonSegmentButton, IonLabel, IonButton, IonFooter, IonIcon, IonFab, IonFabButton, IonFabList, IonText } from '@ionic/react';
 import { RouteComponentProps } from 'react-router';
 import EventDescription from '../components/ViewEventComponents/EventDescription';
 import "./ViewEvent.css";
 import EventPostsList from '../components/ViewEventComponents/EventPostsList';
 import { EventPostProps } from '../components/ViewEventComponents/EventPost';
 import EventResourcesList from '../components/ViewEventComponents/EventResourcesList';
-import { checkmarkCircleOutline, helpCircleOutline, checkmarkCircle, helpCircle } from 'ionicons/icons';
+import { checkmarkCircleOutline, helpCircleOutline, checkmarkCircle, helpCircle, settings, logoVimeo, share, logoFacebook, logoInstagram, logoTwitter, caretBackCircleOutline, caretBack, caretUp, bulb, bulbOutline, shareOutline } from 'ionicons/icons';
 import { connect, ConnectedProps } from 'react-redux';
 import { loadEventDetails, loadingEvent } from '../data/actions/viewEventActions';
 import { RootState } from '../data/reducers';
@@ -170,6 +170,17 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
         <EventPostsList hide={!posts} />
 
         <EventResourcesList hide={!resources}/>
+
+        <IonFab vertical="bottom" horizontal="end" slot="fixed" edge>
+          <IonFabButton>
+            <IonIcon icon={caretUp} />
+          </IonFabButton>
+          <IonFabList side="top">
+            <IonFabButton><IonIcon icon={shareOutline} /></IonFabButton>
+            <IonFabButton><IonIcon icon={bulbOutline} /></IonFabButton>
+            <IonFabButton><IonIcon icon={checkmarkCircleOutline} /></IonFabButton>
+          </IonFabList>
+        </IonFab>
  
        </IonContent>
         <IonFooter className="footer"> {/* This class is a temporary fix for the toolbar appearing too tall on an iphone display */}
