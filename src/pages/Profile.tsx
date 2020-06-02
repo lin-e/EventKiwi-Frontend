@@ -5,7 +5,7 @@ import ItemSlider from '../components/ItemSlider';
 import { SocietyBasic } from '../constants/types';
 import ProfileSocietyIcon from '../components/Profile/ProfileSocietyIcon';
 import { Container } from 'react-grid-system';
-import InterestChip from '../components/InterestChip';
+import InterestChip from '../components/Profile/InterestChip';
 import { fetchProfileDetails, resetInvalidProfileResponse } from '../data/actions/actions';
 import { logOut } from '../data/actions/userActions';
 import { RootState } from '../data/reducers';
@@ -14,6 +14,7 @@ import EmptySectionText from '../components/EmptySectionText';
 import { Redirect } from 'react-router';
 import { UserProfile } from '../data/types/dataInterfaces';
 import { Plugins } from '@capacitor/core';
+import AddInterestModal from '../components/Profile/AddInterestModal';
 
 const { Browser } = Plugins;
 
@@ -132,7 +133,7 @@ class Profile extends Component<ProfileProps, ProfileState> {
                   {this.props.interests.length !== 0 ?
                     <div className="interests">
                       {this.props.interests.map((interest) => (
-                      <InterestChip interest={interest} removeBtn={true} />
+                      <InterestChip interest={interest} />
                     ))}
                     </div> :
                     <EmptySectionText mainText="No followed interests" subText="Try adding some interests to find more of what you like!"/>
@@ -152,13 +153,13 @@ class Profile extends Component<ProfileProps, ProfileState> {
 
           </Container>
 
-          <IonModal isOpen={this.state.showSocietyModal}>
+          <IonModal isOpen={this.state.showSocietyModal} onDidDismiss={() => this.setState({ showInterestModal: false })}>
             <p>This is the society modal</p>
-            <IonButton onClick={() => this.setState({ showSocietyModal: false })}>Close modal</IonButton>
+            <IonButton onClick={() => this.setState({ showSocietyModal: false })}>Done</IonButton>
           </IonModal>
-          <IonModal isOpen={this.state.showInterestModal}>
-            <p>This is the interest modal</p>
-            <IonButton onClick={() => this.setState({ showInterestModal: false })}>Close modal</IonButton>
+          <IonModal isOpen={this.state.showInterestModal} onDidDismiss={() => this.setState({ showInterestModal: false })}>
+            <AddInterestModal />
+            <IonButton onClick={() => this.setState({ showInterestModal: false })}>Done</IonButton>
           </IonModal>
 
           <IonToast

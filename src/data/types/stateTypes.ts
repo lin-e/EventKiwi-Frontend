@@ -24,11 +24,3 @@ export interface ProfileDetailsState {
    profileDetails: ProfileDetails,
    invalidResponse: boolean
 }
-
-export interface ProfileInterestState {
-   interests: string[];
-}
-
-export interface ProfileSocState {
-   societies: Society[]
-}

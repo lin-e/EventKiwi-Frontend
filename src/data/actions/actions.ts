@@ -1,8 +1,8 @@
 import { ThunkAction } from "redux-thunk"
 import { RootState } from "../reducers"
 import { Action } from "redux"
-import { FETCH_EVENTS_CARDS, FETCH_SEARCH_EVENT_CARDS, FETCH_CAL_EVENTS, AppActions, FETCH_PROFILE_DETAILS, FETCH_PROFILE_INTERESTS, FETCH_PROFILE_SOCS, REMOVE_PROFILE_INTEREST, FETCH_PROFILE_DETAILS_FAILED, RESET_PROFILE_INVALID_RESPONSE } from "./types"
-import { discoverEventCardURL, discoverSeachEventCardURL, profileDetailsURL } from "../../constants/endpoints"
+import { FETCH_EVENTS_CARDS, FETCH_SEARCH_EVENT_CARDS, FETCH_CAL_EVENTS, AppActions, FETCH_PROFILE_DETAILS, REMOVE_PROFILE_INTEREST, FETCH_PROFILE_DETAILS_FAILED, RESET_PROFILE_INVALID_RESPONSE, ADD_PROFILE_INTEREST } from "./types"
+import { discoverEventCardURL, discoverSeachEventCardURL, profileDetailsURL, profileInterestDeleteURL, profileInterestAddURL } from "../../constants/endpoints"
 import { resp_event_card_details, resp_profile_details } from "../../constants/RequestInterfaces"
 import { convertResToEventCard, convertResToProfileDetails } from "../../constants/types"
 import { eventList, exampleSchedule } from '../dummy/calendarDummy'
@@ -87,35 +87,54 @@ export const resetInvalidProfileResponse = (): AppThunk => async dispatch => {
    }))
 }
 
-export const fetchProfileInterests = (): AppActions => ({
-   type: FETCH_PROFILE_INTERESTS,
-   payload: exampleInterests
-})
-
-export const removeProfileInterest = (toRemove: string): AppActions => ({
-   type: REMOVE_PROFILE_INTEREST,
-   payload: toRemove
-})
-
-export const fetchProfileSocs = (): AppActions => ({
-   type: FETCH_PROFILE_SOCS,
-   payload: exampleSocs
-})
-
-export const startFetchProfileInterests = () => {
-   return(dispatch: Dispatch<AppActions>, getState: () => RootState) => {
-      dispatch(fetchProfileInterests())
+export const addProfileInterest = (toAdd: string, token: string): AppThunk => async dispatch => {
+   const options = {
+      method: "POST",
+      headers: {
+         "Authorization": `Bearer ${token}`,
+         'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ interest: toAdd }),
    }
+   console.log(JSON.stringify({ interest: toAdd }))
+
+   fetch(profileInterestAddURL, options)
+   .then(status => {
+      return (dispatch({
+         type: ADD_PROFILE_INTEREST,
+         status: status,
+         payload: toAdd
+      }))
+   })
+   // TODO: Add catch to invalid token, status code 403
+   // .catch(() => {
+   //    return(dispatch({
+   //       type: FETCH_PROFILE_DETAILS_FAILED,
+   //    }))
+   // })
 }
 
-export const startRemoveProfileInterest = (toRemove: string) => {
-   return(dispatch: Dispatch<AppActions>, getState: () => RootState) => {
-      dispatch(removeProfileInterest(toRemove))
+export const removeProfileInterest = (toRemove: string, token: string): AppThunk => async dispatch => {
+   const options = {
+      method: "POST",
+      headers: {
+         "Authorization": `Bearer ${token}`,
+         'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ interest: toRemove })
    }
-}
-
-export const startFetchProfileSocs = () => {
-   return(dispatch: Dispatch<AppActions>, getState: () => RootState) => {
-      dispatch(fetchProfileSocs())
-   }
+   fetch(profileInterestDeleteURL, options)
+   .then(status => {
+      return (dispatch({
+         type: REMOVE_PROFILE_INTEREST,
+         status: status,
+         payload: toRemove
+      }))
+   })
+   // TODO: Add catch to invalid token, status code 403
+   // .catch(() => {
+   //    return(dispatch({
+   //       type: FETCH_PROFILE_DETAILS_FAILED,
+   //    }))
+   // })
 }

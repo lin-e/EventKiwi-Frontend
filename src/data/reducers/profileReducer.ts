@@ -1,6 +1,5 @@
-import { ProfileInterestState, ProfileSocState, ProfileDetailsState } from '../types/stateTypes'
-import { FetchProfileType, FETCH_PROFILE_INTERESTS, FETCH_PROFILE_SOCS, REMOVE_PROFILE_INTEREST, FETCH_PROFILE_DETAILS, FETCH_PROFILE_DETAILS_FAILED, RESET_PROFILE_INVALID_RESPONSE } from '../actions/types'
-import { fetchProfileDetails } from '../actions/actions'
+import { ProfileDetailsState } from '../types/stateTypes'
+import { FetchProfileType, REMOVE_PROFILE_INTEREST, FETCH_PROFILE_DETAILS, FETCH_PROFILE_DETAILS_FAILED, RESET_PROFILE_INVALID_RESPONSE, ADD_PROFILE_INTEREST } from '../actions/types'
 
 const initialProfileDetailsState: ProfileDetailsState = {
   profileDetails: {
@@ -31,38 +30,23 @@ export const profileDetailsReducer = (state = initialProfileDetailsState, action
         ...state,
         invalidResponse: false
       }
-    default:
-      return state;
-  }
-}
-
-const initialInterestState: ProfileInterestState = {interests: []}
-
-export const profileInterestReducer = (state = initialInterestState, action: FetchProfileType): ProfileInterestState => {
-  switch(action.type) {
-    case FETCH_PROFILE_INTERESTS:
+    case ADD_PROFILE_INTEREST:
+      const newInterests = state.profileDetails.interests
+      newInterests.push(action.payload)
       return {
         ...state,
-        interests: action.payload
+        profileDetails: {
+          ...state.profileDetails,
+          interests: newInterests
+        }
       };
     case REMOVE_PROFILE_INTEREST:
       return {
         ...state,
-        interests: state.interests.filter((intr) => (intr !== action.payload))
-      }
-    default:
-      return state;
-  }
-}
-
-const initialSocState: ProfileSocState = {societies: []}
-
-export const profileSocReducer = (state = initialSocState, action: FetchProfileType): ProfileSocState => {
-  switch(action.type) {
-    case FETCH_PROFILE_SOCS:
-      return {
-        ...state,
-        societies: action.payload
+        profileDetails: {
+          ...state.profileDetails,
+          interests: state.profileDetails.interests.filter((intr) => (intr !== action.payload))
+        }
       };
     default:
       return state;

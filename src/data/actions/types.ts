@@ -31,9 +31,8 @@ export type FetchCalType = FetchCalendarEventsAction;
 export const FETCH_PROFILE_DETAILS = "FETCH_PROFILE_DETAILS"
 export const FETCH_PROFILE_DETAILS_FAILED = "FETCH_PROFILE_DETAILS_FAILED"
 export const RESET_PROFILE_INVALID_RESPONSE = "RESET_PROFILE_INVALID_RESPONSE"
-export const FETCH_PROFILE_INTERESTS = "FETCH_PROFILE_INTERESTS"
+export const ADD_PROFILE_INTEREST = "ADD_PROFILE_INTEREST"
 export const REMOVE_PROFILE_INTEREST = "REMOVE_PROFILE_INTEREST"
-export const FETCH_PROFILE_SOCS = "FETCH_PROFILE_SOCS"
 
 export interface FetchProfileDetailsAction {
    type: typeof FETCH_PROFILE_DETAILS,
@@ -48,22 +47,19 @@ export interface ResetProfileInvalidResponseAction {
    type: typeof RESET_PROFILE_INVALID_RESPONSE,
 }
 
-export interface FetchProfileInterestsAction {
-   type: typeof FETCH_PROFILE_INTERESTS,
-   payload: string[]
+export interface AddProfileInterestAction {
+   type: typeof ADD_PROFILE_INTEREST,
+   status: string,
+   payload: string
 }
 
 export interface RemoveProfileInterestAction {
    type: typeof REMOVE_PROFILE_INTEREST,
+   status: string,
    payload: string
 }
 
-export interface FetchProfileSocsAction {
-   type: typeof FETCH_PROFILE_SOCS,
-   payload: Society[]
-}
-
-export type FetchProfileType =  FetchProfileDetailsAction | FetchProfileDetailsFailedAction | ResetProfileInvalidResponseAction | FetchProfileInterestsAction | RemoveProfileInterestAction | FetchProfileSocsAction;
+export type FetchProfileType =  FetchProfileDetailsAction | FetchProfileDetailsFailedAction | ResetProfileInvalidResponseAction | AddProfileInterestAction | RemoveProfileInterestAction;
 
 
 export const LOAD_EVENT_DETAILS = "LOAD_EVENT_DETAILS"
