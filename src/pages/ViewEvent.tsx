@@ -27,8 +27,8 @@ const eventPosts: EventPostProps[] = [{postContent: "hello", postTime: "time", o
   {postContent: "hello", postTime: "time", organiserName: "generic society", organiserLogo: "https://upload.wikimedia.org/wikipedia/commons/f/f5/Poster-sized_portrait_of_Barack_Obama.jpg"}]
 
 interface OwnProps extends RouteComponentProps<{ id: string }> {
-   event?: string;
- };
+  event?: string;
+};
 
  
 const mapStateToProps = (state: RootState) => ({
@@ -38,7 +38,7 @@ const mapStateToProps = (state: RootState) => ({
 const connector = connect(mapStateToProps, { loadEventDetails })
 type PropsFromRedux = ConnectedProps<typeof connector>
 
- type ViewEventProps = OwnProps & PropsFromRedux;
+type ViewEventProps = OwnProps & PropsFromRedux;
 
 
 const ViewEvent: React.FC<ViewEventProps> = (props) => {
@@ -48,9 +48,6 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
   const [postsY, setPostsY] = useState<number>(0);
   const [resourcesY, setResourcesY] = useState<number>(0);
 
-  const [eventDetails, setEventDetails] = useState<EventDetails>({} as EventDetails);
-  const [eventResources, setEventResources] = useState<Resource[]>([]);
-
   const [going, setGoing] = useState<boolean>(false);
   const [interested, setInterested] = useState<boolean>(false);
 
@@ -58,7 +55,7 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
   const posts = segment === 'posts';
   const resources = segment === 'resources';
 
-  const [visible, setVisible] = useState<boolean>(true);
+  const [visible, setVisible] = useState<boolean>(false); // create a loading prop for this 
 
   // useEffect(() => {
   //   setVisible(false);
@@ -170,9 +167,7 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
           <EventDescription hide={!details} />
         </div>
 
-        {eventDetails.organiser !== undefined &&
-         <EventPostsList posts={[]} societyName={eventDetails.organiser.name} hide={!posts} />
-        }
+        <EventPostsList hide={!posts} />
 
         <EventResourcesList hide={!resources}/>
  
