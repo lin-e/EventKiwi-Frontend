@@ -1,7 +1,7 @@
 import { ThunkAction } from "redux-thunk"
 import { RootState } from "../reducers"
 import { Action } from "redux"
-import { FETCH_EVENTS_CARDS, FETCH_SEARCH_EVENT_CARDS, FETCH_CAL_EVENTS, AppActions, FETCH_PROFILE_DETAILS, FETCH_PROFILE_INTERESTS, FETCH_PROFILE_SOCS, REMOVE_PROFILE_INTEREST } from "./types"
+import { FETCH_EVENTS_CARDS, FETCH_SEARCH_EVENT_CARDS, FETCH_CAL_EVENTS, AppActions, FETCH_PROFILE_DETAILS, FETCH_PROFILE_INTERESTS, FETCH_PROFILE_SOCS, REMOVE_PROFILE_INTEREST, FETCH_PROFILE_DETAILS_FAILED, RESET_PROFILE_INVALID_RESPONSE } from "./types"
 import { discoverEventCardURL, discoverSeachEventCardURL, profileDetailsURL } from "../../constants/endpoints"
 import { resp_event_card_details, resp_profile_details } from "../../constants/RequestInterfaces"
 import { convertResToEventCard, convertResToProfileDetails } from "../../constants/types"
@@ -74,6 +74,17 @@ export const fetchProfileDetails = (token: string): AppThunk => async dispatch =
          payload: convertResToProfileDetails(details as resp_profile_details)
       }))
    })
+   .catch(() => {
+      return(dispatch({
+         type: FETCH_PROFILE_DETAILS_FAILED,
+      }))
+   })
+}
+
+export const resetInvalidProfileResponse = (): AppThunk => async dispatch => {
+   return(dispatch({
+      type: RESET_PROFILE_INVALID_RESPONSE
+   }))
 }
 
 export const fetchProfileInterests = (): AppActions => ({

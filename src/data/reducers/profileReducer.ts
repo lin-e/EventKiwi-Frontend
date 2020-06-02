@@ -1,5 +1,5 @@
 import { ProfileInterestState, ProfileSocState, ProfileDetailsState } from '../types/stateTypes'
-import { FetchProfileType, FETCH_PROFILE_INTERESTS, FETCH_PROFILE_SOCS, REMOVE_PROFILE_INTEREST, FETCH_PROFILE_DETAILS } from '../actions/types'
+import { FetchProfileType, FETCH_PROFILE_INTERESTS, FETCH_PROFILE_SOCS, REMOVE_PROFILE_INTEREST, FETCH_PROFILE_DETAILS, FETCH_PROFILE_DETAILS_FAILED, RESET_PROFILE_INVALID_RESPONSE } from '../actions/types'
 import { fetchProfileDetails } from '../actions/actions'
 
 const initialProfileDetailsState: ProfileDetailsState = {
@@ -9,7 +9,8 @@ const initialProfileDetailsState: ProfileDetailsState = {
     email: "",
     societies: [],
     interests: []
-  }
+  },
+  invalidResponse: false
 };
 
 export const profileDetailsReducer = (state = initialProfileDetailsState, action: FetchProfileType): ProfileDetailsState => {
@@ -17,7 +18,18 @@ export const profileDetailsReducer = (state = initialProfileDetailsState, action
     case FETCH_PROFILE_DETAILS:
       return {
         ...state,
-        profileDetails: action.payload
+        profileDetails: action.payload,
+        invalidResponse: false
+      }
+    case FETCH_PROFILE_DETAILS_FAILED:
+      return {
+        ...state,
+        invalidResponse: true
+      }
+    case RESET_PROFILE_INVALID_RESPONSE:
+      return {
+        ...state,
+        invalidResponse: false
       }
     default:
       return state;

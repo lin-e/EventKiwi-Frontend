@@ -17,7 +17,8 @@ export interface CalendarEventsState {
 }
 
 export interface ProfileDetailsState {
-   profileDetails: ProfileDetails
+   profileDetails: ProfileDetails,
+   invalidResponse: boolean
 }
 
 export interface ProfileInterestState {

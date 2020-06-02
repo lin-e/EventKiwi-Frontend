@@ -8,6 +8,8 @@ export const FETCH_SEARCH_EVENT_CARDS = "FETCH_SEARCH_EVENT_CARDS"
 export const FETCH_CAL_EVENTS = "FETCH_CAL_EVENTS";
 
 export const FETCH_PROFILE_DETAILS = "FETCH_PROFILE_DETAILS"
+export const FETCH_PROFILE_DETAILS_FAILED = "FETCH_PROFILE_DETAILS_FAILED"
+export const RESET_PROFILE_INVALID_RESPONSE = "RESET_PROFILE_INVALID_RESPONSE"
 export const FETCH_PROFILE_INTERESTS = "FETCH_PROFILE_INTERESTS"
 export const REMOVE_PROFILE_INTEREST = "REMOVE_PROFILE_INTEREST"
 export const FETCH_PROFILE_SOCS = "FETCH_PROFILE_SOCS"
@@ -34,6 +36,14 @@ export interface FetchProfileDetailsAction {
    payload: ProfileDetails
 }
 
+export interface FetchProfileDetailsFailedAction {
+   type: typeof FETCH_PROFILE_DETAILS_FAILED,
+}
+
+export interface ResetProfileInvalidResponseAction {
+   type: typeof RESET_PROFILE_INVALID_RESPONSE,
+}
+
 export interface FetchProfileInterestsAction {
    type: typeof FETCH_PROFILE_INTERESTS,
    payload: string[]
@@ -55,7 +65,7 @@ export type FetchEventType = FetchEventCardsAction | FetchSearchEventCardsAction
 
 export type FetchCalType = FetchCalendarEventsAction;
 
-export type FetchProfileType =  FetchProfileDetailsAction | FetchProfileInterestsAction | RemoveProfileInterestAction | FetchProfileSocsAction;
+export type FetchProfileType =  FetchProfileDetailsAction | FetchProfileDetailsFailedAction | ResetProfileInvalidResponseAction | FetchProfileInterestsAction | RemoveProfileInterestAction | FetchProfileSocsAction;
 
 export type AppActions = FetchEventType | FetchCalType | FetchProfileType | UserType;
 

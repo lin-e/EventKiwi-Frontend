@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonGrid, IonRow, IonCol, IonButton, IonModal } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonGrid, IonRow, IonCol, IonButton, IonModal, IonToast } from '@ionic/react';
 import './Profile.css';
 import ItemSlider from '../components/ItemSlider';
 import { SocietyBasic } from '../constants/types';
 import ProfileSocietyIcon from '../components/Profile/ProfileSocietyIcon';
 import { Container } from 'react-grid-system';
 import InterestChip from '../components/InterestChip';
-import { fetchProfileDetails } from '../data/actions/actions';
+import { fetchProfileDetails, resetInvalidProfileResponse } from '../data/actions/actions';
 import { logOut } from '../data/actions/userActions';
 import { RootState } from '../data/reducers';
 import { connect } from 'react-redux';
@@ -21,6 +21,7 @@ const { Browser } = Plugins;
 interface LinkStateProps {
   interests: string[],
   societies: SocietyBasic[],
+  invalidResponse: boolean,
   profile: UserProfile,
   isLoggedIn: boolean,
   isLoading: boolean,
@@ -28,6 +29,7 @@ interface LinkStateProps {
 }
 
 interface LinkDispatchProps {
+  resetInvalidProfileResponse: () => void;
   fetchProfileDetails: (token: string) => void
   logOut: (token: string) => void;
 }
@@ -36,7 +38,8 @@ type ProfileProps = LinkStateProps & LinkDispatchProps
 
 interface ProfileState {
   showSocietyModal: boolean,
-  showInterestModal: boolean
+  showInterestModal: boolean,
+  showErrorToast: boolean
 }
 
 class Profile extends Component<ProfileProps, ProfileState> {
@@ -45,12 +48,14 @@ class Profile extends Component<ProfileProps, ProfileState> {
     super(props);
     this.state = {
       showSocietyModal: false,
-      showInterestModal: false
+      showInterestModal: false,
+      showErrorToast: false
     }
     this.refresh = this.refresh.bind(this);
   }
 
   componentDidMount() {
+    // Need to check that the token has been loaded in first before attempting first request
     // this.refresh();
   }
 
@@ -149,6 +154,14 @@ class Profile extends Component<ProfileProps, ProfileState> {
             <IonButton onClick={() => this.setState({ showInterestModal: false })}>Close modal</IonButton>
           </IonModal>
           <IonButton onClick={this.refresh}>REFRESH</IonButton>
+
+          <IonToast
+            isOpen={this.props.invalidResponse}
+            onDidDismiss={this.props.resetInvalidProfileResponse}
+            message="Could not retrieve profile right now, please try again later."
+            duration={2000}
+            cssClass="ion-text-center"
+          />
         </IonContent>
       </IonPage>
     );
@@ -159,6 +172,7 @@ const mapStateToProps = (state: RootState): LinkStateProps => {
   return {
     interests: state.profileDetails.profileDetails.interests,
     societies: state.profileDetails.profileDetails.societies,
+    invalidResponse: state.profileDetails.invalidResponse,
     profile: state.userDetails.profile,
     isLoggedIn: state.userDetails.isLoggedIn,
     isLoading: state.userDetails.loading,
@@ -170,5 +184,5 @@ const mapStateToProps = (state: RootState): LinkStateProps => {
 
 export default connect(
   mapStateToProps,
-  { fetchProfileDetails, logOut }
+  { fetchProfileDetails, resetInvalidProfileResponse, logOut }
 )(Profile);
