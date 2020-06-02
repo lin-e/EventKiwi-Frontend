@@ -183,18 +183,6 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
         </IonFab>
  
        </IonContent>
-        <IonFooter className="footer"> {/* This class is a temporary fix for the toolbar appearing too tall on an iphone display */}
-          <IonToolbar>
-            <IonButtons className="buttons">
-              <IonButton color={goingColour} onClick={goingClicked}>
-                Going <IonIcon icon={goingIcon} />
-              </IonButton>
-              <IonButton color={interestedColour} onClick={interestedClicked}>
-                Interested <IonIcon icon={interestedIcon} />
-              </IonButton>
-            </IonButtons>
-          </IonToolbar>
-        </IonFooter>
      </IonPage>
    );
  };
