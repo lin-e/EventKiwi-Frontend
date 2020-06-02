@@ -259,7 +259,7 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
         />
 
         {/* Text area used for copying share url to clipboard */}
-        <textarea hidden={true} ref={shareUrlText} id="shareUrl" value={shareUrl} />
+        <textarea hidden={true} ref={shareUrlTextRef} id="shareUrl" value={shareUrl} />
       </IonContent>
     </IonPage>
   );
