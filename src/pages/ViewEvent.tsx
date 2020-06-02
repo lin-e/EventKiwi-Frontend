@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { IonContent, IonPage, IonHeader, IonToolbar, IonButtons, IonBackButton, IonSegment, IonSegmentButton, IonLabel, IonIcon, IonFab, IonFabButton, IonFabList } from '@ionic/react';
+import { IonContent, IonPage, IonHeader, IonToolbar, IonButtons, IonBackButton, IonSegment, IonSegmentButton, IonLabel, IonIcon, IonFab, IonFabButton, IonFabList, IonToast } from '@ionic/react';
 import { RouteComponentProps } from 'react-router';
 import EventDescription from '../components/ViewEventComponents/EventDescription';
 import "./ViewEvent.css";
@@ -57,6 +57,10 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
 
   const fabColour = props.goingStatus > NOT_GOING ? (props.goingStatus !== GOING - 1 ? "success" : "warning") : "primary";
   const fabIcon = props.goingStatus > NOT_GOING ? (props.goingStatus !== GOING - 1 ? checkmarkCircleOutline : bulbOutline) : caretUp;
+
+  const [goingToast, showGoingToast] = useState<boolean>(false);
+  const [notGoingToast, showNotGoingToast] = useState<boolean>(false);
+  const [interestedToast, showInterestedToast] = useState<boolean>(false);
 
 
   // useEffect(() => {
@@ -122,6 +126,18 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
     }
   }
 
+  const interestedClicked = () => {
+    showInterestedToast(true);
+  }
+
+  const goingClicked = () => {
+    showGoingToast(true);
+  }
+
+  const shareClicked = () => {
+    showNotGoingToast(true);
+  }
+
   return (
     <IonPage>
 
@@ -160,15 +176,15 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
             </IonFabButton>
 
             <IonFabList side="top">
-              <IonFabButton color="primary">
+              <IonFabButton onClick={shareClicked} color="primary">
                 <IonIcon icon={shareOutline} />
               </IonFabButton>
 
-              <IonFabButton color={props.goingStatus === INTERESTED ? "warning" : ""}>
+              <IonFabButton onClick={interestedClicked} color={props.goingStatus === INTERESTED ? "warning" : ""}>
                 <IonIcon icon={bulbOutline} />
               </IonFabButton>
 
-              <IonFabButton color={props.goingStatus === GOING ? "success" : ""}>
+              <IonFabButton onClick={goingClicked} color={props.goingStatus === GOING ? "success" : ""}>
                 <IonIcon icon={checkmarkCircleOutline} />
               </IonFabButton>
             </IonFabList>
@@ -181,6 +197,21 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
             </IonFabButton>
           </IonFab>}
 
+
+
+          <IonToast
+            isOpen={interestedToast || goingToast}
+            onDidDismiss={() => {showInterestedToast(false); showGoingToast(false)}}
+            message="Event added to calendar."
+            duration={3000}
+          />
+
+          <IonToast
+            isOpen={notGoingToast}
+            onDidDismiss={() => showNotGoingToast(false)}
+            message="Event removed from calendar."
+            duration={3000}
+          />
 
       </IonContent>
     </IonPage>
