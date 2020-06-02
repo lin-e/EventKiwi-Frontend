@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { IonContent, IonPage, IonHeader, IonToolbar, IonButtons, IonBackButton, IonSegment, IonSegmentButton, IonLabel, IonIcon, IonFab, IonFabButton, IonFabList, IonToast } from '@ionic/react';
 import { RouteComponentProps } from 'react-router';
 import EventDescription from '../components/ViewEventComponents/EventDescription';
@@ -11,6 +11,11 @@ import { connect, ConnectedProps } from 'react-redux';
 import { loadEventDetails, loadingEvent, goingToEvent, interestedInEvent, notGoingToEvent } from '../data/actions/viewEventActions';
 import { RootState } from '../data/reducers';
 import { NOT_GOING, GOING, INTERESTED } from '../constants/constants';
+import { isPlatform } from '@ionic/react';
+import { Plugins } from '@capacitor/core';
+const { Share } = Plugins;
+
+
 
 const loremIpsum = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam hendrerit justo vel dolor consectetur efficitur. Donec nec sollicitudin augue, non sollicitudin eros. Pellentesque tincidunt dolor quam, in porttitor neque rhoncus a. In hac habitasse platea dictumst. Cras at tortor ex. Aliquam urna leo, convallis eget vehicula et, egestas nec eros. Donec ipsum leo, faucibus non nulla non, accumsan fermentum ligula. Mauris sit amet diam eu purus tincidunt vulputate. Aliquam in nisl id augue consequat aliquet. Phasellus porttitor sed risus quis ultrices. Ut ut risus orci. Sed facilisis erat sed vestibulum bibendum. Interdum et malesuada fames ac ante ipsum primis in faucibus. In consequat ipsum eros, at malesuada libero ullamcorper vel. Quisque bibendum nulla augue, eu tincidunt tellus malesuada in. Phasellus sed est lorem.
 Vestibulum a justo ligula. Integer euismod nibh vitae nulla commodo rhoncus. Phasellus purus leo, interdum et tellus ut, condimentum varius eros. Sed vulputate nulla in sem faucibus, ut mattis odio fermentum. Morbi maximus faucibus justo ac iaculis. Quisque luctus, sapien vel auctor varius, ipsum lacus venenatis elit, a laoreet augue velit volutpat nisi. Suspendisse vitae augue eros. Nunc sit amet semper massa, eget eleifend nisl. Quisque pretium pulvinar justo id suscipit. Integer ullamcorper dolor ut ipsum faucibus, rutrum commodo mauris aliquet. Aliquam scelerisque metus pretium sem pellentesque interdum. Cras rutrum accumsan nunc et consectetur.
@@ -61,7 +66,10 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
   const [goingToast, showGoingToast] = useState<boolean>(false);
   const [notGoingToast, showNotGoingToast] = useState<boolean>(false);
   const [interestedToast, showInterestedToast] = useState<boolean>(false);
+  const [shareUrlToast, showShareUrlToast] = useState<boolean>(false);
 
+  const shareUrlText = useRef<HTMLTextAreaElement>(null);
+  const shareUrl = `https://drp.social/event/${props.match.params.id}`;
 
   // useEffect(() => {
   //   setVisible(false);
@@ -146,8 +154,27 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
     }
   }
 
-  const shareClicked = () => {
-    showNotGoingToast(true);
+  const shareClicked = async () => {
+    if (isPlatform("desktop")) {
+      try {
+        shareUrlText.current!.hidden = false;
+        shareUrlText.current!.select();
+        var successful = document.execCommand('copy');
+        successful ? showShareUrlToast(true) : console.log("Unable to copy URL to clipboard");
+      } catch (err) {
+        console.error('Fallback: Unable to copy', err);
+      } finally {
+        shareUrlText.current!.hidden = true;
+      }
+
+    } else {
+      let shareRet = await Share.share({
+        title: 'See cool stuff',
+        text: 'Really awesome thing you need to see right meow',
+        url: 'http://ionicframework.com/',
+        dialogTitle: 'Share with buddies'
+      });
+    }
   }
 
   return (
@@ -214,17 +241,26 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
         <IonToast
           isOpen={interestedToast || goingToast}
           onDidDismiss={() => { showInterestedToast(false); showGoingToast(false) }}
-          message="Event added to calendar."
+          message="Added event to calendar."
           duration={3000}
         />
 
         <IonToast
           isOpen={notGoingToast}
           onDidDismiss={() => showNotGoingToast(false)}
-          message="Event removed from calendar."
+          message="Removed event from calendar."
           duration={3000}
         />
 
+        <IonToast
+          isOpen={shareUrlToast}
+          onDidDismiss={() => showShareUrlToast(false)}
+          message="Event URL copied to clipboard."
+          duration={3000}
+        />
+
+        {/* Text area used for copying share url to clipboard */}
+        <textarea hidden={true} ref={shareUrlText} id="shareUrl" value={shareUrl} />
       </IonContent>
     </IonPage>
   );
