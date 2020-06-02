@@ -11,6 +11,14 @@ export interface Society extends Profile {
   colour: string;
 }
 
+export const blankSociety = {
+  id: "",
+  name: "",
+  imageSrc: "",
+  shortName: "",
+  colour: ""
+}
+
 export interface EventCardDetails {
    id: string;
    name: string, 
@@ -33,13 +41,37 @@ export interface EventDetails {
    tags: string[],
    description: string,
    sameSocEvents: EventCardDetails[],
-   similarEvents: EventCardDetails[]
+   similarEvents: EventCardDetails[],
+   resources: Resource[],
+   posts: Post[],
+   goingStatus: number
+}
+
+export const blankEventDetails = {
+  id: "",
+  name: "",
+  organiser: blankSociety,
+  images: [],
+  location: "",
+  datetimeStart: new Date(),
+  datetimeEnd: new Date(),
+  tags: [],
+  description: "",
+  sameSocEvents: [],
+  similarEvents: [],
+  resources: [],
+  posts: [],
+  goingStatus: -1
 }
 
 
 export interface Resource {
    name: string,
    id: string
+}
+
+export interface Post {
+
 }
 
 export const convertResToResource = (res: resp_resource): Resource => {
@@ -61,7 +93,10 @@ export const convertResToEventDetails = (res: resp_event_details): EventDetails 
      tags: res.tags,
      description: res.description,
      sameSocEvents: res.same_society_events.map(convertResToEventCard),
-     similarEvents: res.same_society_events.map(convertResToEventCard) // TODO: chamge this to similar events when it is implemented
+     similarEvents: res.similar_events.map(convertResToEventCard),
+     goingStatus: res.going_status,
+     resources: res.resources.map(convertResToResource),
+     posts: res.posts
    }
  }
 

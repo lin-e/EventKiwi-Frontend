@@ -1,6 +1,7 @@
-import { EventCardDetails, Society } from "../../constants/types";
+import { EventCardDetails, Society, EventDetails } from "../../constants/types";
 import { AuthResponse } from "../types/dataInterfaces";
 import { UserState } from "../types/stateTypes";
+import { type } from "os";
 
 export const FETCH_EVENTS_CARDS = "FETCH_EVENTS_CARDS";
 
@@ -44,11 +45,36 @@ export type FetchCalType = FetchCalendarEventsAction;
 
 export type FetchProfileType =  FetchProfileInterestsAction | RemoveProfileInterestAction | FetchProfileSocsAction;
 
-export type AppActions = FetchEventType | FetchCalType | FetchProfileType;
+export type AppActions = FetchEventType | FetchCalType | FetchProfileType | ViewEventType;
 
+export const LOAD_EVENT_DETAILS = "LOAD_EVENT_DETAILS"
+export const LOADING_EVENT = "LOADING_EVENT"
+export const EVENT_GOING = "EVENT_GOING"
+export const EVENT_INTERESTED = "EVENT_INTERESTED"
+export const EVENT_NOT_GOING = "EVENT_NOT_GOING"
 
+interface LoadEventDetailsAction {
+   type: typeof LOAD_EVENT_DETAILS,
+   payload: EventDetails
+}
 
+interface LoadingEventAction {
+   type: typeof LOADING_EVENT
+}
 
+interface GoingAction {
+   type: typeof EVENT_GOING
+}
+
+interface InterestedAction {
+   type: typeof EVENT_INTERESTED
+}
+
+interface NotGoingAction {
+   type: typeof EVENT_NOT_GOING
+}
+
+export type ViewEventType = LoadEventDetailsAction | LoadingEventAction | GoingAction | InterestedAction | NotGoingAction;
 
 export const USER_LOGIN = "USER_LOGIN";
 export const LOAD_USER_DATA = "LOAD_USER_DATA";
