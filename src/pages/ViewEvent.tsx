@@ -199,19 +199,19 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
 
 
 
-          <IonToast
-            isOpen={interestedToast || goingToast}
-            onDidDismiss={() => {showInterestedToast(false); showGoingToast(false)}}
-            message="Event added to calendar."
-            duration={3000}
-          />
+        <IonToast
+          isOpen={interestedToast || goingToast}
+          onDidDismiss={() => { showInterestedToast(false); showGoingToast(false) }}
+          message="Event added to calendar."
+          duration={3000}
+        />
 
-          <IonToast
-            isOpen={notGoingToast}
-            onDidDismiss={() => showNotGoingToast(false)}
-            message="Event removed from calendar."
-            duration={3000}
-          />
+        <IonToast
+          isOpen={notGoingToast}
+          onDidDismiss={() => showNotGoingToast(false)}
+          message="Event removed from calendar."
+          duration={3000}
+        />
 
       </IonContent>
     </IonPage>
