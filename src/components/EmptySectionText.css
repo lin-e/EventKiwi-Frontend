@@ -3,8 +3,7 @@
     position: relative !important;
     top: 50%;
     transform: translateY(-50%);
-    padding-left: 8px;
-    padding-right: 8px;
+    padding: 8px;
 }
 
 .textContainer strong {

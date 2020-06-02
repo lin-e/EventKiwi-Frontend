@@ -116,11 +116,13 @@ class Profile extends Component<ProfileProps, ProfileState> {
                 </IonCol>
               </IonRow>
               <IonRow>
-                <div className="sectionContent interests">
+                <div className="sectionContent">
                   {this.props.interests.length !== 0 ?
-                    (this.props.interests.map((interest) => (
+                    <div className="interests">
+                      {this.props.interests.map((interest) => (
                       <InterestChip interest={interest} removeBtn={true} />
-                    ))) :
+                    ))}
+                    </div> :
                     <EmptySectionText mainText="No followed interests" subText="Try adding some interests to find more of what you like!"/>
                   }
                 </div>
