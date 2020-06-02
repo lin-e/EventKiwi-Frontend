@@ -6,7 +6,7 @@ import { Society } from '../constants/types';
 import ProfileSocietyIcon from '../components/Profile/ProfileSocietyIcon';
 import { Container } from 'react-grid-system';
 import InterestChip from '../components/InterestChip';
-import { startFetchProfileInterests, startFetchProfileSocs } from '../data/actions/actions';
+import { fetchProfileDetails } from '../data/actions/actions';
 import { logOut } from '../data/actions/userActions';
 import { RootState } from '../data/reducers';
 import { connect } from 'react-redux';
@@ -28,8 +28,7 @@ interface LinkStateProps {
 }
 
 interface LinkDispatchProps {
-  startFetchProfileInterests: () => void;
-  startFetchProfileSocs: () => void;
+  fetchProfileDetails: (token: string) => void
   logOut: (token: string) => void;
 }
 
@@ -56,8 +55,7 @@ class Profile extends Component<ProfileProps, ProfileState> {
   }
 
   refresh() {
-    this.props.startFetchProfileSocs();
-    this.props.startFetchProfileInterests();
+    this.props.fetchProfileDetails(this.props.userToken)
   }
 
 
@@ -169,5 +167,5 @@ const mapStateToProps = (state: RootState): LinkStateProps => {
 
 export default connect(
   mapStateToProps,
-  { startFetchProfileInterests, startFetchProfileSocs, logOut }
+  { fetchProfileDetails, logOut }
 )(Profile);

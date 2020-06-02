@@ -1,10 +1,10 @@
 import { ThunkAction } from "redux-thunk"
 import { RootState } from "../reducers"
 import { Action } from "redux"
-import { FETCH_EVENTS_CARDS, FETCH_SEARCH_EVENT_CARDS, FETCH_CAL_EVENTS, AppActions, FETCH_PROFILE_INTERESTS, FETCH_PROFILE_SOCS, REMOVE_PROFILE_INTEREST } from "./types"
-import { discoverEventCardURL, discoverSeachEventCardURL } from "../../constants/endpoints"
-import { resp_event_card_details } from "../../constants/RequestInterfaces"
-import { convertResToEventCard } from "../../constants/types"
+import { FETCH_EVENTS_CARDS, FETCH_SEARCH_EVENT_CARDS, FETCH_CAL_EVENTS, AppActions, FETCH_PROFILE_DETAILS, FETCH_PROFILE_INTERESTS, FETCH_PROFILE_SOCS, REMOVE_PROFILE_INTEREST } from "./types"
+import { discoverEventCardURL, discoverSeachEventCardURL, profileDetailsURL } from "../../constants/endpoints"
+import { resp_event_card_details, resp_profile_details } from "../../constants/RequestInterfaces"
+import { convertResToEventCard, convertResToProfileDetails } from "../../constants/types"
 import { eventList, exampleSchedule } from '../dummy/calendarDummy'
 import { Dispatch } from "react"
 import { exampleInterests, exampleSocs } from "../dummy/profileDummy"
@@ -58,6 +58,24 @@ export const startFetchCalEvents = () => {
    return(dispatch: Dispatch<AppActions>, getState: () => RootState) => {
       dispatch(fetchCalEvents())
    }
+}
+
+export const fetchProfileDetails = (token: string): AppThunk => async dispatch => {
+   const options = {
+      method: "GET",
+      headers: {
+         "Authorization": "Bearer " + token
+      }
+   }
+   fetch(profileDetailsURL, options)
+   .then(response => response.json())
+   .then(details => {
+      console.log(details)
+      return (dispatch({
+         type: FETCH_PROFILE_DETAILS,
+         payload: convertResToProfileDetails(details as resp_profile_details)
+      }))
+   })
 }
 
 export const fetchProfileInterests = (): AppActions => ({

@@ -1,11 +1,9 @@
-import { EventCardDetails, Society } from "../../constants/types";
+import { EventCardDetails, Society, SocietyBasic, ProfileDetails } from "../../constants/types";
 import { UserProfile } from "./dataInterfaces";
 
 export interface EventCardState {
    events: EventCardDetails[]
 }
-
-
 
 export interface UserState {
    loading: boolean,
@@ -16,6 +14,10 @@ export interface UserState {
 
 export interface CalendarEventsState {
    events: EventCardDetails[];
+}
+
+export interface ProfileDetailsState {
+   profileDetails: ProfileDetails
 }
 
 export interface ProfileInterestState {

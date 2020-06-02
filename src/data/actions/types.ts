@@ -1,4 +1,4 @@
-import { EventCardDetails, Society } from "../../constants/types";
+import { EventCardDetails, Society, ProfileDetails } from "../../constants/types";
 import { AuthResponse } from "../types/dataInterfaces";
 import { UserState } from "../types/stateTypes";
 
@@ -7,16 +7,17 @@ export const FETCH_SEARCH_EVENT_CARDS = "FETCH_SEARCH_EVENT_CARDS"
 
 export const FETCH_CAL_EVENTS = "FETCH_CAL_EVENTS";
 
+export const FETCH_PROFILE_DETAILS = "FETCH_PROFILE_DETAILS"
 export const FETCH_PROFILE_INTERESTS = "FETCH_PROFILE_INTERESTS"
 export const REMOVE_PROFILE_INTEREST = "REMOVE_PROFILE_INTEREST"
 export const FETCH_PROFILE_SOCS = "FETCH_PROFILE_SOCS"
 
-interface FetchEventCardsAction {
+export interface FetchEventCardsAction {
    type: typeof FETCH_EVENTS_CARDS,
    payload: EventCardDetails[]
 }
 
-interface FetchSearchEventCardsAction {
+export interface FetchSearchEventCardsAction {
    type: typeof FETCH_SEARCH_EVENT_CARDS,
    payload: EventCardDetails[]
 }
@@ -25,6 +26,12 @@ interface FetchSearchEventCardsAction {
 export interface FetchCalendarEventsAction {
    type: typeof FETCH_CAL_EVENTS,
    payload: EventCardDetails[]
+}
+
+
+export interface FetchProfileDetailsAction {
+   type: typeof FETCH_PROFILE_DETAILS,
+   payload: ProfileDetails
 }
 
 export interface FetchProfileInterestsAction {
@@ -48,7 +55,7 @@ export type FetchEventType = FetchEventCardsAction | FetchSearchEventCardsAction
 
 export type FetchCalType = FetchCalendarEventsAction;
 
-export type FetchProfileType =  FetchProfileInterestsAction | RemoveProfileInterestAction | FetchProfileSocsAction;
+export type FetchProfileType =  FetchProfileDetailsAction | FetchProfileInterestsAction | RemoveProfileInterestAction | FetchProfileSocsAction;
 
 export type AppActions = FetchEventType | FetchCalType | FetchProfileType | UserType;
 
