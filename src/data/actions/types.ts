@@ -48,13 +48,18 @@ export type FetchProfileType =  FetchProfileInterestsAction | RemoveProfileInter
 export type AppActions = FetchEventType | FetchCalType | FetchProfileType | ViewEventType;
 
 export const LOAD_EVENT_DETAILS = "LOAD_EVENT_DETAILS"
+export const LOADING_EVENT = "LOADING_EVENT"
 
 interface LoadEventDetailsAction {
    type: typeof LOAD_EVENT_DETAILS,
    payload: EventDetails
 }
 
-export type ViewEventType = LoadEventDetailsAction;
+interface LoadingEventAction {
+   type: typeof LOADING_EVENT
+}
+
+export type ViewEventType = LoadEventDetailsAction | LoadingEventAction;
 
 export const USER_LOGIN = "USER_LOGIN";
 export const LOAD_USER_DATA = "LOAD_USER_DATA";

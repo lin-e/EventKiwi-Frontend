@@ -6,7 +6,8 @@ export interface EventCardState {
 }
 
 export interface ViewEventState {
-   event: EventDetails
+   event: EventDetails,
+   loading: boolean
 }
 
 export interface UserState {

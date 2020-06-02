@@ -1,7 +1,7 @@
 import { AppThunk } from "../types/dataInterfaces";
 import { eventDetailsURL } from "../../constants/endpoints";
 import { convertResToEventDetails } from "../../constants/types";
-import { LOAD_EVENT_DETAILS } from "./types";
+import { LOAD_EVENT_DETAILS, LOADING_EVENT } from "./types";
 
 export const loadEventDetails = (id: string, userToken: string): AppThunk => async dispatch => {
    fetch(`${eventDetailsURL}${id}`, {
@@ -15,3 +15,7 @@ export const loadEventDetails = (id: string, userToken: string): AppThunk => asy
       payload: details
    }))
 }
+
+export const loadingEvent = () => ({
+   type: LOADING_EVENT
+})

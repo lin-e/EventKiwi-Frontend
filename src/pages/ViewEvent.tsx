@@ -3,13 +3,12 @@ import { IonContent, IonPage, IonHeader, IonToolbar, IonButtons, IonBackButton, 
 import { RouteComponentProps } from 'react-router';
 import EventDescription from '../components/ViewEventComponents/EventDescription';
 import "./ViewEvent.css";
-import { EventDetails, Resource } from '../constants/types';
 import EventPostsList from '../components/ViewEventComponents/EventPostsList';
 import { EventPostProps } from '../components/ViewEventComponents/EventPost';
 import EventResourcesList from '../components/ViewEventComponents/EventResourcesList';
 import { checkmarkCircleOutline, helpCircleOutline, checkmarkCircle, helpCircle } from 'ionicons/icons';
 import { connect, ConnectedProps } from 'react-redux';
-import { loadEventDetails } from '../data/actions/viewEventActions';
+import { loadEventDetails, loadingEvent } from '../data/actions/viewEventActions';
 import { RootState } from '../data/reducers';
 
 const loremIpsum = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam hendrerit justo vel dolor consectetur efficitur. Donec nec sollicitudin augue, non sollicitudin eros. Pellentesque tincidunt dolor quam, in porttitor neque rhoncus a. In hac habitasse platea dictumst. Cras at tortor ex. Aliquam urna leo, convallis eget vehicula et, egestas nec eros. Donec ipsum leo, faucibus non nulla non, accumsan fermentum ligula. Mauris sit amet diam eu purus tincidunt vulputate. Aliquam in nisl id augue consequat aliquet. Phasellus porttitor sed risus quis ultrices. Ut ut risus orci. Sed facilisis erat sed vestibulum bibendum. Interdum et malesuada fames ac ante ipsum primis in faucibus. In consequat ipsum eros, at malesuada libero ullamcorper vel. Quisque bibendum nulla augue, eu tincidunt tellus malesuada in. Phasellus sed est lorem.
@@ -32,10 +31,11 @@ interface OwnProps extends RouteComponentProps<{ id: string }> {
 
  
 const mapStateToProps = (state: RootState) => ({
-  userToken: state.userDetails.userToken
+  userToken: state.userDetails.userToken,
+  isLoading: state.viewEventReducer.loading
 })
   
-const connector = connect(mapStateToProps, { loadEventDetails })
+const connector = connect(mapStateToProps, { loadEventDetails, loadingEvent })
 type PropsFromRedux = ConnectedProps<typeof connector>
 
 type ViewEventProps = OwnProps & PropsFromRedux;
@@ -55,7 +55,6 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
   const posts = segment === 'posts';
   const resources = segment === 'resources';
 
-  const [visible, setVisible] = useState<boolean>(false); // create a loading prop for this 
 
   // useEffect(() => {
   //   setVisible(false);
@@ -81,7 +80,8 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
   // );
 
   useEffect(() => {
-    props.loadEventDetails(props.match.params.id, props.userToken)
+    props.loadingEvent(); // move this to when an event is clicked
+    props.loadEventDetails(props.match.params.id, props.userToken);
   }, [props.match.params.id]);
 
 
@@ -163,7 +163,7 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
        </IonHeader>
  
        <IonContent ref={contentRef} scrollEvents={true} onIonScroll={(e) => saveY(e.detail.currentY)}>
-        <div className={visible ? 'fadeIn' : 'fadeOut'}>
+        <div className={!props.isLoading ? 'fadeIn' : 'fadeOut'}>
           <EventDescription hide={!details} />
         </div>
 
