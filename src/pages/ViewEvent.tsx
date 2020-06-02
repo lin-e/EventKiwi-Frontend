@@ -171,7 +171,7 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
 
         <EventResourcesList hide={!resources}/>
 
-        <IonFab vertical="bottom" horizontal="end" slot="fixed" edge>
+        <IonFab vertical="bottom" horizontal="end" slot="fixed">
           <IonFabButton>
             <IonIcon icon={caretUp} />
           </IonFabButton>
