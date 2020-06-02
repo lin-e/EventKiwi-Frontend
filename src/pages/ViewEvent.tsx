@@ -231,7 +231,7 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
 
         {!props.isLoggedIn &&
           <IonFab vertical="bottom" horizontal="end" slot="fixed">
-            <IonFabButton color="primary">
+            <IonFabButton onClick={shareClicked} color="primary">
               <IonIcon icon={shareOutline} />
             </IonFabButton>
           </IonFab>}
