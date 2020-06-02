@@ -174,9 +174,7 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
          <EventPostsList posts={[]} societyName={eventDetails.organiser.name} hide={!posts} />
         }
 
-        {eventDetails.organiser !== undefined &&
-         <EventResourcesList resources={eventResources} societyName={eventDetails.organiser.name} hide={!resources}/>
-        }
+        <EventResourcesList hide={!resources}/>
  
        </IonContent>
         <IonFooter className="footer"> {/* This class is a temporary fix for the toolbar appearing too tall on an iphone display */}
