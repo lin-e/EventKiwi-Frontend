@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './EventPost.css';
 import { IonGrid, IonRow, IonCardSubtitle, IonText, IonCol, IonCardHeader } from '@ionic/react';
-import ExpandTextView from './ExpandTextView';
+import ExpandTextView from '../ExpandTextView';
 import { Container, Col, Row } from 'react-grid-system';
 
 export interface EventPostProps {

@@ -11,7 +11,7 @@ const PROFILE = 'profile';
 
 const saveUserData = async (data: AuthResponse, login: boolean) => {
    await Storage.set({ key: IS_LOGGED_IN, value: JSON.stringify(login) });
-   await Storage.set({ key: USER_TOKEN, value: JSON.stringify(data.body.token) });
+   await Storage.set({ key: USER_TOKEN, value: data.body.token });
    await Storage.set({ key: PROFILE, value: JSON.stringify(data.body.profile) });
 }
 
@@ -79,6 +79,6 @@ export const logOut = (userToken: string): AppThunk => async dispatch => {
 
 const clearUserData = async () => {
    await Storage.set({ key: IS_LOGGED_IN, value: JSON.stringify(false) });
-   await Storage.set({ key: USER_TOKEN, value: JSON.stringify("") });
+   await Storage.set({ key: USER_TOKEN, value: "" });
    await Storage.set({ key: PROFILE, value: JSON.stringify(blankProfile) });
 }

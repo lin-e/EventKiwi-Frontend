@@ -1,8 +1,12 @@
-import { EventCardDetails, Society, SocietyBasic, ProfileDetails } from "../../constants/types";
+import { EventCardDetails, Society, SocietyBasic, ProfileDetails, EventDetails } from "../../constants/types";
 import { UserProfile } from "./dataInterfaces";
 
 export interface EventCardState {
    events: EventCardDetails[]
+}
+
+export interface ViewEventState {
+   event: EventDetails
 }
 
 export interface UserState {

@@ -67,7 +67,6 @@ class Profile extends Component<ProfileProps, ProfileState> {
   }
 
   refresh() {
-    console.log(this.props.userToken)
     this.props.fetchProfileDetails(this.props.userToken)
   }
 
