@@ -161,9 +161,6 @@ class Profile extends Component<ProfileProps, ProfileState> {
             <IonButton onClick={() => this.setState({ showInterestModal: false })}>Close modal</IonButton>
           </IonModal>
 
-          {/* TODO: Need to remove this button to manually refresh profile, replace with refresher and an on component load */}
-          <IonButton onClick={this.refresh}>REFRESH</IonButton>
-
           <IonToast
             isOpen={this.props.invalidResponse}
             onDidDismiss={this.props.resetInvalidProfileResponse}
@@ -188,7 +185,6 @@ const mapStateToProps = (state: RootState): LinkStateProps => {
     userToken: state.userDetails.userToken
   }
 }
-
 
 
 export default connect(
