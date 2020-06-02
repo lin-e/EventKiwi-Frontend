@@ -12,7 +12,7 @@ const initialProfileDetailsState: ProfileDetailsState = {
   }
 };
 
-export const profileReducer = (state = initialProfileDetailsState, action: FetchProfileType): ProfileDetailsState => {
+export const profileDetailsReducer = (state = initialProfileDetailsState, action: FetchProfileType): ProfileDetailsState => {
   switch(action.type) {
     case FETCH_PROFILE_DETAILS:
       return {

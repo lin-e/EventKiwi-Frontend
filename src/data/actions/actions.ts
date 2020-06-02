@@ -34,7 +34,6 @@ export const fetchEventCards = (refresher: HTMLIonRefresherElement)
 export const fetchSearchEventCards = (searchTerm: string, refresher: HTMLIonRefresherElement): AppThunk => async dispatch => {
    let url = new URL(discoverSeachEventCardURL);
    url.searchParams.append("q", searchTerm);
-   console.log(url.toString())
    fetch(url.toString())
    .then(response => response.json())
    .then(cards => {
@@ -70,7 +69,6 @@ export const fetchProfileDetails = (token: string): AppThunk => async dispatch =
    fetch(profileDetailsURL, options)
    .then(response => response.json())
    .then(details => {
-      console.log(details)
       return (dispatch({
          type: FETCH_PROFILE_DETAILS,
          payload: convertResToProfileDetails(details as resp_profile_details)

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonGrid, IonRow, IonCol, IonButton, IonModal } from '@ionic/react';
 import './Profile.css';
 import ItemSlider from '../components/ItemSlider';
-import { Society } from '../constants/types';
+import { SocietyBasic } from '../constants/types';
 import ProfileSocietyIcon from '../components/Profile/ProfileSocietyIcon';
 import { Container } from 'react-grid-system';
 import InterestChip from '../components/InterestChip';
@@ -20,7 +20,7 @@ const { Browser } = Plugins;
 
 interface LinkStateProps {
   interests: string[],
-  societies: Society[],
+  societies: SocietyBasic[],
   profile: UserProfile,
   isLoggedIn: boolean,
   isLoading: boolean,
@@ -51,7 +51,7 @@ class Profile extends Component<ProfileProps, ProfileState> {
   }
 
   componentDidMount() {
-    this.refresh();
+    // this.refresh();
   }
 
   refresh() {
@@ -98,7 +98,7 @@ class Profile extends Component<ProfileProps, ProfileState> {
                   {this.props.societies.length !== 0 ?
                     <ItemSlider width={130}>
                       {this.props.societies.map((soc) => (
-                        <ProfileSocietyIcon name={soc.shortName} logo={soc.imageSrc} />
+                        <ProfileSocietyIcon name={soc.shortName} logo={soc.imgSrc} />
                       ))}
                     </ItemSlider> :
                     <EmptySectionText mainText="No followed societies" subText="Try following or joining some societies to see what is on!"/>
@@ -146,6 +146,7 @@ class Profile extends Component<ProfileProps, ProfileState> {
             <p>This is the interest modal</p>
             <IonButton onClick={() => this.setState({ showInterestModal: false })}>Close modal</IonButton>
           </IonModal>
+          <IonButton onClick={this.refresh}>REFRESH</IonButton>
         </IonContent>
       </IonPage>
     );
@@ -154,8 +155,8 @@ class Profile extends Component<ProfileProps, ProfileState> {
 
 const mapStateToProps = (state: RootState): LinkStateProps => {
   return {
-    interests: state.profileInterests.interests,
-    societies: state.profileSocs.societies,
+    interests: state.profileDetails.profileDetails.interests,
+    societies: state.profileDetails.profileDetails.societies,
     profile: state.userDetails.profile,
     isLoggedIn: state.userDetails.isLoggedIn,
     isLoading: state.userDetails.loading,
