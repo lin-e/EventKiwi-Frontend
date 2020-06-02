@@ -6,7 +6,7 @@ import "./ViewEvent.css";
 import EventPostsList from '../components/ViewEventComponents/EventPostsList';
 import { EventPostProps } from '../components/ViewEventComponents/EventPost';
 import EventResourcesList from '../components/ViewEventComponents/EventResourcesList';
-import { checkmarkCircleOutline, helpCircleOutline, checkmarkCircle, helpCircle, settings, logoVimeo, share, logoFacebook, logoInstagram, logoTwitter, caretBackCircleOutline, caretBack, caretUp, bulb, bulbOutline, shareOutline } from 'ionicons/icons';
+import { checkmarkCircleOutline, helpCircleOutline, checkmarkCircle, helpCircle, settings, logoVimeo, share, logoFacebook, logoInstagram, logoTwitter, caretBackCircleOutline, caretBack, caretUp, bulb, bulbOutline, shareOutline, checkmarkDoneCircle } from 'ionicons/icons';
 import { connect, ConnectedProps } from 'react-redux';
 import { loadEventDetails, loadingEvent } from '../data/actions/viewEventActions';
 import { RootState } from '../data/reducers';
@@ -17,24 +17,26 @@ Duis pretium, turpis ac commodo mollis, nunc nulla feugiat nulla, sit amet imper
 Quisque maximus, tortor mollis rutrum faucibus, lorem nisl consequat leo, in pretium nulla mi vel neque. Donec malesuada mattis luctus. Curabitur lorem purus, volutpat vestibulum elit vulputate, mollis tempor erat. Nulla facilisi. Maecenas sollicitudin pellentesque ligula eget eleifend. In est quam, dignissim non risus a, laoreet hendrerit neque. Aliquam dolor quam, lobortis sit amet interdum in, ultrices eu sem. Aliquam sagittis odio nec dapibus bibendum. Proin urna massa, sodales at mollis id, finibus id dui. Donec faucibus fringilla volutpat. Sed lobortis ante in magna feugiat luctus. Praesent orci sem, lobortis id ipsum rhoncus, eleifend facilisis odio.
 Proin in volutpat leo, non pretium ligula. Nam in scelerisque ex, non congue tellus. Nulla sed elementum nunc. Nunc auctor commodo sapien, eget imperdiet augue dignissim nec. Duis fermentum tincidunt leo, sit amet sollicitudin arcu gravida in. Donec eu nibh in risus congue tristique sed sed quam. Mauris ullamcorper, urna eget pharetra aliquam, velit sapien finibus tellus, non egestas nisi lacus eget diam. Curabitur placerat rutrum risus, a eleifend elit interdum malesuada. Integer ac enim leo. Nunc pretium justo at vehicula tempor. Duis venenatis arcu urna, sit amet pharetra diam interdum et. Suspendisse nec blandit metus. Sed quis nibh ex. Phasellus quis diam arcu.`
 
-const eventPosts: EventPostProps[] = [{postContent: "hello", postTime: "time", organiserName: "generic society", organiserLogo: "https://upload.wikimedia.org/wikipedia/commons/f/f5/Poster-sized_portrait_of_Barack_Obama.jpg"},
-  {postContent: loremIpsum, postTime: "time", organiserName: "generic society", organiserLogo: "https://upload.wikimedia.org/wikipedia/commons/f/f5/Poster-sized_portrait_of_Barack_Obama.jpg"},
-  {postContent: "hello", postTime: "time", organiserName: "generic society", organiserLogo: "https://upload.wikimedia.org/wikipedia/commons/f/f5/Poster-sized_portrait_of_Barack_Obama.jpg"},
-  {postContent: "hello", postTime: "time", organiserName: "generic society", organiserLogo: "https://upload.wikimedia.org/wikipedia/commons/f/f5/Poster-sized_portrait_of_Barack_Obama.jpg"},
-  {postContent: "hello", postTime: "time", organiserName: "generic society", organiserLogo: "https://upload.wikimedia.org/wikipedia/commons/f/f5/Poster-sized_portrait_of_Barack_Obama.jpg"},
-  {postContent: "hello", postTime: "time", organiserName: "generic society", organiserLogo: "https://upload.wikimedia.org/wikipedia/commons/f/f5/Poster-sized_portrait_of_Barack_Obama.jpg"},
-  {postContent: "hello", postTime: "time", organiserName: "generic society", organiserLogo: "https://upload.wikimedia.org/wikipedia/commons/f/f5/Poster-sized_portrait_of_Barack_Obama.jpg"}]
+const eventPosts: EventPostProps[] = [{ postContent: "hello", postTime: "time", organiserName: "generic society", organiserLogo: "https://upload.wikimedia.org/wikipedia/commons/f/f5/Poster-sized_portrait_of_Barack_Obama.jpg" },
+{ postContent: loremIpsum, postTime: "time", organiserName: "generic society", organiserLogo: "https://upload.wikimedia.org/wikipedia/commons/f/f5/Poster-sized_portrait_of_Barack_Obama.jpg" },
+{ postContent: "hello", postTime: "time", organiserName: "generic society", organiserLogo: "https://upload.wikimedia.org/wikipedia/commons/f/f5/Poster-sized_portrait_of_Barack_Obama.jpg" },
+{ postContent: "hello", postTime: "time", organiserName: "generic society", organiserLogo: "https://upload.wikimedia.org/wikipedia/commons/f/f5/Poster-sized_portrait_of_Barack_Obama.jpg" },
+{ postContent: "hello", postTime: "time", organiserName: "generic society", organiserLogo: "https://upload.wikimedia.org/wikipedia/commons/f/f5/Poster-sized_portrait_of_Barack_Obama.jpg" },
+{ postContent: "hello", postTime: "time", organiserName: "generic society", organiserLogo: "https://upload.wikimedia.org/wikipedia/commons/f/f5/Poster-sized_portrait_of_Barack_Obama.jpg" },
+{ postContent: "hello", postTime: "time", organiserName: "generic society", organiserLogo: "https://upload.wikimedia.org/wikipedia/commons/f/f5/Poster-sized_portrait_of_Barack_Obama.jpg" }]
 
 interface OwnProps extends RouteComponentProps<{ id: string }> {
   event?: string;
 };
 
- 
+
 const mapStateToProps = (state: RootState) => ({
   userToken: state.userDetails.userToken,
-  isLoading: state.viewEventReducer.loading
+  isLoading: state.viewEventReducer.loading,
+  isLoggedIn: state.userDetails.isLoggedIn,
+  goingStatus: state.viewEventReducer.event.goingStatus
 })
-  
+
 const connector = connect(mapStateToProps, { loadEventDetails, loadingEvent })
 type PropsFromRedux = ConnectedProps<typeof connector>
 
@@ -43,17 +45,22 @@ type ViewEventProps = OwnProps & PropsFromRedux;
 
 const ViewEvent: React.FC<ViewEventProps> = (props) => {
   const [segment, setSegment] = useState<'details' | 'posts' | 'resources'>('details');
-  
+
   const [detailsY, setDetailsY] = useState<number>(0);
   const [postsY, setPostsY] = useState<number>(0);
   const [resourcesY, setResourcesY] = useState<number>(0);
 
-  const [going, setGoing] = useState<boolean>(false);
-  const [interested, setInterested] = useState<boolean>(false);
-
   const details = segment === 'details';
   const posts = segment === 'posts';
   const resources = segment === 'resources';
+
+  const GOING = 2;
+  const INTERESTED = 1;
+  const NOT_GOING = 0;
+  const NOT_LOGGED_IN = -1;
+
+  const fabColour = props.goingStatus > NOT_GOING ? (props.goingStatus !== GOING - 1 ? "success" : "warning") : "primary";
+  const fabIcon = props.goingStatus > NOT_GOING ? (props.goingStatus !== GOING - 1 ? checkmarkCircleOutline : bulbOutline) : caretUp;
 
 
   // useEffect(() => {
@@ -85,106 +92,103 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
   }, [props.match.params.id, props.userToken]);
 
 
-   const contentRef = React.useRef<HTMLIonContentElement>(null);
- 
-   const changeTab = (e: { detail: { value: any; }; }) => {
-     const nextSegment = e.detail.value as any;
- 
-     switch (nextSegment) {
-       case 'details':
-         contentRef.current!.scrollToPoint(0, detailsY);
-         break;
-       case 'posts':
-         contentRef.current!.scrollToPoint(0, postsY);
-         break;
-       case 'resources':
-         contentRef.current!.scrollToPoint(0, resourcesY);
-         break;
-     }
-     setSegment(nextSegment);
-     
-   } 
- 
-   const saveY = (y: number) => {
-     switch (segment) {
-       case 'details':
-         setDetailsY(y);
-         break;
-       case 'posts':
-         setPostsY(y);
-         break;
-       case 'resources':
-         setResourcesY(y);
-         break;
-     }
-   }
+  const contentRef = React.useRef<HTMLIonContentElement>(null);
 
-   const goingIcon = going ? checkmarkCircle : checkmarkCircleOutline;
-   const goingColour = going ? "success" : "medium";
+  const changeTab = (e: { detail: { value: any; }; }) => {
+    const nextSegment = e.detail.value as any;
 
-   const interestedIcon = interested ? helpCircle : helpCircleOutline;
-   const interestedColour = interested ? "warning" : "medium";
-
-   const goingClicked = () => {
-     if (!going) {
-      setInterested(false);
-     }
-     setGoing(!going)
-   }
-
-   const interestedClicked = () => {
-    if (!interested) {
-      setGoing(false);
+    switch (nextSegment) {
+      case 'details':
+        contentRef.current!.scrollToPoint(0, detailsY);
+        break;
+      case 'posts':
+        contentRef.current!.scrollToPoint(0, postsY);
+        break;
+      case 'resources':
+        contentRef.current!.scrollToPoint(0, resourcesY);
+        break;
     }
-    setInterested(!interested)
+    setSegment(nextSegment);
+
   }
 
- 
-   return (
-     <IonPage>
- 
-       <IonHeader>
-         <IonToolbar>
-            <IonButtons slot="start">
-               <IonBackButton text="" defaultHref="/events" />
-            </IonButtons>
-           <IonSegment value={segment} onIonChange={changeTab}>
-             <IonSegmentButton value="details">
-               <IonLabel>Details</IonLabel>
-             </IonSegmentButton>
-             <IonSegmentButton value="posts">
-               <IonLabel>Posts</IonLabel>
-             </IonSegmentButton>
-             <IonSegmentButton value="resources">
-               <IonLabel>Resources</IonLabel>
-             </IonSegmentButton>
-           </IonSegment>
-         </IonToolbar>
-       </IonHeader>
- 
-       <IonContent ref={contentRef} scrollEvents={true} onIonScroll={(e) => saveY(e.detail.currentY)}>
+  const saveY = (y: number) => {
+    switch (segment) {
+      case 'details':
+        setDetailsY(y);
+        break;
+      case 'posts':
+        setPostsY(y);
+        break;
+      case 'resources':
+        setResourcesY(y);
+        break;
+    }
+  }
+
+  return (
+    <IonPage>
+
+      <IonHeader>
+        <IonToolbar>
+          <IonButtons slot="start">
+            <IonBackButton text="" defaultHref="/events" />
+          </IonButtons>
+          <IonSegment value={segment} onIonChange={changeTab}>
+            <IonSegmentButton value="details">
+              <IonLabel>Details</IonLabel>
+            </IonSegmentButton>
+            <IonSegmentButton value="posts">
+              <IonLabel>Posts</IonLabel>
+            </IonSegmentButton>
+            <IonSegmentButton value="resources">
+              <IonLabel>Resources</IonLabel>
+            </IonSegmentButton>
+          </IonSegment>
+        </IonToolbar>
+      </IonHeader>
+
+      <IonContent ref={contentRef} scrollEvents={true} onIonScroll={(e) => saveY(e.detail.currentY)}>
         <div className={!props.isLoading ? 'fadeIn' : 'fadeOut'}>
           <EventDescription hide={!details} />
         </div>
 
         <EventPostsList hide={!posts} />
 
-        <EventResourcesList hide={!resources}/>
+        <EventResourcesList hide={!resources} />
 
-        <IonFab vertical="bottom" horizontal="end" slot="fixed">
-          <IonFabButton>
-            <IonIcon icon={caretUp} />
-          </IonFabButton>
-          <IonFabList side="top">
-            <IonFabButton><IonIcon icon={shareOutline} /></IonFabButton>
-            <IonFabButton><IonIcon icon={bulbOutline} /></IonFabButton>
-            <IonFabButton><IonIcon icon={checkmarkCircleOutline} /></IonFabButton>
-          </IonFabList>
-        </IonFab>
- 
-       </IonContent>
-     </IonPage>
-   );
- };
- 
- export default connector(ViewEvent);
+        {props.isLoggedIn &&
+          <IonFab vertical="bottom" horizontal="end" slot="fixed">
+            <IonFabButton color={fabColour}>
+              <IonIcon icon={fabIcon} />
+            </IonFabButton>
+
+            <IonFabList side="top">
+              <IonFabButton color="primary">
+                <IonIcon icon={shareOutline} />
+              </IonFabButton>
+
+              <IonFabButton color={props.goingStatus === INTERESTED ? "warning" : ""}>
+                <IonIcon icon={bulbOutline} />
+              </IonFabButton>
+
+              <IonFabButton color={props.goingStatus === GOING ? "success" : ""}>
+                <IonIcon icon={checkmarkCircleOutline} />
+              </IonFabButton>
+            </IonFabList>
+          </IonFab>}
+
+        {!props.isLoggedIn &&
+          <IonFab vertical="bottom" horizontal="end" slot="fixed">
+            <IonFabButton color="primary">
+              <IonIcon icon={shareOutline} />
+            </IonFabButton>
+          </IonFab>}
+
+
+      </IonContent>
+    </IonPage>
+  );
+};
+
+export default connector(ViewEvent);
