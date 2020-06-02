@@ -153,6 +153,8 @@ class Profile extends Component<ProfileProps, ProfileState> {
             <p>This is the interest modal</p>
             <IonButton onClick={() => this.setState({ showInterestModal: false })}>Close modal</IonButton>
           </IonModal>
+
+          {/* TODO: Need to remove this button to manually refresh profile, replace with refresher and an on component load */}
           <IonButton onClick={this.refresh}>REFRESH</IonButton>
 
           <IonToast
