@@ -55,11 +55,19 @@ class Profile extends Component<ProfileProps, ProfileState> {
   }
 
   componentDidMount() {
-    // Need to check that the token has been loaded in first before attempting first request
-    // this.refresh();
+    if (this.props.userToken !== "") {
+      this.refresh();
+    }
+  }
+
+  componentDidUpdate(prevProps: ProfileProps) {
+    if(this.props.userToken !== prevProps.userToken) {
+      this.refresh()
+    }
   }
 
   refresh() {
+    console.log(this.props.userToken)
     this.props.fetchProfileDetails(this.props.userToken)
   }
 

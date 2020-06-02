@@ -63,7 +63,7 @@ export const fetchProfileDetails = (token: string): AppThunk => async dispatch =
    const options = {
       method: "GET",
       headers: {
-         "Authorization": "Bearer " + token
+         "Authorization": `Bearer ${token}`
       }
    }
    fetch(profileDetailsURL, options)
