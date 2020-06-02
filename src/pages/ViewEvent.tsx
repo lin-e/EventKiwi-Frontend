@@ -158,21 +158,8 @@ const ViewEvent: React.FC<ViewEventProps> = ({ match, event }) => {
        <IonContent ref={contentRef} scrollEvents={true} onIonScroll={(e) => saveY(e.detail.currentY)}>
         {eventDetails.name !== undefined &&
         <div className={visible ? 'fadeIn' : 'fadeOut'}>
-          {/* <EventDescription 
-            id={eventDetails.id}
-            name={eventDetails.name} 
-            organiser={eventDetails.organiser}
-            location={eventDetails.location}
-            datetimeStart={eventDetails.datetimeStart}
-            datetimeEnd={eventDetails.datetimeEnd}
-            description={eventDetails.description}
-            hide={!details}
-            images={eventDetails.images}
-            tags={eventDetails.tags}
-            sameSocEvents={eventDetails.sameSocEvents}
-            similarEvents={eventDetails.similarEvents} 
-          /> */}
-          </div>}
+          <EventDescription hide={!details} />
+        </div>}
  
         {eventDetails.organiser !== undefined &&
          <EventPostsList posts={[]} societyName={eventDetails.organiser.name} hide={!posts} />
