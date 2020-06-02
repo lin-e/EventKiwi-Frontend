@@ -82,7 +82,7 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
   useEffect(() => {
     props.loadingEvent(); // move this to when an event is clicked
     props.loadEventDetails(props.match.params.id, props.userToken);
-  }, [props.match.params.id]);
+  }, [props.match.params.id, props.userToken]);
 
 
    const contentRef = React.useRef<HTMLIonContentElement>(null);
