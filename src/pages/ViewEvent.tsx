@@ -68,7 +68,7 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
   const [interestedToast, showInterestedToast] = useState<boolean>(false);
   const [shareUrlToast, showShareUrlToast] = useState<boolean>(false);
 
-  const shareUrlText = useRef<HTMLTextAreaElement>(null);
+  const shareUrlTextRef = useRef<HTMLTextAreaElement>(null);
   const shareUrl = `https://drp.social/event/${props.match.params.id}`;
 
   // useEffect(() => {
@@ -157,22 +157,21 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
   const shareClicked = async () => {
     if (isPlatform("desktop")) {
       try {
-        shareUrlText.current!.hidden = false;
-        shareUrlText.current!.select();
+        shareUrlTextRef.current!.hidden = false;
+        shareUrlTextRef.current!.select();
         var successful = document.execCommand('copy');
         successful ? showShareUrlToast(true) : console.log("Unable to copy URL to clipboard");
       } catch (err) {
         console.error('Fallback: Unable to copy', err);
       } finally {
-        shareUrlText.current!.hidden = true;
+        shareUrlTextRef.current!.hidden = true;
       }
 
     } else {
       let shareRet = await Share.share({
-        title: 'See cool stuff',
-        text: 'Really awesome thing you need to see right meow',
-        url: 'http://ionicframework.com/',
-        dialogTitle: 'Share with buddies'
+        title: `Share event`,
+        url: shareUrl,
+        dialogTitle: 'Share event'
       });
     }
   }
