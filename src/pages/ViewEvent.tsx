@@ -158,7 +158,7 @@ const ViewEvent: React.FC<ViewEventProps> = ({ match, event }) => {
        <IonContent ref={contentRef} scrollEvents={true} onIonScroll={(e) => saveY(e.detail.currentY)}>
         {eventDetails.name !== undefined &&
         <div className={visible ? 'fadeIn' : 'fadeOut'}>
-          <EventDescription 
+          {/* <EventDescription 
             id={eventDetails.id}
             name={eventDetails.name} 
             organiser={eventDetails.organiser}
@@ -171,7 +171,7 @@ const ViewEvent: React.FC<ViewEventProps> = ({ match, event }) => {
             tags={eventDetails.tags}
             sameSocEvents={eventDetails.sameSocEvents}
             similarEvents={eventDetails.similarEvents} 
-          />
+          /> */}
           </div>}
  
         {eventDetails.organiser !== undefined &&

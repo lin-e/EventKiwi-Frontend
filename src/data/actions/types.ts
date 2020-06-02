@@ -1,6 +1,7 @@
-import { EventCardDetails, Society } from "../../constants/types";
+import { EventCardDetails, Society, EventDetails } from "../../constants/types";
 import { AuthResponse } from "../types/dataInterfaces";
 import { UserState } from "../types/stateTypes";
+import { type } from "os";
 
 export const FETCH_EVENTS_CARDS = "FETCH_EVENTS_CARDS";
 
@@ -44,11 +45,16 @@ export type FetchCalType = FetchCalendarEventsAction;
 
 export type FetchProfileType =  FetchProfileInterestsAction | RemoveProfileInterestAction | FetchProfileSocsAction;
 
-export type AppActions = FetchEventType | FetchCalType | FetchProfileType;
+export type AppActions = FetchEventType | FetchCalType | FetchProfileType | ViewEventType;
 
+export const LOAD_EVENT_DETAILS = "LOAD_EVENT_DETAILS"
 
+interface LoadEventDetailsAction {
+   type: typeof LOAD_EVENT_DETAILS,
+   payload: EventDetails
+}
 
-
+export type ViewEventType = LoadEventDetailsAction;
 
 export const USER_LOGIN = "USER_LOGIN";
 export const LOAD_USER_DATA = "LOAD_USER_DATA";
