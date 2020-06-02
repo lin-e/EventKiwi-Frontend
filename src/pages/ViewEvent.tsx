@@ -9,6 +9,9 @@ import { EventPostProps } from '../components/EventPost';
 import EventResourcesList from '../components/EventResourcesList';
 import { checkmarkCircleOutline, helpCircleOutline, checkmarkCircle, helpCircle } from 'ionicons/icons';
 import { eventDetailsURL, eventResourcesURL } from '../constants/endpoints';
+import { connect, ConnectedProps } from 'react-redux';
+import { loadEventDetails } from '../data/actions/viewEventActions';
+import { RootState } from '../data/reducers';
 
 const loremIpsum = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam hendrerit justo vel dolor consectetur efficitur. Donec nec sollicitudin augue, non sollicitudin eros. Pellentesque tincidunt dolor quam, in porttitor neque rhoncus a. In hac habitasse platea dictumst. Cras at tortor ex. Aliquam urna leo, convallis eget vehicula et, egestas nec eros. Donec ipsum leo, faucibus non nulla non, accumsan fermentum ligula. Mauris sit amet diam eu purus tincidunt vulputate. Aliquam in nisl id augue consequat aliquet. Phasellus porttitor sed risus quis ultrices. Ut ut risus orci. Sed facilisis erat sed vestibulum bibendum. Interdum et malesuada fames ac ante ipsum primis in faucibus. In consequat ipsum eros, at malesuada libero ullamcorper vel. Quisque bibendum nulla augue, eu tincidunt tellus malesuada in. Phasellus sed est lorem.
 Vestibulum a justo ligula. Integer euismod nibh vitae nulla commodo rhoncus. Phasellus purus leo, interdum et tellus ut, condimentum varius eros. Sed vulputate nulla in sem faucibus, ut mattis odio fermentum. Morbi maximus faucibus justo ac iaculis. Quisque luctus, sapien vel auctor varius, ipsum lacus venenatis elit, a laoreet augue velit volutpat nisi. Suspendisse vitae augue eros. Nunc sit amet semper massa, eget eleifend nisl. Quisque pretium pulvinar justo id suscipit. Integer ullamcorper dolor ut ipsum faucibus, rutrum commodo mauris aliquet. Aliquam scelerisque metus pretium sem pellentesque interdum. Cras rutrum accumsan nunc et consectetur.
@@ -27,15 +30,19 @@ const eventPosts: EventPostProps[] = [{postContent: "hello", postTime: "time", o
 interface OwnProps extends RouteComponentProps<{ id: string }> {
    event?: string;
  };
+
  
- interface StateProps {};
- 
- interface DispatchProps {};
- 
- interface ViewEventProps extends OwnProps, StateProps, DispatchProps {};
+const mapStateToProps = (state: RootState) => ({
+  userToken: state.userDetails.userToken
+})
+  
+const connector = connect(mapStateToProps, { loadEventDetails })
+type PropsFromRedux = ConnectedProps<typeof connector>
+
+ type ViewEventProps = OwnProps & PropsFromRedux;
 
 
-const ViewEvent: React.FC<ViewEventProps> = ({ match, event }) => {
+const ViewEvent: React.FC<ViewEventProps> = (props) => {
   const [segment, setSegment] = useState<'details' | 'posts' | 'resources'>('details');
   
   const [detailsY, setDetailsY] = useState<number>(0);
@@ -54,28 +61,32 @@ const ViewEvent: React.FC<ViewEventProps> = ({ match, event }) => {
 
   const [visible, setVisible] = useState<boolean>(true);
 
+  // useEffect(() => {
+  //   setVisible(false);
+  //   fetch(`${eventDetailsURL}${match.params.id}`)
+  //   .then(response => response.json())
+  //   .then(res => {
+  //     setEventDetails({} as EventDetails); 
+  //     return res
+  //   })
+  //   .then(resDetails => {
+  //     setEventDetails(convertResToEventDetails(resDetails));
+  //     contentRef.current!.scrollToPoint(0, 0);
+  //     setTimeout(() => {
+  //       setVisible(true);
+  //     }, 0.5);
+
+  //   })
+
+  //   fetch(`${eventResourcesURL}${match.params.id}`)
+  //   .then(response => response.json())
+  //   .then(data => setEventResources(data.map(convertResToResource)))
+  //   }, [match.params.id]
+  // );
+
   useEffect(() => {
-    setVisible(false);
-    fetch(`${eventDetailsURL}${match.params.id}`)
-    .then(response => response.json())
-    .then(res => {
-      setEventDetails({} as EventDetails); 
-      return res
-    })
-    .then(resDetails => {
-      setEventDetails(convertResToEventDetails(resDetails));
-      contentRef.current!.scrollToPoint(0, 0);
-      setTimeout(() => {
-        setVisible(true);
-      }, 0.5);
-
-    })
-
-    fetch(`${eventResourcesURL}${match.params.id}`)
-    .then(response => response.json())
-    .then(data => setEventResources(data.map(convertResToResource)))
-    }, [match.params.id]
-  );
+    props.loadEventDetails(props.match.params.id, props.userToken)
+  }, [props.match.params.id]);
 
 
    const contentRef = React.useRef<HTMLIonContentElement>(null);
@@ -156,11 +167,10 @@ const ViewEvent: React.FC<ViewEventProps> = ({ match, event }) => {
        </IonHeader>
  
        <IonContent ref={contentRef} scrollEvents={true} onIonScroll={(e) => saveY(e.detail.currentY)}>
-        {eventDetails.name !== undefined &&
         <div className={visible ? 'fadeIn' : 'fadeOut'}>
           <EventDescription hide={!details} />
-        </div>}
- 
+        </div>
+
         {eventDetails.organiser !== undefined &&
          <EventPostsList posts={[]} societyName={eventDetails.organiser.name} hide={!posts} />
         }
@@ -186,4 +196,4 @@ const ViewEvent: React.FC<ViewEventProps> = ({ match, event }) => {
    );
  };
  
- export default ViewEvent;
+ export default connector(ViewEvent);

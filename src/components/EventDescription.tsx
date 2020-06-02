@@ -28,65 +28,65 @@ class EventDescription extends Component<EventDescriptionProps> {
       super(props);
    }
 
-   render() {   
+   render() {
       return (
-      <div style={this.props.hide ? {display: "none"} : {}}>
-         <Container>
-            <IonText><h1>{this.props.event.name}</h1></IonText>
+         <div style={this.props.hide ? { display: "none" } : {}}>
+            <Container>
+               <IonText><h1>{this.props.event.name}</h1></IonText>
 
-            <Row>
-               <Col md={6} sm={12}>
-                  <IonCard className="eventImageCard">
-                     <img className="eventImage" src={this.props.event.images[0]} alt={this.props.event.name}></img>
-                  </IonCard>
-               </Col>
-               
-               <Col md={6} sm={12}>
-                  <IonCardSubtitle>By {this.props.event.organiser.name},</IonCardSubtitle>
-                  <IonCardSubtitle>{`${getDateRange(this.props.event.datetimeStart, this.props.event.datetimeEnd)},`}</IonCardSubtitle>
-                  <IonCardSubtitle>{this.props.event.location}</IonCardSubtitle>
-                  <ExpandTextView limit={450} text={this.props.event.description} />
-               </Col>
-            </Row>
+               <Row>
+                  <Col md={6} sm={12}>
+                     <IonCard className="eventImageCard">
+                        <img className="eventImage" src={this.props.event.images[0]} alt={this.props.event.name}></img>
+                     </IonCard>
+                  </Col>
 
-            {this.props.event.sameSocEvents.length > 0 && 
-            <div>
-               <IonText><h2>More from {this.props.event.organiser.name}</h2></IonText>
-               <div className="suggestedEvents">
-                  
-                  <ItemSlider width={250}>
-                     {this.props.event.sameSocEvents.map(event => {
-                        return <EventMiniCard 
+                  <Col md={6} sm={12}>
+                     <IonCardSubtitle>By {this.props.event.organiser.name},</IonCardSubtitle>
+                     <IonCardSubtitle>{`${getDateRange(this.props.event.datetimeStart, this.props.event.datetimeEnd)},`}</IonCardSubtitle>
+                     <IonCardSubtitle>{this.props.event.location}</IonCardSubtitle>
+                     <ExpandTextView limit={450} text={this.props.event.description} />
+                  </Col>
+               </Row>
+
+               {this.props.event.sameSocEvents.length > 0 &&
+                  <div>
+                     <IonText><h2>More from {this.props.event.organiser.name}</h2></IonText>
+                     <div className="suggestedEvents">
+
+                        <ItemSlider width={250}>
+                           {this.props.event.sameSocEvents.map(event => {
+                              return <EventMiniCard
                                  eventId={event.id}
                                  eventName={event.name}
                                  eventStart={event.datetimeStart}
                                  eventEnd={event.datetimeEnd}
                                  organiser={event.organiser.name}
                                  image={event.image} />
-                        })}
-                  </ItemSlider>
-               </div>
-            </div>}
+                           })}
+                        </ItemSlider>
+                     </div>
+                  </div>}
 
-            {this.props.event.similarEvents.length > 0 && 
-            <div>
-               <IonText><h2>Suggested events</h2></IonText>
-               <div className="suggestedEvents">
-                  <ItemSlider width={250}>
-                     {this.props.event.similarEvents.map(event => {
-                        return <EventMiniCard 
+               {this.props.event.similarEvents.length > 0 &&
+                  <div>
+                     <IonText><h2>Suggested events</h2></IonText>
+                     <div className="suggestedEvents">
+                        <ItemSlider width={250}>
+                           {this.props.event.similarEvents.map(event => {
+                              return <EventMiniCard
                                  eventId={event.id}
                                  eventName={event.name}
                                  eventStart={event.datetimeStart}
                                  eventEnd={event.datetimeEnd}
                                  organiser={event.organiser.name}
                                  image={event.image} />
-                        })}
-                  </ItemSlider>
-               </div>
-            </div>}
-         </Container>
-      </div>
+                           })}
+                        </ItemSlider>
+                     </div>
+                  </div>}
+            </Container>
+         </div>
       )
    }
 }
