@@ -1,14 +1,21 @@
 import React, { Component, createRef } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonSearchbar, IonRefresher, IonRefresherContent } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonSearchbar, IonRefresher, IonRefresherContent, IonList, IonCol, IonRow, IonGrid } from '@ionic/react';
 import './Discover.css';
 import ExploreEventsList from '../components/ExploreEventsList';
 import { connect, ConnectedProps } from 'react-redux';
-import { fetchEventCards, fetchSearchEventCards } from "../data/actions/actions";
+import { fetchEventCards, fetchSearchEventCards, fetchSearchSocietyCards } from "../data/actions/actions";
 import { RootState } from '../data/reducers';
 import { Redirect } from 'react-router';
+import { Container, Row, Col } from 'react-grid-system';
+import SkeletonTextEventCard from '../components/SkeletonTextEventCard';
+import ExploreEventCard from '../components/ExploreEventCard';
+import EmptySectionText from '../components/EmptySectionText';
+import ExploreSocietyCard from '../components/ExploreSocietyCard';
 
 const mapStateToProps = (state: RootState) => {
   return {
+    societies: state.societyCards.societies,
+    events: state.eventCards.events,
     isLoggedIn: state.userDetails.isLoggedIn,
     isLoading: state.userDetails.loading,
     userToken: state.userDetails.userToken
@@ -17,7 +24,7 @@ const mapStateToProps = (state: RootState) => {
 
 const connector = connect(
   mapStateToProps,
-  { fetchEventCards, fetchSearchEventCards }
+  { fetchSearchSocietyCards, fetchEventCards, fetchSearchEventCards }
 )
 
 type PropsFromRedux = ConnectedProps<typeof connector>
@@ -47,15 +54,16 @@ class Discover extends Component<DiscoverProps, DiscoverState> {
   }
 
   searchBarUpdate(e: CustomEvent) {
-    this.setState({searchTerm: e.detail.value!});
+    this.setState({searchTerm: (e.detail.value == undefined) ? "" : e.detail.value!.trim()});
     this.search(this.state.searchTerm)
 
   }
 
   search(searchTerm: string) {
-    if (searchTerm === "") {
+    if (searchTerm == "") {
       this.props.fetchEventCards(this.refresherRef.current!);
     } else {
+      this.props.fetchSearchSocietyCards(searchTerm, this.refresherRef.current!)
       this.props.fetchSearchEventCards(searchTerm, this.refresherRef.current!);
     }
   }
@@ -86,7 +94,57 @@ class Discover extends Component<DiscoverProps, DiscoverState> {
 
         <IonSearchbar ref={this.searchBar} onIonChange={this.searchBarUpdate} debounce={500} enterkeyhint="search" type="search"/>
         
-        <ExploreEventsList />
+        <Container>
+          {(this.state.searchTerm !== "" && this.props.societies.length !== 0) &&
+              <IonGrid>
+                <IonRow>
+                  {this.props.societies.map(society =>
+                    <IonCol sizeXl="4" sizeMd="6" sizeXs="12" key={"societyCardCol-" + society.id} className="societyItem">
+                      <ExploreSocietyCard 
+                        societyName={society.name}
+                        imgSrc={society.imageSrc}
+                        numFollowers={0}
+                        following={false}
+                      />
+                    </IonCol>
+                  )}
+                </IonRow>
+              </IonGrid>
+          }
+          <Row>
+              {this.props.events.length === 0 && 
+                ((this.state.searchTerm === "") ?
+                  [1,2,3,4,5,6].map(x =>
+                    <Col key={"skeleton" + x.toString()} lg={4} md={6}>
+                        <SkeletonTextEventCard />
+                    </Col>
+                  ) :
+                  <Col>
+                    <EmptySectionText 
+                      mainText={`No events found for '${this.state.searchTerm.trim()}'`}
+                      subText="Try searching for something else, or suggest the topic to a society!" />
+                  </Col>
+                )
+              }
+
+              {this.props.events.length > 0  &&
+                this.props.events.map(event => 
+                    <Col key={"eventCardCol-" + event.id} lg={4} md={6}>
+                      <ExploreEventCard key={"eventCard" + event.id}
+                          id={event.id} 
+                          name={event.name}
+                          datetimeStart={event.datetimeStart}
+                          datetimeEnd={event.datetimeEnd}
+                          location={event.location}
+                          image={event.image}
+                          tags={event.tags}
+                          organiser={event.organiser}
+                      />
+                    </Col>
+                )
+              }
+          </Row>
+        </Container>
         
       </IonContent>
     </IonPage>

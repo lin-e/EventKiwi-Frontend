@@ -5,6 +5,7 @@ export const endpointURL = stagingURL;
 
 export const discoverEventCardURL = `${endpointURL}/events/cards/all`
 export const discoverSeachEventCardURL = `${endpointURL}/events/search`
+export const discoverSearchSocietyCardURL = `${endpointURL}/societies/search`
 
 export const eventDetailsURL = `${endpointURL}/events/details/`
 export const eventResourcesURL = `${endpointURL}/events/resources/`
