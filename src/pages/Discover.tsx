@@ -1,5 +1,6 @@
 import React, { Component, createRef } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonSearchbar, IonRefresher, IonRefresherContent, IonList, IonCol, IonRow, IonGrid } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonSearchbar, IonRefresher, IonRefresherContent, IonList, IonCol, IonRow, IonGrid, IonButton, IonIcon, IonButtons } from '@ionic/react';
+import { add } from 'ionicons/icons'
 import './Discover.css';
 import ExploreEventsList from '../components/ExploreEventsList';
 import { connect, ConnectedProps } from 'react-redux';
@@ -11,6 +12,7 @@ import SkeletonTextEventCard from '../components/SkeletonTextEventCard';
 import ExploreEventCard from '../components/ExploreEventCard';
 import EmptySectionText from '../components/EmptySectionText';
 import ExploreSocietyCard from '../components/ExploreSocietyCard';
+import { SocietyCard } from '../constants/types';
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -31,8 +33,11 @@ type PropsFromRedux = ConnectedProps<typeof connector>
 type DiscoverProps = PropsFromRedux;
 
 interface DiscoverState {
-  searchTerm: string
+  searchTerm: string,
+  socExpanded: boolean
 }
+
+const MAX_SOCS = 3;
 
 class Discover extends Component<DiscoverProps, DiscoverState> {
   refresherRef: React.RefObject<HTMLIonRefresherElement>;
@@ -41,12 +46,14 @@ class Discover extends Component<DiscoverProps, DiscoverState> {
   constructor(props: DiscoverProps) {
     super(props);
     this.state = {
-      searchTerm: ""
+      searchTerm: "",
+      socExpanded: false
     }
     this.searchBar = createRef<HTMLIonSearchbarElement>();
     this.refresherRef = createRef<HTMLIonRefresherElement>();
     this.search = this.search.bind(this);
     this.searchBarUpdate = this.searchBarUpdate.bind(this);
+    this.renderSocCard = this.renderSocCard.bind(this);
   }
 
   componentDidMount() {
@@ -54,7 +61,10 @@ class Discover extends Component<DiscoverProps, DiscoverState> {
   }
 
   searchBarUpdate(e: CustomEvent) {
-    this.setState({searchTerm: (e.detail.value == undefined) ? "" : e.detail.value!.trim()});
+    this.setState({
+      searchTerm: (e.detail.value == undefined) ? "" : e.detail.value!.trim(),
+      socExpanded: false
+    });
     this.search(this.state.searchTerm)
 
   }
@@ -63,9 +73,17 @@ class Discover extends Component<DiscoverProps, DiscoverState> {
     if (searchTerm == "") {
       this.props.fetchEventCards(this.refresherRef.current!);
     } else {
-      this.props.fetchSearchSocietyCards(searchTerm, this.refresherRef.current!)
-      this.props.fetchSearchEventCards(searchTerm, this.refresherRef.current!);
+      this.props.fetchSearchSocietyCards(searchTerm, this.refresherRef.current!, this.props.userToken)
+      this.props.fetchSearchEventCards(searchTerm, this.refresherRef.current!, this.props.userToken);
     }
+  }
+
+  renderSocCard(society: SocietyCard) {
+    return (
+      <IonCol sizeXl="4" sizeMd="6" sizeXs="12" key={"societyCardCol-" + society.id}>
+        <ExploreSocietyCard soc={society}/>
+      </IonCol>
+    )
   }
 
   render() {
@@ -98,16 +116,22 @@ class Discover extends Component<DiscoverProps, DiscoverState> {
           {(this.state.searchTerm !== "" && this.props.societies.length !== 0) &&
               <IonGrid>
                 <IonRow>
-                  {this.props.societies.map(society =>
-                    <IonCol sizeXl="4" sizeMd="6" sizeXs="12" key={"societyCardCol-" + society.id} className="societyItem">
-                      <ExploreSocietyCard 
-                        societyName={society.name}
-                        imgSrc={society.imageSrc}
-                        numFollowers={0}
-                        following={false}
-                      />
+                  {(this.props.societies.length > MAX_SOCS) && (!this.state.socExpanded) &&
+                        this.props.societies.slice(0, MAX_SOCS).map(this.renderSocCard)
+                  }
+                  {(this.props.societies.length > MAX_SOCS) && (!this.state.socExpanded) &&
+                    <IonCol sizeXl="4" sizeMd="6" sizeXs="12">
+                      <IonButtons>
+                        <IonButton onClick={() => this.setState({socExpanded: true})}>
+                          <IonIcon icon={add} />
+                          Show more
+                        </IonButton>
+
+                      </IonButtons>
                     </IonCol>
-                  )}
+                  }
+                  {(this.props.societies.length < MAX_SOCS || this.state.socExpanded) &&
+                    this.props.societies.map(this.renderSocCard)}
                 </IonRow>
               </IonGrid>
           }

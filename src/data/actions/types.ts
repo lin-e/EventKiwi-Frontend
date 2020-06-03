@@ -1,15 +1,27 @@
+import { EventCardDetails, ProfileDetails, EventDetails, Society, SocietyCard, Post } from "../../constants/types";
 import { AuthResponse } from "../types/dataInterfaces";
 import { UserState } from "../types/stateTypes";
-import { Society, EventCardDetails, EventDetails, Post, ProfileDetails } from "../../constants/types";
 
 export const FETCH_SEARCH_SOCIETY_CARDS = "FETCH_SEARCH_SOCIETY_CARDS";
+export const FOLLOW_SOCIETY = "FOLLOW_SOCIETY";
+export const UNFOLLOW_SOCIETY = "UNFOLLOW_SOCIETY"
 
 export interface FetchSearchSocietyCardsAction {
    type: typeof FETCH_SEARCH_SOCIETY_CARDS,
-   payload: Society[]
+   payload: SocietyCard[]
 }
 
-export type FetchSocietyType = FetchSearchSocietyCardsAction;
+export interface followSocietyAction {
+   type: typeof FOLLOW_SOCIETY,
+   payload: string
+}
+
+export interface unfollowSocietyAction {
+   type: typeof UNFOLLOW_SOCIETY,
+   payload: string
+}
+
+export type FetchSocietyType = FetchSearchSocietyCardsAction | followSocietyAction | unfollowSocietyAction;
 
 
 export const FETCH_EVENTS_CARDS = "FETCH_EVENTS_CARDS";
