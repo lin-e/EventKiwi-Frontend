@@ -1,4 +1,13 @@
-import { resp_event_details, resp_event_card_details, resp_society, resp_resource, resp_post, resp_event_posts, resp_event_post_organiser } from "./RequestInterfaces";
+import { resp_event_post_organiser, resp_event_posts, resp_post, resp_resource, resp_event_details, resp_event_card_details, resp_profile_details, resp_society, resp_society_basic } from "./RequestInterfaces"
+
+
+export interface ProfileDetails {
+  firstname: string,
+  lastname: string,
+  email: string,
+  societies: SocietyBasic[],
+  interests: string[]
+}
 
 export interface Profile {
   id: string;
@@ -9,6 +18,12 @@ export interface Profile {
 
 export interface Society extends Profile {
   colour: string;
+}
+
+export interface SocietyBasic {
+  imgSrc: string,
+  shortName: string,
+  type: number
 }
 
 export const blankSociety = {
@@ -143,10 +158,31 @@ export const convertResToEventDetails = (res: resp_event_details): EventDetails 
   tags: res.tags
  })
 
- export const convertResToSoc = (res: resp_society): Society => ({
-  id: res.society_id,
-  name: res.society_name,
-  colour: res.colour,
-  shortName: res.short_name,
-  imageSrc: res.society_image_src
- })
+
+ export const convertResToProfileDetails = (res: resp_profile_details): ProfileDetails => {
+   return {
+     firstname: res.firstname,
+     lastname: res.lastname,
+     email: res.email,
+     societies: res.societies.map(convertResToSocBasic),
+     interests: res.interests
+   }
+ }
+
+ export const convertResToSoc = (res: resp_society): Society => {
+   return {
+     id: res.society_id,
+     name: res.society_name,
+     colour: res.colour,
+     shortName: res.short_name,
+     imageSrc: res.society_image_src
+   }
+ }
+
+ export const convertResToSocBasic = (res: resp_society_basic): SocietyBasic => {
+   return {
+     shortName: res.short_name,
+     imgSrc: res.society_image_src,
+     type: res.type
+   }
+ }

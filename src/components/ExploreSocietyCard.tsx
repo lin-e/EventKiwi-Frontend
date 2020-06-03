@@ -1,20 +1,16 @@
 import React, { useState } from 'react';
 import { IonCardHeader, IonCard, IonGrid, IonCol, IonThumbnail, IonIcon, IonRow, IonLabel, IonItem, IonButton } from '@ionic/react';
 import { Row, Col } from 'react-grid-system';
-import "./ExploreSocietyItem.css"
+import "./ExploreSocietyCard.css"
 
-const societyName = "Imperial College Department of Computing Society"
-
-const numFollowers = 1024
-
-interface ExploreSocietyItemProps {
+interface ExploreSocietyCardProps {
   societyName: string,
   numFollowers: number,
   imgSrc: string,
   following: boolean
 }
 
-const ExploreSocietyItem: React.FC<ExploreSocietyItemProps> = ({societyName, numFollowers, imgSrc, following}) => {
+const ExploreSocietyCard: React.FC<ExploreSocietyCardProps> = ({societyName, numFollowers, imgSrc, following}) => {
 
   const [isFollowing, setisFollowing] = useState(following);
 
@@ -37,8 +33,8 @@ const ExploreSocietyItem: React.FC<ExploreSocietyItemProps> = ({societyName, num
               </Col>
               <Col xs={6}>
                 {isFollowing ? 
-                  <IonButton className="followBtn" fill="outline">Unfollow</IonButton> :
-                  <IonButton className="followBtn">Follow</IonButton>
+                  <IonButton className="followBtn" fill="outline" onClick={() => setisFollowing(false)}>Following</IonButton> :
+                  <IonButton className="followBtn" fill="solid" onClick={() => setisFollowing(true)}>Follow</IonButton>
                 }
               </Col>
             </Row>             
@@ -49,4 +45,4 @@ const ExploreSocietyItem: React.FC<ExploreSocietyItemProps> = ({societyName, num
   );
 }
 
-export default ExploreSocietyItem;
+export default ExploreSocietyCard;

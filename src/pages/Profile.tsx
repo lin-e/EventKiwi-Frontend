@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonGrid, IonRow, IonCol, IonButton, IonModal } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonGrid, IonRow, IonCol, IonButton, IonModal, IonToast } from '@ionic/react';
 import './Profile.css';
 import ItemSlider from '../components/ItemSlider';
-import { Society } from '../constants/types';
+import { SocietyBasic } from '../constants/types';
 import ProfileSocietyIcon from '../components/Profile/ProfileSocietyIcon';
 import { Container } from 'react-grid-system';
-import InterestChip from '../components/InterestChip';
-import { startFetchProfileInterests, startFetchProfileSocs } from '../data/actions/actions';
+import InterestChip from '../components/Profile/InterestChip';
+import { fetchProfileDetails, resetInvalidProfileResponse } from '../data/actions/actions';
 import { logOut } from '../data/actions/userActions';
 import { RootState } from '../data/reducers';
 import { connect } from 'react-redux';
@@ -14,13 +14,15 @@ import EmptySectionText from '../components/EmptySectionText';
 import { Redirect } from 'react-router';
 import { UserProfile } from '../data/types/dataInterfaces';
 import { Plugins } from '@capacitor/core';
+import AddInterestModal from '../components/Profile/AddInterestModal';
 
 const { Browser } = Plugins;
 
 
 interface LinkStateProps {
   interests: string[],
-  societies: Society[],
+  societies: SocietyBasic[],
+  invalidResponse: boolean,
   profile: UserProfile,
   isLoggedIn: boolean,
   isLoading: boolean,
@@ -28,8 +30,8 @@ interface LinkStateProps {
 }
 
 interface LinkDispatchProps {
-  startFetchProfileInterests: () => void;
-  startFetchProfileSocs: () => void;
+  resetInvalidProfileResponse: () => void;
+  fetchProfileDetails: (token: string) => void
   logOut: (token: string) => void;
 }
 
@@ -37,7 +39,8 @@ type ProfileProps = LinkStateProps & LinkDispatchProps
 
 interface ProfileState {
   showSocietyModal: boolean,
-  showInterestModal: boolean
+  showInterestModal: boolean,
+  showErrorToast: boolean
 }
 
 class Profile extends Component<ProfileProps, ProfileState> {
@@ -46,18 +49,26 @@ class Profile extends Component<ProfileProps, ProfileState> {
     super(props);
     this.state = {
       showSocietyModal: false,
-      showInterestModal: false
+      showInterestModal: false,
+      showErrorToast: false
     }
     this.refresh = this.refresh.bind(this);
   }
 
   componentDidMount() {
-    this.refresh();
+    if (this.props.userToken !== "") {
+      this.refresh();
+    }
+  }
+
+  componentDidUpdate(prevProps: ProfileProps) {
+    if(this.props.userToken !== prevProps.userToken) {
+      this.refresh()
+    }
   }
 
   refresh() {
-    this.props.startFetchProfileSocs();
-    this.props.startFetchProfileInterests();
+    this.props.fetchProfileDetails(this.props.userToken)
   }
 
 
@@ -100,7 +111,7 @@ class Profile extends Component<ProfileProps, ProfileState> {
                   {this.props.societies.length !== 0 ?
                     <ItemSlider width={130}>
                       {this.props.societies.map((soc) => (
-                        <ProfileSocietyIcon name={soc.shortName} logo={soc.imageSrc} />
+                        <ProfileSocietyIcon name={soc.shortName} logo={soc.imgSrc} />
                       ))}
                     </ItemSlider> :
                     <EmptySectionText mainText="No followed societies" subText="Try following or joining some societies to see what is on!"/>
@@ -118,11 +129,13 @@ class Profile extends Component<ProfileProps, ProfileState> {
                 </IonCol>
               </IonRow>
               <IonRow>
-                <div className="sectionContent interests">
+                <div className="sectionContent">
                   {this.props.interests.length !== 0 ?
-                    (this.props.interests.map((interest) => (
-                      <InterestChip interest={interest} removeBtn={true} />
-                    ))) :
+                    <div className="interests">
+                      {this.props.interests.map((interest) => (
+                      <InterestChip interest={interest} />
+                    ))}
+                    </div> :
                     <EmptySectionText mainText="No followed interests" subText="Try adding some interests to find more of what you like!"/>
                   }
                 </div>
@@ -140,14 +153,22 @@ class Profile extends Component<ProfileProps, ProfileState> {
 
           </Container>
 
-          <IonModal isOpen={this.state.showSocietyModal}>
+          <IonModal isOpen={this.state.showSocietyModal} onDidDismiss={() => this.setState({ showInterestModal: false })}>
             <p>This is the society modal</p>
-            <IonButton onClick={() => this.setState({ showSocietyModal: false })}>Close modal</IonButton>
+            <IonButton onClick={() => this.setState({ showSocietyModal: false })}>Done</IonButton>
           </IonModal>
-          <IonModal isOpen={this.state.showInterestModal}>
-            <p>This is the interest modal</p>
-            <IonButton onClick={() => this.setState({ showInterestModal: false })}>Close modal</IonButton>
+          <IonModal isOpen={this.state.showInterestModal} onDidDismiss={() => this.setState({ showInterestModal: false })}>
+            <AddInterestModal />
+            <IonButton onClick={() => this.setState({ showInterestModal: false })}>Done</IonButton>
           </IonModal>
+
+          <IonToast
+            isOpen={this.props.invalidResponse}
+            onDidDismiss={this.props.resetInvalidProfileResponse}
+            message="Could not retrieve profile right now, please try again later."
+            duration={2000}
+            cssClass="ion-text-center"
+          />
         </IonContent>
       </IonPage>
     );
@@ -156,8 +177,9 @@ class Profile extends Component<ProfileProps, ProfileState> {
 
 const mapStateToProps = (state: RootState): LinkStateProps => {
   return {
-    interests: state.profileInterests.interests,
-    societies: state.profileSocs.societies,
+    interests: state.profileDetails.profileDetails.interests,
+    societies: state.profileDetails.profileDetails.societies,
+    invalidResponse: state.profileDetails.invalidResponse,
     profile: state.userDetails.profile,
     isLoggedIn: state.userDetails.isLoggedIn,
     isLoading: state.userDetails.loading,
@@ -166,8 +188,7 @@ const mapStateToProps = (state: RootState): LinkStateProps => {
 }
 
 
-
 export default connect(
   mapStateToProps,
-  { startFetchProfileInterests, startFetchProfileSocs, logOut }
+  { fetchProfileDetails, resetInvalidProfileResponse, logOut }
 )(Profile);
