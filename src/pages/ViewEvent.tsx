@@ -181,7 +181,7 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
 
       <IonHeader>
         <IonToolbar>
-          <IonButtons slot="start">
+          <IonButtons onClick={props.loadingEvent} slot="start">
             <IonBackButton text="" defaultHref="/events" />
           </IonButtons>
           <IonSegment value={segment} onIonChange={changeTab}>
