@@ -70,6 +70,8 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
 
   const shareUrlTextRef = useRef<HTMLTextAreaElement>(null);
   const shareUrl = `https://drp.social/event/${props.match.params.id}`;
+  
+  const contentRef = React.useRef<HTMLIonContentElement>(null);
 
   const resetView = () => {
     setDetailsY(0);
@@ -84,7 +86,6 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
   }, [props.match.params.id, props.userToken]);
 
 
-  const contentRef = React.useRef<HTMLIonContentElement>(null);
 
   const changeTab = (e: { detail: { value: any; }; }) => {
     const nextSegment = e.detail.value as any;
