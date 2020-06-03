@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import './EventPostsList.css';
 import EventPost, { EventPostProps } from './EventPost';
 import { IonList, IonItem } from '@ionic/react';
@@ -7,8 +7,9 @@ import { RootState } from '../../data/reducers';
 import { ConnectedProps, connect } from 'react-redux';
 
 const mapStateToProps = (state: RootState) => ({
-   // posts: state.viewEventReducer.event.posts,
-   organiserName: state.viewEvent.event.organiser.name
+   posts: state.eventPosts.posts,
+   organiserName: state.viewEvent.event.organiser.name,
+   userToken: state.userDetails.userToken
 })
 
 const connector = connect(mapStateToProps)
@@ -20,14 +21,13 @@ interface OwnProps {
 type PropsFromRedux = ConnectedProps<typeof connector>
 type EventPostsListProps = PropsFromRedux & OwnProps;
 
-class EventPostsList extends Component<EventPostsListProps> {
+const EventPostsList: React.FC<EventPostsListProps> = (props) => {
 
-   render() {   
-      return (
-      <div style={this.props.hide ? {display: "none"} : {}}>
-         {/* {this.props.posts.length === 0 && 
-            <CentredTextContainer name={"No posts from " + this.props.organiserName} />
-         } */}
+   return (
+      <div style={props.hide ? { display: "none" } : {}}>
+         {props.posts.length === 0 && 
+            <CentredTextContainer name={"No posts from " + props.organiserName} />
+         }
          {/* {this.props.posts.length > 0 &&
             <IonList>
                {this.props.posts.map(post => {
@@ -44,8 +44,7 @@ class EventPostsList extends Component<EventPostsListProps> {
             </IonList>
          } */}
       </div>
-      )
-   }
+   )
 }
 
 export default connector(EventPostsList);

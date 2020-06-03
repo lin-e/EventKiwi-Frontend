@@ -1,4 +1,4 @@
-import { EventCardDetails, Society, EventDetails, EventPosts } from "../../constants/types";
+import { EventCardDetails, Society, EventDetails, EventPosts, Post } from "../../constants/types";
 import { AuthResponse } from "../types/dataInterfaces";
 import { UserState } from "../types/stateTypes";
 import { type } from "os";
@@ -45,7 +45,7 @@ export type FetchCalType = FetchCalendarEventsAction;
 
 export type FetchProfileType =  FetchProfileInterestsAction | RemoveProfileInterestAction | FetchProfileSocsAction;
 
-export type AppActions = FetchEventType | FetchCalType | FetchProfileType | ViewEventType;
+export type AppActions = FetchEventType | FetchCalType | FetchProfileType | ViewEventType | EventPostType;
 
 export const LOAD_EVENT_DETAILS = "LOAD_EVENT_DETAILS"
 export const LOADING_EVENT = "LOADING_EVENT"
@@ -97,18 +97,10 @@ interface LoadUserDataAction {
 export type UserType = LoginAction | LoadUserDataAction | LogoutAction;
 
 export const GET_EVENT_POSTS = "GET_EVENT_POSTS";
-export const CREATE_EMPTY_POSTS = "CREATE_EMPTY_POSTS";
 
 interface GetEventPostsAction {
    type: typeof GET_EVENT_POSTS,
-   payload: {
-      posts: EventPosts,
-      event_id: string
-   }
-}
-interface CreateEmptyPostsAction {
-   type: typeof CREATE_EMPTY_POSTS,
-   payload: string
+   payload: Post[]
 }
 
-export type EventPostType = GetEventPostsAction | CreateEmptyPostsAction;
+export type EventPostType = GetEventPostsAction;

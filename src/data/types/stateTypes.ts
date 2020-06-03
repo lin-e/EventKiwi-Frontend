@@ -1,4 +1,4 @@
-import { EventCardDetails, Society, EventDetails, EventPosts } from "../../constants/types";
+import { EventCardDetails, Society, EventDetails, Post } from "../../constants/types";
 import { UserProfile } from "./dataInterfaces";
 
 export interface EventCardState {
@@ -11,7 +11,7 @@ export interface ViewEventState {
 }
 
 export interface EventPostsState {
-   events: {event_id: string, eventPosts: EventPosts}[]
+   posts: Post[]
 }
 
 export interface UserState {
