@@ -1,8 +1,8 @@
-import { EventCardDetails, Society, SocietyBasic, ProfileDetails, EventDetails } from "../../constants/types";
+import { EventCardDetails, Society, SocietyBasic, ProfileDetails, EventDetails, SocietyCard } from "../../constants/types";
 import { UserProfile } from "./dataInterfaces";
 
 export interface SocietyCardState {
-   societies: Society[]
+   societies: SocietyCard[]
 }
 
 export interface EventCardState {

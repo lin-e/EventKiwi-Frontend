@@ -1,10 +1,10 @@
 import { ThunkAction } from "redux-thunk"
 import { RootState } from "../reducers"
 import { Action } from "redux"
-import { FETCH_EVENTS_CARDS, FETCH_SEARCH_EVENT_CARDS, FETCH_CAL_EVENTS, AppActions, FETCH_PROFILE_DETAILS, REMOVE_PROFILE_INTEREST, FETCH_PROFILE_DETAILS_FAILED, RESET_PROFILE_INVALID_RESPONSE, ADD_PROFILE_INTEREST, FETCH_SEARCH_SOCIETY_CARDS } from "./types"
-import { discoverEventCardURL, discoverSeachEventCardURL, profileDetailsURL, profileInterestDeleteURL, profileInterestAddURL, discoverSearchSocietyCardURL } from "../../constants/endpoints"
-import { resp_event_card_details, resp_profile_details, resp_society } from "../../constants/RequestInterfaces"
-import { convertResToEventCard, convertResToProfileDetails, convertResToSoc } from "../../constants/types"
+import { FETCH_EVENTS_CARDS, FETCH_SEARCH_EVENT_CARDS, FETCH_CAL_EVENTS, AppActions, FETCH_PROFILE_DETAILS, REMOVE_PROFILE_INTEREST, FETCH_PROFILE_DETAILS_FAILED, RESET_PROFILE_INVALID_RESPONSE, ADD_PROFILE_INTEREST, FETCH_SEARCH_SOCIETY_CARDS, FOLLOW_SOCIETY, UNFOLLOW_SOCIETY } from "./types"
+import { discoverEventCardURL, discoverSeachEventCardURL, profileDetailsURL, profileInterestDeleteURL, profileInterestAddURL, discoverSearchSocietyCardURL, followSocietyURL, unfollowSocietyURL } from "../../constants/endpoints"
+import { resp_event_card_details, resp_profile_details, resp_society, resp_society_card } from "../../constants/RequestInterfaces"
+import { convertResToEventCard, convertResToProfileDetails, convertResToSoc, convertResToSocCard } from "../../constants/types"
 import { eventList, exampleSchedule } from '../dummy/calendarDummy'
 import { Dispatch } from "react"
 import { exampleInterests, exampleSocs } from "../dummy/profileDummy"
@@ -16,10 +16,15 @@ export type AppThunk<ReturnType = void> = ThunkAction<
   Action<string>
 >
 
-export const fetchSearchSocietyCards = (searchTerm: string, refresher: HTMLIonRefresherElement): AppThunk => async dispatch => {
+export const fetchSearchSocietyCards = (searchTerm: string, refresher: HTMLIonRefresherElement, token: string): AppThunk => async dispatch => {
    let url = new URL(discoverSearchSocietyCardURL);
+   const options = {
+      headers: {
+         "Authorization": `Bearer ${token}`
+      }
+   }
    url.searchParams.append("q", searchTerm);
-   fetch(url.toString())
+   fetch(url.toString(), options)
    .then(response => response.json())
    .then(cards => {
       if (refresher !== null) {
@@ -27,7 +32,37 @@ export const fetchSearchSocietyCards = (searchTerm: string, refresher: HTMLIonRe
       }
       return (dispatch({
          type: FETCH_SEARCH_SOCIETY_CARDS,
-         payload: (cards as resp_society[]).map(convertResToSoc)
+         payload: (cards as resp_society_card[]).map(convertResToSocCard)
+      }))
+   })
+}
+
+export const followSociety = (id: string, token: string): AppThunk => async dispatch => {
+   const options = {
+      headers: {
+         "Authorization": `Bearer ${token}`
+      }
+   }
+   fetch(followSocietyURL + id, options)
+   .then(status => {
+      return(dispatch({
+         type: FOLLOW_SOCIETY,
+         payload: id
+      }))
+   })
+}
+
+export const unfollowSociety = (id: string, token: string): AppThunk => async dispatch => {
+   const options = {
+      headers: {
+         "Authorization": `Bearer ${token}`
+      }
+   }
+   fetch(unfollowSocietyURL + id, options)
+   .then(status => {
+      return(dispatch({
+         type: UNFOLLOW_SOCIETY,
+         payload: id
       }))
    })
 }
@@ -47,10 +82,15 @@ export const fetchEventCards = (refresher: HTMLIonRefresherElement)
    })
 }
 
-export const fetchSearchEventCards = (searchTerm: string, refresher: HTMLIonRefresherElement): AppThunk => async dispatch => {
+export const fetchSearchEventCards = (searchTerm: string, refresher: HTMLIonRefresherElement, token: string): AppThunk => async dispatch => {
    let url = new URL(discoverSeachEventCardURL);
+   const options = {
+      headers: {
+         "Authorization": `Bearer ${token}`
+      }
+   }
    url.searchParams.append("q", searchTerm);
-   fetch(url.toString())
+   fetch(url.toString(), options)
    .then(response => response.json())
    .then(cards => {
       if (refresher !== null) {
@@ -112,8 +152,6 @@ export const addProfileInterest = (toAdd: string, token: string): AppThunk => as
       },
       body: JSON.stringify({ interest: toAdd }),
    }
-   console.log(JSON.stringify({ interest: toAdd }))
-
    fetch(profileInterestAddURL, options)
    .then(status => {
       return (dispatch({

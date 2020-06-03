@@ -48,6 +48,15 @@ export interface resp_society_basic {
   type: number
 }
 
+export interface resp_society_card {
+  society_id: string,
+  society_name: string,
+  society_image_src: string,
+  colour: string,
+  short_name: string,
+  following: number
+}
+
 export interface resp_resource {
   display_name: string,
   bucket_key: string
