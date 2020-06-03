@@ -4,7 +4,7 @@ import { convertResToEventDetails } from "../../constants/types";
 import { LOAD_EVENT_DETAILS, LOADING_EVENT, EVENT_GOING, USER_LOGOUT, EVENT_INTERESTED, EVENT_NOT_GOING } from "./types";
 
 export const loadEventDetails = (id: string, userToken: string): AppThunk => async dispatch => {
-   fetch(`${eventDetailsURL}${id}`, {
+   fetch(eventDetailsURL(id), {
       method: "get",
       headers: { 'Authorization': `Bearer ${userToken}` }
    })
@@ -21,7 +21,7 @@ export const loadingEvent = () => ({
 })
 
 export const goingToEvent = (id: string, userToken: string): AppThunk => async dispatch => {
-   fetch(`${goingToEventEndpoint}${id}`, {
+   fetch(goingToEventEndpoint(id), {
       method: "get",
       headers: { 'Authorization': `Bearer ${userToken}` }
    })
@@ -32,7 +32,7 @@ export const goingToEvent = (id: string, userToken: string): AppThunk => async d
 }
 
 export const interestedInEvent = (id: string, userToken: string): AppThunk => async dispatch => {
-   fetch(`${interestedInEventEndpoint}${id}`, {
+   fetch(interestedInEventEndpoint(id), {
       method: "get",
       headers: { 'Authorization': `Bearer ${userToken}` }
    })
@@ -43,7 +43,7 @@ export const interestedInEvent = (id: string, userToken: string): AppThunk => as
 }
 
 export const notGoingToEvent = (id: string, userToken: string): AppThunk => async dispatch => {
-   fetch(`${notGoingToEventEndpoint}${id}`, {
+   fetch(notGoingToEventEndpoint(id), {
       method: "get",
       headers: { 'Authorization': `Bearer ${userToken}` }
    })
