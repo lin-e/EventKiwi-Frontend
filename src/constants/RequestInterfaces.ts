@@ -22,7 +22,6 @@ export interface resp_event_details {
   similar_events: resp_event_card_details[],
   society: resp_society,
   resources: resp_resource[],
-  posts: resp_post[],
   going_status: number
 }
 
@@ -53,6 +52,22 @@ export interface resp_resource {
   bucket_key: string
 }
 
+export interface resp_event_posts {
+  posts: resp_post[],
+  last: string
+}
+
 export interface resp_post {
-  
+  id: string,
+  event: string,
+  organiser: resp_event_post_organiser,
+  time: string,
+  body: string
+}
+
+export interface resp_event_post_organiser {
+  id: string,
+  image: string,
+  name: string,
+  short: string
 }

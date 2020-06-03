@@ -1,6 +1,6 @@
-import { EventCardDetails, ProfileDetails, EventDetails, Society } from "../../constants/types";
 import { AuthResponse } from "../types/dataInterfaces";
 import { UserState } from "../types/stateTypes";
+import { Society, EventCardDetails, EventDetails, Post, ProfileDetails } from "../../constants/types";
 
 export const FETCH_SEARCH_SOCIETY_CARDS = "FETCH_SEARCH_SOCIETY_CARDS";
 
@@ -122,5 +122,13 @@ interface LoadUserDataAction {
 
 export type UserType = LoginAction | LoadUserDataAction | LogoutAction;
 
+export const GET_EVENT_POSTS = "GET_EVENT_POSTS";
 
-export type AppActions = FetchSocietyType | FetchEventType | FetchCalType | FetchProfileType | ViewEventType | UserType;
+interface GetEventPostsAction {
+   type: typeof GET_EVENT_POSTS,
+   payload: Post[]
+}
+
+export type EventPostType = GetEventPostsAction;
+
+export type AppActions = FetchSocietyType | FetchEventType | FetchCalType | FetchProfileType | ViewEventType | UserType | EventPostType;

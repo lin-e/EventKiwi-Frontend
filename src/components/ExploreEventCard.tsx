@@ -1,28 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import './ExploreEventCard.css';
-import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonIcon, IonChip, IonGrid, IonRow, IonCol, useIonViewDidEnter } from '@ionic/react';
+import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonIcon, IonChip, IonGrid, IonRow, IonCol } from '@ionic/react';
 import { time, location as locationIcon, pricetags } from "ionicons/icons";
 import { getDateRange } from '../utils/DateTimeTools';
-import { EventCardDetails } from '../constants/types';
+import { Society } from '../constants/types';
+import { loadingEvent } from '../data/actions/viewEventActions';
+import { connect, ConnectedProps } from 'react-redux';
 
-interface ExploreEventCardProps {
-  eventName: string, 
-  organiser: string, 
+const connector = connect(null, {loadingEvent})
+
+type PropsFromRedux = ConnectedProps<typeof connector>
+type ExploreEventCardProps = PropsFromRedux & {
+  name: string, 
+  organiser: Society, 
   image: string, 
-  eventLocation: string, 
-  startTime: Date,
-  endTime: Date,
+  location: string, 
+  datetimeStart: Date,
+  datetimeEnd: Date,
   tags: string[],
   id: string;
-}
+};
 
-const ExploreEventCard: React.FC<EventCardDetails> = ({ name, organiser, image, location, datetimeStart, datetimeEnd, tags, id }) => {
-
-  const [visible, setVisible] = useState<boolean>(false);
-
-  useIonViewDidEnter(() => {setVisible(true)});
+const ExploreEventCard: React.FC<ExploreEventCardProps> = ({ name, organiser, image, location, datetimeStart, datetimeEnd, tags, id, loadingEvent }) => {
   return (
-    <IonCard routerLink={`/discover/event/${id}`}>
+    <IonCard onClick={loadingEvent} routerLink={`/discover/event/${id}`}>
 
       <img src={image} className="banner" alt={name}/>
 
@@ -69,4 +70,4 @@ const ExploreEventCard: React.FC<EventCardDetails> = ({ name, organiser, image, 
   );
 };
 
-export default ExploreEventCard;
+export default connector(ExploreEventCard);

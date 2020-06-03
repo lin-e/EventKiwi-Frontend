@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { IonContent, IonPage, IonHeader, IonToolbar, IonButtons, IonBackButton, IonSegment, IonSegmentButton, IonLabel, IonIcon, IonFab, IonFabButton, IonFabList, IonToast } from '@ionic/react';
+import { IonContent, IonPage, IonHeader, IonToolbar, IonButtons, IonBackButton, IonSegment, IonSegmentButton, IonLabel, IonIcon, IonFab, IonFabButton, IonFabList, IonToast, IonButton } from '@ionic/react';
 import { RouteComponentProps } from 'react-router';
 import EventDescription from '../components/ViewEventComponents/EventDescription';
 import "./ViewEvent.css";
@@ -9,6 +9,7 @@ import EventResourcesList from '../components/ViewEventComponents/EventResources
 import { checkmarkCircleOutline, caretUp, bulbOutline, shareOutline } from 'ionicons/icons';
 import { connect, ConnectedProps } from 'react-redux';
 import { loadEventDetails, loadingEvent, goingToEvent, interestedInEvent, notGoingToEvent } from '../data/actions/viewEventActions';
+import { loadEventPosts } from '../data/actions/eventPostsActions';
 import { RootState } from '../data/reducers';
 import { NOT_GOING, GOING, INTERESTED } from '../constants/constants';
 import { isPlatform } from '@ionic/react';
@@ -38,12 +39,12 @@ interface OwnProps extends RouteComponentProps<{ id: string }> {
 
 const mapStateToProps = (state: RootState) => ({
   userToken: state.userDetails.userToken,
-  isLoading: state.viewEventReducer.loading,
+  isLoading: state.viewEvent.loading,
   isLoggedIn: state.userDetails.isLoggedIn,
-  goingStatus: state.viewEventReducer.event.goingStatus
+  goingStatus: state.viewEvent.event.goingStatus
 })
 
-const connector = connect(mapStateToProps, { loadEventDetails, loadingEvent, goingToEvent, interestedInEvent, notGoingToEvent })
+const connector = connect(mapStateToProps, { loadEventDetails, loadingEvent, goingToEvent, interestedInEvent, notGoingToEvent, loadEventPosts })
 type PropsFromRedux = ConnectedProps<typeof connector>
 
 type ViewEventProps = OwnProps & PropsFromRedux;
@@ -71,36 +72,19 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
   const shareUrlTextRef = useRef<HTMLTextAreaElement>(null);
   const shareUrl = `https://drp.social/event/${props.match.params.id}`;
 
-  // useEffect(() => {
-  //   setVisible(false);
-  //   fetch(`${eventDetailsURL}${match.params.id}`)
-  //   .then(response => response.json())
-  //   .then(res => {
-  //     setEventDetails({} as EventDetails); 
-  //     return res
-  //   })
-  //   .then(resDetails => {
-  //     setEventDetails(convertResToEventDetails(resDetails));
-  //     contentRef.current!.scrollToPoint(0, 0);
-  //     setTimeout(() => {
-  //       setVisible(true);
-  //     }, 0.5);
+  const contentRef = React.useRef<HTMLIonContentElement>(null);
 
-  //   })
-
-  //   fetch(`${eventResourcesURL}${match.params.id}`)
-  //   .then(response => response.json())
-  //   .then(data => setEventResources(data.map(convertResToResource)))
-  //   }, [match.params.id]
-  // );
+  const resetView = () => {
+    setDetailsY(0);
+    setPostsY(0);
+    setResourcesY(0);
+    contentRef.current!.scrollToPoint(0, 0);
+  }
 
   useEffect(() => {
-    props.loadingEvent(); // move this to when an event is clicked
     props.loadEventDetails(props.match.params.id, props.userToken);
+    props.loadEventPosts(props.match.params.id, props.userToken);
   }, [props.match.params.id, props.userToken]);
-
-
-  const contentRef = React.useRef<HTMLIonContentElement>(null);
 
   const changeTab = (e: { detail: { value: any; }; }) => {
     const nextSegment = e.detail.value as any;
@@ -181,7 +165,7 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
 
       <IonHeader>
         <IonToolbar>
-          <IonButtons slot="start">
+          <IonButtons  slot="start">
             <IonBackButton text="" defaultHref="/events" />
           </IonButtons>
           <IonSegment value={segment} onIonChange={changeTab}>
@@ -198,10 +182,9 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
         </IonToolbar>
       </IonHeader>
 
-      <IonContent ref={contentRef} scrollEvents={true} onIonScroll={(e) => saveY(e.detail.currentY)}>
-        <div className={!props.isLoading ? 'fadeIn' : 'fadeOut'}>
-          <EventDescription hide={!details} />
-        </div>
+      <IonContent ref={contentRef} scrollEvents onIonScroll={(e) => saveY(e.detail.currentY)} className={!props.isLoading ? 'fadeIn' : 'fadeOut'}>
+
+        <EventDescription hide={!details} />
 
         <EventPostsList hide={!posts} />
 
@@ -259,7 +242,7 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
         />
 
         {/* Text area used for copying share url to clipboard */}
-        <textarea hidden={true} ref={shareUrlTextRef} id="shareUrl" value={shareUrl} />
+        <textarea readOnly hidden={true} ref={shareUrlTextRef} id="shareUrl" value={shareUrl} />
       </IonContent>
     </IonPage>
   );

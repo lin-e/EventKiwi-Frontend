@@ -1,5 +1,6 @@
-import { EventCardDetails, Society, SocietyBasic, ProfileDetails, EventDetails } from "../../constants/types";
+
 import { UserProfile } from "./dataInterfaces";
+import { Society, EventCardDetails, EventDetails, Post, ProfileDetails } from "../../constants/types";
 
 export interface SocietyCardState {
    societies: Society[]
@@ -12,6 +13,10 @@ export interface EventCardState {
 export interface ViewEventState {
    event: EventDetails,
    loading: boolean
+}
+
+export interface EventPostsState {
+   posts: Post[]
 }
 
 export interface UserState {

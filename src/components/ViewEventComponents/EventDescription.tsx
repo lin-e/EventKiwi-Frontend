@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
-import { IonText, IonCard, IonCardSubtitle } from '@ionic/react';
+import { IonText, IonCard, IonCardSubtitle, IonCol, IonGrid, IonRow } from '@ionic/react';
 import './EventDescription.css';
 import { Container, Row, Col } from 'react-grid-system';
 import ExpandTextView from '../ExpandTextView';
-import ItemSlider from '../ItemSlider';
 import EventMiniCard from '../EventMiniCard';
 import { getDateRange } from '../../utils/DateTimeTools';
 import { RootState } from '../../data/reducers';
 import { ConnectedProps, connect } from 'react-redux';
 
 const mapStateToProps = (state: RootState) => ({
-   event: state.viewEventReducer.event
+   event: state.viewEvent.event
 })
 
 const connector = connect(mapStateToProps)
@@ -42,10 +41,19 @@ class EventDescription extends Component<EventDescriptionProps> {
                   </Col>
 
                   <Col md={6} sm={12}>
-                     <IonCardSubtitle>By {this.props.event.organiser.name},</IonCardSubtitle>
-                     <IonCardSubtitle>{`${getDateRange(this.props.event.datetimeStart, this.props.event.datetimeEnd)},`}</IonCardSubtitle>
-                     <IonCardSubtitle>{this.props.event.location}</IonCardSubtitle>
-                     <ExpandTextView limit={450} text={this.props.event.description} />
+                     <Row>
+                        <Col>
+                           <IonCardSubtitle>By {this.props.event.organiser.name},</IonCardSubtitle>
+                           <IonCardSubtitle>{`${getDateRange(this.props.event.datetimeStart, this.props.event.datetimeEnd)},`}</IonCardSubtitle>
+                           <IonCardSubtitle>{this.props.event.location}</IonCardSubtitle>
+                        </Col>
+                     </Row>
+                     <Row>
+                        <Col>
+                           <ExpandTextView limit={450} text={this.props.event.description} />
+                        </Col>
+                     </Row>
+
                   </Col>
                </Row>
 
@@ -53,18 +61,23 @@ class EventDescription extends Component<EventDescriptionProps> {
                   <div>
                      <IonText><h2>More from {this.props.event.organiser.name}</h2></IonText>
                      <div className="suggestedEvents">
+                        <IonGrid>
+                           <IonRow>
+                              {this.props.event.sameSocEvents.map(event => {
+                                 return <IonCol size="auto" key={`sameSocMiniEventCardCol--${event.id}`}>
 
-                        <ItemSlider width={250}>
-                           {this.props.event.sameSocEvents.map(event => {
-                              return <EventMiniCard
-                                 eventId={event.id}
-                                 eventName={event.name}
-                                 eventStart={event.datetimeStart}
-                                 eventEnd={event.datetimeEnd}
-                                 organiser={event.organiser.name}
-                                 image={event.image} />
-                           })}
-                        </ItemSlider>
+                                 <EventMiniCard key={`sameSocMiniEventCard--${event.id}`}
+                                    eventId={event.id}
+                                    eventName={event.name}
+                                    eventStart={event.datetimeStart}
+                                    eventEnd={event.datetimeEnd}
+                                    organiser={event.organiser.name}
+                                    image={event.image} />
+                                 </IonCol>
+                              })}
+                           </IonRow>
+                        </IonGrid>
+
                      </div>
                   </div>}
 
@@ -72,17 +85,21 @@ class EventDescription extends Component<EventDescriptionProps> {
                   <div>
                      <IonText><h2>Suggested events</h2></IonText>
                      <div className="suggestedEvents">
-                        <ItemSlider width={250}>
+                     <IonGrid>
+                           <IonRow>
                            {this.props.event.similarEvents.map(event => {
-                              return <EventMiniCard
+                              return <IonCol size="auto" key={`similarEventMiniEventCardCol--${event.id}`}>
+                               <EventMiniCard key={`similarEventMiniEventCard--${event.id}`}
                                  eventId={event.id}
                                  eventName={event.name}
                                  eventStart={event.datetimeStart}
                                  eventEnd={event.datetimeEnd}
                                  organiser={event.organiser.name}
                                  image={event.image} />
+                              </IonCol>
                            })}
-                        </ItemSlider>
+                           </IonRow>
+                        </IonGrid>
                      </div>
                   </div>}
             </Container>
