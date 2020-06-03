@@ -70,7 +70,7 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
 
   const shareUrlTextRef = useRef<HTMLTextAreaElement>(null);
   const shareUrl = `https://drp.social/event/${props.match.params.id}`;
-  
+
   const contentRef = React.useRef<HTMLIonContentElement>(null);
 
   const resetView = () => {
@@ -81,11 +81,8 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
   }
 
   useEffect(() => {
-    resetView();
     props.loadEventDetails(props.match.params.id, props.userToken);
   }, [props.match.params.id, props.userToken]);
-
-
 
   const changeTab = (e: { detail: { value: any; }; }) => {
     const nextSegment = e.detail.value as any;
@@ -166,7 +163,7 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
 
       <IonHeader>
         <IonToolbar>
-          <IonButtons onClick={props.loadingEvent} slot="start">
+          <IonButtons  slot="start">
             <IonBackButton text="" defaultHref="/events" />
           </IonButtons>
           <IonSegment value={segment} onIonChange={changeTab}>

@@ -41,10 +41,19 @@ class EventDescription extends Component<EventDescriptionProps> {
                   </Col>
 
                   <Col md={6} sm={12}>
-                     <IonCardSubtitle>By {this.props.event.organiser.name},</IonCardSubtitle>
-                     <IonCardSubtitle>{`${getDateRange(this.props.event.datetimeStart, this.props.event.datetimeEnd)},`}</IonCardSubtitle>
-                     <IonCardSubtitle>{this.props.event.location}</IonCardSubtitle>
-                     <ExpandTextView limit={450} text={this.props.event.description} />
+                     <Row>
+                        <Col>
+                           <IonCardSubtitle>By {this.props.event.organiser.name},</IonCardSubtitle>
+                           <IonCardSubtitle>{`${getDateRange(this.props.event.datetimeStart, this.props.event.datetimeEnd)},`}</IonCardSubtitle>
+                           <IonCardSubtitle>{this.props.event.location}</IonCardSubtitle>
+                        </Col>
+                     </Row>
+                     <Row>
+                        <Col>
+                           <ExpandTextView limit={450} text={this.props.event.description} />
+                        </Col>
+                     </Row>
+
                   </Col>
                </Row>
 
