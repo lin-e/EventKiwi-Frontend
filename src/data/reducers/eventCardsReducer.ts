@@ -11,12 +11,12 @@ export function eventCardsReducer(state = initialState, action: FetchEventType):
          return {
             ...state,
             events: action.payload
-         }
+         };
       case FETCH_SEARCH_EVENT_CARDS:
          return {
             ...state,
             events: action.payload
-         }
+         };
       default:
          return state;
 

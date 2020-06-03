@@ -1,9 +1,19 @@
-import { EventCardDetails, ProfileDetails, EventDetails } from "../../constants/types";
+import { EventCardDetails, ProfileDetails, EventDetails, Society } from "../../constants/types";
 import { AuthResponse } from "../types/dataInterfaces";
 import { UserState } from "../types/stateTypes";
 
+export const FETCH_SEARCH_SOCIETY_CARDS = "FETCH_SEARCH_SOCIETY_CARDS";
+
+export interface FetchSearchSocietyCardsAction {
+   type: typeof FETCH_SEARCH_SOCIETY_CARDS,
+   payload: Society[]
+}
+
+export type FetchSocietyType = FetchSearchSocietyCardsAction;
+
+
 export const FETCH_EVENTS_CARDS = "FETCH_EVENTS_CARDS";
-export const FETCH_SEARCH_EVENT_CARDS = "FETCH_SEARCH_EVENT_CARDS"
+export const FETCH_SEARCH_EVENT_CARDS = "FETCH_SEARCH_EVENT_CARDS";
 
 export interface FetchEventCardsAction {
    type: typeof FETCH_EVENTS_CARDS,
@@ -113,4 +123,4 @@ interface LoadUserDataAction {
 export type UserType = LoginAction | LoadUserDataAction | LogoutAction;
 
 
-export type AppActions = FetchEventType | FetchCalType | FetchProfileType | ViewEventType | UserType;
+export type AppActions = FetchSocietyType | FetchEventType | FetchCalType | FetchProfileType | ViewEventType | UserType;
