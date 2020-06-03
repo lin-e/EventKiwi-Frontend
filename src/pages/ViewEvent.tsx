@@ -71,31 +71,15 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
   const shareUrlTextRef = useRef<HTMLTextAreaElement>(null);
   const shareUrl = `https://drp.social/event/${props.match.params.id}`;
 
-  // useEffect(() => {
-  //   setVisible(false);
-  //   fetch(`${eventDetailsURL}${match.params.id}`)
-  //   .then(response => response.json())
-  //   .then(res => {
-  //     setEventDetails({} as EventDetails); 
-  //     return res
-  //   })
-  //   .then(resDetails => {
-  //     setEventDetails(convertResToEventDetails(resDetails));
-  //     contentRef.current!.scrollToPoint(0, 0);
-  //     setTimeout(() => {
-  //       setVisible(true);
-  //     }, 0.5);
-
-  //   })
-
-  //   fetch(`${eventResourcesURL}${match.params.id}`)
-  //   .then(response => response.json())
-  //   .then(data => setEventResources(data.map(convertResToResource)))
-  //   }, [match.params.id]
-  // );
+  const resetView = () => {
+    setDetailsY(0);
+    setPostsY(0);
+    setResourcesY(0);
+    contentRef.current!.scrollToPoint(0, 0);
+  }
 
   useEffect(() => {
-    props.loadingEvent(); // move this to when an event is clicked
+    resetView();
     props.loadEventDetails(props.match.params.id, props.userToken);
   }, [props.match.params.id, props.userToken]);
 
