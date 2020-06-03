@@ -39,8 +39,8 @@ export interface resp_resource {
 }
 
 export interface resp_post {
-  id: number,
-  event: number,
+  id: string,
+  event: string,
   organiser: resp_society,
   time: string,
   body: string

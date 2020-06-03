@@ -70,8 +70,8 @@ export interface Resource {
 }
 
 export interface Post {
-  id: number,
-  eventId: number,
+  id: string,
+  eventId: string,
   organiser: Society,
   time: Date,
   body: string
