@@ -11,7 +11,7 @@ export const loadEventPosts = (id: string, userToken: string): AppThunk => async
       headers: { 'Authorization': `Bearer ${userToken}` }
    })
    .then(res => res.json())
-   .then(data => convertResToEventPosts(data))
+   .then(data => {console.log(data); return convertResToEventPosts(data)})
    .then(posts => dispatch({
       type: GET_EVENT_POSTS,
       payload: posts.posts

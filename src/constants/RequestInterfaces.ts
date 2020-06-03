@@ -46,7 +46,14 @@ export interface resp_event_posts {
 export interface resp_post {
   id: string,
   event: string,
-  organiser: resp_society,
+  organiser: resp_event_post_organiser,
   time: string,
   body: string
+}
+
+export interface resp_event_post_organiser {
+  id: string,
+  image: string,
+  name: string,
+  short: string
 }

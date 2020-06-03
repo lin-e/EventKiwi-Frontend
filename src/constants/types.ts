@@ -1,4 +1,4 @@
-import { resp_event_details, resp_event_card_details, resp_society, resp_resource, resp_post, resp_event_posts } from "./RequestInterfaces";
+import { resp_event_details, resp_event_card_details, resp_society, resp_resource, resp_post, resp_event_posts, resp_event_post_organiser } from "./RequestInterfaces";
 
 export interface Profile {
   id: string;
@@ -72,15 +72,29 @@ export interface Resource {
 export interface Post {
   id: string,
   eventId: string,
-  organiser: Society,
+  organiser: PostOrganiser,
   time: Date,
   body: string
+}
+
+export interface PostOrganiser {
+  id: string,
+  image: string,
+  name: string,
+  short: string
 }
 
 export interface EventPosts {
   posts: Post[],
   last_id: string
 }
+
+export const convertResToPostOrganiser = (res: resp_event_post_organiser): PostOrganiser => ({
+  id: res.id,
+  image: res.image,
+  name: res.name,
+  short: res.short
+ })
 
 export const convertResToEventPosts = (res: resp_event_posts): EventPosts => ({
   last_id: res.last,
@@ -91,7 +105,7 @@ export const convertResToEventPosts = (res: resp_event_posts): EventPosts => ({
 export const convertResToPost = (res: resp_post): Post => ({
   id: res.id,
   eventId: res.event,
-  organiser: convertResToSoc(res.organiser),
+  organiser: convertResToPostOrganiser(res.organiser),
   time:  new Date(res.time),
   body: res.body
 })

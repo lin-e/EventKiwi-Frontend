@@ -5,6 +5,7 @@ import { IonList, IonItem } from '@ionic/react';
 import CentredTextContainer from '../CentredTextContainer';
 import { RootState } from '../../data/reducers';
 import { ConnectedProps, connect } from 'react-redux';
+import { getLongDate, getTime } from '../../utils/DateTimeTools';
 
 const mapStateToProps = (state: RootState) => ({
    posts: state.eventPosts.posts,
@@ -28,21 +29,21 @@ const EventPostsList: React.FC<EventPostsListProps> = (props) => {
          {props.posts.length === 0 && 
             <CentredTextContainer name={"No posts from " + props.organiserName} />
          }
-         {/* {this.props.posts.length > 0 &&
+         {props.posts.length > 0 &&
             <IonList>
-               {this.props.posts.map(post => {
-                  return (<IonItem>
+               {props.posts.map(post => {
+                  return (<IonItem key={`event-post-${post.id}`}>
                            <div className="restrictedWidth">
                            <EventPost 
-                              postContent={post.postContent} 
-                              postTime={post.postTime} // use prabs datetime tool here 
-                              organiserName={post.organiserName} 
-                              organiserLogo={post.organiserLogo}/>
+                              postContent={post.body} 
+                              postTime={`${getLongDate(post.time)}, ${getTime(post.time)}`} // use prabs datetime tool here 
+                              organiserName={post.organiser.name} 
+                              organiserLogo={post.organiser.image}/>
                            </div>
                         </IonItem>)
                })}
             </IonList>
-         } */}
+         }
       </div>
    )
 }
