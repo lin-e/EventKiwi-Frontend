@@ -198,8 +198,10 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
         </IonToolbar>
       </IonHeader>
 
-      <IonContent ref={contentRef} scrollEvents={true} onIonScroll={(e) => saveY(e.detail.currentY)}>
-        <EventDescription hide={!details} />
+      <IonContent ref={contentRef} scrollEvents onIonScroll={(e) => saveY(e.detail.currentY)} className={!props.isLoading ? 'fadeIn' : 'fadeOut'}>
+        <div >
+          <EventDescription hide={!details} />
+        </div>
 
         <EventPostsList hide={!posts} />
 
