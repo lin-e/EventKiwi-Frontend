@@ -33,7 +33,7 @@ class EventResourcesList extends Component<EventResourcesListProps> {
             <IonList>
                {this.props.resources.map(resource => {
                   return (
-                  <IonItemSliding>
+                  <IonItemSliding key={`event-resource-${resource.id}`}>
                      <IonItem href={resourceDownloadURL(resource.id)} detail download={resource.name}>
                         <div className="restrictedWidth">
                            <EventResource name={resource.name} />
