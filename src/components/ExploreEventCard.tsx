@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import './ExploreEventCard.css';
-import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonIcon, IonChip, IonGrid, IonRow, IonCol, useIonViewDidEnter } from '@ionic/react';
+import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonIcon, IonChip, IonGrid, IonRow, IonCol } from '@ionic/react';
 import { time, location as locationIcon, pricetags } from "ionicons/icons";
 import { getDateRange } from '../utils/DateTimeTools';
-import { EventCardDetails, Society } from '../constants/types';
+import { Society } from '../constants/types';
 import { loadingEvent } from '../data/actions/viewEventActions';
 import { connect, ConnectedProps } from 'react-redux';
-
 
 const connector = connect(null, {loadingEvent})
 
@@ -23,10 +22,6 @@ type ExploreEventCardProps = PropsFromRedux & {
 };
 
 const ExploreEventCard: React.FC<ExploreEventCardProps> = ({ name, organiser, image, location, datetimeStart, datetimeEnd, tags, id, loadingEvent }) => {
-
-  const [visible, setVisible] = useState<boolean>(false);
-
-  useIonViewDidEnter(() => {setVisible(true)});
   return (
     <IonCard onClick={loadingEvent} routerLink={`/discover/event/${id}`}>
 
