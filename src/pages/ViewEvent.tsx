@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { IonContent, IonPage, IonHeader, IonToolbar, IonButtons, IonBackButton, IonSegment, IonSegmentButton, IonLabel, IonIcon, IonFab, IonFabButton, IonFabList, IonToast } from '@ionic/react';
+import { IonContent, IonPage, IonHeader, IonToolbar, IonButtons, IonBackButton, IonSegment, IonSegmentButton, IonLabel, IonIcon, IonFab, IonFabButton, IonFabList, IonToast, IonButton } from '@ionic/react';
 import { RouteComponentProps } from 'react-router';
 import EventDescription from '../components/ViewEventComponents/EventDescription';
 import "./ViewEvent.css";
@@ -199,9 +199,7 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
       </IonHeader>
 
       <IonContent ref={contentRef} scrollEvents={true} onIonScroll={(e) => saveY(e.detail.currentY)}>
-        <div className={!props.isLoading ? 'fadeIn' : 'fadeOut'}>
-          <EventDescription hide={!details} />
-        </div>
+        <EventDescription hide={!details} />
 
         <EventPostsList hide={!posts} />
 
@@ -259,7 +257,7 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
         />
 
         {/* Text area used for copying share url to clipboard */}
-        <textarea hidden={true} ref={shareUrlTextRef} id="shareUrl" value={shareUrl} />
+        <textarea readOnly hidden={true} ref={shareUrlTextRef} id="shareUrl" value={shareUrl} />
       </IonContent>
     </IonPage>
   );
