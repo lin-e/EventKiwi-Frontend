@@ -17,5 +17,5 @@ export const interestedInEventEndpoint = (id: string) =>  `${endpointURL}/events
 export const notGoingToEventEndpoint = (id: string) =>  `${endpointURL}/events/none/${id}`;
 
 export const eventPostsEndpoint = (eventId: string, lastPostId: string) => {
- return `${endpointURL}/${eventId}/${lastPostId}/`
+ return `${endpointURL}/events/posts/${eventId}/${lastPostId}/`
 }

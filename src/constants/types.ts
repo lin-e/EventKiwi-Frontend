@@ -1,4 +1,4 @@
-import { resp_event_details, resp_event_card_details, resp_society, resp_resource, resp_post } from "./RequestInterfaces";
+import { resp_event_details, resp_event_card_details, resp_society, resp_resource, resp_post, resp_event_posts } from "./RequestInterfaces";
 
 export interface Profile {
   id: string;
@@ -76,6 +76,17 @@ export interface Post {
   time: Date,
   body: string
 }
+
+export interface EventPosts {
+  posts: Post[],
+  last_id: string
+}
+
+export const convertResToEventPosts = (res: resp_event_posts): EventPosts => ({
+  last_id: res.last,
+  posts: res.posts.map(convertResToPost)
+})
+
 
 export const convertResToPost = (res: resp_post): Post => ({
   id: res.id,

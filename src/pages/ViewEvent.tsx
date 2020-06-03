@@ -9,6 +9,7 @@ import EventResourcesList from '../components/ViewEventComponents/EventResources
 import { checkmarkCircleOutline, caretUp, bulbOutline, shareOutline } from 'ionicons/icons';
 import { connect, ConnectedProps } from 'react-redux';
 import { loadEventDetails, loadingEvent, goingToEvent, interestedInEvent, notGoingToEvent } from '../data/actions/viewEventActions';
+import { loadEventPosts, createEmptyPosts } from '../data/actions/eventPostsActions';
 import { RootState } from '../data/reducers';
 import { NOT_GOING, GOING, INTERESTED } from '../constants/constants';
 import { isPlatform } from '@ionic/react';
@@ -43,7 +44,7 @@ const mapStateToProps = (state: RootState) => ({
   goingStatus: state.viewEvent.event.goingStatus
 })
 
-const connector = connect(mapStateToProps, { loadEventDetails, loadingEvent, goingToEvent, interestedInEvent, notGoingToEvent })
+const connector = connect(mapStateToProps, { loadEventDetails, loadingEvent, goingToEvent, interestedInEvent, notGoingToEvent, loadEventPosts, createEmptyPosts })
 type PropsFromRedux = ConnectedProps<typeof connector>
 
 type ViewEventProps = OwnProps & PropsFromRedux;
@@ -82,6 +83,8 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
 
   useEffect(() => {
     props.loadEventDetails(props.match.params.id, props.userToken);
+    props.createEmptyPosts(props.match.params.id)
+    // props.loadEventPosts(props.match.params.id, "0", props.userToken);  
   }, [props.match.params.id, props.userToken]);
 
   const changeTab = (e: { detail: { value: any; }; }) => {

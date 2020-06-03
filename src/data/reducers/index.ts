@@ -4,6 +4,7 @@ import { userReducer } from "./userReducer";
 import { calEventReducer } from "./calendarReducer";
 import { profileInterestReducer, profileSocReducer } from "./profileReducer";
 import { viewEventReducer } from "./viewEventReducer";
+import { eventPostReducer } from "./eventPostsReducer";
 
 
 export const rootReducer = combineReducers({
@@ -13,7 +14,7 @@ export const rootReducer = combineReducers({
    profileInterests: profileInterestReducer,
    profileSocs: profileSocReducer,
    viewEvent: viewEventReducer,
-   // eventPosts: eventPostsReducer
+   eventPosts: eventPostReducer
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
