@@ -16,21 +16,23 @@ class ExpandTextView extends Component<ExpandTextViewProps> {
       const limited = this.props.text.substring(0, this.props.limit)+"...";
 
       return (
-         <IonText className="test">
-            {this.props.text.length <= this.props.limit && 
-               <p>{this.props.text}</p>
-            }
+         <div>
+            <IonText>
+               {this.props.text.length <= this.props.limit && 
+                  <p>{this.props.text}</p>
+               }
 
-            {this.state.showAll &&
-                        (<div>
-                           <p>{this.props.text}</p>
-                           <a onClick={this.showLess}>Read less</a>
-                        </div>)}
-            
-            {!this.state.showAll && this.props.text.length > this.props.limit &&
-                  <p>{limited}<span><a onClick={this.showMore}>&nbsp;Read more</a></span></p>
-            }
-         </IonText>
+               {this.state.showAll &&
+                           (<div>
+                              <p>{this.props.text}</p>
+                              <a onClick={this.showLess}>Read less</a>
+                           </div>)}
+               
+               {!this.state.showAll && this.props.text.length > this.props.limit &&
+                     <p>{limited}<span><a onClick={this.showMore}>&nbsp;Read more</a></span></p>
+                  }
+            </IonText>
+         </div>
       )
    }
 }
