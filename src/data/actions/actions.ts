@@ -7,7 +7,6 @@ import { resp_event_card_details, resp_profile_details, resp_society, resp_socie
 import { convertResToEventCard, convertResToProfileDetails, convertResToSoc, convertResToSocCard } from "../../constants/types"
 import { eventList, exampleSchedule } from '../dummy/calendarDummy'
 import { Dispatch } from "react"
-import { exampleInterests, exampleSocs } from "../dummy/profileDummy"
 
 export type AppThunk<ReturnType = void> = ThunkAction<
   ReturnType,
@@ -43,7 +42,7 @@ export const followSociety = (id: string, token: string): AppThunk => async disp
          "Authorization": `Bearer ${token}`
       }
    }
-   fetch(followSocietyURL + id, options)
+   fetch(followSocietyURL(id), options)
    .then(status => {
       return(dispatch({
          type: FOLLOW_SOCIETY,
@@ -58,7 +57,7 @@ export const unfollowSociety = (id: string, token: string): AppThunk => async di
          "Authorization": `Bearer ${token}`
       }
    }
-   fetch(unfollowSocietyURL + id, options)
+   fetch(unfollowSocietyURL(id), options)
    .then(status => {
       return(dispatch({
          type: UNFOLLOW_SOCIETY,

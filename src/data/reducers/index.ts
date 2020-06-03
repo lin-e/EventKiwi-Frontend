@@ -4,6 +4,7 @@ import { userReducer } from "./userReducer";
 import { calEventReducer } from "./calendarReducer";
 import { profileDetailsReducer } from "./profileReducer";
 import { viewEventReducer } from "./viewEventReducer";
+import { eventPostReducer } from "./eventPostsReducer";
 import { societyCardsReducer } from "./societyCardsReducer";
 
 
@@ -12,6 +13,8 @@ export const rootReducer = combineReducers({
    eventCards: eventCardsReducer,
    userDetails: userReducer,
    calEvents: calEventReducer,
+   viewEvent: viewEventReducer,
+   eventPosts: eventPostReducer,
    profileDetails: profileDetailsReducer,
    viewEventReducer: viewEventReducer
 });

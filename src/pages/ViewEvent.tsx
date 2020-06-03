@@ -9,6 +9,7 @@ import EventResourcesList from '../components/ViewEventComponents/EventResources
 import { checkmarkCircleOutline, caretUp, bulbOutline, shareOutline } from 'ionicons/icons';
 import { connect, ConnectedProps } from 'react-redux';
 import { loadEventDetails, loadingEvent, goingToEvent, interestedInEvent, notGoingToEvent } from '../data/actions/viewEventActions';
+import { loadEventPosts } from '../data/actions/eventPostsActions';
 import { RootState } from '../data/reducers';
 import { NOT_GOING, GOING, INTERESTED } from '../constants/constants';
 import { isPlatform } from '@ionic/react';
@@ -38,12 +39,12 @@ interface OwnProps extends RouteComponentProps<{ id: string }> {
 
 const mapStateToProps = (state: RootState) => ({
   userToken: state.userDetails.userToken,
-  isLoading: state.viewEventReducer.loading,
+  isLoading: state.viewEvent.loading,
   isLoggedIn: state.userDetails.isLoggedIn,
-  goingStatus: state.viewEventReducer.event.goingStatus
+  goingStatus: state.viewEvent.event.goingStatus
 })
 
-const connector = connect(mapStateToProps, { loadEventDetails, loadingEvent, goingToEvent, interestedInEvent, notGoingToEvent })
+const connector = connect(mapStateToProps, { loadEventDetails, loadingEvent, goingToEvent, interestedInEvent, notGoingToEvent, loadEventPosts })
 type PropsFromRedux = ConnectedProps<typeof connector>
 
 type ViewEventProps = OwnProps & PropsFromRedux;
@@ -82,6 +83,7 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
 
   useEffect(() => {
     props.loadEventDetails(props.match.params.id, props.userToken);
+    props.loadEventPosts(props.match.params.id, props.userToken);
   }, [props.match.params.id, props.userToken]);
 
   const changeTab = (e: { detail: { value: any; }; }) => {
@@ -181,9 +183,8 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
       </IonHeader>
 
       <IonContent ref={contentRef} scrollEvents onIonScroll={(e) => saveY(e.detail.currentY)} className={!props.isLoading ? 'fadeIn' : 'fadeOut'}>
-        <div >
-          <EventDescription hide={!details} />
-        </div>
+
+        <EventDescription hide={!details} />
 
         <EventPostsList hide={!posts} />
 

@@ -1,14 +1,16 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import './EventPostsList.css';
 import EventPost, { EventPostProps } from './EventPost';
 import { IonList, IonItem } from '@ionic/react';
 import CentredTextContainer from '../CentredTextContainer';
 import { RootState } from '../../data/reducers';
 import { ConnectedProps, connect } from 'react-redux';
+import { getLongDate, getTime } from '../../utils/DateTimeTools';
 
 const mapStateToProps = (state: RootState) => ({
-   posts: state.viewEventReducer.event.posts,
-   organiserName: state.viewEventReducer.event.organiser.name
+   posts: state.eventPosts.posts,
+   organiserName: state.viewEvent.event.organiser.name,
+   userToken: state.userDetails.userToken
 })
 
 const connector = connect(mapStateToProps)
@@ -20,32 +22,30 @@ interface OwnProps {
 type PropsFromRedux = ConnectedProps<typeof connector>
 type EventPostsListProps = PropsFromRedux & OwnProps;
 
-class EventPostsList extends Component<EventPostsListProps> {
+const EventPostsList: React.FC<EventPostsListProps> = (props) => {
 
-   render() {   
-      return (
-      <div style={this.props.hide ? {display: "none"} : {}}>
-         {this.props.posts.length === 0 && 
-            <CentredTextContainer name={"No posts from " + this.props.organiserName} />
+   return (
+      <div style={props.hide ? { display: "none" } : {}}>
+         {props.posts.length === 0 && 
+            <CentredTextContainer name={"No posts from " + props.organiserName} />
          }
-         {/* {this.props.posts.length > 0 &&
+         {props.posts.length > 0 &&
             <IonList>
-               {this.props.posts.map(post => {
-                  return (<IonItem>
+               {props.posts.map(post => {
+                  return (<IonItem key={`event-post-${post.id}`}>
                            <div className="restrictedWidth">
                            <EventPost 
-                              postContent={post.postContent} 
-                              postTime={post.postTime} // use prabs datetime tool here 
-                              organiserName={post.organiserName} 
-                              organiserLogo={post.organiserLogo}/>
+                              postContent={post.body} 
+                              postTime={`${getLongDate(post.time)}, ${getTime(post.time)}`} // use prabs datetime tool here 
+                              organiserName={post.organiser.name} 
+                              organiserLogo={post.organiser.image}/>
                            </div>
                         </IonItem>)
                })}
             </IonList>
-         } */}
+         }
       </div>
-      )
-   }
+   )
 }
 
 export default connector(EventPostsList);

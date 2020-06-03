@@ -1,4 +1,5 @@
-import { resp_event_details, resp_event_card_details, resp_society, resp_resource, resp_profile_details, resp_society_basic, resp_society_card } from "./RequestInterfaces";
+import { resp_event_post_organiser, resp_event_posts, resp_post, resp_resource, resp_event_details, resp_event_card_details, resp_profile_details, resp_society, resp_society_basic, resp_society_card } from "./RequestInterfaces"
+
 
 export interface ProfileDetails {
   firstname: string,
@@ -66,7 +67,6 @@ export interface EventDetails {
    sameSocEvents: EventCardDetails[],
    similarEvents: EventCardDetails[],
    resources: Resource[],
-   posts: Post[],
    goingStatus: number
 }
 
@@ -94,49 +94,79 @@ export interface Resource {
 }
 
 export interface Post {
-
+  id: string,
+  eventId: string,
+  organiser: PostOrganiser,
+  time: Date,
+  body: string
 }
 
-export const convertResToResource = (res: resp_resource): Resource => {
-   return {
-      name: res.display_name,
-      id: res.bucket_key
-   }
+export interface PostOrganiser {
+  id: string,
+  image: string,
+  name: string,
+  short: string
 }
 
-export const convertResToEventDetails = (res: resp_event_details): EventDetails => {
-   return {
-     id: res.event_id,
-     name: res.event_name,
-     organiser: convertResToSoc(res.society),
-     images: [res.event_image_src],
-     location: res.location,
-     datetimeStart: new Date(res.start_datetime),
-     datetimeEnd: new Date(res.end_datetime),
-     tags: res.tags,
-     description: res.description,
-     sameSocEvents: res.same_society_events.map(convertResToEventCard),
-     similarEvents: res.similar_events.map(convertResToEventCard),
-     goingStatus: res.going_status,
-     resources: res.resources.map(convertResToResource),
-     posts: res.posts
-   }
- }
+export interface EventPosts {
+  posts: Post[],
+  last_id: string
+}
+
+export const convertResToPostOrganiser = (res: resp_event_post_organiser): PostOrganiser => ({
+  id: res.id,
+  image: res.image,
+  name: res.name,
+  short: res.short
+ })
+
+export const convertResToEventPosts = (res: resp_event_posts): EventPosts => ({
+  last_id: res.last,
+  posts: res.posts.map(convertResToPost)
+})
 
 
- export const convertResToEventCard = (res: resp_event_card_details): EventCardDetails => {
-   return {
-     id: res.event_id,
-     name: res.event_name,
-     organiser: convertResToSoc(res.society),
-     image: res.event_image_src, 
-     location: res.location, 
-     datetimeStart: new Date(res.start_datetime),
-     datetimeEnd: new Date(res.end_datetime),
-     tags: res.tags
-   };
+export const convertResToPost = (res: resp_post): Post => ({
+  id: res.id,
+  eventId: res.event,
+  organiser: convertResToPostOrganiser(res.organiser),
+  time:  new Date(res.time),
+  body: res.body
+})
 
- }
+export const convertResToResource = (res: resp_resource): Resource => ({
+  name: res.display_name,
+  id: res.bucket_key
+})
+
+export const convertResToEventDetails = (res: resp_event_details): EventDetails => ({
+  id: res.event_id,
+  name: res.event_name,
+  organiser: convertResToSoc(res.society),
+  images: [res.event_image_src],
+  location: res.location,
+  datetimeStart: new Date(res.start_datetime),
+  datetimeEnd: new Date(res.end_datetime),
+  tags: res.tags,
+  description: res.description,
+  sameSocEvents: res.same_society_events.map(convertResToEventCard),
+  similarEvents: res.similar_events.map(convertResToEventCard),
+  goingStatus: res.going_status,
+  resources: res.resources.map(convertResToResource)
+ })
+
+
+ export const convertResToEventCard = (res: resp_event_card_details): EventCardDetails => ({
+  id: res.event_id,
+  name: res.event_name,
+  organiser: convertResToSoc(res.society),
+  image: res.event_image_src, 
+  location: res.location, 
+  datetimeStart: new Date(res.start_datetime),
+  datetimeEnd: new Date(res.end_datetime),
+  tags: res.tags
+ })
+
 
  export const convertResToProfileDetails = (res: resp_profile_details): ProfileDetails => {
    return {
