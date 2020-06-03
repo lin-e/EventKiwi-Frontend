@@ -9,7 +9,7 @@ import { RootState } from '../../data/reducers';
 import { ConnectedProps, connect } from 'react-redux';
 
 const mapStateToProps = (state: RootState) => ({
-   event: state.viewEventReducer.event
+   event: state.viewEvent.event
 })
 
 const connector = connect(mapStateToProps)

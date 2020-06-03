@@ -8,7 +8,7 @@ import { ConnectedProps, connect } from 'react-redux';
 
 const mapStateToProps = (state: RootState) => ({
    // posts: state.viewEventReducer.event.posts,
-   organiserName: state.viewEventReducer.event.organiser.name
+   organiserName: state.viewEvent.event.organiser.name
 })
 
 const connector = connect(mapStateToProps)

@@ -8,8 +8,8 @@ import { RootState } from '../../data/reducers';
 import { connect, ConnectedProps } from 'react-redux';
 
 const mapStateToProps = (state: RootState) => ({
-   resources: state.viewEventReducer.event.resources,
-   organiserName: state.viewEventReducer.event.organiser.name
+   resources: state.viewEvent.event.resources,
+   organiserName: state.viewEvent.event.organiser.name
 })
 
 const connector = connect(mapStateToProps)

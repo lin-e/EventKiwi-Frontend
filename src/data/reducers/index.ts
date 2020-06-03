@@ -12,7 +12,8 @@ export const rootReducer = combineReducers({
    calEvents: calEventReducer,
    profileInterests: profileInterestReducer,
    profileSocs: profileSocReducer,
-   viewEventReducer: viewEventReducer
+   viewEvent: viewEventReducer,
+   // eventPosts: eventPostsReducer
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
