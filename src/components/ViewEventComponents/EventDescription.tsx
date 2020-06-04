@@ -10,7 +10,8 @@ import { ConnectedProps, connect } from 'react-redux';
 
 const mapStateToProps = (state: RootState) => ({
    event: state.viewEvent.event,
-   eventsEvent: state.viewEvent.eventsEvent
+   eventsEvent: state.viewEvent.eventsEvent,
+   discoverEvent: state.viewEvent.discoverEvent
 })
 
 const connector = connect(mapStateToProps)
@@ -24,7 +25,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>
 type EventDescriptionProps = PropsFromRedux & OwnProps;
 
 const EventDescription: React.FC<EventDescriptionProps> = (props) => {
-   const eventDescription = props.eventsEvent
+   const eventDescription = props.tab === "events" ? props.eventsEvent : (props.tab === "discover" ? props.discoverEvent : props.event);
    return (
       <div style={props.hide ? { display: "none" } : {}}>
          <Container>
@@ -63,7 +64,9 @@ const EventDescription: React.FC<EventDescriptionProps> = (props) => {
                            {eventDescription.sameSocEvents.map(event => {
                               return <IonCol size="auto" key={`sameSocMiniEventCardCol--${event.id}`}>
 
-                                 <EventMiniCard key={`sameSocMiniEventCard--${event.id}`}
+                                 <EventMiniCard 
+                                    key={`sameSocMiniEventCard--${event.id}`}
+                                    tab={props.tab}
                                     eventId={event.id}
                                     eventName={event.name}
                                     eventStart={event.datetimeStart}
@@ -86,7 +89,9 @@ const EventDescription: React.FC<EventDescriptionProps> = (props) => {
                         <IonRow>
                            {eventDescription.similarEvents.map(event => {
                               return <IonCol size="auto" key={`similarEventMiniEventCardCol--${event.id}`}>
-                                 <EventMiniCard key={`similarEventMiniEventCard--${event.id}`}
+                                 <EventMiniCard 
+                                    key={`similarEventMiniEventCard--${event.id}`}
+                                    tab={props.tab}
                                     eventId={event.id}
                                     eventName={event.name}
                                     eventStart={event.datetimeStart}

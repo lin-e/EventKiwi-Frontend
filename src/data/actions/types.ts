@@ -74,6 +74,7 @@ export type FetchProfileType =  FetchProfileDetailsAction | FetchProfileDetailsF
 
 export const LOAD_EVENT_DETAILS = "LOAD_EVENT_DETAILS"
 export const EVENTS_LOAD_EVENT_DETAILS = "EVENTS_LOAD_EVENT_DETAILS"
+export const DISCOVER_LOAD_EVENT_DETAILS = "DISCOVER_LOAD_EVENT_DETAILS"
 export const LOAD_BLANK_EVENT_DETAILS = "LOAD_BLANK_EVENT_DETAILS"
 export const LOADING_EVENT = "LOADING_EVENT"
 export const EVENT_GOING = "EVENT_GOING"
@@ -87,6 +88,11 @@ interface LoadEventDetailsAction {
 
 interface EventsLoadEventDetailsAction {
    type: typeof EVENTS_LOAD_EVENT_DETAILS,
+   payload: EventDetails
+}
+
+interface DiscoverLoadEventDetailsAction {
+   type: typeof DISCOVER_LOAD_EVENT_DETAILS,
    payload: EventDetails
 }
 
@@ -110,7 +116,14 @@ interface NotGoingAction {
    type: typeof EVENT_NOT_GOING
 }
 
-export type ViewEventType = LoadEventDetailsAction | LoadingEventAction | GoingAction | InterestedAction | NotGoingAction | LoadBlankEventDetailsAction | EventsLoadEventDetailsAction;
+export type ViewEventType = LoadEventDetailsAction 
+                          | LoadingEventAction 
+                          | GoingAction 
+                          | InterestedAction 
+                          | NotGoingAction 
+                          | LoadBlankEventDetailsAction 
+                          | EventsLoadEventDetailsAction 
+                          | DiscoverLoadEventDetailsAction;
 
 
 export const USER_LOGIN = "USER_LOGIN";

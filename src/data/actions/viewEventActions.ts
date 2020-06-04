@@ -1,7 +1,7 @@
 import { AppThunk } from "../types/dataInterfaces";
 import { eventDetailsURL, goingToEventEndpoint, interestedInEventEndpoint, notGoingToEventEndpoint } from "../../constants/endpoints";
 import { convertResToEventDetails } from "../../constants/types";
-import { LOAD_EVENT_DETAILS, LOADING_EVENT, EVENT_GOING, USER_LOGOUT, EVENT_INTERESTED, EVENT_NOT_GOING, LOAD_BLANK_EVENT_DETAILS, EVENTS_LOAD_EVENT_DETAILS } from "./types";
+import { LOAD_EVENT_DETAILS, LOADING_EVENT, EVENT_GOING, USER_LOGOUT, EVENT_INTERESTED, EVENT_NOT_GOING, LOAD_BLANK_EVENT_DETAILS, EVENTS_LOAD_EVENT_DETAILS, DISCOVER_LOAD_EVENT_DETAILS } from "./types";
 
 export const loadEventDetails = (id: string, tab: string, userToken: string): AppThunk => async dispatch => {
    fetch(eventDetailsURL(id), {
@@ -11,7 +11,7 @@ export const loadEventDetails = (id: string, tab: string, userToken: string): Ap
       .then(res => res.json())
       .then(data => convertResToEventDetails(data))
       .then(details => {
-         const type = tab === "events" ? EVENTS_LOAD_EVENT_DETAILS : (tab === "discover" ? LOAD_EVENT_DETAILS : LOAD_EVENT_DETAILS);
+         const type = tab === "events" ? EVENTS_LOAD_EVENT_DETAILS : (tab === "discover" ? DISCOVER_LOAD_EVENT_DETAILS : LOAD_EVENT_DETAILS);
          dispatch({
             type: type,
             payload: details
