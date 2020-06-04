@@ -20,8 +20,9 @@ type EventMiniCardProps = PropsFromRedux & {
 };
 
 const EventMiniCard: React.FC<EventMiniCardProps> = ({ eventName, organiser, image, eventStart, eventEnd, eventId, loadingEvent, tab}) => {
+  const urlPrefix = tab !== "" ? `/${tab}` : "";
   return (
-    <IonCard onClick={loadingEvent} className="mini_card" routerLink={`/${tab}/event/${eventId}`}>
+    <IonCard onClick={loadingEvent} className="mini_card" routerLink={`${urlPrefix}/event/${eventId}`}>
 
       <img src={image} className="mini_banner"/>
 

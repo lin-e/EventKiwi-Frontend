@@ -1,6 +1,6 @@
-import React, { Component, useEffect, useState } from 'react';
+import React from 'react';
 import './EventPostsList.css';
-import EventPost, { EventPostProps } from './EventPost';
+import EventPost from './EventPost';
 import { IonList, IonItem } from '@ionic/react';
 import CentredTextContainer from '../CentredTextContainer';
 import { RootState } from '../../data/reducers';
