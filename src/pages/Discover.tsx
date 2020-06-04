@@ -61,6 +61,7 @@ class Discover extends Component<DiscoverProps, DiscoverState> {
   }
 
   searchBarUpdate(e: CustomEvent) {
+    console.log(e.detail.value)
     this.setState({
       searchTerm: (e.detail.value == undefined) ? "" : e.detail.value!.trim(),
       socExpanded: false
@@ -106,7 +107,7 @@ class Discover extends Component<DiscoverProps, DiscoverState> {
           </IonToolbar>
         </IonHeader>  
 
-        <IonRefresher ref={this.refresherRef} slot="fixed" onIonRefresh={this.searchBarUpdate}>
+        <IonRefresher ref={this.refresherRef} slot="fixed" onIonRefresh={() => this.search(this.state.searchTerm)}>
           <IonRefresherContent></IonRefresherContent>
         </IonRefresher>
 
