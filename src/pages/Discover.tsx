@@ -2,7 +2,6 @@ import React, { Component, createRef } from 'react';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonSearchbar, IonRefresher, IonRefresherContent, IonList, IonCol, IonRow, IonGrid, IonButton, IonIcon, IonButtons } from '@ionic/react';
 import { add } from 'ionicons/icons'
 import './Discover.css';
-import ExploreEventsList from '../components/ExploreEventsList';
 import { connect, ConnectedProps } from 'react-redux';
 import { fetchEventCards, fetchSearchEventCards, fetchSearchSocietyCards } from "../data/actions/actions";
 import { RootState } from '../data/reducers';
@@ -61,7 +60,6 @@ class Discover extends Component<DiscoverProps, DiscoverState> {
   }
 
   searchBarUpdate(e: CustomEvent) {
-    console.log(e.detail.value)
     this.setState({
       searchTerm: (e.detail.value == undefined) ? "" : e.detail.value!.trim(),
       socExpanded: false

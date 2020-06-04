@@ -1,4 +1,4 @@
-import { EventCardDetails, Post, ProfileDetails, EventDetails, SocietyCard, CalendarEvent } from "../../constants/types";
+import { EventCardDetails, Post, ProfileDetails, EventDetails, SocietyCard, CalendarEvent, InterestDetails } from "../../constants/types";
 
 import { UserProfile } from "./dataInterfaces";
 
@@ -33,4 +33,8 @@ export interface CalendarEventsState {
 export interface ProfileDetailsState {
    profileDetails: ProfileDetails,
    invalidResponse: boolean
+}
+
+export interface interestSearchState {
+   interests: InterestDetails[]
 }

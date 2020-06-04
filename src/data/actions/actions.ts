@@ -1,10 +1,10 @@
 import { ThunkAction } from "redux-thunk"
 import { RootState } from "../reducers"
 import { Action } from "redux"
-import { FETCH_EVENTS_CARDS, FETCH_SEARCH_EVENT_CARDS, FETCH_CAL_EVENTS, FETCH_PROFILE_DETAILS, REMOVE_PROFILE_INTEREST, FETCH_PROFILE_DETAILS_FAILED, RESET_PROFILE_INVALID_RESPONSE, ADD_PROFILE_INTEREST, FETCH_SEARCH_SOCIETY_CARDS, FOLLOW_SOCIETY, UNFOLLOW_SOCIETY } from "./types"
-import { discoverEventCardURL, discoverSeachEventCardURL, profileDetailsURL, profileInterestDeleteURL, profileInterestAddURL, discoverSearchSocietyCardURL, followSocietyURL, unfollowSocietyURL, calendarEventsURL } from "../../constants/endpoints"
-import { resp_event_card_details, resp_profile_details, resp_society_card, resp_calendar_event } from "../../constants/RequestInterfaces"
-import { convertResToEventCard, convertResToProfileDetails, convertResToSocCard, convertResToCalEvent } from "../../constants/types"
+import { FETCH_EVENTS_CARDS, FETCH_SEARCH_EVENT_CARDS, FETCH_CAL_EVENTS, FETCH_PROFILE_DETAILS, REMOVE_PROFILE_INTEREST, FETCH_PROFILE_DETAILS_FAILED, RESET_PROFILE_INVALID_RESPONSE, ADD_PROFILE_INTEREST, FETCH_SEARCH_SOCIETY_CARDS, FOLLOW_SOCIETY, UNFOLLOW_SOCIETY, FETCH_SEARCH_INTERESTS } from "./types"
+import { discoverEventCardURL, discoverSeachEventCardURL, profileDetailsURL, profileInterestDeleteURL, profileInterestAddURL, discoverSearchSocietyCardURL, followSocietyURL, unfollowSocietyURL, calendarEventsURL, profileInterestSearchURL } from "../../constants/endpoints"
+import { resp_event_card_details, resp_profile_details, resp_society_card, resp_calendar_event, resp_search_interests } from "../../constants/RequestInterfaces"
+import { convertResToEventCard, convertResToProfileDetails, convertResToInterest, convertResToSocCard, convertResToCalEvent } from "../../constants/types"
 
 export type AppThunk<ReturnType = void> = ThunkAction<
   ReturnType,
@@ -146,6 +146,24 @@ export const resetInvalidProfileResponse = (): AppThunk => async dispatch => {
    return (dispatch({
       type: RESET_PROFILE_INVALID_RESPONSE
    }))
+}
+
+export const fetchSearchInterests = (searchTerm: string, token: string): AppThunk => async dispatch => {
+   let url = new URL(profileInterestSearchURL);
+   const options = {
+      headers: {
+         "Authorization": `Bearer ${token}`
+      }
+   }
+   url.searchParams.append("q", searchTerm);
+   fetch(url.toString(), options)
+   .then(response => response.json())
+   .then(interests => {
+      return (dispatch({
+         type: FETCH_SEARCH_INTERESTS,
+         payload: (interests as resp_search_interests[]).map(convertResToInterest)
+      }))
+   })
 }
 
 export const addProfileInterest = (toAdd: string, token: string): AppThunk => async dispatch => {

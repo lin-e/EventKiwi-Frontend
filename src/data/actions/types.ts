@@ -1,4 +1,4 @@
-import { EventCardDetails, ProfileDetails, EventDetails, Society, SocietyCard, Post, CalendarEvent } from "../../constants/types";
+import { EventCardDetails, ProfileDetails, EventDetails, Society, SocietyCard, Post, CalendarEvent, InterestDetails } from "../../constants/types";
 import { AuthResponse } from "../types/dataInterfaces";
 import { UserState } from "../types/stateTypes";
 
@@ -81,7 +81,17 @@ export interface RemoveProfileInterestAction {
    payload: string
 }
 
-export type FetchProfileType =  FetchProfileDetailsAction | FetchProfileDetailsFailedAction | ResetProfileInvalidResponseAction | AddProfileInterestAction | RemoveProfileInterestAction;
+export type FetchProfileType =  FetchProfileDetailsAction | FetchProfileDetailsFailedAction | ResetProfileInvalidResponseAction | FetchSearchInterestsAction | AddProfileInterestAction | RemoveProfileInterestAction;
+
+
+export const FETCH_SEARCH_INTERESTS = "FETCH_SEARCH_INTERESTS"
+
+export interface FetchSearchInterestsAction {
+   type: typeof FETCH_SEARCH_INTERESTS,
+   payload: InterestDetails[]
+}
+
+export type FetchInterestType = FetchSearchInterestsAction;
 
 
 export const LOAD_EVENT_DETAILS = "LOAD_EVENT_DETAILS"

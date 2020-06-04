@@ -1,4 +1,4 @@
-import { resp_event_post_organiser, resp_event_posts, resp_post, resp_resource, resp_event_details, resp_event_card_details, resp_profile_details, resp_society, resp_society_basic, resp_society_card, resp_calendar_event, resp_society_cal } from "./RequestInterfaces"
+import { resp_event_post_organiser, resp_event_posts, resp_post, resp_resource, resp_event_details, resp_event_card_details, resp_profile_details, resp_society, resp_society_basic, resp_society_card, resp_calendar_event, resp_society_cal, resp_search_interests } from "./RequestInterfaces"
 
 
 export interface ProfileDetails {
@@ -48,6 +48,12 @@ export const blankSociety = {
   imageSrc: "",
   shortName: "",
   colour: ""
+}
+
+export interface InterestDetails {
+  name: string,
+  numInterested: number,
+  interested: boolean
 }
 
 export interface EventCardDetails {
@@ -201,6 +207,12 @@ export const convertResToProfileDetails = (res: resp_profile_details): ProfileDe
   email: res.email,
   societies: res.societies.map(convertResToSocBasic),
   interests: res.interests
+})
+
+export const convertResToInterest = (res: resp_search_interests): InterestDetails => ({
+  name: res.name,
+  numInterested: res.followers,
+  interested: res.case
 })
 
 export const convertResToSoc = (res: resp_society): Society => ({

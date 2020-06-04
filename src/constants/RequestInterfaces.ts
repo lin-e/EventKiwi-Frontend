@@ -43,6 +43,12 @@ export interface resp_profile_details {
   interests: string[]
 }
 
+export interface resp_search_interests {
+  name: string,
+  case: boolean,
+  followers: number
+}
+
 export interface resp_society {
   society_id: string,
   society_name: string,

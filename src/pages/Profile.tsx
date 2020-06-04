@@ -106,7 +106,7 @@ class Profile extends Component<ProfileProps, ProfileState> {
                   {this.props.societies.length !== 0 ?
                     <ItemSlider width={130}>
                       {this.props.societies.map((soc) => (
-                        <ProfileSocietyIcon name={soc.shortName} logo={soc.imgSrc} />
+                        <ProfileSocietyIcon name={soc.shortName} logo={soc.imgSrc} key={soc.shortName} />
                       ))}
                     </ItemSlider> :
                     <EmptySectionText mainText="No followed societies" subText="Try following or joining some societies to see what is on!"/>
@@ -128,7 +128,7 @@ class Profile extends Component<ProfileProps, ProfileState> {
                   {this.props.interests.length !== 0 ?
                     <div className="interests">
                       {this.props.interests.map((interest) => (
-                      <InterestChip interest={interest} />
+                      <InterestChip interest={interest} key={interest}/>
                     ))}
                     </div> :
                     <EmptySectionText mainText="No followed interests" subText="Try adding some interests to find more of what you like!"/>

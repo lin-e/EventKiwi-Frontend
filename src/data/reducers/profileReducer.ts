@@ -1,5 +1,5 @@
 import { ProfileDetailsState } from '../types/stateTypes'
-import { FetchProfileType, REMOVE_PROFILE_INTEREST, FETCH_PROFILE_DETAILS, FETCH_PROFILE_DETAILS_FAILED, RESET_PROFILE_INVALID_RESPONSE, ADD_PROFILE_INTEREST } from '../actions/types'
+import { FetchProfileType, REMOVE_PROFILE_INTEREST, FETCH_PROFILE_DETAILS, FETCH_PROFILE_DETAILS_FAILED, RESET_PROFILE_INVALID_RESPONSE, ADD_PROFILE_INTEREST, FETCH_SEARCH_INTERESTS } from '../actions/types'
 
 const initialProfileDetailsState: ProfileDetailsState = {
   profileDetails: {
