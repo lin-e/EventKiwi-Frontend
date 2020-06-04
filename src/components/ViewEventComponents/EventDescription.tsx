@@ -32,7 +32,7 @@ type EventDescriptionProps = PropsFromRedux & OwnProps;
 
 const EventDescription: React.FC<EventDescriptionProps> = (props) => {
    const eventDescription = props.tab === "events" ? props.eventsEvent : (props.tab === "discover" ? props.discoverEvent : props.event);
-   const goingStatus = props.tab === "events" ? props.dGoingStatus : (props.tab === "discover" ? props.dGoingStatus : props.goingToEvent);
+   const goingStatus = props.tab === "events" ? props.eGoingStatus : (props.tab === "discover" ? props.dGoingStatus : props.goingToEvent);
 
    const [goingToast, showGoingToast] = useState<boolean>(false);
    const [notGoingToast, showNotGoingToast] = useState<boolean>(false);
