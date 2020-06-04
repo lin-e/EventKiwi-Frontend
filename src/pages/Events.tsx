@@ -30,10 +30,12 @@ class Events extends Component<EventsProps> {
   }
 
   componentDidMount() {
-    while(this.props.userToken !== "") {
-      setTimeout(() => {}, 100)
+    // TODO: Change implementation to more correct way on waiting on user token to load in
+    if(this.props.userToken === "") {
+      setTimeout(this.refresh, 250)
+    } else {
+      this.refresh()
     }
-    this.refresh();
   }
 
   refresh() {
