@@ -12,6 +12,7 @@ export interface EventCardState {
 
 export interface ViewEventState {
    event: EventDetails,
+   eventsEvent: EventDetails,
    loading: boolean
 }
 

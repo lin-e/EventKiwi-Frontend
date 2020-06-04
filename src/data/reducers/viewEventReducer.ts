@@ -1,10 +1,11 @@
 import { ViewEventState } from "../types/stateTypes";
 import { blankEventDetails } from "../../constants/types";
-import { ViewEventType, LOAD_EVENT_DETAILS, LOADING_EVENT, EVENT_NOT_GOING, EVENT_INTERESTED, EVENT_GOING } from "../actions/types";
+import { ViewEventType, LOAD_EVENT_DETAILS, LOADING_EVENT, EVENT_NOT_GOING, EVENT_INTERESTED, EVENT_GOING, LOAD_BLANK_EVENT_DETAILS, EVENTS_LOAD_EVENT_DETAILS } from "../actions/types";
 import { NOT_GOING, GOING, INTERESTED } from "../../constants/constants";
 
 const initialState: ViewEventState = {
    event: blankEventDetails,
+   eventsEvent: blankEventDetails,
    loading: true
 }
 
@@ -18,6 +19,20 @@ export function viewEventReducer(state = initialState, action: ViewEventType): V
             loading: false
          }
 
+      case EVENTS_LOAD_EVENT_DETAILS:
+         return {
+            ...state,
+            eventsEvent: action.payload,
+            loading: false
+         }
+
+
+      case LOAD_BLANK_EVENT_DETAILS:
+         return {
+            ...state,
+            event: blankEventDetails
+         }
+         
       case LOADING_EVENT:
          return {
             ...state,
