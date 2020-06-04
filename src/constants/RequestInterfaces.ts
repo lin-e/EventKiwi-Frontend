@@ -45,7 +45,6 @@ export interface resp_profile_details {
 
 export interface resp_search_interests {
   tag: string,
-  interested: boolean,
   count: number
 }
 
