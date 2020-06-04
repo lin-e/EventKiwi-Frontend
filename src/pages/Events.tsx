@@ -1,5 +1,5 @@
-import React, { Component, createRef } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, withIonLifeCycle, IonRefresher, IonRefresherContent } from '@ionic/react';
+import React, { useEffect } from 'react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonRefresher, IonRefresherContent, useIonViewDidEnter } from '@ionic/react';
 import './Events.css';
 import CalendarEventView from '../components/Calendar/CalendarEventView';
 import { fetchCalEvents } from '../data/actions/actions'
@@ -18,56 +18,41 @@ const connector = connect(mapStateToProps, { fetchCalEvents, loadBlankEvent });
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 type EventsProps = PropsFromRedux
+const Events: React.FC<EventsProps> = (props) => {
 
-class Events extends Component<EventsProps> {
-  refresherRef: React.RefObject<HTMLIonRefresherElement>;
+  const refresherRef = React.useRef<HTMLIonRefresherElement>(null);
 
-  constructor(props: EventsProps) {
-    super(props);
-    this.refresherRef = createRef<HTMLIonRefresherElement>();
-    this.refresh = this.refresh.bind(this);
+  const refresh = () => {
+    props.fetchCalEvents(refresherRef.current!, props.userToken);
   }
 
-  componentDidMount() {
-    // TODO: Change implementation to more correct way on waiting on user token to load in
-    if(this.props.userToken === "") {
-      setTimeout(this.refresh, 150)
-    } else {
-      this.refresh()
-    }
+  useEffect(() => { refresh() }, [props.userToken])
+
+  useIonViewDidEnter(() => {
+    props.loadBlankEvent("events");
+  });
+
+
+  if (!props.isLoggedIn && !props.isLoading) {
+    return <Redirect to="/auth" />
   }
 
-  refresh() {
-    this.props.fetchCalEvents(this.refresherRef.current!, this.props.userToken);
-  }
-
-  ionViewWillEnter() {
-    this.props.loadBlankEvent("events");
-  }
-
-  render() {
-
-    if (!this.props.isLoggedIn && !this.props.isLoading) {
-      return <Redirect to="/auth" />
-    }
-
-    return (
-      <IonPage>
+  return (
+    <IonPage>
       <IonHeader>
         <IonToolbar>
           <IonTitle>Your Events</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <IonRefresher ref={this.refresherRef} slot="fixed" onIonRefresh={this.refresh}>
+        <IonRefresher ref={refresherRef} slot="fixed" onIonRefresh={refresh}>
           <IonRefresherContent></IonRefresherContent>
         </IonRefresher>
 
-          <CalendarEventView />
+        <CalendarEventView />
       </IonContent>
     </IonPage>
-    );
-  }
+  );
 }
 
-export default connector(withIonLifeCycle(Events));
+export default connector(Events);

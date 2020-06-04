@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { IonText, IonCard, IonCardSubtitle, IonCol, IonGrid, IonRow, IonButton, IonIcon, IonToast, IonSkeletonText } from '@ionic/react';
 import './EventDescription.css';
 import { Container, Row, Col } from 'react-grid-system';

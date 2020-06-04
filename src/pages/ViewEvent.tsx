@@ -53,8 +53,14 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
     setDetailsY(0);
     setPostsY(0);
     setResourcesY(0);
-    contentRef.current!.scrollToPoint(0, 0);
+    try {
+      contentRef.current!.scrollToTop();
+   } catch {
+     // contentRef has not yet loaded 
+   }
   }
+
+  useEffect(resetView, [props.eventId])
 
   const changeTab = (e: { detail: { value: any; }; }) => {
     const nextSegment = e.detail.value as any;

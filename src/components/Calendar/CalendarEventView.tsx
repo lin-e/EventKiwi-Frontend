@@ -42,8 +42,8 @@ function groupByDate(events: CalendarEvent[]) {
 
 type Props = LinkStateProps
 
-const CalendarEventView: React.FC<Props> = ({groupedEvents}) => {
-  if (groupedEvents.length === 0) {
+const CalendarEventView: React.FC<Props> = ({groupedEvents, loadingUser}) => {
+  if (!loadingUser && groupedEvents === []) {
     return (
       <EmptySectionText mainText="No Events Found" subText="Find some events and societies in the Discover tab!" />
     )
@@ -72,13 +72,15 @@ const CalendarEventView: React.FC<Props> = ({groupedEvents}) => {
 }
 
 interface LinkStateProps {
-  groupedEvents: EventGroupByDate[]
+  groupedEvents: EventGroupByDate[],
+  loadingUser: boolean
 }
 
 
 const mapStateToProps = (state: RootState): LinkStateProps => {
   return {
-    groupedEvents: groupByDate(state.calEvents.events)
+    groupedEvents: groupByDate(state.calEvents.events),
+    loadingUser: state.userDetails.loading
   }
 }
 
