@@ -30,19 +30,12 @@ const AddInterestModal: React.FC<AddInterestModalProps> = ({ searchResults, inte
     fetchSearchInterests(searchTerm, userToken);
   }
 
-  const addInterest = (e: MouseEvent) => {
-    e.preventDefault();
-
-    console.log("add func");
-    addProfileInterest(searchTerm, userToken)
-  }
-  
   return (
     <IonContent>
       <div className="modalContainer">
         <h3 className="subtitle">Find an interest</h3>
         <IonSearchbar placeholder="e.g. hockey, finance, dance" onIonChange={searchBarUpdate} />
-        <IonList>
+        <IonList hidden={searchTerm === ""}>
           {searchTerm !== "" && searchResults.filter(intr => (intr.name === searchTerm)).length === 0 &&
             <InterestItem interest={{
                 name: searchTerm,
@@ -55,7 +48,6 @@ const AddInterestModal: React.FC<AddInterestModalProps> = ({ searchResults, inte
             <InterestItem interest={interest} key={interest.name} />
           ))}
         </IonList>
-        <IonButton onClick={addInterest}>Add {searchTerm}</IonButton>
       </div>
     </IonContent>
   );

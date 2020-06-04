@@ -150,7 +150,7 @@ class Profile extends Component<ProfileProps, ProfileState> {
 
           <IonModal isOpen={this.state.showInterestModal} onDidDismiss={() => this.setState({ showInterestModal: false })}>
             <AddInterestModal />
-            <IonButton onClick={() => this.setState({ showInterestModal: false })}>Done</IonButton>
+            <IonButton onClick={() => this.setState({ showInterestModal: false })} className="dismissBtn">Done</IonButton>
           </IonModal>
 
           <IonToast
