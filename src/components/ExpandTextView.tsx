@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { IonText } from '@ionic/react';
+import "./ExpandTextView.css";
 
 interface ExpandTextViewProps {
   text: string,
@@ -23,14 +24,10 @@ class ExpandTextView extends Component<ExpandTextViewProps> {
                }
 
                {this.state.showAll &&
-                           (<div>
-                              <p>{this.props.text}</p>
-                              <a onClick={this.showLess}>Read less</a>
-                           </div>)}
+                  <p>{this.props.text} <br /> <span className="clickable"><a onClick={this.showLess}>Read less</a></span></p>}
                
                {!this.state.showAll && this.props.text.length > this.props.limit &&
-                     <p>{limited}<span><a onClick={this.showMore}>&nbsp;Read more</a></span></p>
-                  }
+                  <p>{limited} <br /> <span className="clickable"><a onClick={this.showMore}>Read more</a></span></p>}
             </IonText>
          </div>
       )

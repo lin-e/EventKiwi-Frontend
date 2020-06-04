@@ -89,7 +89,7 @@ const EventDescription: React.FC<EventDescriptionProps> = (props) => {
                   </Row>
                   <Row>
                      <Col>
-                        <ExpandTextView limit={450} text={eventDescription.description} />
+                        <ExpandTextView limit={520} text={eventDescription.description} />
                      </Col>
                   </Row>
 
