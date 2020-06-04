@@ -44,7 +44,7 @@ const InterestItem: React.FC<InterestItemProps> = ({ interest, interestList, use
           <IonCol size="8">
             <IonLabel>
               <div className="interestName">{interest.name}</div>
-              <p>{`${interest.numInterested} other ${interest.numInterested === 1 ? "person" : "people"} interested`}</p>
+              <p>{`${interest.numInterested} ${(interest.numInterested == 1) ? "person" : "people"} interested`}</p>
             </IonLabel>
           </IonCol>
           <IonCol size="4">

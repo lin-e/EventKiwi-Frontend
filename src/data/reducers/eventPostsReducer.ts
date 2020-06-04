@@ -1,8 +1,10 @@
-import { GET_EVENT_POSTS, EventPostType } from "../actions/types";
+import { GET_EVENT_POSTS, EventPostType, GET_DISCOVER_EVENT_POSTS, GET_EVENTS_EVENT_POSTS } from "../actions/types";
 import { EventPostsState } from "../types/stateTypes";
 
 const initialState: EventPostsState = {
-   posts: []
+   posts: [],
+   discoverPosts: [],
+   eventsPost: []
 }
 
 export function eventPostReducer(state = initialState, action: EventPostType): EventPostsState {
@@ -11,6 +13,18 @@ export function eventPostReducer(state = initialState, action: EventPostType): E
          return {
             ...state,
             posts: action.payload
+         }
+
+      case GET_DISCOVER_EVENT_POSTS:
+         return {
+            ...state,
+            discoverPosts: action.payload
+         }
+
+      case GET_EVENTS_EVENT_POSTS:
+         return {
+            ...state,
+            eventsPost: action.payload
          }
 
       default:

@@ -12,11 +12,15 @@ export interface EventCardState {
 
 export interface ViewEventState {
    event: EventDetails,
+   eventsEvent: EventDetails,
+   discoverEvent: EventDetails,
    loading: boolean
 }
 
 export interface EventPostsState {
-   posts: Post[]
+   posts: Post[],
+   discoverPosts: Post[],
+   eventsPost: Post[]
 }
 
 export interface UserState {

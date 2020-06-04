@@ -3,19 +3,21 @@ import React from "react";
 import { Route, Redirect } from "react-router";
 import Events from "./Events";
 import Discover from "./Discover";
-import ViewEvent from "./ViewEvent";
 import Profile from "./Profile";
 import { calendar, compass, person } from "ionicons/icons";
+import EventsTabEventPage from "./EventsTabEventPage";
+import DiscoverTabEventPage from "./DiscoverTabEventPage";
+import StandaloneEventPage from "./StandaloneEventPage";
 
 const Tabs: React.FC = () => (
    <IonTabs>
       <IonRouterOutlet>
-         <Route path="/events" component={Events} exact={true} />
-         <Route path="/discover" component={Discover} exact={true} />
-         <Route path="/event/:id" component={ViewEvent} exact={true} />
-         <Route path="/discover/event/:id" component={ViewEvent} exact={true} />
-         <Route path="/events/event/:id" component={ViewEvent} exact={true} />
-         <Route path="/profile" component={Profile} />
+         <Route path="/events" render={() => <Events />} exact={true} />
+         <Route path="/discover" render={() => <Discover />} exact={true} />
+         <Route path="/discover/event/:id" component={DiscoverTabEventPage} exact />
+         <Route path="/events/event/:id" component={EventsTabEventPage} exact />
+         <Route path="/event/:id" component={StandaloneEventPage} exact />
+         <Route path="/profile" render={() => <Profile />} />
          <Route path="/" render={() => <Redirect to="/events" />} exact={true} />
       </IonRouterOutlet>
       <IonTabBar slot="bottom">

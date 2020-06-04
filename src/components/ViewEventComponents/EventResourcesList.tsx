@@ -9,49 +9,52 @@ import { connect, ConnectedProps } from 'react-redux';
 
 const mapStateToProps = (state: RootState) => ({
    resources: state.viewEvent.event.resources,
+   eResources: state.viewEvent.eventsEvent.resources,
+   dResources: state.viewEvent.discoverEvent.resources,
    organiserName: state.viewEvent.event.organiser.name
 })
 
 const connector = connect(mapStateToProps)
 
 interface OwnProps {
-   hide: boolean
+   hide: boolean,
+   tab: string
 }
 
 type PropsFromRedux = ConnectedProps<typeof connector>
 type EventResourcesListProps = PropsFromRedux & OwnProps;
+const EventResourcesList: React.FC<EventResourcesListProps> = (props) => {
 
-class EventResourcesList extends Component<EventResourcesListProps> {
-   render() {   
-      return (
-      <div style={this.props.hide ? {display: "none"} : {}}>
-         {this.props.resources.length === 0 && 
-            <CentredTextContainer name={"No resources from " + this.props.organiserName} />
+   const resources = props.tab === "events" ? props.eResources : (props.tab === "discover" ? props.dResources : props.resources);
+
+   return (
+      <div style={props.hide ? { display: "none" } : {}}>
+         {resources.length === 0 &&
+            <CentredTextContainer name={"No resources for this event"} />
          }
-         
-         {this.props.resources.length > 0 && 
+
+         {resources.length > 0 &&
             <IonList>
-               {this.props.resources.map(resource => {
+               {resources.map(resource => {
                   return (
-                  <IonItemSliding key={`event-resource-${resource.id}`}>
-                     <IonItem href={resourceDownloadURL(resource.id)} detail download={resource.name}>
-                        <div className="restrictedWidth">
-                           <EventResource name={resource.name} />
-                        </div>
-                     </IonItem>
-                 
-                     <IonItemOptions side="end">
-                        <IonItemOption onClick={() => console.log('favorite clicked')}>Favorite</IonItemOption>
-                     </IonItemOptions>
-                  </IonItemSliding>
+                     <IonItemSliding key={`event-resource-${resource.id}`}>
+                        <IonItem href={resourceDownloadURL(resource.id)} detail download={resource.name}>
+                           <div className="restrictedWidth">
+                              <EventResource name={resource.name} />
+                           </div>
+                        </IonItem>
+
+                        <IonItemOptions side="end">
+                           <IonItemOption onClick={() => console.log('favorite clicked')}>Favorite</IonItemOption>
+                        </IonItemOptions>
+                     </IonItemSliding>
 
                   )
                })}
             </IonList>
          }
       </div>
-      )
-   }
+   )
 }
 
 export default connector(EventResourcesList);

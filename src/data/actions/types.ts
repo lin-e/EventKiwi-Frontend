@@ -1,6 +1,7 @@
 import { EventCardDetails, ProfileDetails, EventDetails, Society, SocietyCard, Post, CalendarEvent, InterestDetails } from "../../constants/types";
 import { AuthResponse } from "../types/dataInterfaces";
 import { UserState } from "../types/stateTypes";
+import { ViewEventType } from "./viewEvent/viewEventTypes";
 
 export const FETCH_SEARCH_SOCIETY_CARDS = "FETCH_SEARCH_SOCIETY_CARDS";
 export const FOLLOW_SOCIETY = "FOLLOW_SOCIETY";
@@ -94,36 +95,6 @@ export interface FetchSearchInterestsAction {
 export type FetchInterestType = FetchSearchInterestsAction;
 
 
-export const LOAD_EVENT_DETAILS = "LOAD_EVENT_DETAILS"
-export const LOADING_EVENT = "LOADING_EVENT"
-export const EVENT_GOING = "EVENT_GOING"
-export const EVENT_INTERESTED = "EVENT_INTERESTED"
-export const EVENT_NOT_GOING = "EVENT_NOT_GOING"
-
-interface LoadEventDetailsAction {
-   type: typeof LOAD_EVENT_DETAILS,
-   payload: EventDetails
-}
-
-interface LoadingEventAction {
-   type: typeof LOADING_EVENT
-}
-
-interface GoingAction {
-   type: typeof EVENT_GOING
-}
-
-interface InterestedAction {
-   type: typeof EVENT_INTERESTED
-}
-
-interface NotGoingAction {
-   type: typeof EVENT_NOT_GOING
-}
-
-export type ViewEventType = LoadEventDetailsAction | LoadingEventAction | GoingAction | InterestedAction | NotGoingAction;
-
-
 export const USER_LOGIN = "USER_LOGIN";
 export const LOAD_USER_DATA = "LOAD_USER_DATA";
 export const USER_LOGOUT = "USER_LOGOUT";
@@ -145,10 +116,22 @@ interface LoadUserDataAction {
 export type UserType = LoginAction | LoadUserDataAction | LogoutAction;
 
 export const GET_EVENT_POSTS = "GET_EVENT_POSTS";
+export const GET_DISCOVER_EVENT_POSTS = "GET_DISCOVER_EVENT_POSTS";
+export const GET_EVENTS_EVENT_POSTS = "GET_EVENTS_EVENT_POSTS";
 
 interface GetEventPostsAction {
    type: typeof GET_EVENT_POSTS,
    payload: Post[]
 }
 
-export type EventPostType = GetEventPostsAction;
+interface GetDiscoverEventPostsAction {
+   type: typeof GET_DISCOVER_EVENT_POSTS,
+   payload: Post[]
+}
+
+interface GetEventsEventPostsAction {
+   type: typeof GET_EVENTS_EVENT_POSTS,
+   payload: Post[]
+}
+
+export type EventPostType = GetEventPostsAction | GetDiscoverEventPostsAction | GetEventsEventPostsAction;

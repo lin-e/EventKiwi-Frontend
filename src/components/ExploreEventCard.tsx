@@ -4,7 +4,7 @@ import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, 
 import { time, location as locationIcon, pricetags } from "ionicons/icons";
 import { getDateRange } from '../utils/DateTimeTools';
 import { Society } from '../constants/types';
-import { loadingEvent } from '../data/actions/viewEventActions';
+import { loadingEvent } from '../data/actions/viewEvent/viewEventActions';
 import { connect, ConnectedProps } from 'react-redux';
 
 const connector = connect(null, {loadingEvent})
