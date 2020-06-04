@@ -2,7 +2,6 @@ import React, { Component, createRef } from 'react';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonSearchbar, IonRefresher, IonRefresherContent, IonList, IonCol, IonRow, IonGrid, IonButton, IonIcon, IonButtons } from '@ionic/react';
 import { add } from 'ionicons/icons'
 import './Discover.css';
-import ExploreEventsList from '../components/ExploreEventsList';
 import { connect, ConnectedProps } from 'react-redux';
 import { fetchEventCards, fetchSearchEventCards, fetchSearchSocietyCards } from "../data/actions/actions";
 import { RootState } from '../data/reducers';
@@ -106,13 +105,14 @@ class Discover extends Component<DiscoverProps, DiscoverState> {
           </IonToolbar>
         </IonHeader>  
 
-        <IonRefresher ref={this.refresherRef} slot="fixed" onIonRefresh={this.searchBarUpdate}>
+        <IonRefresher ref={this.refresherRef} slot="fixed" onIonRefresh={() => this.search(this.state.searchTerm)}>
           <IonRefresherContent></IonRefresherContent>
         </IonRefresher>
 
-        <IonSearchbar ref={this.searchBar} onIonChange={this.searchBarUpdate} debounce={500} enterkeyhint="search" type="search"/>
         
         <Container>
+          <IonSearchbar ref={this.searchBar} onIonChange={this.searchBarUpdate} debounce={500} enterkeyhint="search" type="search"/>
+          
           {(this.state.searchTerm !== "" && this.props.societies.length !== 0) &&
               <IonGrid>
                 <IonRow>

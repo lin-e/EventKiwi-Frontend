@@ -1,5 +1,5 @@
 import { ProfileDetailsState } from '../types/stateTypes'
-import { FetchProfileType, REMOVE_PROFILE_INTEREST, FETCH_PROFILE_DETAILS, FETCH_PROFILE_DETAILS_FAILED, RESET_PROFILE_INVALID_RESPONSE, ADD_PROFILE_INTEREST } from '../actions/types'
+import { FetchProfileType, REMOVE_PROFILE_INTEREST, FETCH_PROFILE_DETAILS, FETCH_PROFILE_DETAILS_FAILED, RESET_PROFILE_INVALID_RESPONSE, ADD_PROFILE_INTEREST, FETCH_SEARCH_INTERESTS } from '../actions/types'
 
 const initialProfileDetailsState: ProfileDetailsState = {
   profileDetails: {
@@ -31,17 +31,10 @@ export const profileDetailsReducer = (state = initialProfileDetailsState, action
         invalidResponse: false
       }
     case ADD_PROFILE_INTEREST:
-      const newInterests = state.profileDetails.interests
       if (!state.profileDetails.interests.includes(action.payload)) {
-        newInterests.push(action.payload)
+        state.profileDetails.interests.push(action.payload);
       }
-      return {
-        ...state,
-        profileDetails: {
-          ...state.profileDetails,
-          interests: newInterests
-        }
-      };
+      return state;
     case REMOVE_PROFILE_INTEREST:
       return {
         ...state,
