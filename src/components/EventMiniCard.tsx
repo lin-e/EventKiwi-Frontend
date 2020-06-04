@@ -2,7 +2,7 @@ import React from 'react';
 import './EventMiniCard.css';
 import { IonCard, IonCardContent, IonCardSubtitle, IonCardTitle, IonGrid, IonRow } from '@ionic/react';
 import { getDateRange } from '../utils/DateTimeTools';
-import { loadingEvent } from '../data/actions/viewEventActions';
+import { loadingEvent } from '../data/actions/viewEvent/viewEventActions';
 import { connect, ConnectedProps } from 'react-redux';
 
 

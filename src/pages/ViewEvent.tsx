@@ -6,7 +6,7 @@ import EventPostsList from '../components/ViewEventComponents/EventPostsList';
 import EventResourcesList from '../components/ViewEventComponents/EventResourcesList';
 import { shareOutline } from 'ionicons/icons';
 import { connect, ConnectedProps } from 'react-redux';
-import { loadEventDetails, loadingEvent, loadBlankEvent, goingToEvent, interestedInEvent, notGoingToEvent } from '../data/actions/viewEventActions';
+import { loadEventDetails, loadingEvent, loadBlankEvent, goingToEvent, interestedInEvent, notGoingToEvent } from '../data/actions/viewEvent/viewEventActions';
 import { loadEventPosts } from '../data/actions/eventPostsActions';
 import { RootState } from '../data/reducers';
 import { isPlatform } from '@ionic/react';

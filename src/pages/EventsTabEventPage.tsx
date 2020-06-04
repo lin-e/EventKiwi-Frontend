@@ -3,7 +3,7 @@ import ViewEvent from './ViewEvent';
 import { RouteComponentProps } from 'react-router';
 import { RootState } from '../data/reducers';
 import { ConnectedProps, connect } from 'react-redux';
-import { loadEventDetails, loadingEvent, loadBlankEvent } from '../data/actions/viewEventActions';
+import { loadEventDetails, loadingEvent, loadBlankEvent } from '../data/actions/viewEvent/viewEventActions';
 import { loadEventPosts } from '../data/actions/eventPostsActions';
 
 interface OwnProps extends RouteComponentProps<{ id: string }> { };
