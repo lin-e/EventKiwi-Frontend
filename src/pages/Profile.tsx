@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonGrid, IonRow, IonCol, IonButton, IonModal, IonToast } from '@ionic/react';
+import React, { Component, createRef } from 'react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonGrid, IonRow, IonCol, IonButton, IonModal, IonToast, IonRefresher, IonRefresherContent } from '@ionic/react';
 import './Profile.css';
 import ItemSlider from '../components/ItemSlider';
 import { SocietyBasic } from '../constants/types';
@@ -9,7 +9,7 @@ import InterestChip from '../components/Profile/InterestChip';
 import { fetchProfileDetails, resetInvalidProfileResponse } from '../data/actions/actions';
 import { logOut } from '../data/actions/userActions';
 import { RootState } from '../data/reducers';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import EmptySectionText from '../components/EmptySectionText';
 import { Redirect } from 'react-router';
 import { UserProfile } from '../data/types/dataInterfaces';
@@ -19,23 +19,23 @@ import AddInterestModal from '../components/Profile/AddInterestModal';
 const { Browser } = Plugins;
 
 
-interface LinkStateProps {
-  interests: string[],
-  societies: SocietyBasic[],
-  invalidResponse: boolean,
-  profile: UserProfile,
-  isLoggedIn: boolean,
-  isLoading: boolean,
-  userToken: string
+
+const mapStateToProps = (state: RootState) => {
+  return {
+    interests: state.profileDetails.profileDetails.interests,
+    societies: state.profileDetails.profileDetails.societies,
+    invalidResponse: state.profileDetails.invalidResponse,
+    profile: state.userDetails.profile,
+    isLoggedIn: state.userDetails.isLoggedIn,
+    isLoading: state.userDetails.loading,
+    userToken: state.userDetails.userToken
+  }
 }
 
-interface LinkDispatchProps {
-  resetInvalidProfileResponse: () => void;
-  fetchProfileDetails: (token: string) => void
-  logOut: (token: string) => void;
-}
+const connector = connect(mapStateToProps, { fetchProfileDetails, resetInvalidProfileResponse, logOut })
 
-type ProfileProps = LinkStateProps & LinkDispatchProps
+type PropsFromRedux = ConnectedProps<typeof connector>
+type ProfileProps = PropsFromRedux
 
 interface ProfileState {
   showInterestModal: boolean,
@@ -84,10 +84,11 @@ class Profile extends Component<ProfileProps, ProfileState> {
       <IonPage>
         <IonHeader>
           <IonToolbar>
-            <IonTitle>{this.props.profile ? this.props.profile.firstname : "Profile"}</IonTitle>
+            <IonTitle>{this.props.profile ? `Hi ${this.props.profile.firstname}` : "My Profile"}</IonTitle>
           </IonToolbar>
         </IonHeader>
         <IonContent>
+
           <IonHeader collapse="condense">
             <IonToolbar>
               <IonTitle size="large">{this.props.profile ? this.props.profile.firstname : "Profile"}</IonTitle>
@@ -166,20 +167,4 @@ class Profile extends Component<ProfileProps, ProfileState> {
   }
 }
 
-const mapStateToProps = (state: RootState): LinkStateProps => {
-  return {
-    interests: state.profileDetails.profileDetails.interests,
-    societies: state.profileDetails.profileDetails.societies,
-    invalidResponse: state.profileDetails.invalidResponse,
-    profile: state.userDetails.profile,
-    isLoggedIn: state.userDetails.isLoggedIn,
-    isLoading: state.userDetails.loading,
-    userToken: state.userDetails.userToken
-  }
-}
-
-
-export default connect(
-  mapStateToProps,
-  { fetchProfileDetails, resetInvalidProfileResponse, logOut }
-)(Profile);
+export default connector(Profile);
