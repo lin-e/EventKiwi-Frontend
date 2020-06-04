@@ -97,20 +97,20 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
 
   const interestedClicked = () => {
     if (props.goingStatus !== INTERESTED) {
-      props.interestedInEvent(props.eventId, props.userToken);
+      props.interestedInEvent(props.eventId, props.activeTab, props.userToken);
       showInterestedToast(true);
     } else {
-      props.notGoingToEvent(props.eventId, props.userToken);
+      props.notGoingToEvent(props.eventId, props.activeTab, props.userToken);
       showNotGoingToast(true);
     }
   }
 
   const goingClicked = () => {
     if (props.goingStatus !== GOING) {
-      props.goingToEvent(props.eventId, props.userToken);
+      props.goingToEvent(props.eventId, props.activeTab, props.userToken);
       showGoingToast(true)
     } else {
-      props.notGoingToEvent(props.eventId, props.userToken);
+      props.notGoingToEvent(props.eventId, props.activeTab, props.userToken);
       showNotGoingToast(true);
     }
   }
@@ -166,7 +166,7 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
         <EventPostsList hide={!posts} />
 
         <EventResourcesList hide={!resources} />
-
+{/* 
         {props.isLoggedIn &&
           <IonFab vertical="bottom" horizontal="end" slot="fixed">
             <IonFabButton color={fabColour}>
@@ -186,18 +186,17 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
                 <IonIcon icon={checkmarkCircleOutline} />
               </IonFabButton>
             </IonFabList>
-          </IonFab>}
+          </IonFab>} */}
 
-        {!props.isLoggedIn &&
           <IonFab vertical="bottom" horizontal="end" slot="fixed">
             <IonFabButton onClick={shareClicked} color="primary">
               <IonIcon icon={shareOutline} />
             </IonFabButton>
-          </IonFab>}
+          </IonFab>
 
 
 
-        <IonToast
+        {/* <IonToast
           isOpen={interestedToast || goingToast}
           onDidDismiss={() => { showInterestedToast(false); showGoingToast(false) }}
           message="Added event to calendar."
@@ -209,7 +208,7 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
           onDidDismiss={() => showNotGoingToast(false)}
           message="Removed event from calendar."
           duration={3000}
-        />
+        /> */}
 
         <IonToast
           isOpen={shareUrlToast}

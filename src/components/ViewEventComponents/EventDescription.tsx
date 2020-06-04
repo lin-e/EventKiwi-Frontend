@@ -1,5 +1,5 @@
 import React from 'react';
-import { IonText, IonCard, IonCardSubtitle, IonCol, IonGrid, IonRow } from '@ionic/react';
+import { IonText, IonCard, IonCardSubtitle, IonCol, IonGrid, IonRow, IonButton, IonIcon } from '@ionic/react';
 import './EventDescription.css';
 import { Container, Row, Col } from 'react-grid-system';
 import ExpandTextView from '../ExpandTextView';
@@ -7,6 +7,7 @@ import EventMiniCard from '../EventMiniCard';
 import { getDateRange } from '../../utils/DateTimeTools';
 import { RootState } from '../../data/reducers';
 import { ConnectedProps, connect } from 'react-redux';
+import { checkmarkCircleOutline, starOutline } from 'ionicons/icons';
 
 const mapStateToProps = (state: RootState) => ({
    event: state.viewEvent.event,
@@ -40,10 +41,15 @@ const EventDescription: React.FC<EventDescriptionProps> = (props) => {
 
                <Col md={6} sm={12}>
                   <Row>
-                     <Col>
+                     <Col lg={5} sm={12}>
                         <IonCardSubtitle>By {eventDescription.organiser.name},</IonCardSubtitle>
                         <IonCardSubtitle>{`${getDateRange(props.event.datetimeStart, props.event.datetimeEnd)},`}</IonCardSubtitle>
                         <IonCardSubtitle>{eventDescription.location}</IonCardSubtitle>
+                     </Col>
+                     <Col lg={7}>
+                        <br />
+                        <IonButton color="success">Going&nbsp; <IonIcon icon={checkmarkCircleOutline} /></IonButton>
+                        <IonButton color="medium">Interested&nbsp; <IonIcon icon={starOutline} /></IonButton>
                      </Col>
                   </Row>
                   <Row>
