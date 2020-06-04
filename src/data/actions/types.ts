@@ -80,6 +80,12 @@ export const LOADING_EVENT = "LOADING_EVENT"
 export const EVENT_GOING = "EVENT_GOING"
 export const EVENT_INTERESTED = "EVENT_INTERESTED"
 export const EVENT_NOT_GOING = "EVENT_NOT_GOING"
+export const EVENTS_EVENT_GOING = "EVENTS_EVENT_GOING"
+export const EVENTS_EVENT_INTERESTED = "EVENTS_EVENT_INTERESTED"
+export const EVENTS_EVENT_NOT_GOING = "EVENTS_EVENT_NOT_GOING"
+export const DISCOVER_EVENT_GOING = "DISCOVER_EVENT_GOING"
+export const DISCOVER_EVENT_INTERESTED = "DISCOVER_EVENT_INTERESTED"
+export const DISCOVER_EVENT_NOT_GOING = "DISCOVER_EVENT_NOT_GOING"
 
 interface LoadEventDetailsAction {
    type: typeof LOAD_EVENT_DETAILS,
@@ -104,17 +110,17 @@ interface LoadingEventAction {
    type: typeof LOADING_EVENT
 }
 
-interface GoingAction {
-   type: typeof EVENT_GOING
-}
+interface GoingAction { type: typeof EVENT_GOING }
+interface InterestedAction { type: typeof EVENT_INTERESTED }
+interface NotGoingAction { type: typeof EVENT_NOT_GOING }
 
-interface InterestedAction {
-   type: typeof EVENT_INTERESTED
-}
+interface EventsGoingAction { type: typeof EVENTS_EVENT_GOING }
+interface EventsInterestedAction { type: typeof EVENTS_EVENT_INTERESTED }
+interface EventsNotGoingAction { type: typeof EVENTS_EVENT_NOT_GOING }
 
-interface NotGoingAction {
-   type: typeof EVENT_NOT_GOING
-}
+interface DiscoverGoingAction { type: typeof DISCOVER_EVENT_GOING }
+interface DiscoverInterestedAction { type: typeof DISCOVER_EVENT_INTERESTED }
+interface DiscoverNotGoingAction { type: typeof DISCOVER_EVENT_NOT_GOING }
 
 export type ViewEventType = LoadEventDetailsAction 
                           | LoadingEventAction 
@@ -123,7 +129,13 @@ export type ViewEventType = LoadEventDetailsAction
                           | NotGoingAction 
                           | LoadBlankEventDetailsAction 
                           | EventsLoadEventDetailsAction 
-                          | DiscoverLoadEventDetailsAction;
+                          | DiscoverLoadEventDetailsAction
+                          | EventsGoingAction
+                          | EventsInterestedAction
+                          | EventsNotGoingAction
+                          | DiscoverGoingAction
+                          | DiscoverInterestedAction
+                          | DiscoverNotGoingAction;
 
 
 export const USER_LOGIN = "USER_LOGIN";
