@@ -1,8 +1,10 @@
 import React, { useState, MouseEvent } from 'react';
-import { IonLabel, IonSearchbar, IonButton, IonToast } from '@ionic/react';
+import { IonLabel, IonSearchbar, IonButton, IonToast, IonTitle, IonContent, IonList } from '@ionic/react';
 import { RootState } from '../../data/reducers';
 import { addProfileInterest } from '../../data/actions/actions'
 import { ConnectedProps, connect } from 'react-redux';
+import './AddInterestModal.css'
+import InterestItem from './InterestItem';
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -35,11 +37,16 @@ const AddInterestModal: React.FC<AddInterestModalProps> = ({ userToken, addProfi
   }
   
   return (
-    <div>
-      <IonLabel position="stacked">Find an interest</IonLabel>
-      <IonSearchbar placeholder="e.g. hockey, finance, dance" onIonChange={searchBarUpdate} />
-      <IonButton onClick={addInterest}>Add {searchTerm}</IonButton>
-    </div>
+    <IonContent>
+      <div className="modalContainer">
+        <h3 className="subtitle">Find an interest</h3>
+        <IonSearchbar placeholder="e.g. hockey, finance, dance" onIonChange={searchBarUpdate} />
+        <IonList>
+          <InterestItem interest={searchTerm} numInterested={0} interested={false}/>
+        </IonList>
+        <IonButton onClick={addInterest}>Add {searchTerm}</IonButton>
+      </div>
+    </IonContent>
   );
 }
 

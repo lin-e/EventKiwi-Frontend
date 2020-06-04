@@ -38,7 +38,6 @@ interface LinkDispatchProps {
 type ProfileProps = LinkStateProps & LinkDispatchProps
 
 interface ProfileState {
-  showSocietyModal: boolean,
   showInterestModal: boolean,
   showErrorToast: boolean
 }
@@ -48,7 +47,6 @@ class Profile extends Component<ProfileProps, ProfileState> {
   constructor(props: ProfileProps) {
     super(props);
     this.state = {
-      showSocietyModal: false,
       showInterestModal: false,
       showErrorToast: false
     }
@@ -102,9 +100,6 @@ class Profile extends Component<ProfileProps, ProfileState> {
                 <IonCol className="sectionHeader" size="8">
                   <IonTitle className="profileTitle">My Societies</IonTitle>
                 </IonCol>
-                <IonCol size="4">
-                  <IonButton className="profileBtn" color="transparent" onClick={() => this.setState({ showSocietyModal: true })}>Manage</IonButton>
-                </IonCol>
               </IonRow>
               <IonRow>
                 <div className="sectionContent">
@@ -153,10 +148,6 @@ class Profile extends Component<ProfileProps, ProfileState> {
 
           </Container>
 
-          <IonModal isOpen={this.state.showSocietyModal} onDidDismiss={() => this.setState({ showInterestModal: false })}>
-            <p>This is the society modal</p>
-            <IonButton onClick={() => this.setState({ showSocietyModal: false })}>Done</IonButton>
-          </IonModal>
           <IonModal isOpen={this.state.showInterestModal} onDidDismiss={() => this.setState({ showInterestModal: false })}>
             <AddInterestModal />
             <IonButton onClick={() => this.setState({ showInterestModal: false })}>Done</IonButton>
