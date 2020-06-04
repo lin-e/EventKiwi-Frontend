@@ -24,7 +24,7 @@ const tab = "discover"
 const DiscoverTabEventPage: React.FC<DiscoverTabEventPageProps> = (props) => {
    useEffect(() => {
       props.loadEventDetails(props.match.params.id, tab, props.userToken);
-      props.loadEventPosts(props.match.params.id, props.userToken);
+      props.loadEventPosts(props.match.params.id, tab, props.userToken);
    }, [props.match.params.id, props.userToken]);
 
    return (

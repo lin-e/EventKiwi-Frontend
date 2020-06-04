@@ -138,7 +138,7 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
 
         <EventPostsList hide={!posts} />
 
-        <EventResourcesList hide={!resources} />
+        <EventResourcesList tab={props.activeTab} hide={!resources} />
 
         <IonFab vertical="bottom" horizontal="end" slot="fixed">
           <IonFabButton onClick={shareClicked} color="primary">
