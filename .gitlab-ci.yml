@@ -1,8 +1,17 @@
 image: line5/drp-backend:latest
 
 stages:
+  - test
   - build
   - deploy
+
+test:
+  stage: test
+  script:
+    - npm install
+    - npm test
+  except:
+    - staging
 
 build:
   stage: build
