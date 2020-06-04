@@ -17,7 +17,8 @@ const mapStateToProps = (state: RootState) => ({
    discoverEvent: state.viewEvent.discoverEvent,
    dGoingStatus: state.viewEvent.discoverEvent.goingStatus,
    eGoingStatus: state.viewEvent.eventsEvent.goingStatus,
-   userToken: state.userDetails.userToken
+   userToken: state.userDetails.userToken,
+   isLoggedIn: state.userDetails.isLoggedIn
 })
 
 const connector = connect(mapStateToProps, { goingToEvent, interestedInEvent, notGoingToEvent })
@@ -77,6 +78,7 @@ const EventDescription: React.FC<EventDescriptionProps> = (props) => {
                         <IonCardSubtitle>{`${getDateRange(props.event.datetimeStart, props.event.datetimeEnd)},`}</IonCardSubtitle>
                         <IonCardSubtitle>{eventDescription.location}</IonCardSubtitle>
                      </Col>
+                     {props.isLoggedIn && 
                      <Col lg={7}>
                         <br />
                         <IonButton onClick={goingClicked} color={goingStatus === GOING ? "success" : "medium"}>
@@ -85,7 +87,7 @@ const EventDescription: React.FC<EventDescriptionProps> = (props) => {
                         <IonButton onClick={interestedClicked} color={goingStatus === INTERESTED ? "warning" : "medium"}>
                            Interested&nbsp; <IonIcon icon={starOutline} />
                         </IonButton>
-                     </Col>
+                     </Col>}
                   </Row>
                   <Row>
                      <Col>
