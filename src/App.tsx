@@ -5,7 +5,6 @@ import {
   IonRouterOutlet
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import HomeOrLogin from './components/HomeOrLogin';
 import Login from './pages/Login';
 
 /* Core CSS required for Ionic components to work properly */

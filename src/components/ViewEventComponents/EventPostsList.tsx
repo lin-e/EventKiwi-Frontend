@@ -36,7 +36,7 @@ const EventPostsList: React.FC<EventPostsListProps> = (props) => {
                            <div className="restrictedWidth">
                            <EventPost 
                               postContent={post.body} 
-                              postTime={`${getLongDate(post.time)}, ${getTime(post.time)}`} // use prabs datetime tool here 
+                              postTime={`${getLongDate(post.time)}, ${getTime(post.time)}`}
                               organiserName={post.organiser.name} 
                               organiserLogo={post.organiser.image}/>
                            </div>
