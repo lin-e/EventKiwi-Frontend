@@ -4,10 +4,10 @@ import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, 
 import { time, location as locationIcon, pricetags } from "ionicons/icons";
 import { getDateRange } from '../utils/DateTimeTools';
 import { Society } from '../constants/types';
-import { loadingEvent } from '../data/actions/viewEvent/viewEventActions';
+import { loadBlankEvent } from '../data/actions/viewEvent/viewEventActions';
 import { connect, ConnectedProps } from 'react-redux';
 
-const connector = connect(null, {loadingEvent})
+const connector = connect(null, {loadBlankEvent})
 
 type PropsFromRedux = ConnectedProps<typeof connector>
 type ExploreEventCardProps = PropsFromRedux & {
@@ -21,9 +21,9 @@ type ExploreEventCardProps = PropsFromRedux & {
   id: string;
 };
 
-const ExploreEventCard: React.FC<ExploreEventCardProps> = ({ name, organiser, image, location, datetimeStart, datetimeEnd, tags, id, loadingEvent }) => {
+const ExploreEventCard: React.FC<ExploreEventCardProps> = ({ name, organiser, image, location, datetimeStart, datetimeEnd, tags, id, loadBlankEvent }) => {
   return (
-    <IonCard onClick={loadingEvent} routerLink={`/discover/event/${id}`}>
+    <IonCard onClick={() => loadBlankEvent("discover")} routerLink={`/discover/event/${id}`}>
 
       <img src={image} className="banner" alt={name}/>
 

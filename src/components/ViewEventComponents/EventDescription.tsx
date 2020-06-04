@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { IonText, IonCard, IonCardSubtitle, IonCol, IonGrid, IonRow, IonButton, IonIcon, IonToast } from '@ionic/react';
+import { IonText, IonCard, IonCardSubtitle, IonCol, IonGrid, IonRow, IonButton, IonIcon, IonToast, IonSkeletonText } from '@ionic/react';
 import './EventDescription.css';
 import { Container, Row, Col } from 'react-grid-system';
 import ExpandTextView from '../ExpandTextView';
@@ -62,7 +62,14 @@ const EventDescription: React.FC<EventDescriptionProps> = (props) => {
    return (
       <div style={props.hide ? { display: "none" } : {}}>
          <Container>
-            <IonText><h1>{eventDescription.name}</h1></IonText>
+            <IonText>
+            {eventDescription.name === "" && 
+               <h1><IonSkeletonText style={{ width: '40%', height: '30px' }} animated /></h1>
+            }
+            {eventDescription.name !== "" && 
+               <h1>{eventDescription.name}</h1>
+            }
+            </IonText>
 
             <Row>
                <Col md={6} sm={12}>
@@ -74,9 +81,16 @@ const EventDescription: React.FC<EventDescriptionProps> = (props) => {
                <Col md={6} sm={12}>
                   <Row>
                      <Col lg={5} sm={12}>
-                        <IonCardSubtitle>By {eventDescription.organiser.name},</IonCardSubtitle>
-                        <IonCardSubtitle>{`${getDateRange(props.event.datetimeStart, props.event.datetimeEnd)},`}</IonCardSubtitle>
-                        <IonCardSubtitle>{eventDescription.location}</IonCardSubtitle>
+                        {eventDescription.description === "" && <div>
+                           <IonSkeletonText animated />  
+                           <IonSkeletonText animated />  
+                           <IonSkeletonText animated />  
+                        </div>}
+                        {eventDescription.description !== "" && <div>
+                           <IonCardSubtitle>By {eventDescription.organiser.name},</IonCardSubtitle>
+                           <IonCardSubtitle>{`${getDateRange(props.event.datetimeStart, props.event.datetimeEnd)},`}</IonCardSubtitle>
+                           <IonCardSubtitle>{eventDescription.location}</IonCardSubtitle>
+                        </div>}
                      </Col>
                      {props.isLoggedIn && 
                      <Col lg={7}>
@@ -91,7 +105,18 @@ const EventDescription: React.FC<EventDescriptionProps> = (props) => {
                   </Row>
                   <Row>
                      <Col>
-                        <ExpandTextView limit={520} text={eventDescription.description} />
+                        {eventDescription.description === "" && <div>
+                           <IonSkeletonText animated />  
+                           <IonSkeletonText animated />  
+                           <IonSkeletonText animated />  
+                           <IonSkeletonText animated />  
+                           <IonSkeletonText animated />  
+                           <IonSkeletonText animated />  
+                           <IonSkeletonText animated />  
+                        </div>}
+                        {eventDescription.description !== "" && 
+                           <ExpandTextView limit={520} text={eventDescription.description} />
+                        }
                      </Col>
                   </Row>
 

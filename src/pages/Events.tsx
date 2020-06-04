@@ -1,24 +1,33 @@
 import React, { Component, createRef } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, withIonLifeCycle } from '@ionic/react';
 import './Events.css';
 import CalendarEventView from '../components/Calendar/CalendarEventView';
 import { ThunkDispatch } from 'redux-thunk';
 import { AppActions } from '../data/actions/types';
 import { startFetchCalEvents } from '../data/actions/actions';
+import { loadBlankEvent } from '../data/actions/viewEvent/viewEventActions';
 import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import { RootState } from '../data/reducers';
 import { Redirect } from 'react-router';
 
-type Props = LinkDispatchProps & {
-  isLoggedIn: boolean,
-  isLoading: boolean
-};
+const mapStateToProps = (state: RootState) => ({
+  isLoggedIn: state.userDetails.isLoggedIn,
+  isLoading: state.userDetails.loading
+})
 
-class Events extends Component<Props> {
+const connector = connect(
+  mapStateToProps,
+  { startFetchCalEvents, loadBlankEvent }
+)
+
+type PropsFromRedux = ConnectedProps<typeof connector>
+type EventsProps = PropsFromRedux;
+
+class Events extends Component<EventsProps> {
   refresherRef: React.RefObject<HTMLIonRefresherElement>;
 
-  constructor(props: Props) {
+  constructor(props: EventsProps) {
     super(props);
     this.refresherRef = createRef<HTMLIonRefresherElement>();
     this.refresh = this.refresh.bind(this);
@@ -30,6 +39,10 @@ class Events extends Component<Props> {
 
   refresh() {
     this.props.startFetchCalEvents();
+  }
+
+  ionViewWillEnter() {
+    this.props.loadBlankEvent("events");
   }
 
   render() {
@@ -61,15 +74,8 @@ interface LinkDispatchProps {
   startFetchCalEvents: () => void;
 }
 
-const mapStateToProps = (state: RootState) => {
-  return {
-    isLoggedIn: state.userDetails.isLoggedIn,
-    isLoading: state.userDetails.loading
-  }
-}
-
 const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>): LinkDispatchProps => ({
   startFetchCalEvents: bindActionCreators(startFetchCalEvents, dispatch)
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(Events);
+export default connector(withIonLifeCycle(Events));
