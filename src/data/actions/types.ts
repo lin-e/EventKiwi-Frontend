@@ -1,4 +1,4 @@
-import { EventCardDetails, ProfileDetails, EventDetails, Society, SocietyCard, Post } from "../../constants/types";
+import { EventCardDetails, ProfileDetails, EventDetails, Society, SocietyCard, Post, CalendarEvent } from "../../constants/types";
 import { AuthResponse } from "../types/dataInterfaces";
 import { UserState } from "../types/stateTypes";
 
@@ -44,7 +44,7 @@ export const FETCH_CAL_EVENTS = "FETCH_CAL_EVENTS";
 
 export interface FetchCalendarEventsAction {
    type: typeof FETCH_CAL_EVENTS,
-   payload: EventCardDetails[]
+   payload: CalendarEvent[]
 }
 
 export type FetchCalType = FetchCalendarEventsAction;

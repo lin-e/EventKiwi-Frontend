@@ -2,11 +2,9 @@ import { ThunkAction } from "redux-thunk"
 import { RootState } from "../reducers"
 import { Action } from "redux"
 import { FETCH_EVENTS_CARDS, FETCH_SEARCH_EVENT_CARDS, FETCH_CAL_EVENTS, AppActions, FETCH_PROFILE_DETAILS, REMOVE_PROFILE_INTEREST, FETCH_PROFILE_DETAILS_FAILED, RESET_PROFILE_INVALID_RESPONSE, ADD_PROFILE_INTEREST, FETCH_SEARCH_SOCIETY_CARDS, FOLLOW_SOCIETY, UNFOLLOW_SOCIETY } from "./types"
-import { discoverEventCardURL, discoverSeachEventCardURL, profileDetailsURL, profileInterestDeleteURL, profileInterestAddURL, discoverSearchSocietyCardURL, followSocietyURL, unfollowSocietyURL } from "../../constants/endpoints"
-import { resp_event_card_details, resp_profile_details, resp_society, resp_society_card } from "../../constants/RequestInterfaces"
-import { convertResToEventCard, convertResToProfileDetails, convertResToSoc, convertResToSocCard } from "../../constants/types"
-import { eventList, exampleSchedule } from '../dummy/calendarDummy'
-import { Dispatch } from "react"
+import { discoverEventCardURL, discoverSeachEventCardURL, profileDetailsURL, profileInterestDeleteURL, profileInterestAddURL, discoverSearchSocietyCardURL, followSocietyURL, unfollowSocietyURL, calendarEventsURL } from "../../constants/endpoints"
+import { resp_event_card_details, resp_profile_details, resp_society, resp_society_card, resp_calendar_event } from "../../constants/RequestInterfaces"
+import { convertResToEventCard, convertResToProfileDetails, convertResToSocCard, convertResToCalEvent } from "../../constants/types"
 
 export type AppThunk<ReturnType = void> = ThunkAction<
   ReturnType,
@@ -103,15 +101,23 @@ export const fetchSearchEventCards = (searchTerm: string, refresher: HTMLIonRefr
 }
 
 
-export const fetchCalEvents = (): AppActions => ({
-   type: FETCH_CAL_EVENTS,
-   payload: eventList
-})
-
-export const startFetchCalEvents = () => {
-   return(dispatch: Dispatch<AppActions>, getState: () => RootState) => {
-      dispatch(fetchCalEvents())
+export const fetchCalEvents = (refresher: HTMLIonRefresherElement, token: string): AppThunk => async dispatch => {
+   const options = {
+      headers: {
+         "Authorization": `Bearer ${token}`
+      }
    }
+   fetch(calendarEventsURL, options)
+   .then(response => response.json())
+   .then(events => {
+      if (refresher !== null) {
+         refresher.complete();
+      }
+      return (dispatch({
+         type: FETCH_CAL_EVENTS,
+         payload: (events as resp_calendar_event[]).map(convertResToCalEvent)
+      }))
+   })
 }
 
 export const fetchProfileDetails = (token: string): AppThunk => async dispatch => {
@@ -130,14 +136,14 @@ export const fetchProfileDetails = (token: string): AppThunk => async dispatch =
       }))
    })
    .catch(() => {
-      return(dispatch({
+      return (dispatch({
          type: FETCH_PROFILE_DETAILS_FAILED,
       }))
    })
 }
 
 export const resetInvalidProfileResponse = (): AppThunk => async dispatch => {
-   return(dispatch({
+   return (dispatch({
       type: RESET_PROFILE_INVALID_RESPONSE
    }))
 }

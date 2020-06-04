@@ -1,12 +1,11 @@
 import React, { useState, useRef, MouseEvent } from 'react';
-import {} from '@fortawesome/fontawesome-svg-core';
-import { EventCardDetails } from '../../constants/types'
-import { IonItemSliding, IonGrid, IonCol, IonRow, IonItem, IonLabel, IonCardTitle, IonCardHeader, IonText, IonItemOptions, IonItemOption } from '@ionic/react';
-import { getTime, getShortDate, sameDay, getDateRangeNoStartDate } from '../../utils/DateTimeTools'
+import { CalendarEvent } from '../../constants/types'
+import { IonItemSliding, IonGrid, IonCol, IonRow, IonItem, IonText, IonItemOptions, IonItemOption } from '@ionic/react';
+import { getDateRangeNoStartDate } from '../../utils/DateTimeTools'
 import './CalendarEventItem.css'
 
 interface CalendarEventItemProps {
-  event: EventCardDetails
+  event: CalendarEvent
   isFavourite: boolean
 }
 

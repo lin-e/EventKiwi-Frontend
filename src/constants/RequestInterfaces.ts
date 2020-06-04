@@ -9,6 +9,16 @@ export interface resp_event_card_details {
   tags: string[]
 }
 
+export interface resp_calendar_event {
+  id: string,
+  start: string,
+  end: string,
+  location: string,
+  name: string,
+  organiser: resp_society_cal,
+  status: number
+}
+
 export interface resp_event_details {
   event_id: string,
   event_name: string,
@@ -45,6 +55,13 @@ export interface resp_society_basic {
   society_image_src: string,
   short_name: string,
   type: number
+}
+
+export interface resp_society_cal {
+  colour: string,
+  id: string,
+  name: string,
+  short: string
 }
 
 export interface resp_society_card {

@@ -1,4 +1,4 @@
-import { resp_event_post_organiser, resp_event_posts, resp_post, resp_resource, resp_event_details, resp_event_card_details, resp_profile_details, resp_society, resp_society_basic, resp_society_card } from "./RequestInterfaces"
+import { resp_event_post_organiser, resp_event_posts, resp_post, resp_resource, resp_event_details, resp_event_card_details, resp_profile_details, resp_society, resp_society_basic, resp_society_card, resp_calendar_event, resp_society_cal } from "./RequestInterfaces"
 
 
 export interface ProfileDetails {
@@ -24,6 +24,13 @@ export interface SocietyBasic {
   imgSrc: string,
   shortName: string,
   type: number
+}
+
+export interface SocietyCal {
+  id: string,
+  name: string,
+  shortName: string,
+  colour: string
 }
 
 export interface SocietyCard {
@@ -68,6 +75,16 @@ export interface EventDetails {
    similarEvents: EventCardDetails[],
    resources: Resource[],
    goingStatus: number
+}
+
+export interface CalendarEvent {
+  id: string,
+  datetimeStart: Date,
+  datetimeEnd: Date,
+  location: string,
+  name: string,
+  organiser: SocietyCal,
+  status: number
 }
 
 export const blankEventDetails = {
@@ -156,7 +173,7 @@ export const convertResToEventDetails = (res: resp_event_details): EventDetails 
  })
 
 
- export const convertResToEventCard = (res: resp_event_card_details): EventCardDetails => ({
+export const convertResToEventCard = (res: resp_event_card_details): EventCardDetails => ({
   id: res.event_id,
   name: res.event_name,
   organiser: convertResToSoc(res.society),
@@ -165,44 +182,53 @@ export const convertResToEventDetails = (res: resp_event_details): EventDetails 
   datetimeStart: new Date(res.start_datetime),
   datetimeEnd: new Date(res.end_datetime),
   tags: res.tags
- })
+})
+
+export const convertResToCalEvent = (res: resp_calendar_event): CalendarEvent => ({
+  id: res.id,
+  datetimeStart: new Date(res.start),
+  datetimeEnd: new Date(res.end),
+  location: res.location,
+  name: res.name,
+  organiser: convertResToSocCal(res.organiser),
+  status: res.status
+})
 
 
- export const convertResToProfileDetails = (res: resp_profile_details): ProfileDetails => {
-   return {
-     firstname: res.firstname,
-     lastname: res.lastname,
-     email: res.email,
-     societies: res.societies.map(convertResToSocBasic),
-     interests: res.interests
-   }
- }
+export const convertResToProfileDetails = (res: resp_profile_details): ProfileDetails => ({
+  firstname: res.firstname,
+  lastname: res.lastname,
+  email: res.email,
+  societies: res.societies.map(convertResToSocBasic),
+  interests: res.interests
+})
 
- export const convertResToSoc = (res: resp_society): Society => {
-   return {
-     id: res.society_id,
-     name: res.society_name,
-     colour: res.colour,
-     shortName: res.short_name,
-     imageSrc: res.society_image_src
-   }
- }
+export const convertResToSoc = (res: resp_society): Society => ({
+  id: res.society_id,
+  name: res.society_name,
+  colour: res.colour,
+  shortName: res.short_name,
+  imageSrc: res.society_image_src
+})
 
- export const convertResToSocBasic = (res: resp_society_basic): SocietyBasic => {
-   return {
-     shortName: res.short_name,
-     imgSrc: res.society_image_src,
-     type: res.type
-   }
- }
+export const convertResToSocBasic = (res: resp_society_basic): SocietyBasic => ({
+  shortName: res.short_name,
+  imgSrc: res.society_image_src,
+  type: res.type
+})
 
- export const convertResToSocCard = (res: resp_society_card): SocietyCard => {
-  return {
-    id: res.society_id,
-    name: res.society_name,
-    colour: res.colour,
-    shortName: res.short_name,
-    imageSrc: res.society_image_src,
-    following: res.following
-  }
-}
+export const convertResToSocCard = (res: resp_society_card): SocietyCard => ({
+  id: res.society_id,
+  name: res.society_name,
+  colour: res.colour,
+  shortName: res.short_name,
+  imageSrc: res.society_image_src,
+  following: res.following
+})
+
+export const convertResToSocCal = (res: resp_society_cal): SocietyCal => ({
+  id: res.id,
+  name: res.name,
+  shortName: res.short,
+  colour: `#${res.colour}`
+})

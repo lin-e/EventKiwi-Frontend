@@ -3,6 +3,8 @@ const productionURL = "https://endpoint.drp.social";
 
 export const endpointURL = stagingURL;
 
+export const calendarEventsURL = `${endpointURL}/calendar`
+
 export const discoverEventCardURL = `${endpointURL}/events/cards/all`;
 export const discoverSeachEventCardURL = `${endpointURL}/events/search`;
 export const discoverSearchSocietyCardURL = `${endpointURL}/societies/search`;

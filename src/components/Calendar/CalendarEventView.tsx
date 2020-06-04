@@ -1,7 +1,7 @@
 import React from 'react';
 import { IonList, IonListHeader, IonItemGroup, IonItemDivider, IonLabel } from '@ionic/react'
 import './CalendarEventView.css'
-import { EventCardDetails } from '../../constants/types';
+import { CalendarEvent } from '../../constants/types';
 import { sameDay, getLongDate } from '../../utils/DateTimeTools';
 import CalendarEventItem from './CalendarEventItem';
 import { RootState } from '../../data/reducers';
@@ -11,10 +11,10 @@ import { Container } from 'react-grid-system';
 
 interface EventGroupByDate {
   date: Date,
-  events: EventCardDetails[]
+  events: CalendarEvent[]
 }
   
-function groupByDate(events: EventCardDetails[]) {
+function groupByDate(events: CalendarEvent[]) {
   if (events.length == 0) {
     return [];
   }
