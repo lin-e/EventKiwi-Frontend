@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { IonContent, IonPage, IonHeader, IonToolbar, IonButtons, IonBackButton, IonSegment, IonSegmentButton, IonLabel, IonIcon, IonFab, IonFabButton, IonFabList, IonToast } from '@ionic/react'
+import React, { useState, useRef } from 'react';
+import { IonContent, IonPage, IonHeader, IonToolbar, IonButtons, IonBackButton, IonSegment, IonSegmentButton, IonLabel, IonIcon, IonFab, IonFabButton, IonToast } from '@ionic/react'
 import EventDescription from '../components/ViewEventComponents/EventDescription';
 import "./ViewEvent.css";
 import EventPostsList from '../components/ViewEventComponents/EventPostsList';

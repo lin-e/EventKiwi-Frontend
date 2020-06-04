@@ -2,10 +2,8 @@ import React, { Component, createRef } from 'react';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, withIonLifeCycle, IonRefresher, IonRefresherContent } from '@ionic/react';
 import './Events.css';
 import CalendarEventView from '../components/Calendar/CalendarEventView';
-import { ThunkDispatch } from 'redux-thunk';
 import { fetchCalEvents } from '../data/actions/actions'
 import { loadBlankEvent } from '../data/actions/viewEvent/viewEventActions';
-import { bindActionCreators } from 'redux';
 import { connect, ConnectedProps } from 'react-redux';
 import { RootState } from '../data/reducers';
 import { Redirect } from 'react-router';
