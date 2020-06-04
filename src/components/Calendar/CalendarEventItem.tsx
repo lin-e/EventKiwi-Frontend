@@ -43,14 +43,14 @@ const CalendarEventItem: React.FC<CalendarEventItemProps> = ({ event, isFavourit
             </IonCol>
           </IonRow>
           <IonRow>
-            <IonCol size="5" className="detailCol">
+            <IonCol size="6" className="detailCol">
               <IonText color="medium">
                 <p className="eventDateTime">
                   {getDateRangeNoStartDate(event.datetimeStart, event.datetimeEnd)}
                 </p>
               </IonText>
             </IonCol>
-            <IonCol size="7" className="detailCol">
+            <IonCol size="6" className="detailCol">
               <IonText color="medium">
                 <p className="eventLocation">{event.location}</p>
               </IonText>
