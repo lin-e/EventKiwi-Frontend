@@ -52,8 +52,7 @@ export const blankSociety = {
 
 export interface InterestDetails {
   name: string,
-  numInterested: number,
-  interested: boolean
+  numInterested: number
 }
 
 export interface EventCardDetails {
@@ -210,9 +209,8 @@ export const convertResToProfileDetails = (res: resp_profile_details): ProfileDe
 })
 
 export const convertResToInterest = (res: resp_search_interests): InterestDetails => ({
-  name: res.name,
-  numInterested: res.followers,
-  interested: res.case
+  name: res.tag,
+  numInterested: res.count
 })
 
 export const convertResToSoc = (res: resp_society): Society => ({

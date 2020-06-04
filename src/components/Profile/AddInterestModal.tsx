@@ -26,21 +26,27 @@ const AddInterestModal: React.FC<AddInterestModalProps> = ({ searchResults, inte
   const [searchTerm, setsearchTerm] = useState("");
   
   const searchBarUpdate = (e: CustomEvent) => {
-    setsearchTerm(e.detail.value!.toLowerCase());
-    fetchSearchInterests(searchTerm, userToken);
+    if (e.detail.value === undefined) {
+      setsearchTerm("");
+      fetchSearchInterests("", userToken)
+    } else {
+      const newSearchTerm = e.detail.value!.trim().toLowerCase();
+      setsearchTerm(newSearchTerm);
+      fetchSearchInterests(newSearchTerm, userToken);
+    }
   }
 
   return (
     <IonContent>
       <div className="modalContainer">
         <h3 className="subtitle">Find an interest</h3>
-        <IonSearchbar placeholder="e.g. hockey, finance, dance" onIonChange={searchBarUpdate} />
+        <IonSearchbar placeholder="e.g. hockey, finance, dance" onIonChange={searchBarUpdate} debounce={500} enterkeyhint="search" type="search" />
         <IonList hidden={searchTerm === ""}>
           {searchTerm !== "" && searchResults.filter(intr => (intr.name === searchTerm)).length === 0 &&
-            <InterestItem interest={{
+            <InterestItem 
+              interest={{
                 name: searchTerm,
                 numInterested: 0,
-                interested: interests.includes(searchTerm)
               }}
             />
           }

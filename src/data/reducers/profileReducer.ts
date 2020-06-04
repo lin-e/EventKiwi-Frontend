@@ -31,17 +31,10 @@ export const profileDetailsReducer = (state = initialProfileDetailsState, action
         invalidResponse: false
       }
     case ADD_PROFILE_INTEREST:
-      const newInterests = state.profileDetails.interests
       if (!state.profileDetails.interests.includes(action.payload)) {
-        newInterests.push(action.payload)
+        state.profileDetails.interests.push(action.payload);
       }
-      return {
-        ...state,
-        profileDetails: {
-          ...state.profileDetails,
-          interests: newInterests
-        }
-      };
+      return state;
     case REMOVE_PROFILE_INTEREST:
       return {
         ...state,
