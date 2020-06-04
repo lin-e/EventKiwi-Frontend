@@ -2,11 +2,11 @@ import React from 'react';
 import './EventMiniCard.css';
 import { IonCard, IonCardContent, IonCardSubtitle, IonCardTitle, IonGrid, IonRow } from '@ionic/react';
 import { getDateRange } from '../utils/DateTimeTools';
-import { loadingEvent } from '../data/actions/viewEvent/viewEventActions';
+import { loadBlankEvent } from '../data/actions/viewEvent/viewEventActions';
 import { connect, ConnectedProps } from 'react-redux';
 
 
-const connector = connect(null, {loadingEvent})
+const connector = connect(null, {loadBlankEvent})
 
 type PropsFromRedux = ConnectedProps<typeof connector>
 type EventMiniCardProps = PropsFromRedux & {
@@ -19,10 +19,10 @@ type EventMiniCardProps = PropsFromRedux & {
   tab: string
 };
 
-const EventMiniCard: React.FC<EventMiniCardProps> = ({ eventName, organiser, image, eventStart, eventEnd, eventId, loadingEvent, tab}) => {
+const EventMiniCard: React.FC<EventMiniCardProps> = ({ eventName, organiser, image, eventStart, eventEnd, eventId, loadBlankEvent, tab}) => {
   const urlPrefix = tab !== "" ? `/${tab}` : "";
   return (
-    <IonCard onClick={loadingEvent} className="mini_card" routerLink={`${urlPrefix}/event/${eventId}`}>
+    <IonCard onClick={() => loadBlankEvent(tab)}  className="mini_card" routerLink={`${urlPrefix}/event/${eventId}`}>
 
       <img src={image} className="mini_banner"/>
 
