@@ -171,12 +171,24 @@ interface LoadUserDataAction {
 export type UserType = LoginAction | LoadUserDataAction | LogoutAction;
 
 export const GET_EVENT_POSTS = "GET_EVENT_POSTS";
+export const GET_DISCOVER_EVENT_POSTS = "GET_DISCOVER_EVENT_POSTS";
+export const GET_EVENTS_EVENT_POSTS = "GET_EVENTS_EVENT_POSTS";
 
 interface GetEventPostsAction {
    type: typeof GET_EVENT_POSTS,
    payload: Post[]
 }
 
-export type EventPostType = GetEventPostsAction;
+interface GetDiscoverEventPostsAction {
+   type: typeof GET_DISCOVER_EVENT_POSTS,
+   payload: Post[]
+}
+
+interface GetEventsEventPostsAction {
+   type: typeof GET_EVENTS_EVENT_POSTS,
+   payload: Post[]
+}
+
+export type EventPostType = GetEventPostsAction | GetDiscoverEventPostsAction | GetEventsEventPostsAction;
 
 export type AppActions = FetchSocietyType | FetchEventType | FetchCalType | FetchProfileType | ViewEventType | UserType | EventPostType;

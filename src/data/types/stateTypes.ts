@@ -18,7 +18,9 @@ export interface ViewEventState {
 }
 
 export interface EventPostsState {
-   posts: Post[]
+   posts: Post[],
+   discoverPosts: Post[],
+   eventsPost: Post[]
 }
 
 export interface UserState {

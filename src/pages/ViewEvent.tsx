@@ -136,7 +136,7 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
 
         <EventDescription tab={props.activeTab} hide={!details} />
 
-        <EventPostsList hide={!posts} />
+        <EventPostsList tab={props.activeTab} hide={!posts} />
 
         <EventResourcesList tab={props.activeTab} hide={!resources} />
 
