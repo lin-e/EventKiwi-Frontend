@@ -84,7 +84,7 @@ class Profile extends Component<ProfileProps, ProfileState> {
       <IonPage>
         <IonHeader>
           <IonToolbar>
-            <IonTitle>{this.props.profile ? `Hi ${this.props.profile.firstname}` : "My Profile"}</IonTitle>
+            <IonTitle>{this.props.profile ? this.props.profile.firstname : "My Profile"}</IonTitle>
           </IonToolbar>
         </IonHeader>
         <IonContent>
@@ -98,7 +98,7 @@ class Profile extends Component<ProfileProps, ProfileState> {
 
             <IonGrid>
               <IonRow>
-                <IonCol className="sectionHeader" size="8">
+                <IonCol className="sectionHeader">
                   <IonTitle className="profileTitle">My Societies</IonTitle>
                 </IonCol>
               </IonRow>
