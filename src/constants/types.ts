@@ -96,7 +96,7 @@ export const blankEventDetails = {
   id: "",
   name: "",
   organiser: blankSociety,
-  images: [],
+  images: ["https://shilohplainfield.org/images/Blank-photo-small.png"],
   location: "",
   datetimeStart: new Date(),
   datetimeEnd: new Date(),
