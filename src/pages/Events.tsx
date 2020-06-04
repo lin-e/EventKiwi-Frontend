@@ -1,10 +1,9 @@
 import React, { Component, createRef } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, withIonLifeCycle } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, withIonLifeCycle, IonRefresher, IonRefresherContent } from '@ionic/react';
 import './Events.css';
 import CalendarEventView from '../components/Calendar/CalendarEventView';
 import { ThunkDispatch } from 'redux-thunk';
-import { AppActions } from '../data/actions/types';
-import { startFetchCalEvents } from '../data/actions/actions';
+import { fetchCalEvents } from '../data/actions/actions'
 import { loadBlankEvent } from '../data/actions/viewEvent/viewEventActions';
 import { bindActionCreators } from 'redux';
 import { connect, ConnectedProps } from 'react-redux';
@@ -13,16 +12,14 @@ import { Redirect } from 'react-router';
 
 const mapStateToProps = (state: RootState) => ({
   isLoggedIn: state.userDetails.isLoggedIn,
-  isLoading: state.userDetails.loading
+  isLoading: state.userDetails.loading,
+  userToken: state.userDetails.userToken
 })
 
-const connector = connect(
-  mapStateToProps,
-  { startFetchCalEvents, loadBlankEvent }
-)
+const connector = connect(mapStateToProps, { fetchCalEvents, loadBlankEvent });
 
-type PropsFromRedux = ConnectedProps<typeof connector>
-type EventsProps = PropsFromRedux;
+type PropsFromRedux = ConnectedProps<typeof connector>;
+type EventsProps = PropsFromRedux
 
 class Events extends Component<EventsProps> {
   refresherRef: React.RefObject<HTMLIonRefresherElement>;
@@ -34,11 +31,16 @@ class Events extends Component<EventsProps> {
   }
 
   componentDidMount() {
-    this.refresh();
+    // TODO: Change implementation to more correct way on waiting on user token to load in
+    if(this.props.userToken === "") {
+      setTimeout(this.refresh, 150)
+    } else {
+      this.refresh()
+    }
   }
 
   refresh() {
-    this.props.startFetchCalEvents();
+    this.props.fetchCalEvents(this.refresherRef.current!, this.props.userToken);
   }
 
   ionViewWillEnter() {
@@ -59,9 +61,9 @@ class Events extends Component<EventsProps> {
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        {/* <IonRefresher ref={this.refresherRef} slot="fixed" onIonRefresh={this.refresh}>
+        <IonRefresher ref={this.refresherRef} slot="fixed" onIonRefresh={this.refresh}>
           <IonRefresherContent></IonRefresherContent>
-        </IonRefresher> */}
+        </IonRefresher>
 
           <CalendarEventView />
       </IonContent>
@@ -69,13 +71,5 @@ class Events extends Component<EventsProps> {
     );
   }
 }
-
-interface LinkDispatchProps {
-  startFetchCalEvents: () => void;
-}
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AppActions>): LinkDispatchProps => ({
-  startFetchCalEvents: bindActionCreators(startFetchCalEvents, dispatch)
-})
 
 export default connector(withIonLifeCycle(Events));

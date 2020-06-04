@@ -1,4 +1,4 @@
-import { EventCardDetails, ProfileDetails, EventDetails, Society, SocietyCard, Post } from "../../constants/types";
+import { EventCardDetails, ProfileDetails, EventDetails, Society, SocietyCard, Post, CalendarEvent, InterestDetails } from "../../constants/types";
 import { AuthResponse } from "../types/dataInterfaces";
 import { UserState } from "../types/stateTypes";
 import { ViewEventType } from "./viewEvent/viewEventTypes";
@@ -45,7 +45,7 @@ export const FETCH_CAL_EVENTS = "FETCH_CAL_EVENTS";
 
 export interface FetchCalendarEventsAction {
    type: typeof FETCH_CAL_EVENTS,
-   payload: EventCardDetails[]
+   payload: CalendarEvent[]
 }
 
 export type FetchCalType = FetchCalendarEventsAction;
@@ -82,7 +82,17 @@ export interface RemoveProfileInterestAction {
    payload: string
 }
 
-export type FetchProfileType =  FetchProfileDetailsAction | FetchProfileDetailsFailedAction | ResetProfileInvalidResponseAction | AddProfileInterestAction | RemoveProfileInterestAction;
+export type FetchProfileType =  FetchProfileDetailsAction | FetchProfileDetailsFailedAction | ResetProfileInvalidResponseAction | FetchSearchInterestsAction | AddProfileInterestAction | RemoveProfileInterestAction;
+
+
+export const FETCH_SEARCH_INTERESTS = "FETCH_SEARCH_INTERESTS"
+
+export interface FetchSearchInterestsAction {
+   type: typeof FETCH_SEARCH_INTERESTS,
+   payload: InterestDetails[]
+}
+
+export type FetchInterestType = FetchSearchInterestsAction;
 
 
 export const USER_LOGIN = "USER_LOGIN";
@@ -125,5 +135,3 @@ interface GetEventsEventPostsAction {
 }
 
 export type EventPostType = GetEventPostsAction | GetDiscoverEventPostsAction | GetEventsEventPostsAction;
-
-export type AppActions = FetchSocietyType | FetchEventType | FetchCalType | FetchProfileType | ViewEventType | UserType | EventPostType;
