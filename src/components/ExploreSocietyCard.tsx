@@ -1,40 +1,64 @@
-import React, { useState } from 'react';
-import { IonCardHeader, IonCard, IonGrid, IonCol, IonThumbnail, IonIcon, IonRow, IonLabel, IonItem, IonButton } from '@ionic/react';
+import React, { useState, MouseEvent } from 'react';
+import { IonGrid, IonCol, IonRow, IonLabel, IonItem, IonButton } from '@ionic/react';
 import { Row, Col } from 'react-grid-system';
 import "./ExploreSocietyCard.css"
+import { connect, ConnectedProps } from 'react-redux';
+import { SocietyCard } from '../constants/types';
+import { RootState } from '../data/reducers';
+import { followSociety, unfollowSociety } from '../data/actions/actions'
+import { FOLLOWING } from '../constants/constants';
 
-interface ExploreSocietyCardProps {
-  societyName: string,
-  numFollowers: number,
-  imgSrc: string,
-  following: boolean
+
+const NUM_FOLLOWERS = 0;
+
+const mapStateToProps = (state: RootState) => {
+  return {
+    userToken: state.userDetails.userToken
+  }
 }
 
-const ExploreSocietyCard: React.FC<ExploreSocietyCardProps> = ({societyName, numFollowers, imgSrc, following}) => {
+const connector = connect(mapStateToProps, { followSociety, unfollowSociety });
 
-  const [isFollowing, setisFollowing] = useState(following);
+interface OwnProps {
+  soc: SocietyCard
+}
 
+type PropsFromRedux = ConnectedProps<typeof connector>
+type ExploreSocietyCardProps = OwnProps & PropsFromRedux
+
+const ExploreSocietyCard: React.FC<ExploreSocietyCardProps> = ({ soc, userToken, followSociety, unfollowSociety }) => {
+  
+  const toggleFollow = (e: MouseEvent) => {
+    e.preventDefault();
+    
+    if (soc.following >= FOLLOWING) {
+      unfollowSociety(soc.id, userToken);
+    } else {
+      followSociety(soc.id, userToken)
+    }
+    
+  }
   return (
-    <IonItem className="socItem">
+    <IonItem className="socItem fadeIn">
       <IonGrid>
         <IonRow>
           <IonCol size="3">
-            <img src={imgSrc} className="socLogo"/>
+            <img src={soc.imageSrc} className="socLogo"/>
           </IonCol>
           <IonCol size="9">
             <IonLabel className="ion-text-wrap">
-              <h2>{societyName}</h2>
+              <h2>{soc.name}</h2>
             </IonLabel>
             <Row>
               <Col xs={6} className="followerText">
                 <IonLabel>
-                  <p>{`${numFollowers} followers`}</p>
+                  <p>{`${NUM_FOLLOWERS} followers`}</p>
                 </IonLabel>
               </Col>
               <Col xs={6}>
-                {isFollowing ? 
-                  <IonButton className="followBtn" fill="outline" onClick={() => setisFollowing(false)}>Following</IonButton> :
-                  <IonButton className="followBtn" fill="solid" onClick={() => setisFollowing(true)}>Follow</IonButton>
+                {soc.following >= FOLLOWING ? 
+                  <IonButton className="followBtn" fill="outline" onClick={toggleFollow}>Following</IonButton> :
+                  <IonButton className="followBtn" fill="solid" onClick={toggleFollow}>Follow</IonButton>
                 }
               </Col>
             </Row>             
@@ -45,4 +69,4 @@ const ExploreSocietyCard: React.FC<ExploreSocietyCardProps> = ({societyName, num
   );
 }
 
-export default ExploreSocietyCard;
+export default connector(ExploreSocietyCard);

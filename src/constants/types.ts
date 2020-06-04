@@ -1,4 +1,4 @@
-import { resp_event_post_organiser, resp_event_posts, resp_post, resp_resource, resp_event_details, resp_event_card_details, resp_profile_details, resp_society, resp_society_basic } from "./RequestInterfaces"
+import { resp_event_post_organiser, resp_event_posts, resp_post, resp_resource, resp_event_details, resp_event_card_details, resp_profile_details, resp_society, resp_society_basic, resp_society_card } from "./RequestInterfaces"
 
 
 export interface ProfileDetails {
@@ -24,6 +24,15 @@ export interface SocietyBasic {
   imgSrc: string,
   shortName: string,
   type: number
+}
+
+export interface SocietyCard {
+  id: string;
+  name: string;
+  imageSrc: string;
+  shortName: string;
+  colour: string;
+  following: number;
 }
 
 export const blankSociety = {
@@ -186,3 +195,14 @@ export const convertResToEventDetails = (res: resp_event_details): EventDetails 
      type: res.type
    }
  }
+
+ export const convertResToSocCard = (res: resp_society_card): SocietyCard => {
+  return {
+    id: res.society_id,
+    name: res.society_name,
+    colour: res.colour,
+    shortName: res.short_name,
+    imageSrc: res.society_image_src,
+    following: res.following
+  }
+}

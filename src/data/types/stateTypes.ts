@@ -1,9 +1,9 @@
+import { EventCardDetails, Post, ProfileDetails, EventDetails, SocietyCard } from "../../constants/types";
 
 import { UserProfile } from "./dataInterfaces";
-import { Society, EventCardDetails, EventDetails, Post, ProfileDetails } from "../../constants/types";
 
 export interface SocietyCardState {
-   societies: Society[]
+   societies: SocietyCard[]
 }
 
 export interface EventCardState {
