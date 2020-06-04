@@ -32,6 +32,10 @@
     padding: 0px;
 }
 
+.goingStatusSymbol {
+    text-align: end;
+}
+
 .heartIcon {
     color: #ffffff !important;
     size: 36px;

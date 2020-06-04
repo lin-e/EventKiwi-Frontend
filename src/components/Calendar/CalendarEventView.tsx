@@ -1,5 +1,5 @@
 import React from 'react';
-import { IonList, IonListHeader, IonItemGroup, IonItemDivider, IonLabel } from '@ionic/react'
+import { IonList, IonItemGroup, IonItemDivider, IonLabel } from '@ionic/react'
 import './CalendarEventView.css'
 import { CalendarEvent } from '../../constants/types';
 import { sameDay, getLongDate } from '../../utils/DateTimeTools';
