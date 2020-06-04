@@ -1,4 +1,4 @@
-import React, { Component, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import ViewEvent from './ViewEvent';
 import { RouteComponentProps } from 'react-router';
 import { RootState } from '../data/reducers';
@@ -17,11 +17,11 @@ const mapStateToProps = (state: RootState) => ({
 
 const connector = connect(mapStateToProps, { loadEventDetails, loadBlankEvent, loadingEvent, loadEventPosts })
 type PropsFromRedux = ConnectedProps<typeof connector>
-type EventsTabEventPageProps = OwnProps & PropsFromRedux;
+type StandaloneEventPageProps = OwnProps & PropsFromRedux;
 
-const tab = "events"
+const tab = ""
 
-const EventsTabEventPage: React.FC<EventsTabEventPageProps> = (props) => {
+const StandaloneEventPage: React.FC<StandaloneEventPageProps> = (props) => {
    useEffect(() => {
       props.loadEventDetails(props.match.params.id, tab, props.userToken);
       props.loadEventPosts(props.match.params.id, tab, props.userToken);
@@ -32,4 +32,4 @@ const EventsTabEventPage: React.FC<EventsTabEventPageProps> = (props) => {
    )
 }
 
-export default connector(EventsTabEventPage);
+export default connector(StandaloneEventPage);

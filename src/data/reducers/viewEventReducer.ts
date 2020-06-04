@@ -1,6 +1,21 @@
 import { ViewEventState } from "../types/stateTypes";
 import { blankEventDetails } from "../../constants/types";
-import { ViewEventType, LOAD_EVENT_DETAILS, LOADING_EVENT, EVENT_NOT_GOING, EVENT_INTERESTED, EVENT_GOING, LOAD_BLANK_EVENT_DETAILS, EVENTS_LOAD_EVENT_DETAILS, DISCOVER_LOAD_EVENT_DETAILS, EVENTS_EVENT_GOING, EVENTS_EVENT_NOT_GOING, EVENTS_EVENT_INTERESTED, DISCOVER_EVENT_GOING, DISCOVER_EVENT_NOT_GOING, DISCOVER_EVENT_INTERESTED } from "../actions/types";
+import { ViewEventType, 
+         LOAD_EVENT_DETAILS, 
+         LOADING_EVENT,
+         EVENT_NOT_GOING, 
+         EVENT_INTERESTED, 
+         EVENT_GOING, 
+         LOAD_BLANK_EVENT_DETAILS, 
+         EVENTS_LOAD_EVENT_DETAILS, 
+         DISCOVER_LOAD_EVENT_DETAILS, 
+         EVENTS_EVENT_GOING, EVENTS_EVENT_NOT_GOING, 
+         EVENTS_EVENT_INTERESTED, 
+         DISCOVER_EVENT_GOING, 
+         DISCOVER_EVENT_NOT_GOING, 
+         DISCOVER_EVENT_INTERESTED, 
+         LOAD_EVENTS_BLANK_EVENT_DETAILS, 
+         LOAD_DISCOVER_BLANK_EVENT_DETAILS} from "../actions/viewEvent/viewEventTypes";
 import { NOT_GOING, GOING, INTERESTED } from "../../constants/constants";
 
 const initialState: ViewEventState = {
@@ -39,7 +54,19 @@ export function viewEventReducer(state = initialState, action: ViewEventType): V
             ...state,
             event: blankEventDetails
          }
-         
+      
+      case LOAD_EVENTS_BLANK_EVENT_DETAILS:
+         return {
+            ...state,
+            eventsEvent: blankEventDetails
+         }
+
+      case LOAD_DISCOVER_BLANK_EVENT_DETAILS:
+         return {
+            ...state,
+            discoverEvent: blankEventDetails
+         }
+
       case LOADING_EVENT:
          return {
             ...state,

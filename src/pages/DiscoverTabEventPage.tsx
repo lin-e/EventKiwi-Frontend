@@ -3,7 +3,7 @@ import ViewEvent from './ViewEvent';
 import { RouteComponentProps } from 'react-router';
 import { RootState } from '../data/reducers';
 import { ConnectedProps, connect } from 'react-redux';
-import { loadEventDetails, loadingEvent, loadBlankEvent } from '../data/actions/viewEventActions';
+import { loadEventDetails, loadingEvent, loadBlankEvent } from '../data/actions/viewEvent/viewEventActions';
 import { loadEventPosts } from '../data/actions/eventPostsActions';
 
 interface OwnProps extends RouteComponentProps<{ id: string }> { };
@@ -24,7 +24,7 @@ const tab = "discover"
 const DiscoverTabEventPage: React.FC<DiscoverTabEventPageProps> = (props) => {
    useEffect(() => {
       props.loadEventDetails(props.match.params.id, tab, props.userToken);
-      props.loadEventPosts(props.match.params.id, props.userToken);
+      props.loadEventPosts(props.match.params.id, tab, props.userToken);
    }, [props.match.params.id, props.userToken]);
 
    return (

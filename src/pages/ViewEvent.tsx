@@ -6,7 +6,7 @@ import EventPostsList from '../components/ViewEventComponents/EventPostsList';
 import EventResourcesList from '../components/ViewEventComponents/EventResourcesList';
 import { shareOutline } from 'ionicons/icons';
 import { connect, ConnectedProps } from 'react-redux';
-import { loadEventDetails, loadingEvent, loadBlankEvent, goingToEvent, interestedInEvent, notGoingToEvent } from '../data/actions/viewEventActions';
+import { loadEventDetails, loadingEvent, loadBlankEvent, goingToEvent, interestedInEvent, notGoingToEvent } from '../data/actions/viewEvent/viewEventActions';
 import { loadEventPosts } from '../data/actions/eventPostsActions';
 import { RootState } from '../data/reducers';
 import { isPlatform } from '@ionic/react';
@@ -136,9 +136,9 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
 
         <EventDescription tab={props.activeTab} hide={!details} />
 
-        <EventPostsList hide={!posts} />
+        <EventPostsList tab={props.activeTab} hide={!posts} />
 
-        <EventResourcesList hide={!resources} />
+        <EventResourcesList tab={props.activeTab} hide={!resources} />
 
         <IonFab vertical="bottom" horizontal="end" slot="fixed">
           <IonFabButton onClick={shareClicked} color="primary">

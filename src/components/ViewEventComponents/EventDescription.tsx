@@ -9,7 +9,7 @@ import { RootState } from '../../data/reducers';
 import { ConnectedProps, connect } from 'react-redux';
 import { checkmarkCircleOutline, starOutline } from 'ionicons/icons';
 import { INTERESTED, GOING } from '../../constants/constants';
-import { goingToEvent, interestedInEvent, notGoingToEvent } from '../../data/actions/viewEventActions';
+import { goingToEvent, interestedInEvent, notGoingToEvent } from '../../data/actions/viewEvent/viewEventActions';
 
 const mapStateToProps = (state: RootState) => ({
    event: state.viewEvent.event,
