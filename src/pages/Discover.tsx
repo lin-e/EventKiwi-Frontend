@@ -111,9 +111,10 @@ class Discover extends Component<DiscoverProps, DiscoverState> {
           <IonRefresherContent></IonRefresherContent>
         </IonRefresher>
 
-        <IonSearchbar ref={this.searchBar} onIonChange={this.searchBarUpdate} debounce={500} enterkeyhint="search" type="search"/>
         
         <Container>
+          <IonSearchbar ref={this.searchBar} onIonChange={this.searchBarUpdate} debounce={500} enterkeyhint="search" type="search"/>
+          
           {(this.state.searchTerm !== "" && this.props.societies.length !== 0) &&
               <IonGrid>
                 <IonRow>

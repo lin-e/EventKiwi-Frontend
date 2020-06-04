@@ -142,5 +142,3 @@ interface GetEventPostsAction {
 }
 
 export type EventPostType = GetEventPostsAction;
-
-export type AppActions = FetchSocietyType | FetchEventType | FetchCalType | FetchProfileType | ViewEventType | UserType | EventPostType;

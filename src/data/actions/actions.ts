@@ -1,9 +1,9 @@
 import { ThunkAction } from "redux-thunk"
 import { RootState } from "../reducers"
 import { Action } from "redux"
-import { FETCH_EVENTS_CARDS, FETCH_SEARCH_EVENT_CARDS, FETCH_CAL_EVENTS, AppActions, FETCH_PROFILE_DETAILS, REMOVE_PROFILE_INTEREST, FETCH_PROFILE_DETAILS_FAILED, RESET_PROFILE_INVALID_RESPONSE, ADD_PROFILE_INTEREST, FETCH_SEARCH_SOCIETY_CARDS, FOLLOW_SOCIETY, UNFOLLOW_SOCIETY } from "./types"
+import { FETCH_EVENTS_CARDS, FETCH_SEARCH_EVENT_CARDS, FETCH_CAL_EVENTS, FETCH_PROFILE_DETAILS, REMOVE_PROFILE_INTEREST, FETCH_PROFILE_DETAILS_FAILED, RESET_PROFILE_INVALID_RESPONSE, ADD_PROFILE_INTEREST, FETCH_SEARCH_SOCIETY_CARDS, FOLLOW_SOCIETY, UNFOLLOW_SOCIETY } from "./types"
 import { discoverEventCardURL, discoverSeachEventCardURL, profileDetailsURL, profileInterestDeleteURL, profileInterestAddURL, discoverSearchSocietyCardURL, followSocietyURL, unfollowSocietyURL, calendarEventsURL } from "../../constants/endpoints"
-import { resp_event_card_details, resp_profile_details, resp_society, resp_society_card, resp_calendar_event } from "../../constants/RequestInterfaces"
+import { resp_event_card_details, resp_profile_details, resp_society_card, resp_calendar_event } from "../../constants/RequestInterfaces"
 import { convertResToEventCard, convertResToProfileDetails, convertResToSocCard, convertResToCalEvent } from "../../constants/types"
 
 export type AppThunk<ReturnType = void> = ThunkAction<
