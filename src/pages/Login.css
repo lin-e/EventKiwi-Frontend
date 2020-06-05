@@ -4,7 +4,7 @@
    margin-right: auto;
 }
 
-.test {
+.centred {
    position: relative;
    top: 50%;
    bottom: 50%;
@@ -18,15 +18,6 @@
    --ion-color-contrast-rgb: 255, 255, 255;
    --ion-color-shade: #02386c;
    --ion-color-tint: #1b5388;
-}
-
-.ion-color-imperialLight {
-   --ion-color-base: #a7bdd2;
-   --ion-color-base-rgb: 167, 189, 210;
-   --ion-color-contrast: #000000;
-   --ion-color-contrast-rgb: 0, 0, 0;
-   --ion-color-shade: #93a6b9;
-   --ion-color-tint: #b0c4d7;
 }
 
 .sk {
