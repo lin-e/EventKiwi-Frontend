@@ -2,6 +2,7 @@ image: line5/drp-backend:latest
 
 stages:
   - build
+  - test
   - deploy
 
 build:
@@ -14,12 +15,21 @@ build:
   except:
     - staging
 
+test:
+  stage: test
+  script:
+    - npm install
+    - npm test
+  except:
+    - staging
+
 staging:
   type: deploy
   stage: deploy
   script:
     - dpl --provider=heroku --app=$HEROKU_APP_STAGING --api-key=$HEROKU_API_KEY
   only:
+    - master
     - staging
 
 production:
@@ -29,4 +39,3 @@ production:
     - dpl --provider=heroku --app=$HEROKU_APP_PRODUCTION --api-key=$HEROKU_API_KEY
   only:
     - master
-    - staging

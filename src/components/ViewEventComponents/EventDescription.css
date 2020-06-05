@@ -1,0 +1,45 @@
+.eventImage {
+    width: fit-content;
+    object-fit: cover;
+}
+
+@media only screen and (min-width: 900px) {
+    .eventImage {
+        height: 35vh !important;
+    }
+}
+
+@media only screen and (max-width: 900px) {
+    .eventImage {
+        height: 30vh !important;
+    }
+    .suggestedEvents {
+        width: fit-content;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .eventImage {
+        height: 25vh !important;
+    }
+}
+
+.eventImageCard {
+    width: 100%;
+    margin-left: 0px;
+    align-content: flex-start;
+    height: auto;
+}
+
+.attendBtn {
+    min-width: 300px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    float: inline-end;
+}
+
+.suggestedEvents {
+    /* width: fit-content; */
+    object-fit: cover;
+    margin-left: -20px;
+}

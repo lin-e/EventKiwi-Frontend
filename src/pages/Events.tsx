@@ -1,28 +1,58 @@
-import React, { Component } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import ExploreContainer from '../components/ExploreContainer';
+import React, { useEffect } from 'react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonRefresher, IonRefresherContent, useIonViewDidEnter } from '@ionic/react';
 import './Events.css';
+import CalendarEventView from '../components/Calendar/CalendarEventView';
+import { fetchCalEvents } from '../data/actions/actions'
+import { loadBlankEvent } from '../data/actions/viewEvent/viewEventActions';
+import { connect, ConnectedProps } from 'react-redux';
+import { RootState } from '../data/reducers';
+import { Redirect } from 'react-router';
 
-class Events extends Component {
-  render() {
-    return (
-      <IonPage>
+const mapStateToProps = (state: RootState) => ({
+  isLoggedIn: state.userDetails.isLoggedIn,
+  isLoading: state.userDetails.loading,
+  userToken: state.userDetails.userToken
+})
+
+const connector = connect(mapStateToProps, { fetchCalEvents, loadBlankEvent });
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+type EventsProps = PropsFromRedux
+const Events: React.FC<EventsProps> = (props) => {
+
+  const refresherRef = React.useRef<HTMLIonRefresherElement>(null);
+
+  const refresh = () => {
+    props.fetchCalEvents(refresherRef.current!, props.userToken);
+  }
+
+  useEffect(() => { refresh() }, [props.userToken])
+
+  useIonViewDidEnter(() => {
+    props.loadBlankEvent("events");
+  });
+
+
+  if (!props.isLoggedIn && !props.isLoading) {
+    return <Redirect to="/auth" />
+  }
+
+  return (
+    <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Events</IonTitle>
+          <IonTitle>Your Events</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">Events</IonTitle>
-          </IonToolbar>
-        </IonHeader>
-        <ExploreContainer name="Tab 1 page" />
+        <IonRefresher ref={refresherRef} slot="fixed" onIonRefresh={refresh}>
+          <IonRefresherContent></IonRefresherContent>
+        </IonRefresher>
+
+        <CalendarEventView />
       </IonContent>
     </IonPage>
-    );
-  }
+  );
 }
 
-export default Events;
+export default connector(Events);

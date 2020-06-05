@@ -1,0 +1,50 @@
+.profileContainer {
+    margin-top: 16px;
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+}
+
+.sectionHeader {
+    vertical-align: middle;
+    height: 42px;
+}
+
+.profileTitle {
+    padding: 0px;
+    padding-left: 8px;
+    text-align: left;
+    font-size: 24px;
+    min-height: 24px;
+}
+
+.profileBtn {
+    padding: 0px;
+    float: right;
+    height: 32px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    color: var(--ion-color-primary);
+}
+
+@media only screen and (max-width: 900px) {
+    .sectionContent {
+        width: fit-content;
+    }
+}
+
+.sectionContent {
+    overflow: hidden;
+    margin-bottom: 48px;
+    background-color: var(--ion-color-light);
+    border-radius: 25px;
+    min-width: 100%;
+    min-height: 48px;
+}
+
+.interests {
+    padding: 4px;
+}
+
+.dismissBtn {
+    margin: 8px;
+}

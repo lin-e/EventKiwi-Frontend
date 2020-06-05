@@ -1,0 +1,35 @@
+.fadeOut{
+   opacity: 0;
+   transition: opacity 0s;
+
+}
+.fadeIn{
+   opacity: 1;
+   transition: opacity 0.1s;
+}
+.footer {
+   max-height: 8vh;
+}
+
+.buttons {
+   object-fit: cover;
+   height: fit-content;
+   bottom: 30%;
+   width: 90%;
+   margin-left: auto !important;
+   margin-right: auto !important;
+   height: auto;
+   padding: auto;
+   margin: 10px;
+}
+
+
+.fadeOut{
+   opacity: 0;
+   transition: opacity 0s;
+
+}
+.fadeIn{
+   opacity: 1;
+   transition: opacity 0.1s;
+}

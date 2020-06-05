@@ -1,0 +1,51 @@
+.eventItem {
+    border-left: 2px solid var(--socCol, #a7bdd2);
+    padding-left: 8px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    margin-left: 0px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.eventName {
+    font-size: medium;
+    margin-bottom: 0px;
+    margin-top: 0px;
+}
+
+.eventDateTime {
+    font-size: small;
+    margin-bottom: 0px;
+    margin-top: 0px;
+    text-align: start;
+}
+
+.eventLocation {
+    font-size: small;
+    margin-bottom: 0px;
+    margin-top: 0px;
+    text-align: end;
+}
+
+.detailCol {
+    padding: 0px;
+}
+
+.goingStatusSymbol {
+    text-align: end;
+}
+
+.heartIcon {
+    color: #ffffff !important;
+    size: 36px;
+}
+
+.ion-color-favourite {
+    --ion-color-base: #ff97c1;
+    --ion-color-base-rgb: 255, 151, 193;
+    --ion-color-contrast: #ffffff;
+    --ion-color-contrast-rgb: 0, 0, 0;
+    --ion-color-shade: #e085aa;
+    --ion-color-tint: #ffa1c7;
+}

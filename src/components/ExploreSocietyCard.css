@@ -1,0 +1,28 @@
+.fadeIn {
+    opacity: 1;
+    transition: opacity 1s;
+}
+
+.socItem {
+    border-radius: 4px;
+    max-height: 120px;
+    object-fit: contain;
+}
+
+.socLogo {
+    height: 75px !important;
+    width: 75px !important;
+    border-radius: 50% !important;
+}
+
+.socInfo {
+    word-wrap: break-word !important;
+}
+
+.followBtn {
+    float: right;
+}
+
+.followerText {
+    margin-top: 8px;
+}
