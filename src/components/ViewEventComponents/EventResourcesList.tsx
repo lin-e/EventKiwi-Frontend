@@ -6,36 +6,35 @@ import CentredTextContainer from '../CentredTextContainer';
 import { resourceDownloadURL } from '../../constants/endpoints';
 import { RootState } from '../../data/reducers';
 import { connect, ConnectedProps } from 'react-redux';
+import { Resource } from '../../constants/types';
 
-const mapStateToProps = (state: RootState) => ({
-   resources: state.viewEvent.event.resources,
-   eResources: state.viewEvent.eventsEvent.resources,
-   dResources: state.viewEvent.discoverEvent.resources,
-   organiserName: state.viewEvent.event.organiser.name
-})
+// const mapStateToProps = (state: RootState) => ({
+//    resources: state.viewEvent.event.resources,
+//    eResources: state.viewEvent.eventsEvent.resources,
+//    dResources: state.viewEvent.discoverEvent.resources,
+//    organiserName: state.viewEvent.event.organiser.name
+// })
 
-const connector = connect(mapStateToProps)
+// const connector = connect(mapStateToProps)
 
 interface OwnProps {
    hide: boolean,
-   tab: string
+   tab: string,
+   resources: Resource[]
 }
 
-type PropsFromRedux = ConnectedProps<typeof connector>
-type EventResourcesListProps = PropsFromRedux & OwnProps;
+// type PropsFromRedux = ConnectedProps<typeof connector>
+type EventResourcesListProps = OwnProps;
 const EventResourcesList: React.FC<EventResourcesListProps> = (props) => {
-
-   const resources = props.tab === "events" ? props.eResources : (props.tab === "discover" ? props.dResources : props.resources);
-
    return (
       <div style={props.hide ? { display: "none" } : {}}>
-         {resources.length === 0 &&
+         {props.resources.length === 0 &&
             <CentredTextContainer name={"No resources for this event"} />
          }
 
-         {resources.length > 0 &&
+         {props.resources.length > 0 &&
             <IonList>
-               {resources.map(resource => {
+               {props.resources.map(resource => {
                   return (
                      <IonItemSliding key={`event-resource-${resource.id}`}>
                         <IonItem href={resourceDownloadURL(resource.id)} detail download={resource.name}>
@@ -57,4 +56,4 @@ const EventResourcesList: React.FC<EventResourcesListProps> = (props) => {
    )
 }
 
-export default connector(EventResourcesList);
+export default EventResourcesList;

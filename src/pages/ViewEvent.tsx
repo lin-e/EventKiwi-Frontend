@@ -5,13 +5,16 @@ import "./ViewEvent.css";
 import EventPostsList from '../components/ViewEventComponents/EventPostsList';
 import EventResourcesList from '../components/ViewEventComponents/EventResourcesList';
 import { shareOutline } from 'ionicons/icons';
-import { connect, ConnectedProps } from 'react-redux';
+import { connect, ConnectedProps, useSelector } from 'react-redux';
 import { loadEventDetails, loadingEvent, loadBlankEvent, goingToEvent, interestedInEvent, notGoingToEvent } from '../data/actions/viewEvent/viewEventActions';
 import { loadEventPosts } from '../data/actions/eventPostsActions';
 import { RootState } from '../data/reducers';
 import { isPlatform } from '@ionic/react';
 import { Plugins } from '@capacitor/core';
+import { blankEventDetails, EventDetails } from '../constants/types';
 const { Share } = Plugins;
+
+const eventWithId = (state: RootState) => (id: string) => state.viewEvent.events.filter(e => e.id === id);
 
 interface OwnProps {
   eventId: string,
@@ -22,7 +25,7 @@ const mapStateToProps = (state: RootState) => ({
   userToken: state.userDetails.userToken,
   isLoading: state.viewEvent.loading,
   isLoggedIn: state.userDetails.isLoggedIn,
-  goingStatus: state.viewEvent.event.goingStatus
+  events: state.viewEvent.events
 })
 
 const connector = connect(mapStateToProps, { loadEventDetails, loadBlankEvent, loadingEvent, goingToEvent, interestedInEvent, notGoingToEvent, loadEventPosts })
@@ -48,6 +51,10 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
   const shareUrl = `https://drp.social/event/${props.eventId}`;
 
   const contentRef = React.useRef<HTMLIonContentElement>(null);
+
+  const eventsWithMatchingId: EventDetails[] = useSelector(eventWithId)(props.eventId)
+  const eventDescription = eventsWithMatchingId.length > 0 ? eventsWithMatchingId[0] : blankEventDetails;
+  const goingStatus = eventDescription.goingStatus
 
   const resetView = () => {
     setDetailsY(0);
@@ -120,7 +127,7 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
 
       <IonHeader>
         <IonToolbar>
-          <IonButtons  slot="start">
+          <IonButtons slot="start">
             <IonBackButton text="" defaultHref={`/${props.activeTab}`} />
           </IonButtons>
           <IonSegment value={segment} onIonChange={changeTab}>
@@ -139,11 +146,11 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
 
       <IonContent ref={contentRef} scrollEvents onIonScroll={(e) => saveY(e.detail.currentY)} className={!props.isLoading ? 'fadeIn' : 'fadeOut'}>
 
-        <EventDescription tab={props.activeTab} hide={!details} />
+        <EventDescription goingStatus={goingStatus} eventId={props.eventId} eventDescription={eventDescription} tab={props.activeTab} hide={!details} />
 
         <EventPostsList tab={props.activeTab} hide={!posts} />
 
-        <EventResourcesList tab={props.activeTab} hide={!resources} />
+        <EventResourcesList resources={eventDescription.resources} tab={props.activeTab} hide={!resources} />
 
         <IonFab vertical="bottom" horizontal="end" slot="fixed">
           <IonFabButton onClick={shareClicked} color="primary">

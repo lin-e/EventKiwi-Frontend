@@ -11,8 +11,7 @@ interface OwnProps extends RouteComponentProps<{ id: string }> { };
 const mapStateToProps = (state: RootState) => ({
    userToken: state.userDetails.userToken,
    isLoading: state.viewEvent.loading,
-   isLoggedIn: state.userDetails.isLoggedIn,
-   goingStatus: state.viewEvent.event.goingStatus
+   isLoggedIn: state.userDetails.isLoggedIn
 })
 
 const connector = connect(mapStateToProps, { loadEventDetails, loadBlankEvent, loadingEvent, loadEventPosts })
