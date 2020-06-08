@@ -5,7 +5,7 @@ import { CalendarEvent } from '../../constants/types';
 import { sameDay, getLongDate } from '../../utils/DateTimeTools';
 import CalendarEventItem from './CalendarEventItem';
 import { RootState } from '../../data/reducers';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import EmptySectionText from '../EmptySectionText';
 import { Container } from 'react-grid-system';
 
@@ -40,9 +40,21 @@ function groupByDate(events: CalendarEvent[]) {
   return groupedItems;
 }
 
-type Props = LinkStateProps
+interface OwnProps {
+  hide: boolean
+}
 
-const CalendarEventView: React.FC<Props> = ({groupedEvents, loadingUser}) => {
+const mapStateToProps = (state: RootState) => ({
+  groupedEvents: groupByDate(state.calEvents.events),
+  loadingUser: state.userDetails.loading
+})
+
+const connector = connect(mapStateToProps)
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+type CalendarEventViewProps = OwnProps & PropsFromRedux;
+
+const CalendarEventView: React.FC<CalendarEventViewProps> = ({hide, groupedEvents, loadingUser}) => {
   if (!loadingUser && groupedEvents === []) {
     return (
       <EmptySectionText mainText="No Events Found" subText="Find some events and societies in the Discover tab!" />
@@ -52,7 +64,7 @@ const CalendarEventView: React.FC<Props> = ({groupedEvents, loadingUser}) => {
   const currDate = new Date(Date.now())
   
   return (
-    <Container className="calendarContainer">
+    <Container className="calendarContainer" hidden={hide}>
       <IonList>
         {groupedEvents.map((eventGroup) => (
           <IonItemGroup key={`date-${eventGroup.date.getDate()}-${eventGroup.date.getMonth() + 1}`}>
@@ -71,17 +83,6 @@ const CalendarEventView: React.FC<Props> = ({groupedEvents, loadingUser}) => {
   )
 }
 
-interface LinkStateProps {
-  groupedEvents: EventGroupByDate[],
-  loadingUser: boolean
-}
 
 
-const mapStateToProps = (state: RootState): LinkStateProps => {
-  return {
-    groupedEvents: groupByDate(state.calEvents.events),
-    loadingUser: state.userDetails.loading
-  }
-}
-
-export default connect(mapStateToProps)(CalendarEventView);
+export default connector(CalendarEventView);

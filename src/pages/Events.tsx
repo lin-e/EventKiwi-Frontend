@@ -110,7 +110,7 @@ const Events: React.FC<EventsProps> = (props) => {
           <IonRefresherContent></IonRefresherContent>
         </IonRefresher>
 
-        <CalendarEventView />
+        <CalendarEventView hide={!upcoming}/>
 
         <IonFab vertical="bottom" horizontal="end" slot="fixed">
           <IonFabButton>
