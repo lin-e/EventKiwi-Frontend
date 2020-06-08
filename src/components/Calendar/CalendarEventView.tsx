@@ -54,5 +54,4 @@ const CalendarEventView: React.FC<CalendarEventViewProps> = ({hide, groupedEvent
 }
 
 
-
 export default connector(CalendarEventView);

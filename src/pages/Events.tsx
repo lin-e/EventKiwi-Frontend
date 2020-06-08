@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonRefresher, IonRefresherContent, useIonViewDidEnter, IonFab, IonFabButton, IonIcon, IonFabList, IonSegment, IonSegmentButton, IonLabel } from '@ionic/react';
+import React, { useEffect, useState, MouseEvent } from 'react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonRefresher, IonRefresherContent, useIonViewDidEnter, IonFab, IonFabButton, IonIcon, IonFabList, IonSegment, IonSegmentButton, IonLabel, IonToast } from '@ionic/react';
 import { chevronUp, options, calendar, add } from 'ionicons/icons'
 import './Events.css';
 import CalendarEventView from '../components/Calendar/CalendarEventView';
@@ -27,6 +27,9 @@ const Events: React.FC<EventsProps> = (props) => {
 
   const upcoming = segment === 'upcoming';
   const past = segment === 'past';
+
+  const [viewType, setViewType] = useState<'list' | 'grid'>('list');
+  const [gridViewToast, setGridViewToast] = useState(false);
 
   const isSociety: boolean = true;
 
@@ -79,6 +82,13 @@ const Events: React.FC<EventsProps> = (props) => {
     }
   }
 
+  const showGridView = (e: MouseEvent) => {
+    e.preventDefault();
+
+    // To be implemented
+    // setViewType('grid');
+    setGridViewToast(true);
+  }
 
   if (!props.isLoggedIn && !props.isLoading) {
     return <Redirect to="/auth" />
@@ -119,7 +129,7 @@ const Events: React.FC<EventsProps> = (props) => {
             <IonFabButton>
               <IonIcon icon={options}/>
             </IonFabButton>
-            <IonFabButton>
+            <IonFabButton onClick={showGridView}>
               <IonIcon icon={calendar}/>
             </IonFabButton>
             {isSociety &&
@@ -129,6 +139,16 @@ const Events: React.FC<EventsProps> = (props) => {
             }
           </IonFabList>
         </IonFab>
+
+        <IonToast 
+          isOpen={gridViewToast}
+          onDidDismiss={() => setGridViewToast(false)}
+          message="Grid view coming soon!"
+          position="bottom"
+          duration={2000}
+          cssClass="ion-text-center"
+          animated
+        />
       </IonContent>
     </IonPage>
   );
