@@ -11,8 +11,10 @@ import { loadEventPosts } from '../data/actions/eventPostsActions';
 import { RootState } from '../data/reducers';
 import { isPlatform } from '@ionic/react';
 import { Plugins } from '@capacitor/core';
-import { blankEventDetails } from '../constants/types';
+import { blankEventDetails, EventDetails } from '../constants/types';
 const { Share } = Plugins;
+
+const eventWithId = (state: RootState) => (id: string) => state.viewEvent.events.filter(e => e.id === id);
 
 interface OwnProps {
   eventId: string,
@@ -23,6 +25,7 @@ const mapStateToProps = (state: RootState) => ({
   userToken: state.userDetails.userToken,
   isLoading: state.viewEvent.loading,
   isLoggedIn: state.userDetails.isLoggedIn,
+  events: state.viewEvent.events
 })
 
 const connector = connect(mapStateToProps, { loadEventDetails, loadBlankEvent, loadingEvent, goingToEvent, interestedInEvent, notGoingToEvent, loadEventPosts })
@@ -49,14 +52,9 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
 
   const contentRef = React.useRef<HTMLIonContentElement>(null);
 
-  const eventDescription = useSelector((state: RootState) => {
-    const eventsWithId = state.viewEvent.events.filter(e => e.id === props.eventId)
-    if (eventsWithId.length > 0) {
-      return eventsWithId[0]
-    } else {
-      return blankEventDetails
-    }
-  })
+  const eventsWithMatchingId: EventDetails[] = useSelector(eventWithId)(props.eventId)
+  const eventDescription = eventsWithMatchingId.length > 0 ? eventsWithMatchingId[0] : blankEventDetails;
+  const goingStatus = eventDescription.goingStatus
 
   const resetView = () => {
     setDetailsY(0);
@@ -127,7 +125,7 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
 
       <IonHeader>
         <IonToolbar>
-          <IonButtons  slot="start">
+          <IonButtons slot="start">
             <IonBackButton text="" defaultHref={`/${props.activeTab}`} />
           </IonButtons>
           <IonSegment value={segment} onIonChange={changeTab}>
@@ -146,7 +144,7 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
 
       <IonContent ref={contentRef} scrollEvents onIonScroll={(e) => saveY(e.detail.currentY)} className={!props.isLoading ? 'fadeIn' : 'fadeOut'}>
 
-        <EventDescription eventDescription={eventDescription} tab={props.activeTab} hide={!details} />
+        <EventDescription goingStatus={goingStatus} eventId={props.eventId} eventDescription={eventDescription} tab={props.activeTab} hide={!details} />
 
         <EventPostsList tab={props.activeTab} hide={!posts} />
 

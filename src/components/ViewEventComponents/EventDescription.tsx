@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { IonText, IonCard, IonCardSubtitle, IonCol, IonGrid, IonRow, IonButton, IonIcon, IonToast, IonSkeletonText } from '@ionic/react';
 import './EventDescription.css';
 import { Container, Row, Col } from 'react-grid-system';
@@ -6,7 +6,7 @@ import ExpandTextView from '../ExpandTextView';
 import EventMiniCard from '../EventMiniCard';
 import { getDateRange } from '../../utils/DateTimeTools';
 import { RootState } from '../../data/reducers';
-import { ConnectedProps, connect, useSelector } from 'react-redux';
+import { ConnectedProps, connect } from 'react-redux';
 import { checkmarkCircleOutline, starOutline } from 'ionicons/icons';
 import { INTERESTED, GOING } from '../../constants/constants';
 import { goingToEvent, interestedInEvent, notGoingToEvent } from '../../data/actions/viewEvent/viewEventActions';
@@ -22,7 +22,9 @@ const connector = connect(mapStateToProps, { goingToEvent, interestedInEvent, no
 interface OwnProps {
    hide: boolean,
    eventDescription: EventDetails,
-   tab: string
+   tab: string,
+   eventId: string,
+   goingStatus: number
 }
 
 type PropsFromRedux = ConnectedProps<typeof connector>
@@ -35,27 +37,26 @@ const EventDescription: React.FC<EventDescriptionProps> = (props) => {
 
    const interestedClicked = () => {
       if (props.eventDescription.goingStatus !== INTERESTED) {
-        props.interestedInEvent(props.eventDescription.id, props.userToken);
-      //   showInterestedToast(true);
+         props.interestedInEvent(props.eventDescription.id, props.userToken);
+         showInterestedToast(true);
       } else {
-        props.notGoingToEvent(props.eventDescription.id, props.userToken);
-        showNotGoingToast(true);
+         props.notGoingToEvent(props.eventDescription.id, props.userToken);
+         showNotGoingToast(true);
       }
     }
   
     const goingClicked = () => {
       if (props.eventDescription.goingStatus !== GOING) {
-        props.goingToEvent(props.eventDescription.id, props.userToken);
-      //   showGoingToast(true)
+         props.goingToEvent(props.eventDescription.id, props.userToken);
+         showGoingToast(true)
       } else {
-        props.notGoingToEvent(props.eventDescription.id, props.userToken);
-        showNotGoingToast(true);
+         props.notGoingToEvent(props.eventDescription.id, props.userToken);
+         showNotGoingToast(true);
       }
     }
 
    return (
       <div style={props.hide ? { display: "none" } : {}}>
-         <h1>{props.eventDescription.goingStatus}</h1>
          <Container>
             <IonText>
             {props.eventDescription.name === "" && 
@@ -90,10 +91,10 @@ const EventDescription: React.FC<EventDescriptionProps> = (props) => {
                      {props.isLoggedIn && 
                      <Col lg={7}>
                         <br />
-                        <IonButton onClick={goingClicked} color={props.eventDescription.goingStatus === GOING ? "success" : "medium"}>
+                        <IonButton onClick={goingClicked} color={props.goingStatus === GOING ? "success" : "medium"}>
                            Going&nbsp; <IonIcon icon={checkmarkCircleOutline} />
                         </IonButton>
-                        <IonButton onClick={interestedClicked} color={props.eventDescription.goingStatus === INTERESTED ? "warning" : "medium"}>
+                        <IonButton onClick={interestedClicked} color={props.goingStatus === INTERESTED ? "warning" : "medium"}>
                            Interested&nbsp; <IonIcon icon={starOutline} />
                         </IonButton>
                      </Col>}
