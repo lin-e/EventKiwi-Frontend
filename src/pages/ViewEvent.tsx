@@ -60,8 +60,10 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
     setDetailsY(0);
     setPostsY(0);
     setResourcesY(0);
-    try { contentRef.current!.scrollToTop() }
-    catch { /* contentRef has not yet loaded */ }
+    try {
+      contentRef.current!.scrollToTop();
+    } catch { /* contentRef has not yet loaded */ }
+    setSegment('details');
   }
 
   useEffect(resetView, [props.eventId])
