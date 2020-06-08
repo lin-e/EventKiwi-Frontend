@@ -146,7 +146,7 @@ class Profile extends Component<ProfileProps, ProfileState> {
               </IonRow>
 
               <IonRow>
-                <IonButton routerLink="/profile/licences" className="profileBtn" color="transparent">Licenses</IonButton>
+                <IonButton routerLink="/profile/licences" className="profileBtn" color="transparent">Licences</IonButton>
               </IonRow>
             </IonGrid>
 
