@@ -3,7 +3,7 @@ import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonSearchbar, Ion
 import { add } from 'ionicons/icons'
 import './Discover.css';
 import { connect, ConnectedProps } from 'react-redux';
-import { fetchEventCards, fetchSearchEventCards, fetchSearchSocietyCards } from "../data/actions/actions";
+import { fetchEventCards, fetchSearchEventCards, fetchMoreSearchEventCards, fetchSearchSocietyCards } from "../data/actions/actions";
 import { RootState } from '../data/reducers';
 import { Redirect } from 'react-router';
 import { Container, Row, Col } from 'react-grid-system';
@@ -12,11 +12,13 @@ import ExploreEventCard from '../components/ExploreEventCard';
 import EmptySectionText from '../components/EmptySectionText';
 import ExploreSocietyCard from '../components/ExploreSocietyCard';
 import { SocietyCard } from '../constants/types';
+import { MAX_SOCS_DISPLAY } from '../constants/constants';
 
 const mapStateToProps = (state: RootState) => {
   return {
     societies: state.societyCards.societies,
     events: state.eventCards.events,
+    moreResults: state.eventCards.moreResults,
     isLoggedIn: state.userDetails.isLoggedIn,
     isLoading: state.userDetails.loading,
     userToken: state.userDetails.userToken
@@ -25,7 +27,7 @@ const mapStateToProps = (state: RootState) => {
 
 const connector = connect(
   mapStateToProps,
-  { fetchSearchSocietyCards, fetchEventCards, fetchSearchEventCards }
+  { fetchSearchSocietyCards, fetchEventCards, fetchSearchEventCards, fetchMoreSearchEventCards }
 )
 
 type PropsFromRedux = ConnectedProps<typeof connector>
@@ -33,10 +35,9 @@ type DiscoverProps = PropsFromRedux;
 
 interface DiscoverState {
   searchTerm: string,
+  searchOffset: number,
   socExpanded: boolean
 }
-
-const MAX_SOCS = 3;
 
 class Discover extends Component<DiscoverProps, DiscoverState> {
   refresherRef: React.RefObject<HTMLIonRefresherElement>;
@@ -46,6 +47,7 @@ class Discover extends Component<DiscoverProps, DiscoverState> {
     super(props);
     this.state = {
       searchTerm: "",
+      searchOffset: 0,
       socExpanded: false
     }
     this.searchBar = createRef<HTMLIonSearchbarElement>();
@@ -65,16 +67,21 @@ class Discover extends Component<DiscoverProps, DiscoverState> {
       socExpanded: false
     });
     this.search(this.state.searchTerm)
-
   }
 
   search(searchTerm: string) {
     if (searchTerm == "") {
       this.props.fetchEventCards(this.refresherRef.current!);
     } else {
+      this.setState({searchOffset: 0});
       this.props.fetchSearchSocietyCards(searchTerm, this.refresherRef.current!, this.props.userToken)
       this.props.fetchSearchEventCards(searchTerm, this.refresherRef.current!, this.props.userToken);
     }
+  }
+
+  loadMoreEvents(searchTerm: string) {
+    this.setState({searchOffset: this.props.events.length});
+    this.props.fetchMoreSearchEventCards(searchTerm, this.state.searchOffset, this.props.userToken);
   }
 
   renderSocCard(society: SocietyCard) {
@@ -116,10 +123,10 @@ class Discover extends Component<DiscoverProps, DiscoverState> {
           {(this.state.searchTerm !== "" && this.props.societies.length !== 0) &&
               <IonGrid>
                 <IonRow>
-                  {(this.props.societies.length > MAX_SOCS) && (!this.state.socExpanded) &&
-                        this.props.societies.slice(0, MAX_SOCS).map(this.renderSocCard)
+                  {(this.props.societies.length > MAX_SOCS_DISPLAY) && (!this.state.socExpanded) &&
+                        this.props.societies.slice(0, MAX_SOCS_DISPLAY).map(this.renderSocCard)
                   }
-                  {(this.props.societies.length > MAX_SOCS) && (!this.state.socExpanded) &&
+                  {(this.props.societies.length > MAX_SOCS_DISPLAY) && (!this.state.socExpanded) &&
                     <IonCol sizeXl="4" sizeMd="6" sizeXs="12">
                       <IonButtons>
                         <IonButton onClick={() => this.setState({socExpanded: true})}>
@@ -130,7 +137,7 @@ class Discover extends Component<DiscoverProps, DiscoverState> {
                       </IonButtons>
                     </IonCol>
                   }
-                  {(this.props.societies.length < MAX_SOCS || this.state.socExpanded) &&
+                  {(this.props.societies.length < MAX_SOCS_DISPLAY || this.state.socExpanded) &&
                     this.props.societies.map(this.renderSocCard)}
                 </IonRow>
               </IonGrid>
@@ -166,6 +173,19 @@ class Discover extends Component<DiscoverProps, DiscoverState> {
                       />
                     </Col>
                 )
+              }
+              {this.props.events.length > 0 && this.props.moreResults &&
+                <Col xs={12} className="resultsEnd">
+                  <IonButton onClick={e => {e.preventDefault(); this.loadMoreEvents(this.state.searchTerm)}}>Show more</IonButton>
+                </Col>
+              }
+              {this.props.events.length > 0 && !this.props.moreResults &&
+                <Col xs={12} className="resultsEnd">
+                  <EmptySectionText 
+                    mainText={this.state.searchTerm === "" ? "No more events found" : `No more results for "${this.state.searchTerm}"`}
+                    subText={this.state.searchTerm === "" ? "Try searching for more events later" : "Try searching for something else!"}
+                  />
+                </Col>
               }
           </Row>
         </Container>
