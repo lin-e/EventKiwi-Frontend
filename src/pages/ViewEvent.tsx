@@ -5,12 +5,13 @@ import "./ViewEvent.css";
 import EventPostsList from '../components/ViewEventComponents/EventPostsList';
 import EventResourcesList from '../components/ViewEventComponents/EventResourcesList';
 import { shareOutline } from 'ionicons/icons';
-import { connect, ConnectedProps } from 'react-redux';
+import { connect, ConnectedProps, useSelector } from 'react-redux';
 import { loadEventDetails, loadingEvent, loadBlankEvent, goingToEvent, interestedInEvent, notGoingToEvent } from '../data/actions/viewEvent/viewEventActions';
 import { loadEventPosts } from '../data/actions/eventPostsActions';
 import { RootState } from '../data/reducers';
 import { isPlatform } from '@ionic/react';
 import { Plugins } from '@capacitor/core';
+import { blankEventDetails } from '../constants/types';
 const { Share } = Plugins;
 
 interface OwnProps {
@@ -22,7 +23,6 @@ const mapStateToProps = (state: RootState) => ({
   userToken: state.userDetails.userToken,
   isLoading: state.viewEvent.loading,
   isLoggedIn: state.userDetails.isLoggedIn,
-  goingStatus: state.viewEvent.event.goingStatus
 })
 
 const connector = connect(mapStateToProps, { loadEventDetails, loadBlankEvent, loadingEvent, goingToEvent, interestedInEvent, notGoingToEvent, loadEventPosts })
@@ -49,15 +49,21 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
 
   const contentRef = React.useRef<HTMLIonContentElement>(null);
 
+  const eventDescription = useSelector((state: RootState) => {
+    const eventsWithId = state.viewEvent.events.filter(e => e.id === props.eventId)
+    if (eventsWithId.length > 0) {
+      return eventsWithId[0]
+    } else {
+      return blankEventDetails
+    }
+  })
+
   const resetView = () => {
     setDetailsY(0);
     setPostsY(0);
     setResourcesY(0);
-    try {
-      contentRef.current!.scrollToTop();
-   } catch {
-     // contentRef has not yet loaded 
-   }
+    try { contentRef.current!.scrollToTop() }
+    catch { /* contentRef has not yet loaded */ }
   }
 
   useEffect(resetView, [props.eventId])
@@ -140,11 +146,11 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
 
       <IonContent ref={contentRef} scrollEvents onIonScroll={(e) => saveY(e.detail.currentY)} className={!props.isLoading ? 'fadeIn' : 'fadeOut'}>
 
-        <EventDescription tab={props.activeTab} hide={!details} />
+        <EventDescription eventDescription={eventDescription} tab={props.activeTab} hide={!details} />
 
         <EventPostsList tab={props.activeTab} hide={!posts} />
 
-        <EventResourcesList tab={props.activeTab} hide={!resources} />
+        <EventResourcesList resources={eventDescription.resources} tab={props.activeTab} hide={!resources} />
 
         <IonFab vertical="bottom" horizontal="end" slot="fixed">
           <IonFabButton onClick={shareClicked} color="primary">

@@ -16,8 +16,7 @@ export const rootReducer = combineReducers({
    viewEvent: viewEventReducer,
    eventPosts: eventPostReducer,
    profileDetails: profileDetailsReducer,
-   interestSearch: interestSearchReducer,
-   viewEventReducer: viewEventReducer
+   interestSearch: interestSearchReducer
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

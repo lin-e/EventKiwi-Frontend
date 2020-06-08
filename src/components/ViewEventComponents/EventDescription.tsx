@@ -6,17 +6,13 @@ import ExpandTextView from '../ExpandTextView';
 import EventMiniCard from '../EventMiniCard';
 import { getDateRange } from '../../utils/DateTimeTools';
 import { RootState } from '../../data/reducers';
-import { ConnectedProps, connect } from 'react-redux';
+import { ConnectedProps, connect, useSelector } from 'react-redux';
 import { checkmarkCircleOutline, starOutline } from 'ionicons/icons';
 import { INTERESTED, GOING } from '../../constants/constants';
 import { goingToEvent, interestedInEvent, notGoingToEvent } from '../../data/actions/viewEvent/viewEventActions';
+import { EventDetails } from '../../constants/types';
 
 const mapStateToProps = (state: RootState) => ({
-   event: state.viewEvent.event,
-   eventsEvent: state.viewEvent.eventsEvent,
-   discoverEvent: state.viewEvent.discoverEvent,
-   dGoingStatus: state.viewEvent.discoverEvent.goingStatus,
-   eGoingStatus: state.viewEvent.eventsEvent.goingStatus,
    userToken: state.userDetails.userToken,
    isLoggedIn: state.userDetails.isLoggedIn
 })
@@ -25,6 +21,7 @@ const connector = connect(mapStateToProps, { goingToEvent, interestedInEvent, no
 
 interface OwnProps {
    hide: boolean,
+   eventDescription: EventDetails,
    tab: string
 }
 
@@ -32,80 +29,78 @@ type PropsFromRedux = ConnectedProps<typeof connector>
 type EventDescriptionProps = PropsFromRedux & OwnProps;
 
 const EventDescription: React.FC<EventDescriptionProps> = (props) => {
-   const eventDescription = props.tab === "events" ? props.eventsEvent : (props.tab === "discover" ? props.discoverEvent : props.event);
-   const goingStatus = props.tab === "events" ? props.eGoingStatus : (props.tab === "discover" ? props.dGoingStatus : props.goingToEvent);
-
    const [goingToast, showGoingToast] = useState<boolean>(false);
    const [notGoingToast, showNotGoingToast] = useState<boolean>(false);
    const [interestedToast, showInterestedToast] = useState<boolean>(false);
 
    const interestedClicked = () => {
-      if (eventDescription.goingStatus !== INTERESTED) {
-        props.interestedInEvent(eventDescription.id, props.tab, props.userToken);
-        showInterestedToast(true);
+      if (props.eventDescription.goingStatus !== INTERESTED) {
+        props.interestedInEvent(props.eventDescription.id, props.userToken);
+      //   showInterestedToast(true);
       } else {
-        props.notGoingToEvent(eventDescription.id, props.tab, props.userToken);
+        props.notGoingToEvent(props.eventDescription.id, props.userToken);
         showNotGoingToast(true);
       }
     }
   
     const goingClicked = () => {
-      if (eventDescription.goingStatus !== GOING) {
-        props.goingToEvent(eventDescription.id, props.tab, props.userToken);
-        showGoingToast(true)
+      if (props.eventDescription.goingStatus !== GOING) {
+        props.goingToEvent(props.eventDescription.id, props.userToken);
+      //   showGoingToast(true)
       } else {
-        props.notGoingToEvent(eventDescription.id, props.tab, props.userToken);
+        props.notGoingToEvent(props.eventDescription.id, props.userToken);
         showNotGoingToast(true);
       }
     }
 
    return (
       <div style={props.hide ? { display: "none" } : {}}>
+         <h1>{props.eventDescription.goingStatus}</h1>
          <Container>
             <IonText>
-            {eventDescription.name === "" && 
+            {props.eventDescription.name === "" && 
                <h1><IonSkeletonText style={{ width: '40%', height: '30px' }} animated /></h1>
             }
-            {eventDescription.name !== "" && 
-               <h1>{eventDescription.name}</h1>
+            {props.eventDescription.name !== "" && 
+               <h1>{props.eventDescription.name}</h1>
             }
             </IonText>
 
             <Row>
                <Col md={6} sm={12}>
                   <IonCard className="eventImageCard">
-                     <img className="eventImage" src={eventDescription.images[0]} alt={props.event.name}></img>
+                     <img className="eventImage" src={props.eventDescription.images[0]} alt={props.eventDescription.name}></img>
                   </IonCard>
                </Col>
 
                <Col md={6} sm={12}>
                   <Row>
                      <Col lg={5} sm={12}>
-                        {eventDescription.description === "" && <div>
+                        {props.eventDescription.description === "" && <div>
                            <IonSkeletonText animated />  
                            <IonSkeletonText animated />  
                            <IonSkeletonText animated />  
                         </div>}
-                        {eventDescription.description !== "" && <div>
-                           <IonCardSubtitle>By {eventDescription.organiser.name},</IonCardSubtitle>
-                           <IonCardSubtitle>{`${getDateRange(props.event.datetimeStart, props.event.datetimeEnd)},`}</IonCardSubtitle>
-                           <IonCardSubtitle>{eventDescription.location}</IonCardSubtitle>
+                        {props.eventDescription.description !== "" && <div>
+                           <IonCardSubtitle>By {props.eventDescription.organiser.name},</IonCardSubtitle>
+                           <IonCardSubtitle>{`${getDateRange(props.eventDescription.datetimeStart, props.eventDescription.datetimeEnd)},`}</IonCardSubtitle>
+                           <IonCardSubtitle>{props.eventDescription.location}</IonCardSubtitle>
                         </div>}
                      </Col>
                      {props.isLoggedIn && 
                      <Col lg={7}>
                         <br />
-                        <IonButton onClick={goingClicked} color={goingStatus === GOING ? "success" : "medium"}>
+                        <IonButton onClick={goingClicked} color={props.eventDescription.goingStatus === GOING ? "success" : "medium"}>
                            Going&nbsp; <IonIcon icon={checkmarkCircleOutline} />
                         </IonButton>
-                        <IonButton onClick={interestedClicked} color={goingStatus === INTERESTED ? "warning" : "medium"}>
+                        <IonButton onClick={interestedClicked} color={props.eventDescription.goingStatus === INTERESTED ? "warning" : "medium"}>
                            Interested&nbsp; <IonIcon icon={starOutline} />
                         </IonButton>
                      </Col>}
                   </Row>
                   <Row>
                      <Col>
-                        {eventDescription.description === "" && <div>
+                        {props.eventDescription.description === "" && <div>
                            <IonSkeletonText animated />  
                            <IonSkeletonText animated />  
                            <IonSkeletonText animated />  
@@ -114,8 +109,8 @@ const EventDescription: React.FC<EventDescriptionProps> = (props) => {
                            <IonSkeletonText animated />  
                            <IonSkeletonText animated />  
                         </div>}
-                        {eventDescription.description !== "" && 
-                           <ExpandTextView limit={520} text={eventDescription.description} />
+                        {props.eventDescription.description !== "" && 
+                           <ExpandTextView limit={520} text={props.eventDescription.description} />
                         }
                      </Col>
                   </Row>
@@ -123,13 +118,13 @@ const EventDescription: React.FC<EventDescriptionProps> = (props) => {
                </Col>
             </Row>
 
-            {eventDescription.sameSocEvents.length > 0 &&
+            {props.eventDescription.sameSocEvents.length > 0 &&
                <div>
-                  <IonText><h2>More from {eventDescription.organiser.shortName}</h2></IonText>
+                  <IonText><h2>More from {props.eventDescription.organiser.shortName}</h2></IonText>
                   <div className="suggestedEvents">
                      <IonGrid>
                         <IonRow>
-                           {eventDescription.sameSocEvents.map(event => {
+                           {props.eventDescription.sameSocEvents.map(event => {
                               return <IonCol size="auto" key={`sameSocMiniEventCardCol--${event.id}`}>
 
                                  <EventMiniCard
@@ -149,13 +144,13 @@ const EventDescription: React.FC<EventDescriptionProps> = (props) => {
                   </div>
                </div>}
 
-            {eventDescription.similarEvents.length > 0 &&
+            {props.eventDescription.similarEvents.length > 0 &&
                <div>
                   <IonText><h2>Suggested events</h2></IonText>
                   <div className="suggestedEvents">
                      <IonGrid>
                         <IonRow>
-                           {eventDescription.similarEvents.map(event => {
+                           {props.eventDescription.similarEvents.map(event => {
                               return <IonCol size="auto" key={`similarEventMiniEventCardCol--${event.id}`}>
                                  <EventMiniCard
                                     key={`similarEventMiniEventCard--${event.id}`}

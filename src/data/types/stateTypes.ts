@@ -11,9 +11,7 @@ export interface EventCardState {
 }
 
 export interface ViewEventState {
-   event: EventDetails,
-   eventsEvent: EventDetails,
-   discoverEvent: EventDetails,
+   events: EventDetails[],
    loading: boolean
 }
 
