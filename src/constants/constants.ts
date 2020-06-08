@@ -5,3 +5,6 @@ export const GOING = 2;
 
 export const FOLLOWING = 1;
 export const NOT_FOLLOWING = 0;
+
+export const MAX_SOCS_DISPLAY = 3;
+export const EVENT_SEARCH_BATCH_SIZE = 18;
