@@ -26,10 +26,9 @@ const mapStateToProps = (state: RootState) => ({
 })
 
 const connector = connect(mapStateToProps, { loadEventDetails, loadBlankEvent, loadingEvent, goingToEvent, interestedInEvent, notGoingToEvent, loadEventPosts })
+
 type PropsFromRedux = ConnectedProps<typeof connector>
-
 type ViewEventProps = OwnProps & PropsFromRedux;
-
 
 const ViewEvent: React.FC<ViewEventProps> = (props) => {
   const [segment, setSegment] = useState<'details' | 'posts' | 'resources'>('details');

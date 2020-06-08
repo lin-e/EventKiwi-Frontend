@@ -20,7 +20,6 @@ const connector = connect(mapStateToProps, { fetchCalEvents, loadBlankEvent });
 type PropsFromRedux = ConnectedProps<typeof connector>;
 type EventsProps = PropsFromRedux
 
-
 const Events: React.FC<EventsProps> = (props) => {
   const [segment, setSegment] = useState<'upcoming' | 'past'>('upcoming');
   const [upcomingY, setUpcomingY] = useState(0);

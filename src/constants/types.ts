@@ -92,6 +92,11 @@ export interface CalendarEvent {
   status: number
 }
 
+export interface EventGroupByDate {
+  date: Date,
+  events: CalendarEvent[]
+}
+
 export const blankEventDetails = {
   id: "",
   name: "",
