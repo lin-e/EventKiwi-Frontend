@@ -28,14 +28,14 @@ const initialState = {
 }
 
 
-// describe('View event actions', () => {
-//   it('should create an action to load a blank event detail', () => {
-//     const expectedAction = {
-//       type: types.LOAD_EVENTS_BLANK_EVENT_DETAILS,
-//     }
-//     expect(actions.loadBlankEvent("events")).toEqual(expectedAction)
-//   })
-// })
+describe('View event actions', () => {
+  it('should create an action to load a blank event detail', () => {
+    const expectedAction = {
+      type: types.LOAD_EVENTS_BLANK_EVENT_DETAILS,
+    }
+    expect(actions.loadBlankEvent("events")).toEqual(expectedAction)
+  })
+})
 
 // describe('viewActions reducer', () => {
 //   it('should return the initial state', () => {
