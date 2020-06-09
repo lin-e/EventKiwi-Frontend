@@ -1,7 +1,7 @@
-import { AppThunk } from "../types/dataInterfaces"
-import { eventPostsEndpoint } from "../../constants/endpoints"
-import { GET_EVENT_POSTS, GET_EVENTS_EVENT_POSTS, GET_DISCOVER_EVENT_POSTS } from "./types"
-import { convertResToEventPosts } from "../../constants/types"
+import { AppThunk } from "../../types/dataInterfaces"
+import { eventPostsEndpoint } from "../../../constants/endpoints"
+import { GET_EVENT_POSTS, GET_EVENTS_EVENT_POSTS, GET_DISCOVER_EVENT_POSTS } from "./eventPostsTypes"
+import { convertResToEventPosts } from "../../../constants/types"
 
 
 

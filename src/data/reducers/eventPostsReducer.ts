@@ -1,7 +1,8 @@
-import { GET_EVENT_POSTS, EventPostType, GET_DISCOVER_EVENT_POSTS, GET_EVENTS_EVENT_POSTS } from "../actions/types";
+import { GET_EVENT_POSTS, EventPostType, GET_DISCOVER_EVENT_POSTS, GET_EVENTS_EVENT_POSTS } from "../actions/eventPosts/eventPostsTypes";
 import { EventPostsState } from "../types/stateTypes";
 
 const initialState: EventPostsState = {
+   eventPosts: [],
    posts: [],
    discoverPosts: [],
    eventsPost: []
