@@ -9,3 +9,7 @@
     width: fit-content;
     object-fit: cover;
 }
+
+.detailsList {
+    margin-bottom: 16px;
+}

@@ -133,7 +133,7 @@ const Events: React.FC<EventsProps> = (props) => {
               <IonIcon icon={calendar}/>
             </IonFabButton>
             {isSociety &&
-              <IonFabButton>
+              <IonFabButton routerLink="/events/add">
                 <IonIcon icon={add} />
               </IonFabButton>
             }
