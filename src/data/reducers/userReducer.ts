@@ -1,15 +1,13 @@
 import { USER_LOGIN, UserType, LOAD_USER_DATA, USER_LOGOUT,  } from "../actions/types";
 import { UserState } from "../types/stateTypes";
+import { blankProfile } from "../types/dataInterfaces";
 
 const initialState: UserState = {
    loading: true,
    isLoggedIn: false,
    userToken: "",
-   profile: {
-      firstname: "",
-      surname: "",
-      email: ""
-   }
+   profile: blankProfile,
+   isSoc: false
 
 }
 
@@ -21,6 +19,7 @@ export function userReducer(state = initialState, action: UserType): UserState {
             isLoggedIn: true,
             userToken: action.payload.body.token,
             profile: action.payload.body.profile,
+            isSoc: action.payload.body.profile.society !== "0",
             loading: false
          }
       case LOAD_USER_DATA:
@@ -29,7 +28,8 @@ export function userReducer(state = initialState, action: UserType): UserState {
             isLoggedIn: action.payload.isLoggedIn,
             userToken: action.payload.userToken,
             profile: action.payload.profile,
-            loading: action.payload.loading
+            loading: action.payload.loading,
+            isSoc: action.payload.profile.society !== "0",
          }
       case USER_LOGOUT:
          return {
@@ -37,7 +37,8 @@ export function userReducer(state = initialState, action: UserType): UserState {
             isLoggedIn: false,
             userToken: initialState.userToken,
             profile: initialState.profile,
-            loading: false
+            loading: true,
+            isSoc: false
          }
       default:
          return state;

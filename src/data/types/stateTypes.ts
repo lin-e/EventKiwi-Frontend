@@ -26,7 +26,8 @@ export interface UserState {
    loading: boolean,
    isLoggedIn: boolean,
    userToken: string,
-   profile: UserProfile
+   profile: UserProfile,
+   isSoc: boolean
 }
 
 export interface CalendarEventsState {

@@ -23,7 +23,6 @@ export const logIn = (msToken: string): AppThunk => async dispatch => {
    })
    .then(res => res.json())
    .then(data => {
-      console.log(data)
       saveUserData(data, true)
       return data
    })
