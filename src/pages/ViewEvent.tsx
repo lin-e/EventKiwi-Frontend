@@ -200,10 +200,13 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
           <IonHeader>
 
             <IonToolbar>
-              <IonButtons>
-                <IonButton onClick={() => showPostModal(false)}>Cancel</IonButton>
+              <IonButtons slot="start">
+                <IonButton color="primary" onClick={() => showPostModal(false)}>Cancel</IonButton>
               </IonButtons>
-              <IonTitle>Add post</IonTitle>
+              {isPlatform("ios") &&
+                <IonTitle>Add post</IonTitle> }
+              {!isPlatform("ios") &&
+                <IonTitle slot="end">Add post</IonTitle> }
             </IonToolbar>
           </IonHeader>
 
@@ -214,8 +217,8 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
                 <IonInput required onIonChange={e => setPostTitle(e.detail.value!)} />
               </IonItem>
               <IonItem>
-                <IonLabel position="floating">Post body</IonLabel>
-                <IonTextarea rows={30} required onIonChange={e => setPostBody(e.detail.value!)} />
+                <IonLabel position="floating">Content</IonLabel>
+                <IonTextarea rows={30} placeholder="Update your followers..." required onIonChange={e => setPostBody(e.detail.value!)} />
               </IonItem>
 
               <IonButton type="submit" onClick={addPost} expand="block">Post</IonButton>
