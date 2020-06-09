@@ -2,19 +2,94 @@ import React, { useState, MouseEvent } from 'react';
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonGrid, IonRow, IonCol, IonLabel, IonTextarea, IonInput, IonText, IonCard, IonDatetime, IonButtons, IonBackButton, IonList, IonItem, IonSelect, IonSelectOption, IonIcon, IonItemDivider, IonButton, IonChip, IonModal } from '@ionic/react';
 import { Container, Row, Col } from 'react-grid-system';
 import { calendar, closeCircle } from 'ionicons/icons';
-import { parseISO, format } from 'date-fns'
+import { parseISO, format, isBefore } from 'date-fns'
 
 import './AddEvent.css'
 import EmptySectionText from '../components/EmptySectionText';
 import AddTagSearch from '../components/EditEvent/AddTagSearch';
+import { UNIX_EPOCH, PRIVATE, SOCIETIES, MEMBERS, PUBLIC } from '../constants/constants';
+import { createNewEvent } from '../data/actions/editEventActions';
+import { ConnectedProps, connect } from 'react-redux';
+import { RootState } from '../data/reducers';
 
-const AddEvent: React.FC = () => {
+
+const mapStateToProps = (state: RootState) => {
+  return {
+    userToken: state.userDetails.userToken
+  }
+}
+
+const connector = connect(mapStateToProps, { createNewEvent });
+
+type PropsFromRedux = ConnectedProps<typeof connector>
+type AddEventProps = PropsFromRedux
+
+const AddEvent: React.FC<AddEventProps> = ({userToken, createNewEvent}) => {
+  const [title, setTitle] = useState("");
+  const [location, setLocation] = useState("");
   const [startDatetime, setStartDatetime] = useState(new Date());
   const [endDatetime, setEndDatetime] = useState(new Date());
+  const [privacy, setPrivacy] = useState(PRIVATE);
   const [tagList, setTagList] = useState<string[]>([]);
+  const [description, setDescription] = useState("");
+  
   const [showTagSearch, setShowTagSearch] = useState(false);
+  
+  const [endBeforeStartToast, setEndBeforeStartToast] = useState(false);
+  const [noTitleToast, setNoTitleToast] = useState(false);
+  const [noLocationToast, setNoLocationToast] = useState(false);
+  const [noDescriptionToast, setNoDescriptionToast] = useState(false);
+  const [noTagsToast, setNoTagsToast] = useState(false);
+  const [tooManyTagsToast, setTooManyTagsToast] = useState(false);
 
   const currDatetime = new Date();
+
+  const mapPrivacy = (privacyLevel: string) => {
+    switch(privacyLevel) {
+      case "Private":
+        return PRIVATE
+      case "Societies Only":
+        return SOCIETIES;
+      case "Members":
+        return MEMBERS;
+      case "Public":
+        return PUBLIC;
+      default:
+        return PRIVATE;
+    }
+  }
+
+  const unmapPrivacy = (privacyLevel: number) => {
+    switch(privacyLevel) {
+      case PRIVATE:
+        return "Private"
+      case SOCIETIES:
+        return "Societies Only"
+      case MEMBERS:
+        return "Members"
+      case PUBLIC:
+        return "Public"
+      default:
+        return "Unknown"
+    }
+  }
+
+  const updateTitle = (e: CustomEvent) => {
+    setTitle((e.detail.value == undefined) ? "" : e.detail.value!.trim())
+  }
+
+  const updateLocation = (e: CustomEvent) => {
+    setLocation((e.detail.value == undefined) ? "" : e.detail.value!.trim())
+  }
+
+  const updatePrivacy = (e: CustomEvent) => {
+    console.log(e.detail.value);
+    setPrivacy(mapPrivacy(e.detail.value));
+  }
+
+  const updateDescription = (e: CustomEvent) => {
+    setDescription((e.detail.value == undefined) ? "" : e.detail.value!.trim())
+  }
 
   const addTag = (toAdd: string) => {
     setTagList(tagList.concat([toAdd]))
@@ -22,6 +97,43 @@ const AddEvent: React.FC = () => {
 
   const removeTag = (toRemove: string) => {
     setTagList(tagList.filter(tag => tag !== toRemove));
+  }
+
+  const validEvent = () => {
+    if (!isBefore(startDatetime, endDatetime)) {
+      setEndBeforeStartToast(true);
+    } else if (title === "") {
+      setNoTitleToast(true);
+    } else if (location === "") {
+      setNoLocationToast(true);
+    } else if (description === "") {
+      setNoDescriptionToast(true);
+    } else if (tagList.length === 0) {
+      setNoTagsToast(true);
+    } else if (tagList.length > 8) {
+      setTooManyTagsToast(true);
+    } else {
+      return true;
+    }
+
+    return false;
+  }
+
+  const saveEvent = (e: MouseEvent) => {
+    e.preventDefault();
+
+    if (validEvent()) {
+      createNewEvent({
+        name: title,
+        location: location,
+        desc: description,
+        privacy: privacy,
+        tags: tagList,
+        start: startDatetime.toISOString(),
+        end: endDatetime.toISOString(),
+        img: "https://picsum.photos/600/400"
+      }, userToken);
+    }
   }
 
   return (
@@ -33,7 +145,7 @@ const AddEvent: React.FC = () => {
           </IonButtons>
           <IonTitle>Create new Event</IonTitle>
           <IonButtons  slot="end">
-            <IonButton color="primary">Save</IonButton>
+            <IonButton onClick={saveEvent} color="primary">Save</IonButton>
           </IonButtons>
         </IonToolbar>
       </IonHeader>
@@ -58,6 +170,7 @@ const AddEvent: React.FC = () => {
                 required
                 rows={2}
                 maxlength={64}
+                onIonChange={updateTitle}
               />
             </IonItem>
           </IonList>
@@ -75,6 +188,7 @@ const AddEvent: React.FC = () => {
                   <IonLabel position="stacked">Location:</IonLabel>
                   <IonInput
                     maxlength={128}
+                    onIonChange={updateLocation}
                   />
                 </IonItem>
 
@@ -87,7 +201,7 @@ const AddEvent: React.FC = () => {
                     value={startDatetime.toISOString()}
                     displayFormat="DDDD D MMM YYYY h:mm A"
                     pickerFormat="D MMMM YYYY H mm"
-                    min={format(currDatetime, "yyyy-MM-dd'T'HH:mm:ss")}
+                    min={format(UNIX_EPOCH, "yyyy-MM-dd'T'HH:mm:ss")}
                     max={(currDatetime.getFullYear() + 3).toString()}
                     onIonChange={e => setStartDatetime(parseISO(e.detail.value!))}
                   />
@@ -110,7 +224,7 @@ const AddEvent: React.FC = () => {
 
                 <IonItem lines="none">
                   <IonLabel>Privacy:</IonLabel>
-                  <IonSelect interface="popover">
+                  <IonSelect interface="popover" value={unmapPrivacy(privacy)} defaultChecked onIonChange={updatePrivacy}>
                     <IonSelectOption>Private</IonSelectOption>
                     <IonSelectOption>Societies Only</IonSelectOption>
                     <IonSelectOption>Members</IonSelectOption>
@@ -160,6 +274,7 @@ const AddEvent: React.FC = () => {
                     rows={8}
                     spellCheck
                     wrap="soft"
+                    onIonChange={updateDescription}
                     />
                 </IonItem>
               </IonList>
@@ -177,4 +292,4 @@ const AddEvent: React.FC = () => {
   );
 }
 
-export default AddEvent;
+export default connector(AddEvent);

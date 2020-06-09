@@ -121,6 +121,15 @@ interface LoadUserDataAction {
 
 export type UserType = LoginAction | LoadUserDataAction | LogoutAction;
 
+export const CREATE_NEW_EVENT = "CREATE_NEW_EVENT";
+
+interface CreateNewEventAction {
+   type: typeof CREATE_NEW_EVENT,
+   payload: EventDetails
+}
+
+export type EventEditType = CreateNewEventAction;
+
 export const GET_EVENT_POSTS = "GET_EVENT_POSTS";
 export const GET_DISCOVER_EVENT_POSTS = "GET_DISCOVER_EVENT_POSTS";
 export const GET_EVENTS_EVENT_POSTS = "GET_EVENTS_EVENT_POSTS";

@@ -169,7 +169,7 @@ export const convertResToResource = (res: resp_resource): Resource => ({
 export const convertResToEventDetails = (res: resp_event_details): EventDetails => ({
   id: res.event_id,
   name: res.event_name,
-  organiser: convertResToSoc(res.society),
+  organiser: convertResToSoc(res.society as resp_society),
   images: [res.event_image_src],
   location: res.location,
   datetimeStart: new Date(res.start_datetime),
