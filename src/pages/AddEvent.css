@@ -12,6 +12,45 @@ img .uploadImage {
     object-fit: cover;
 }
 
+ion-list {
+    border-radius: 5px;
+}
+
+.coreDetailsRow {
+    margin-top: 8px;
+}
+
 .detailsList {
     margin-bottom: 16px;
+}
+
+@media only screen and (max-width: 900px) {
+    .tagContainer {
+        width: fit-content;
+    }
+}
+
+.tagContainer {
+    overflow: hidden;
+    margin-top: 0px;
+    margin-bottom: 16px;
+    background-color: var(--ion-item-background);
+    border-radius: 5px;
+    min-width: 100%;
+    min-height: 48px;
+}
+
+.tagEditBtn {
+    float: right;
+    padding: 0px;
+    height: 32px;
+    margin: 0px;
+}
+
+.tag {
+    padding: 4px
+}
+
+.noTagText {
+    transform: translateY(0);
 }

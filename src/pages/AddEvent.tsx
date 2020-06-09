@@ -1,17 +1,25 @@
-import React, { useState } from 'react';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonGrid, IonRow, IonCol, IonLabel, IonTextarea, IonInput, IonText, IonCard, IonDatetime, IonButtons, IonBackButton, IonList, IonItem, IonSelect, IonSelectOption, IonIcon, IonItemDivider, IonButton } from '@ionic/react';
+import React, { useState, MouseEvent } from 'react';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonGrid, IonRow, IonCol, IonLabel, IonTextarea, IonInput, IonText, IonCard, IonDatetime, IonButtons, IonBackButton, IonList, IonItem, IonSelect, IonSelectOption, IonIcon, IonItemDivider, IonButton, IonChip } from '@ionic/react';
 import { Container, Row, Col } from 'react-grid-system';
 import { getFullDate, getNumDate } from '../utils/DateTimeTools';
-import { calendar, time } from 'ionicons/icons';
+import { calendar, time, closeCircle } from 'ionicons/icons';
 import { parseISO, format } from 'date-fns'
 
 import './AddEvent.css'
+import InterestChip from '../components/Profile/InterestChip';
+import EmptySectionText from '../components/EmptySectionText';
 
 const AddEvent: React.FC = () => {
   const [startDatetime, setStartDatetime] = useState(new Date());
   const [endDatetime, setEndDatetime] = useState(new Date());
+  const [tagList, setTagList] = useState(["programming", "vim", "docsoc"]);
 
   const currDatetime = new Date();
+
+  const removeTag = (e: MouseEvent, toRemove: string) => {
+    e.preventDefault();
+    setTagList(tagList.filter(tag => tag !== toRemove));
+  }
 
   return (
     <IonPage>
@@ -38,18 +46,20 @@ const AddEvent: React.FC = () => {
         </IonHeader>
 
         <Container>
-          <IonItem>
-            <IonLabel position="stacked">Title:</IonLabel>
-            <IonTextarea 
-              spellCheck
-              wrap="soft"
-              required
-              rows={2}
-              maxlength={64}
-            />
-          </IonItem>
+          <IonList>
+            <IonItem lines="none">
+              <IonLabel position="stacked">Title:</IonLabel>
+              <IonTextarea 
+                spellCheck
+                wrap="soft"
+                required
+                rows={2}
+                maxlength={64}
+              />
+            </IonItem>
+          </IonList>
 
-          <Row>
+          <Row className="coreDetailsRow">
             <Col md={6} sm={12}>
               <IonCard className="uploadImageCard">
                 <img className="uploadImage" src="https://picsum.photos/800/400" alt="event banner image" />
@@ -72,7 +82,7 @@ const AddEvent: React.FC = () => {
                   <IonIcon icon={calendar} slot="start" />
                   <IonDatetime
                     value={startDatetime.toISOString()}
-                    displayFormat="DDDD D MMMM YYYY h:mm A"
+                    displayFormat="DDDD D MMM YYYY h:mm A"
                     pickerFormat="D MMMM YYYY H mm"
                     min={format(currDatetime, "yyyy-MM-dd'T'HH:mm:ss")}
                     max={(currDatetime.getFullYear() + 3).toString()}
@@ -87,7 +97,7 @@ const AddEvent: React.FC = () => {
                   <IonIcon icon={calendar} slot="start" />
                   <IonDatetime 
                     value={endDatetime.toISOString()}
-                    displayFormat="DDDD D MMMM YYYY h:mm A"
+                    displayFormat="DDDD D MMM YYYY h:mm A"
                     pickerFormat="D MMMM YYYY H mm"
                     min={format(startDatetime, "yyyy-MM-dd'T'HH:mm:ss")}
                     max={(currDatetime.getFullYear() + 3).toString()}
@@ -107,9 +117,37 @@ const AddEvent: React.FC = () => {
               </IonList>
             </Col>
           </Row>
-          <Row>
 
+          <Row>
+            <Col xs={8}>
+              <IonLabel>Tags:</IonLabel>
+            </Col>
+            <Col xs={4}>
+              <IonButton className="tagEditBtn" fill="clear">Edit</IonButton>
+            </Col>
           </Row>
+          <Row>
+            <Col xs={12}>
+              <div className="tagContainer">
+                {tagList.length !== 0 ?
+                  <div className="tag">
+                    {tagList.map((tag) => (
+                      <IonChip>
+                        <IonLabel>{tag}</IonLabel>
+                        <IonIcon icon={closeCircle} onClick={e => removeTag(e, tag)}/>
+                      </IonChip>
+                    ))}
+                  </div> :
+                  <EmptySectionText
+                    className="noTagText"
+                    mainText="No Added tags"
+                    subText="Try adding some tags to better categorise and advertise the event!"
+                  />
+                }
+              </div>
+            </Col>
+          </Row>
+
           <Row>
             <Col xs={12}>
               <IonList>
