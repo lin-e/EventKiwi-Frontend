@@ -1,7 +1,7 @@
 import React, { useState, MouseEvent } from 'react';
 import { IonSearchbar, IonContent, IonList } from '@ionic/react';
 import { RootState } from '../../data/reducers';
-import { fetchSearchInterests, addProfileInterest } from '../../data/actions/actions'
+import { fetchSearchInterests } from '../../data/actions/actions'
 import { ConnectedProps, connect } from 'react-redux';
 import './AddInterestModal.css'
 import InterestItem from './InterestItem';
@@ -15,7 +15,7 @@ const mapStateToProps = (state: RootState) => {
 
 const connector = connect(
   mapStateToProps,
-  { fetchSearchInterests, addProfileInterest }
+  { fetchSearchInterests }
 )
 
 type PropsFromRedux = ConnectedProps<typeof connector>
