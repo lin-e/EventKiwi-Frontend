@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { IonContent, IonPage, IonHeader, IonToolbar, IonButtons, IonBackButton, IonSegment, IonSegmentButton, IonLabel, IonIcon, IonFab, IonFabButton, IonToast } from '@ionic/react'
+import { IonContent, IonPage, IonHeader, IonToolbar, IonButtons, IonBackButton, IonSegment, IonSegmentButton, IonLabel, IonIcon, IonFab, IonFabButton, IonToast, IonModal, IonButton, IonTitle, IonFooter, IonItem, IonInput, IonTextarea } from '@ionic/react'
 import EventDescription from '../components/ViewEventComponents/EventDescription';
 import "./ViewEvent.css";
 import EventPostsList from '../components/ViewEventComponents/EventPostsList';
 import EventResourcesList from '../components/ViewEventComponents/EventResourcesList';
-import { shareOutline } from 'ionicons/icons';
+import { shareOutline, add, pencil } from 'ionicons/icons';
 import { connect, ConnectedProps, useSelector } from 'react-redux';
 import { loadEventDetails, loadingEvent, loadBlankEvent, goingToEvent, interestedInEvent, notGoingToEvent } from '../data/actions/viewEvent/viewEventActions';
 import { loadEventPosts } from '../data/actions/eventPostsActions';
@@ -55,6 +55,10 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
   const eventsWithMatchingId: EventDetails[] = useSelector(eventWithId)(props.eventId)
   const eventDescription = eventsWithMatchingId.length > 0 ? eventsWithMatchingId[0] : blankEventDetails;
   const goingStatus = eventDescription.goingStatus
+
+  const [postModal, showPostModal] = useState<boolean>(false);
+  const [postTitle, setPostTitle] = useState<string>("");
+  const [postBody, setPostBody] = useState<string>("");
 
   const resetView = () => {
     setDetailsY(0);
@@ -122,6 +126,29 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
     }
   }
 
+  const editEvent = () => {
+    console.log("edit clicked")
+  }
+
+  const showAddPost = () => {
+    setPostTitle("");
+    setPostBody("");
+    showPostModal(true);
+  }
+
+  const editResources = () => {
+    console.log("edit resources clicked")
+  }
+
+  const ownerFabIcon = segment === "details" ? pencil : (segment === "posts" ? add : shareOutline);
+  const ownerFabOnClick = segment === "details" ? editEvent : (segment === "posts" ? showAddPost : editResources);
+
+  const addPost = () => {
+    console.log(postTitle);
+    console.log(postBody);
+    showPostModal(false);
+  }
+
   return (
     <IonPage>
 
@@ -153,8 +180,8 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
         <EventResourcesList resources={eventDescription.resources} tab={props.activeTab} hide={!resources} />
 
         <IonFab vertical="bottom" horizontal="end" slot="fixed">
-          <IonFabButton onClick={shareClicked} color="primary">
-            <IonIcon icon={shareOutline} />
+          <IonFabButton onClick={ownerFabOnClick} color="primary">
+            <IonIcon icon={ownerFabIcon} />
           </IonFabButton>
         </IonFab>
 
@@ -164,6 +191,40 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
           onDidDismiss={() => showShareUrlToast(false)}
           message="Event URL copied to clipboard."
           duration={3000} />
+
+        <IonModal
+          isOpen={postModal}
+          swipeToClose={true}
+          onDidDismiss={() => showPostModal(false)}>
+
+          <IonHeader>
+
+            <IonToolbar>
+              <IonButtons>
+                <IonButton onClick={() => showPostModal(false)}>Cancel</IonButton>
+              </IonButtons>
+              <IonTitle>Add post</IonTitle>
+            </IonToolbar>
+          </IonHeader>
+
+          <IonContent>
+            <form onSubmit={e => e.preventDefault()}>
+              <IonItem>
+                <IonLabel position="floating">Title</IonLabel>
+                <IonInput required onIonChange={e => setPostTitle(e.detail.value!)} />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="floating">Post body</IonLabel>
+                <IonTextarea rows={30} required onIonChange={e => setPostBody(e.detail.value!)} />
+              </IonItem>
+
+              <IonButton type="submit" onClick={addPost} expand="block">Post</IonButton>
+            </form>
+
+
+
+          </IonContent>
+        </IonModal>
 
         {/* Text area used for copying share url to clipboard */}
         <textarea readOnly hidden={true} ref={shareUrlTextRef} id="shareUrl" value={shareUrl} />
