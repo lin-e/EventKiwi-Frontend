@@ -130,6 +130,13 @@ export interface PostOrganiser {
   short: string
 }
 
+
+
+export interface EventIdAndPosts {
+  eventId: string,
+  posts: Post[]
+}
+
 export interface EventPosts {
   posts: Post[],
   last_id: string

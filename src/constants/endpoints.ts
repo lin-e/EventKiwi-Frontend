@@ -31,3 +31,7 @@ export const notGoingToEventEndpoint = (id: string) =>  `${endpointURL}/events/n
 export const eventPostsEndpoint = (eventId: string, lastPostId: string) => {
  return `${endpointURL}/events/posts/${eventId}/${lastPostId}/`
 }
+
+export const addEventPostEndpoint = (eventId: string) => {
+ return `${endpointURL}/events/posts/${eventId}/new/`
+}
