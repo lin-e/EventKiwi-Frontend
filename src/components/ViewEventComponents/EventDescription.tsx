@@ -1,16 +1,18 @@
-import React, { useState } from 'react';
-import { IonText, IonCard, IonCardSubtitle, IonCol, IonGrid, IonRow, IonButton, IonIcon, IonToast, IonSkeletonText } from '@ionic/react';
+import React, { useState, useRef } from 'react';
+import { IonText, IonCard, IonCardSubtitle, IonCol, IonGrid, IonRow, IonButton, IonIcon, IonToast, IonSkeletonText, IonChip, isPlatform } from '@ionic/react';
 import './EventDescription.css';
 import { Container, Row, Col } from 'react-grid-system';
 import ExpandTextView from '../ExpandTextView';
 import EventMiniCard from '../EventMiniCard';
 import { getDateRange } from '../../utils/DateTimeTools';
 import { RootState } from '../../data/reducers';
+import { Plugins } from '@capacitor/core';
 import { ConnectedProps, connect } from 'react-redux';
-import { checkmarkCircleOutline, starOutline } from 'ionicons/icons';
-import { INTERESTED, GOING } from '../../constants/constants';
+import { checkmarkCircleOutline, starOutline, time, location as locationIcon, shareOutline } from 'ionicons/icons';
+import { INTERESTED, GOING, EVENT_OWNER } from '../../constants/constants';
 import { goingToEvent, interestedInEvent, notGoingToEvent } from '../../data/actions/viewEvent/viewEventActions';
 import { EventDetails } from '../../constants/types';
+const { Share } = Plugins;
 
 const mapStateToProps = (state: RootState) => ({
    userToken: state.userDetails.userToken,
@@ -24,7 +26,8 @@ interface OwnProps {
    eventDescription: EventDetails,
    tab: string,
    eventId: string,
-   goingStatus: number
+   goingStatus: number,
+   shareUrl: string
 }
 
 type PropsFromRedux = ConnectedProps<typeof connector>
@@ -34,6 +37,9 @@ const EventDescription: React.FC<EventDescriptionProps> = (props) => {
    const [goingToast, showGoingToast] = useState<boolean>(false);
    const [notGoingToast, showNotGoingToast] = useState<boolean>(false);
    const [interestedToast, showInterestedToast] = useState<boolean>(false);
+   const [shareUrlToast, showShareUrlToast] = useState<boolean>(false);
+
+   const shareUrlTextRef = useRef<HTMLTextAreaElement>(null);
 
    const interestedClicked = () => {
       if (props.eventDescription.goingStatus !== INTERESTED) {
@@ -43,9 +49,9 @@ const EventDescription: React.FC<EventDescriptionProps> = (props) => {
          props.notGoingToEvent(props.eventDescription.id, props.userToken);
          showNotGoingToast(true);
       }
-    }
-  
-    const goingClicked = () => {
+   }
+
+   const goingClicked = () => {
       if (props.eventDescription.goingStatus !== GOING) {
          props.goingToEvent(props.eventDescription.id, props.userToken);
          showGoingToast(true)
@@ -53,18 +59,42 @@ const EventDescription: React.FC<EventDescriptionProps> = (props) => {
          props.notGoingToEvent(props.eventDescription.id, props.userToken);
          showNotGoingToast(true);
       }
+   }
+
+   const shareClicked = async () => {
+      if (isPlatform("desktop")) {
+        try {
+          shareUrlTextRef.current!.hidden = false;
+          shareUrlTextRef.current!.select();
+          var successful = document.execCommand('copy');
+          successful ? showShareUrlToast(true) : console.log("Unable to copy URL to clipboard");
+        } catch (err) {
+          console.error('Fallback: Unable to copy', err);
+        } finally {
+          shareUrlTextRef.current!.hidden = true;
+        }
+  
+      } else {
+        let shareRet = await Share.share({
+          title: `Share event`,
+          url: props.shareUrl,
+          dialogTitle: 'Share event'
+        });
+      }
     }
 
    return (
       <div style={props.hide ? { display: "none" } : {}}>
          <Container>
             <IonText>
-            {props.eventDescription.name === "" && 
-               <h1><IonSkeletonText style={{ width: '40%', height: '30px' }} animated /></h1>
-            }
-            {props.eventDescription.name !== "" && 
-               <h1>{props.eventDescription.name}</h1>
-            }
+               {props.eventDescription.name === "" && <>
+                  <h1><IonSkeletonText style={{ width: '40%', height: '30px' }} animated /></h1>
+                  <IonSkeletonText animated />  </>
+               }
+               {props.eventDescription.name !== "" && <>
+                  <h1>{props.eventDescription.name}</h1>
+                  <IonCardSubtitle>By {props.eventDescription.organiser.name}</IonCardSubtitle> </>
+               }
             </IonText>
 
             <Row>
@@ -78,40 +108,67 @@ const EventDescription: React.FC<EventDescriptionProps> = (props) => {
                   <Row>
                      <Col lg={5} sm={12}>
                         {props.eventDescription.description === "" && <div>
-                           <IonSkeletonText animated />  
-                           <IonSkeletonText animated />  
-                           <IonSkeletonText animated />  
+                           <IonSkeletonText animated />
+                           <IonSkeletonText animated />
                         </div>}
                         {props.eventDescription.description !== "" && <div>
-                           <IonCardSubtitle>By {props.eventDescription.organiser.name},</IonCardSubtitle>
-                           <IonCardSubtitle>{`${getDateRange(props.eventDescription.datetimeStart, props.eventDescription.datetimeEnd)},`}</IonCardSubtitle>
-                           <IonCardSubtitle>{props.eventDescription.location}</IonCardSubtitle>
+                           <IonCardSubtitle className="detailsText">
+                              <IonGrid className="timeLocationGrid">
+                                 <IonRow className="timeLocationRow">
+                                    <IonCol className="timeLocationCol" size="auto">
+                                       <IonIcon icon={time} />
+                                    </IonCol>
+                                    <IonCol>
+                                       {`${getDateRange(props.eventDescription.datetimeStart, props.eventDescription.datetimeEnd)}`}
+                                    </IonCol>
+                                 </IonRow>
+                                 <IonRow className="timeLocationRow">
+                                    <IonCol className="timeLocationCol" size="auto">
+                                       <IonIcon icon={locationIcon} />
+                                    </IonCol>
+                                    <IonCol>
+                                       {props.eventDescription.location}
+                                    </IonCol>
+                                 </IonRow>
+                              </IonGrid>
+                           </IonCardSubtitle>
                         </div>}
                      </Col>
-                     {props.isLoggedIn && 
-                     <Col lg={7}>
-                        <br />
-                        <IonButton onClick={goingClicked} color={props.goingStatus === GOING ? "success" : "medium"}>
-                           Going&nbsp; <IonIcon icon={checkmarkCircleOutline} />
-                        </IonButton>
-                        <IonButton onClick={interestedClicked} color={props.goingStatus === INTERESTED ? "warning" : "medium"}>
-                           Interested&nbsp; <IonIcon icon={starOutline} />
-                        </IonButton>
-                     </Col>}
+                     {props.isLoggedIn && props.goingStatus !== EVENT_OWNER &&
+                        <Col lg={7}>
+                           <IonButton onClick={goingClicked} color={props.goingStatus === GOING ? "success" : "medium"}>
+                              Going&nbsp; <IonIcon icon={checkmarkCircleOutline} />
+                           </IonButton>
+                           <IonButton onClick={interestedClicked} color={props.goingStatus === INTERESTED ? "warning" : "medium"}>
+                              Interested&nbsp; <IonIcon icon={starOutline} />
+                           </IonButton>
+                        </Col>}
+
+                     {props.isLoggedIn && props.goingStatus === EVENT_OWNER &&
+                        <Col lg={7}>
+                           <IonButton onClick={shareClicked} color="primary">
+                              Share event&nbsp; <IonIcon icon={shareOutline} />
+                           </IonButton>
+                        </Col>}
+                  </Row>
+                  <Row>
+                     <Col>
+                        {props.eventDescription.tags.map(tag => <IonChip key={`tag-${tag}=${props.eventDescription.id}`}>{tag}</IonChip>)}
+                     </Col>
                   </Row>
                   <Row>
                      <Col>
                         {props.eventDescription.description === "" && <div>
-                           <IonSkeletonText animated />  
-                           <IonSkeletonText animated />  
-                           <IonSkeletonText animated />  
-                           <IonSkeletonText animated />  
-                           <IonSkeletonText animated />  
-                           <IonSkeletonText animated />  
-                           <IonSkeletonText animated />  
+                           <IonSkeletonText animated />
+                           <IonSkeletonText animated />
+                           <IonSkeletonText animated />
+                           <IonSkeletonText animated />
+                           <IonSkeletonText animated />
+                           <IonSkeletonText animated />
+                           <IonSkeletonText animated />
                         </div>}
-                        {props.eventDescription.description !== "" && 
-                           <ExpandTextView limit={520} text={props.eventDescription.description} />
+                        {props.eventDescription.description !== "" &&
+                           <ExpandTextView limit={455} text={props.eventDescription.description} />
                         }
                      </Col>
                   </Row>
@@ -190,6 +247,15 @@ const EventDescription: React.FC<EventDescriptionProps> = (props) => {
             message="Removed event from calendar."
             duration={3000}
          />
+
+         <IonToast
+            isOpen={shareUrlToast}
+            onDidDismiss={() => showShareUrlToast(false)}
+            message="Event URL copied to clipboard."
+            duration={3000} />
+
+         {/* Text area used for copying share url to clipboard */}
+         <textarea readOnly hidden={true} ref={shareUrlTextRef} id="shareUrl" value={props.shareUrl} />
       </div>
    )
 }

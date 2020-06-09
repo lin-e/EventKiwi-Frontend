@@ -1,30 +1,28 @@
-import { GET_EVENT_POSTS, EventPostType, GET_DISCOVER_EVENT_POSTS, GET_EVENTS_EVENT_POSTS } from "../actions/types";
+import { GET_EVENT_POSTS, EventPostType, ADD_EVENT_POST } from "../actions/eventPosts/eventPostsTypes";
 import { EventPostsState } from "../types/stateTypes";
 
 const initialState: EventPostsState = {
-   posts: [],
-   discoverPosts: [],
-   eventsPost: []
+   posts: []
 }
 
 export function eventPostReducer(state = initialState, action: EventPostType): EventPostsState {
    switch (action.type) {
       case GET_EVENT_POSTS:
+         const GET_EVENT_newEventPosts = state.posts.filter(ep => ep.eventId !== action.payload.eventId);
+         GET_EVENT_newEventPosts.unshift(action.payload)
          return {
             ...state,
-            posts: action.payload
+            posts: GET_EVENT_newEventPosts
          }
 
-      case GET_DISCOVER_EVENT_POSTS:
+      case ADD_EVENT_POST:
+         const ADD_EVENT_newEventPosts = state.posts.filter(ep => ep.eventId !== action.payload.eventId);
+         const eventWithNewPost = state.posts.filter(ep => ep.eventId === action.payload.eventId)[0];
+         eventWithNewPost.posts.unshift(action.payload.post)
+         ADD_EVENT_newEventPosts.unshift(eventWithNewPost)
          return {
             ...state,
-            discoverPosts: action.payload
-         }
-
-      case GET_EVENTS_EVENT_POSTS:
-         return {
-            ...state,
-            eventsPost: action.payload
+            posts: ADD_EVENT_newEventPosts
          }
 
       default:

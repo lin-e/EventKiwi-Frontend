@@ -1,20 +1,22 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { IonContent, IonPage, IonHeader, IonToolbar, IonButtons, IonBackButton, IonSegment, IonSegmentButton, IonLabel, IonIcon, IonFab, IonFabButton, IonToast } from '@ionic/react'
+import { IonContent, IonPage, IonHeader, IonToolbar, IonButtons, IonBackButton, IonSegment, IonSegmentButton, IonLabel, IonIcon, IonFab, IonFabButton, IonToast, IonModal, IonButton, IonTitle, IonFooter, IonItem, IonInput, IonTextarea } from '@ionic/react'
 import EventDescription from '../components/ViewEventComponents/EventDescription';
 import "./ViewEvent.css";
 import EventPostsList from '../components/ViewEventComponents/EventPostsList';
 import EventResourcesList from '../components/ViewEventComponents/EventResourcesList';
-import { shareOutline } from 'ionicons/icons';
+import { shareOutline, add, pencil } from 'ionicons/icons';
 import { connect, ConnectedProps, useSelector } from 'react-redux';
 import { loadEventDetails, loadingEvent, loadBlankEvent, goingToEvent, interestedInEvent, notGoingToEvent } from '../data/actions/viewEvent/viewEventActions';
-import { loadEventPosts } from '../data/actions/eventPostsActions';
+import { loadEventPosts, addEventPost } from '../data/actions/eventPosts/eventPostsActions';
 import { RootState } from '../data/reducers';
 import { isPlatform } from '@ionic/react';
 import { Plugins } from '@capacitor/core';
-import { blankEventDetails, EventDetails } from '../constants/types';
+import { blankEventDetails, EventDetails, EventIdAndPosts } from '../constants/types';
+import { EVENT_OWNER } from '../constants/constants';
 const { Share } = Plugins;
 
 const eventWithId = (state: RootState) => (id: string) => state.viewEvent.events.filter(e => e.id === id);
+const postsWithEventId = (state: RootState) => (id: string) => state.eventPosts.posts.filter(e => e.eventId === id);
 
 interface OwnProps {
   eventId: string,
@@ -28,7 +30,15 @@ const mapStateToProps = (state: RootState) => ({
   events: state.viewEvent.events
 })
 
-const connector = connect(mapStateToProps, { loadEventDetails, loadBlankEvent, loadingEvent, goingToEvent, interestedInEvent, notGoingToEvent, loadEventPosts })
+const connector = connect(mapStateToProps,
+  { loadEventDetails, 
+    loadBlankEvent, 
+    loadingEvent, 
+    goingToEvent, 
+    interestedInEvent, 
+    notGoingToEvent, 
+    loadEventPosts,
+    addEventPost })
 type PropsFromRedux = ConnectedProps<typeof connector>
 
 type ViewEventProps = OwnProps & PropsFromRedux;
@@ -55,6 +65,12 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
   const eventsWithMatchingId: EventDetails[] = useSelector(eventWithId)(props.eventId)
   const eventDescription = eventsWithMatchingId.length > 0 ? eventsWithMatchingId[0] : blankEventDetails;
   const goingStatus = eventDescription.goingStatus
+
+  const postsWithMatchingId: EventIdAndPosts[] = useSelector(postsWithEventId)(props.eventId)
+  const eventPosts = postsWithMatchingId.length > 0 ? postsWithMatchingId[0].posts : [];
+
+  const [postModal, showPostModal] = useState<boolean>(false);
+  const [postBody, setPostBody] = useState<string>("");
 
   const resetView = () => {
     setDetailsY(0);
@@ -122,6 +138,27 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
     }
   }
 
+  const editEvent = () => {
+    console.log("edit clicked")
+  }
+
+  const showAddPost = () => {
+    setPostBody("");
+    showPostModal(true);
+  }
+
+  const editResources = () => {
+    console.log("edit resources clicked")
+  }
+
+  const ownerFabIcon = segment === "details" ? pencil : (segment === "posts" ? add : shareOutline);
+  const ownerFabOnClick = segment === "details" ? editEvent : (segment === "posts" ? showAddPost : editResources);
+
+  const addPost = () => {
+    props.addEventPost(props.eventId, postBody, props.userToken)
+    showPostModal(false);
+  }
+
   return (
     <IonPage>
 
@@ -146,24 +183,56 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
 
       <IonContent ref={contentRef} scrollEvents onIonScroll={(e) => saveY(e.detail.currentY)} className={!props.isLoading ? 'fadeIn' : 'fadeOut'}>
 
-        <EventDescription goingStatus={goingStatus} eventId={props.eventId} eventDescription={eventDescription} tab={props.activeTab} hide={!details} />
+        <EventDescription goingStatus={goingStatus} shareUrl={shareUrl} eventId={props.eventId} eventDescription={eventDescription} tab={props.activeTab} hide={!details} />
 
-        <EventPostsList tab={props.activeTab} hide={!posts} />
+        <EventPostsList posts={eventPosts} hide={!posts} numPosts={eventPosts.length} />
 
         <EventResourcesList resources={eventDescription.resources} tab={props.activeTab} hide={!resources} />
 
-        <IonFab vertical="bottom" horizontal="end" slot="fixed">
-          <IonFabButton onClick={shareClicked} color="primary">
-            <IonIcon icon={shareOutline} />
-          </IonFabButton>
-        </IonFab>
+        {goingStatus === EVENT_OWNER && 
+          <IonFab vertical="bottom" horizontal="end" slot="fixed">
+            <IonFabButton onClick={ownerFabOnClick} color="primary">
+              <IonIcon icon={ownerFabIcon} />
+            </IonFabButton>
+          </IonFab>}
 
+        {goingStatus !== EVENT_OWNER && 
+          <IonFab vertical="bottom" horizontal="end" slot="fixed">
+            <IonFabButton onClick={shareClicked} color="primary">
+              <IonIcon icon={shareOutline} />
+            </IonFabButton>
+          </IonFab>}
 
         <IonToast
           isOpen={shareUrlToast}
           onDidDismiss={() => showShareUrlToast(false)}
           message="Event URL copied to clipboard."
           duration={3000} />
+
+        <IonModal
+          isOpen={postModal}
+          swipeToClose={true}
+          onDidDismiss={() => showPostModal(false)}>
+
+          <IonHeader>
+
+            <IonToolbar>
+              <IonButtons slot="start">
+                <IonButton color="danger" onClick={() => showPostModal(false)}>Cancel</IonButton>
+              </IonButtons>
+              <IonButtons slot="end">
+                <IonButton color="primary" onClick={addPost} disabled={postBody === ""}>Add post</IonButton>
+              </IonButtons>
+            </IonToolbar>
+          </IonHeader>
+
+          <IonContent>
+            <IonItem>
+              <IonLabel position="stacked">Write a post</IonLabel>
+              <IonTextarea rows={50} placeholder="Update your followers..." required onIonChange={e => setPostBody(e.detail.value!)} />
+            </IonItem>
+          </IonContent>
+        </IonModal>
 
         {/* Text area used for copying share url to clipboard */}
         <textarea readOnly hidden={true} ref={shareUrlTextRef} id="shareUrl" value={shareUrl} />
