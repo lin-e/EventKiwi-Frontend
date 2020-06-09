@@ -1,19 +1,17 @@
 import React, { useState, MouseEvent } from 'react';
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonGrid, IonRow, IonCol, IonLabel, IonTextarea, IonInput, IonText, IonCard, IonDatetime, IonButtons, IonBackButton, IonList, IonItem, IonSelect, IonSelectOption, IonIcon, IonItemDivider, IonButton, IonChip, IonModal } from '@ionic/react';
 import { Container, Row, Col } from 'react-grid-system';
-import { getFullDate, getNumDate } from '../utils/DateTimeTools';
-import { calendar, time, closeCircle } from 'ionicons/icons';
+import { calendar, closeCircle } from 'ionicons/icons';
 import { parseISO, format } from 'date-fns'
 
 import './AddEvent.css'
-import InterestChip from '../components/Profile/InterestChip';
 import EmptySectionText from '../components/EmptySectionText';
 import AddTagSearch from '../components/EditEvent/AddTagSearch';
 
 const AddEvent: React.FC = () => {
   const [startDatetime, setStartDatetime] = useState(new Date());
   const [endDatetime, setEndDatetime] = useState(new Date());
-  const [tagList, setTagList] = useState(["programming", "vim", "docsoc"]);
+  const [tagList, setTagList] = useState<string[]>([]);
   const [showTagSearch, setShowTagSearch] = useState(false);
 
   const currDatetime = new Date();

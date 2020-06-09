@@ -1,5 +1,5 @@
 import React, { useState, MouseEvent } from 'react';
-import { IonLabel, IonSearchbar, IonButton, IonToast, IonTitle, IonContent, IonList } from '@ionic/react';
+import { IonSearchbar, IonContent, IonList } from '@ionic/react';
 import { RootState } from '../../data/reducers';
 import { fetchSearchInterests, addProfileInterest } from '../../data/actions/actions'
 import { ConnectedProps, connect } from 'react-redux';
