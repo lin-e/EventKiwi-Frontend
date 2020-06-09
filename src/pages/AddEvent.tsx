@@ -1,10 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonGrid, IonRow, IonCol, IonLabel, IonTextarea, IonInput, IonText, IonCard, IonDatetime, IonButtons, IonBackButton, IonList, IonItem, IonSelect, IonSelectOption, IonIcon, IonItemDivider } from '@ionic/react';
 import { Container, Row, Col } from 'react-grid-system';
-import { getFullDate } from '../utils/DateTimeTools';
+import { getFullDate, getNumDate } from '../utils/DateTimeTools';
 import { calendar, time } from 'ionicons/icons';
+import { parseISO, format } from 'date-fns'
 
 const AddEvent: React.FC = () => {
+  const [startDatetime, setStartDatetime] = useState(new Date());
+  const [endDatetime, setEndDatetime] = useState(new Date());
+
+  const currDatetime = new Date();
+
   return (
     <IonPage>
       <IonHeader>
@@ -18,6 +24,9 @@ const AddEvent: React.FC = () => {
 
       <IonContent>
         <IonHeader collapse="condense">
+        <IonButtons  slot="start">
+          <IonBackButton text="Cancel" color="danger" defaultHref={`/events`} />
+        </IonButtons>
           <IonToolbar>
             <IonTitle  size="large">Create new Event</IonTitle>
           </IonToolbar>
@@ -53,11 +62,14 @@ const AddEvent: React.FC = () => {
                 </IonItemDivider>
                 <IonItem>
                   <IonIcon icon={calendar} slot="start" />
-                  <IonDatetime displayFormat="DDDD D MMMM YYYY" pickerFormat="D MMMM YYYY" />
-                </IonItem>
-                <IonItem lines="none">
-                  <IonIcon icon={time} slot="start" />
-                  <IonDatetime displayFormat="h:m A" pickerFormat="H m" />
+                  <IonDatetime
+                    value={startDatetime.toISOString()}
+                    displayFormat="DDDD D MMMM YYYY h:mm A"
+                    pickerFormat="D MMMM YYYY H mm"
+                    min={format(currDatetime, "yyyy-MM-dd'T'HH:mm:ss")}
+                    max={(currDatetime.getFullYear() + 3).toString()}
+                    onIonChange={e => setStartDatetime(parseISO(e.detail.value!))}
+                  />
                 </IonItem>
 
                 <IonItemDivider>
@@ -66,16 +78,15 @@ const AddEvent: React.FC = () => {
                 <IonItem>
                   <IonIcon icon={calendar} slot="start" />
                   <IonDatetime 
-                    displayFormat="DDDD D MMMM YYYY"
-                    pickerFormat="D MMMM YYYY"
-                    min={new Date().getFullYear().toString()}
-                    max={(new Date().getFullYear() + 3).toString()}
+                    value={endDatetime.toISOString()}
+                    displayFormat="DDDD D MMMM YYYY h:mm A"
+                    pickerFormat="D MMMM YYYY H mm"
+                    min={format(startDatetime, "yyyy-MM-dd'T'HH:mm:ss")}
+                    max={(currDatetime.getFullYear() + 3).toString()}
+                    onIonChange={e => setEndDatetime(parseISO(e.detail.value!))}
                   />
                 </IonItem>
-                <IonItem>
-                  <IonIcon icon={time} slot="start" />
-                  <IonDatetime displayFormat="h:m A" pickerFormat="H m" />
-                </IonItem>
+
                 <IonItem>
                   <IonLabel>Privacy:</IonLabel>
                   <IonSelect interface="popover">
@@ -96,7 +107,6 @@ const AddEvent: React.FC = () => {
               </IonList>
             </Col>
           </Row>
-          <p></p>
         
         </Container>
       </IonContent>

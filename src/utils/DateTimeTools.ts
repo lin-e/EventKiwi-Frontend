@@ -28,6 +28,10 @@ export const getShortDate = (date: Date) => {
   )
 }
 
+export const getNumDate = (date: Date) => (
+  `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`
+)
+
 export const sameDay = (date1: Date, date2: Date) => {
   return (
     date1.getUTCDate() === date2.getUTCDate()) &&
