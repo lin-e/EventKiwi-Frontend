@@ -9,7 +9,6 @@ import InterestItem from './InterestItem';
 const mapStateToProps = (state: RootState) => {
   return {
     searchResults: state.interestSearch.interests,
-    interests: state.profileDetails.profileDetails.interests,
     userToken: state.userDetails.userToken
   }
 }
@@ -22,7 +21,7 @@ const connector = connect(
 type PropsFromRedux = ConnectedProps<typeof connector>
 type AddInterestModalProps = PropsFromRedux
 
-const AddInterestModal: React.FC<AddInterestModalProps> = ({ searchResults, interests, userToken, fetchSearchInterests, addProfileInterest }) => {
+const AddInterestModal: React.FC<AddInterestModalProps> = ({ searchResults, userToken, fetchSearchInterests }) => {
   const [searchTerm, setsearchTerm] = useState("");
   
   const searchBarUpdate = (e: CustomEvent) => {
