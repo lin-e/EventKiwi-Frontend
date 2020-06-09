@@ -1,16 +1,18 @@
-import React, { useState } from 'react';
-import { IonText, IonCard, IonCardSubtitle, IonCol, IonGrid, IonRow, IonButton, IonIcon, IonToast, IonSkeletonText, IonChip } from '@ionic/react';
+import React, { useState, useRef } from 'react';
+import { IonText, IonCard, IonCardSubtitle, IonCol, IonGrid, IonRow, IonButton, IonIcon, IonToast, IonSkeletonText, IonChip, isPlatform } from '@ionic/react';
 import './EventDescription.css';
 import { Container, Row, Col } from 'react-grid-system';
 import ExpandTextView from '../ExpandTextView';
 import EventMiniCard from '../EventMiniCard';
 import { getDateRange } from '../../utils/DateTimeTools';
 import { RootState } from '../../data/reducers';
+import { Plugins } from '@capacitor/core';
 import { ConnectedProps, connect } from 'react-redux';
-import { checkmarkCircleOutline, starOutline, time, location as locationIcon } from 'ionicons/icons';
-import { INTERESTED, GOING } from '../../constants/constants';
+import { checkmarkCircleOutline, starOutline, time, location as locationIcon, shareOutline } from 'ionicons/icons';
+import { INTERESTED, GOING, EVENT_OWNER } from '../../constants/constants';
 import { goingToEvent, interestedInEvent, notGoingToEvent } from '../../data/actions/viewEvent/viewEventActions';
 import { EventDetails } from '../../constants/types';
+const { Share } = Plugins;
 
 const mapStateToProps = (state: RootState) => ({
    userToken: state.userDetails.userToken,
@@ -24,7 +26,8 @@ interface OwnProps {
    eventDescription: EventDetails,
    tab: string,
    eventId: string,
-   goingStatus: number
+   goingStatus: number,
+   shareUrl: string
 }
 
 type PropsFromRedux = ConnectedProps<typeof connector>
@@ -34,6 +37,9 @@ const EventDescription: React.FC<EventDescriptionProps> = (props) => {
    const [goingToast, showGoingToast] = useState<boolean>(false);
    const [notGoingToast, showNotGoingToast] = useState<boolean>(false);
    const [interestedToast, showInterestedToast] = useState<boolean>(false);
+   const [shareUrlToast, showShareUrlToast] = useState<boolean>(false);
+
+   const shareUrlTextRef = useRef<HTMLTextAreaElement>(null);
 
    const interestedClicked = () => {
       if (props.eventDescription.goingStatus !== INTERESTED) {
@@ -54,6 +60,28 @@ const EventDescription: React.FC<EventDescriptionProps> = (props) => {
          showNotGoingToast(true);
       }
    }
+
+   const shareClicked = async () => {
+      if (isPlatform("desktop")) {
+        try {
+          shareUrlTextRef.current!.hidden = false;
+          shareUrlTextRef.current!.select();
+          var successful = document.execCommand('copy');
+          successful ? showShareUrlToast(true) : console.log("Unable to copy URL to clipboard");
+        } catch (err) {
+          console.error('Fallback: Unable to copy', err);
+        } finally {
+          shareUrlTextRef.current!.hidden = true;
+        }
+  
+      } else {
+        let shareRet = await Share.share({
+          title: `Share event`,
+          url: props.shareUrl,
+          dialogTitle: 'Share event'
+        });
+      }
+    }
 
    return (
       <div style={props.hide ? { display: "none" } : {}}>
@@ -106,14 +134,20 @@ const EventDescription: React.FC<EventDescriptionProps> = (props) => {
                            </IonCardSubtitle>
                         </div>}
                      </Col>
-                     {props.isLoggedIn &&
+                     {props.isLoggedIn && props.goingStatus !== EVENT_OWNER &&
                         <Col lg={7}>
-                           {/* <br /> */}
                            <IonButton onClick={goingClicked} color={props.goingStatus === GOING ? "success" : "medium"}>
                               Going&nbsp; <IonIcon icon={checkmarkCircleOutline} />
                            </IonButton>
                            <IonButton onClick={interestedClicked} color={props.goingStatus === INTERESTED ? "warning" : "medium"}>
                               Interested&nbsp; <IonIcon icon={starOutline} />
+                           </IonButton>
+                        </Col>}
+
+                     {props.isLoggedIn && props.goingStatus === EVENT_OWNER &&
+                        <Col lg={7}>
+                           <IonButton onClick={shareClicked} color="primary">
+                              Share event&nbsp; <IonIcon icon={shareOutline} />
                            </IonButton>
                         </Col>}
                   </Row>
@@ -213,6 +247,15 @@ const EventDescription: React.FC<EventDescriptionProps> = (props) => {
             message="Removed event from calendar."
             duration={3000}
          />
+
+         <IonToast
+            isOpen={shareUrlToast}
+            onDidDismiss={() => showShareUrlToast(false)}
+            message="Event URL copied to clipboard."
+            duration={3000} />
+
+         {/* Text area used for copying share url to clipboard */}
+         <textarea readOnly hidden={true} ref={shareUrlTextRef} id="shareUrl" value={props.shareUrl} />
       </div>
    )
 }

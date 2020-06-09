@@ -12,6 +12,7 @@ import { RootState } from '../data/reducers';
 import { isPlatform } from '@ionic/react';
 import { Plugins } from '@capacitor/core';
 import { blankEventDetails, EventDetails, EventIdAndPosts } from '../constants/types';
+import { EVENT_OWNER } from '../constants/constants';
 const { Share } = Plugins;
 
 const eventWithId = (state: RootState) => (id: string) => state.viewEvent.events.filter(e => e.id === id);
@@ -182,18 +183,25 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
 
       <IonContent ref={contentRef} scrollEvents onIonScroll={(e) => saveY(e.detail.currentY)} className={!props.isLoading ? 'fadeIn' : 'fadeOut'}>
 
-        <EventDescription goingStatus={goingStatus} eventId={props.eventId} eventDescription={eventDescription} tab={props.activeTab} hide={!details} />
+        <EventDescription goingStatus={goingStatus} shareUrl={shareUrl} eventId={props.eventId} eventDescription={eventDescription} tab={props.activeTab} hide={!details} />
 
         <EventPostsList posts={eventPosts} hide={!posts} numPosts={eventPosts.length} />
 
         <EventResourcesList resources={eventDescription.resources} tab={props.activeTab} hide={!resources} />
 
-        <IonFab vertical="bottom" horizontal="end" slot="fixed">
-          <IonFabButton onClick={ownerFabOnClick} color="primary">
-            <IonIcon icon={ownerFabIcon} />
-          </IonFabButton>
-        </IonFab>
+        {goingStatus === EVENT_OWNER && 
+          <IonFab vertical="bottom" horizontal="end" slot="fixed">
+            <IonFabButton onClick={ownerFabOnClick} color="primary">
+              <IonIcon icon={ownerFabIcon} />
+            </IonFabButton>
+          </IonFab>}
 
+        {goingStatus !== EVENT_OWNER && 
+          <IonFab vertical="bottom" horizontal="end" slot="fixed">
+            <IonFabButton onClick={shareClicked} color="primary">
+              <IonIcon icon={shareOutline} />
+            </IonFabButton>
+          </IonFab>}
 
         <IonToast
           isOpen={shareUrlToast}
