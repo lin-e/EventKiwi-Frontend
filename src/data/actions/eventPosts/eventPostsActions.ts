@@ -23,7 +23,6 @@ export const loadEventPosts = (id: string, userToken: string): AppThunk => async
 }
 
 export const addEventPost = (eventId: string, content: string, userToken: string): AppThunk => async dispatch => {
-   console.log(content)
    fetch(addEventPostEndpoint(eventId), {
       method: 'post',
       body: JSON.stringify({ content: content }),

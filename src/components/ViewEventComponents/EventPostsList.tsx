@@ -16,7 +16,8 @@ const connector = connect(mapStateToProps)
 
 interface OwnProps {
    hide: boolean,
-   posts: Post[]
+   posts: Post[],
+   numPosts: number
 }
 
 type PropsFromRedux = ConnectedProps<typeof connector>
