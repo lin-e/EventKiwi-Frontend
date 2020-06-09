@@ -24,6 +24,10 @@ export interface EventPostsState {
    eventsPost: Post[]
 }
 
+export interface EventEditState {
+   event: EventDetails
+}
+
 export interface UserState {
    loading: boolean,
    isLoggedIn: boolean,
