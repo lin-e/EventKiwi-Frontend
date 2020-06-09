@@ -1,7 +1,7 @@
 import { AppThunk } from "../../types/dataInterfaces"
 import { eventPostsEndpoint, addEventPostEndpoint } from "../../../constants/endpoints"
 import { GET_EVENT_POSTS, ADD_EVENT_POST } from "./eventPostsTypes"
-import { convertResToEventPosts } from "../../../constants/types"
+import { convertResToEventPosts, convertResToPost } from "../../../constants/types"
 
 
 
@@ -30,7 +30,7 @@ export const addEventPost = (eventId: string, content: string, userToken: string
       headers: { 'Authorization': `Bearer ${userToken}`, 'Content-Type': 'application/json' }
    })
    .then(res => res.json())
-   .then(data => data.body)
+   .then(data => convertResToPost(data.body))
    .then(post => (dispatch({
       type: ADD_EVENT_POST,
       payload: {
