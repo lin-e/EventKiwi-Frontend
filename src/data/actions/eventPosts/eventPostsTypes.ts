@@ -7,17 +7,10 @@ export const ADD_EVENT_POST = "ADD_EVENT_POST";
 
 interface GetEventPostsAction {
    type: typeof GET_EVENT_POSTS,
-   payload: Post[]
-}
-
-interface GetDiscoverEventPostsAction {
-   type: typeof GET_DISCOVER_EVENT_POSTS,
-   payload: Post[]
-}
-
-interface GetEventsEventPostsAction {
-   type: typeof GET_EVENTS_EVENT_POSTS,
-   payload: Post[]
+   payload: {
+      eventId: string,
+      posts: Post[]
+   }
 }
 
 interface AddEventPostsAction {
@@ -28,4 +21,4 @@ interface AddEventPostsAction {
    }
 }
 
-export type EventPostType = GetEventPostsAction | GetDiscoverEventPostsAction | GetEventsEventPostsAction | AddEventPostsAction;
+export type EventPostType = GetEventPostsAction | AddEventPostsAction;

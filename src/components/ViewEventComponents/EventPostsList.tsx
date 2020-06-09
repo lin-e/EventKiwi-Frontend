@@ -6,11 +6,9 @@ import CentredTextContainer from '../CentredTextContainer';
 import { RootState } from '../../data/reducers';
 import { ConnectedProps, connect } from 'react-redux';
 import { getLongDate, getTime } from '../../utils/DateTimeTools';
+import { Post } from '../../constants/types';
 
 const mapStateToProps = (state: RootState) => ({
-   posts: state.eventPosts.posts,
-   discoverPosts: state.eventPosts.discoverPosts,
-   eventsPost: state.eventPosts.eventsPost,
    userToken: state.userDetails.userToken
 })
 
@@ -18,23 +16,21 @@ const connector = connect(mapStateToProps)
 
 interface OwnProps {
    hide: boolean,
-   tab: string
+   posts: Post[]
 }
 
 type PropsFromRedux = ConnectedProps<typeof connector>
 type EventPostsListProps = PropsFromRedux & OwnProps;
 
 const EventPostsList: React.FC<EventPostsListProps> = (props) => {
-   const posts = props.tab === "events" ? props.eventsPost : (props.tab === "discover" ? props.discoverPosts : props.posts);
-
    return (
       <div style={props.hide ? { display: "none" } : {}}>
-         {posts.length === 0 && 
+         {props.posts.length === 0 && 
             <CentredTextContainer name={"No posts for this event"} />
          }
-         {posts.length > 0 &&
+         {props.posts.length > 0 &&
             <IonList>
-               {posts.map(post => {
+               {props.posts.map(post => {
                   return (
                      <IonItem key={`event-post-${post.id}`}>
                         <div className="restrictedWidth">

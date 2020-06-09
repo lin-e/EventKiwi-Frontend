@@ -11,10 +11,11 @@ import { loadEventPosts } from '../data/actions/eventPosts/eventPostsActions';
 import { RootState } from '../data/reducers';
 import { isPlatform } from '@ionic/react';
 import { Plugins } from '@capacitor/core';
-import { blankEventDetails, EventDetails } from '../constants/types';
+import { blankEventDetails, EventDetails, Post, EventIdAndPosts } from '../constants/types';
 const { Share } = Plugins;
 
 const eventWithId = (state: RootState) => (id: string) => state.viewEvent.events.filter(e => e.id === id);
+const postsWithEventId = (state: RootState) => (id: string) => state.eventPosts.posts.filter(e => e.eventId === id);
 
 interface OwnProps {
   eventId: string,
@@ -62,6 +63,9 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
   const eventsWithMatchingId: EventDetails[] = useSelector(eventWithId)(props.eventId)
   const eventDescription = eventsWithMatchingId.length > 0 ? eventsWithMatchingId[0] : blankEventDetails;
   const goingStatus = eventDescription.goingStatus
+
+  const postsWithMatchingId: EventIdAndPosts[] = useSelector(postsWithEventId)(props.eventId)
+  const eventPosts = postsWithMatchingId.length > 0 ? postsWithMatchingId[0].posts : [];
 
   const [postModal, showPostModal] = useState<boolean>(false);
   const [postBody, setPostBody] = useState<string>("");
@@ -179,7 +183,7 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
 
         <EventDescription goingStatus={goingStatus} eventId={props.eventId} eventDescription={eventDescription} tab={props.activeTab} hide={!details} />
 
-        <EventPostsList tab={props.activeTab} hide={!posts} />
+        <EventPostsList posts={eventPosts} hide={!posts} />
 
         <EventResourcesList resources={eventDescription.resources} tab={props.activeTab} hide={!resources} />
 
