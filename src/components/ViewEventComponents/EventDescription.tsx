@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { IonText, IonCard, IonCardSubtitle, IonCol, IonGrid, IonRow, IonButton, IonIcon, IonToast, IonSkeletonText } from '@ionic/react';
+import { IonText, IonCard, IonCardSubtitle, IonCol, IonGrid, IonRow, IonButton, IonIcon, IonToast, IonSkeletonText, IonChip } from '@ionic/react';
 import './EventDescription.css';
 import { Container, Row, Col } from 'react-grid-system';
 import ExpandTextView from '../ExpandTextView';
@@ -7,7 +7,7 @@ import EventMiniCard from '../EventMiniCard';
 import { getDateRange } from '../../utils/DateTimeTools';
 import { RootState } from '../../data/reducers';
 import { ConnectedProps, connect } from 'react-redux';
-import { checkmarkCircleOutline, starOutline } from 'ionicons/icons';
+import { checkmarkCircleOutline, starOutline, time, location as locationIcon } from 'ionicons/icons';
 import { INTERESTED, GOING } from '../../constants/constants';
 import { goingToEvent, interestedInEvent, notGoingToEvent } from '../../data/actions/viewEvent/viewEventActions';
 import { EventDetails } from '../../constants/types';
@@ -43,9 +43,9 @@ const EventDescription: React.FC<EventDescriptionProps> = (props) => {
          props.notGoingToEvent(props.eventDescription.id, props.userToken);
          showNotGoingToast(true);
       }
-    }
-  
-    const goingClicked = () => {
+   }
+
+   const goingClicked = () => {
       if (props.eventDescription.goingStatus !== GOING) {
          props.goingToEvent(props.eventDescription.id, props.userToken);
          showGoingToast(true)
@@ -53,18 +53,20 @@ const EventDescription: React.FC<EventDescriptionProps> = (props) => {
          props.notGoingToEvent(props.eventDescription.id, props.userToken);
          showNotGoingToast(true);
       }
-    }
+   }
 
    return (
       <div style={props.hide ? { display: "none" } : {}}>
          <Container>
             <IonText>
-            {props.eventDescription.name === "" && 
-               <h1><IonSkeletonText style={{ width: '40%', height: '30px' }} animated /></h1>
-            }
-            {props.eventDescription.name !== "" && 
-               <h1>{props.eventDescription.name}</h1>
-            }
+               {props.eventDescription.name === "" && <>
+                  <h1><IonSkeletonText style={{ width: '40%', height: '30px' }} animated /></h1>
+                  <IonSkeletonText animated />  </>
+               }
+               {props.eventDescription.name !== "" && <>
+                  <h1>{props.eventDescription.name}</h1>
+                  <IonCardSubtitle>By {props.eventDescription.organiser.name}</IonCardSubtitle> </>
+               }
             </IonText>
 
             <Row>
@@ -78,40 +80,61 @@ const EventDescription: React.FC<EventDescriptionProps> = (props) => {
                   <Row>
                      <Col lg={5} sm={12}>
                         {props.eventDescription.description === "" && <div>
-                           <IonSkeletonText animated />  
-                           <IonSkeletonText animated />  
-                           <IonSkeletonText animated />  
+                           <IonSkeletonText animated />
+                           <IonSkeletonText animated />
                         </div>}
                         {props.eventDescription.description !== "" && <div>
-                           <IonCardSubtitle>By {props.eventDescription.organiser.name},</IonCardSubtitle>
-                           <IonCardSubtitle>{`${getDateRange(props.eventDescription.datetimeStart, props.eventDescription.datetimeEnd)},`}</IonCardSubtitle>
-                           <IonCardSubtitle>{props.eventDescription.location}</IonCardSubtitle>
+                           <IonCardSubtitle className="detailsText">
+                              <IonGrid className="timeLocationGrid">
+                                 <IonRow className="timeLocationRow">
+                                    <IonCol className="timeLocationCol" size="auto">
+                                       <IonIcon icon={time} />
+                                    </IonCol>
+                                    <IonCol>
+                                       {`${getDateRange(props.eventDescription.datetimeStart, props.eventDescription.datetimeEnd)}`}
+                                    </IonCol>
+                                 </IonRow>
+                                 <IonRow className="timeLocationRow">
+                                    <IonCol className="timeLocationCol" size="auto">
+                                       <IonIcon icon={locationIcon} />
+                                    </IonCol>
+                                    <IonCol>
+                                       {props.eventDescription.location}
+                                    </IonCol>
+                                 </IonRow>
+                              </IonGrid>
+                           </IonCardSubtitle>
                         </div>}
                      </Col>
-                     {props.isLoggedIn && 
-                     <Col lg={7}>
-                        <br />
-                        <IonButton onClick={goingClicked} color={props.goingStatus === GOING ? "success" : "medium"}>
-                           Going&nbsp; <IonIcon icon={checkmarkCircleOutline} />
-                        </IonButton>
-                        <IonButton onClick={interestedClicked} color={props.goingStatus === INTERESTED ? "warning" : "medium"}>
-                           Interested&nbsp; <IonIcon icon={starOutline} />
-                        </IonButton>
-                     </Col>}
+                     {props.isLoggedIn &&
+                        <Col lg={7}>
+                           {/* <br /> */}
+                           <IonButton onClick={goingClicked} color={props.goingStatus === GOING ? "success" : "medium"}>
+                              Going&nbsp; <IonIcon icon={checkmarkCircleOutline} />
+                           </IonButton>
+                           <IonButton onClick={interestedClicked} color={props.goingStatus === INTERESTED ? "warning" : "medium"}>
+                              Interested&nbsp; <IonIcon icon={starOutline} />
+                           </IonButton>
+                        </Col>}
+                  </Row>
+                  <Row>
+                     <Col>
+                        {props.eventDescription.tags.map(tag => <IonChip key={`tag-${tag}=${props.eventDescription.id}`}>{tag}</IonChip>)}
+                     </Col>
                   </Row>
                   <Row>
                      <Col>
                         {props.eventDescription.description === "" && <div>
-                           <IonSkeletonText animated />  
-                           <IonSkeletonText animated />  
-                           <IonSkeletonText animated />  
-                           <IonSkeletonText animated />  
-                           <IonSkeletonText animated />  
-                           <IonSkeletonText animated />  
-                           <IonSkeletonText animated />  
+                           <IonSkeletonText animated />
+                           <IonSkeletonText animated />
+                           <IonSkeletonText animated />
+                           <IonSkeletonText animated />
+                           <IonSkeletonText animated />
+                           <IonSkeletonText animated />
+                           <IonSkeletonText animated />
                         </div>}
-                        {props.eventDescription.description !== "" && 
-                           <ExpandTextView limit={520} text={props.eventDescription.description} />
+                        {props.eventDescription.description !== "" &&
+                           <ExpandTextView limit={455} text={props.eventDescription.description} />
                         }
                      </Col>
                   </Row>
