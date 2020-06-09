@@ -1,5 +1,5 @@
 import React, { useState, MouseEvent } from 'react';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonGrid, IonRow, IonCol, IonLabel, IonTextarea, IonInput, IonText, IonCard, IonDatetime, IonButtons, IonBackButton, IonList, IonItem, IonSelect, IonSelectOption, IonIcon, IonItemDivider, IonButton, IonChip } from '@ionic/react';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonGrid, IonRow, IonCol, IonLabel, IonTextarea, IonInput, IonText, IonCard, IonDatetime, IonButtons, IonBackButton, IonList, IonItem, IonSelect, IonSelectOption, IonIcon, IonItemDivider, IonButton, IonChip, IonModal } from '@ionic/react';
 import { Container, Row, Col } from 'react-grid-system';
 import { getFullDate, getNumDate } from '../utils/DateTimeTools';
 import { calendar, time, closeCircle } from 'ionicons/icons';
@@ -8,16 +8,21 @@ import { parseISO, format } from 'date-fns'
 import './AddEvent.css'
 import InterestChip from '../components/Profile/InterestChip';
 import EmptySectionText from '../components/EmptySectionText';
+import AddTagSearch from '../components/EditEvent/AddTagSearch';
 
 const AddEvent: React.FC = () => {
   const [startDatetime, setStartDatetime] = useState(new Date());
   const [endDatetime, setEndDatetime] = useState(new Date());
   const [tagList, setTagList] = useState(["programming", "vim", "docsoc"]);
+  const [showTagSearch, setShowTagSearch] = useState(false);
 
   const currDatetime = new Date();
 
-  const removeTag = (e: MouseEvent, toRemove: string) => {
-    e.preventDefault();
+  const addTag = (toAdd: string) => {
+    setTagList(tagList.concat([toAdd]))
+  }
+
+  const removeTag = (toRemove: string) => {
     setTagList(tagList.filter(tag => tag !== toRemove));
   }
 
@@ -123,7 +128,7 @@ const AddEvent: React.FC = () => {
               <IonLabel>Tags:</IonLabel>
             </Col>
             <Col xs={4}>
-              <IonButton className="tagEditBtn" fill="clear">Edit</IonButton>
+              <IonButton className="tagEditBtn" fill="clear" onClick={() => setShowTagSearch(true)}>Edit</IonButton>
             </Col>
           </Row>
           <Row>
@@ -134,7 +139,7 @@ const AddEvent: React.FC = () => {
                     {tagList.map((tag) => (
                       <IonChip>
                         <IonLabel>{tag}</IonLabel>
-                        <IonIcon icon={closeCircle} onClick={e => removeTag(e, tag)}/>
+                        <IonIcon icon={closeCircle} onClick={() => removeTag(tag)}/>
                       </IonChip>
                     ))}
                   </div> :
@@ -164,6 +169,11 @@ const AddEvent: React.FC = () => {
           </Row>
         
         </Container>
+
+        <IonModal isOpen={showTagSearch} onDidDismiss={() => setShowTagSearch(false)}>
+          <AddTagSearch currentTags={tagList} addTag={addTag} removeTag={removeTag} />
+          <IonButton onClick={() => setShowTagSearch(false)} className="dismissBtn">Done</IonButton>
+        </IonModal>
       </IonContent>
     </IonPage>
   );

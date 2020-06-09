@@ -54,3 +54,7 @@ ion-list {
 .noTagText {
     transform: translateY(0);
 }
+
+.dismissBtn {
+    margin-bottom: 8px;
+}
