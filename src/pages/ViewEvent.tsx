@@ -28,7 +28,14 @@ const mapStateToProps = (state: RootState) => ({
   events: state.viewEvent.events
 })
 
-const connector = connect(mapStateToProps, { loadEventDetails, loadBlankEvent, loadingEvent, goingToEvent, interestedInEvent, notGoingToEvent, loadEventPosts })
+const connector = connect(mapStateToProps,
+  { loadEventDetails, 
+    loadBlankEvent, 
+    loadingEvent, 
+    goingToEvent, 
+    interestedInEvent, 
+    notGoingToEvent, 
+    loadEventPosts })
 type PropsFromRedux = ConnectedProps<typeof connector>
 
 type ViewEventProps = OwnProps & PropsFromRedux;
@@ -57,7 +64,6 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
   const goingStatus = eventDescription.goingStatus
 
   const [postModal, showPostModal] = useState<boolean>(false);
-  const [postTitle, setPostTitle] = useState<string>("");
   const [postBody, setPostBody] = useState<string>("");
 
   const resetView = () => {
@@ -131,7 +137,6 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
   }
 
   const showAddPost = () => {
-    setPostTitle("");
     setPostBody("");
     showPostModal(true);
   }
@@ -144,7 +149,6 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
   const ownerFabOnClick = segment === "details" ? editEvent : (segment === "posts" ? showAddPost : editResources);
 
   const addPost = () => {
-    console.log(postTitle);
     console.log(postBody);
     showPostModal(false);
   }
@@ -201,31 +205,19 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
 
             <IonToolbar>
               <IonButtons slot="start">
-                <IonButton color="primary" onClick={() => showPostModal(false)}>Cancel</IonButton>
+                <IonButton color="danger" onClick={() => showPostModal(false)}>Cancel</IonButton>
               </IonButtons>
-              {isPlatform("ios") &&
-                <IonTitle>Add post</IonTitle> }
-              {!isPlatform("ios") &&
-                <IonTitle slot="end">Add post</IonTitle> }
+              <IonButtons slot="end">
+                <IonButton color="primary" onClick={addPost}>Add post</IonButton>
+              </IonButtons>
             </IonToolbar>
           </IonHeader>
 
           <IonContent>
-            <form onSubmit={e => e.preventDefault()}>
-              <IonItem>
-                <IonLabel position="floating">Title</IonLabel>
-                <IonInput required onIonChange={e => setPostTitle(e.detail.value!)} />
-              </IonItem>
-              <IonItem>
-                <IonLabel position="floating">Content</IonLabel>
-                <IonTextarea rows={30} placeholder="Update your followers..." required onIonChange={e => setPostBody(e.detail.value!)} />
-              </IonItem>
-
-              <IonButton type="submit" onClick={addPost} expand="block">Post</IonButton>
-            </form>
-
-
-
+            <IonItem>
+              <IonLabel position="stacked">Write a post</IonLabel>
+              <IonTextarea rows={50} placeholder="Update your followers..." required onIonChange={e => setPostBody(e.detail.value!)} />
+            </IonItem>
           </IonContent>
         </IonModal>
 
