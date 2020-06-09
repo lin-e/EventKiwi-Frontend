@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonGrid, IonRow, IonCol, IonLabel, IonTextarea, IonInput, IonText, IonCard, IonDatetime, IonButtons, IonBackButton, IonList, IonItem, IonSelect, IonSelectOption, IonIcon, IonItemDivider } from '@ionic/react';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonGrid, IonRow, IonCol, IonLabel, IonTextarea, IonInput, IonText, IonCard, IonDatetime, IonButtons, IonBackButton, IonList, IonItem, IonSelect, IonSelectOption, IonIcon, IonItemDivider, IonButton } from '@ionic/react';
 import { Container, Row, Col } from 'react-grid-system';
 import { getFullDate, getNumDate } from '../utils/DateTimeTools';
 import { calendar, time } from 'ionicons/icons';
 import { parseISO, format } from 'date-fns'
+
+import './AddEvent.css'
 
 const AddEvent: React.FC = () => {
   const [startDatetime, setStartDatetime] = useState(new Date());
@@ -14,11 +16,14 @@ const AddEvent: React.FC = () => {
   return (
     <IonPage>
       <IonHeader>
-        <IonButtons  slot="start">
-          <IonBackButton text="Cancel" color="danger" defaultHref={`/events`} />
-        </IonButtons>
         <IonToolbar>
+          <IonButtons  slot="start">
+            <IonBackButton color="danger" defaultHref={`/events`} />
+          </IonButtons>
           <IonTitle>Create new Event</IonTitle>
+          <IonButtons  slot="end">
+            <IonButton color="primary">Save</IonButton>
+          </IonButtons>
         </IonToolbar>
       </IonHeader>
 
@@ -36,17 +41,18 @@ const AddEvent: React.FC = () => {
           <IonItem>
             <IonLabel position="stacked">Title:</IonLabel>
             <IonTextarea 
-              autoGrow
               spellCheck
               wrap="soft"
               required
+              rows={2}
+              maxlength={64}
             />
           </IonItem>
 
           <Row>
             <Col md={6} sm={12}>
-              <IonCard className="eventImageCard">
-                <img className="eventImage" src="https://picsum.photos/800/600" alt="event banner image" />
+              <IonCard className="uploadImageCard">
+                <img className="uploadImage" src="https://picsum.photos/800/400" alt="event banner image" />
               </IonCard>
             </Col>
 
@@ -54,7 +60,9 @@ const AddEvent: React.FC = () => {
               <IonList className="detailsList">
                 <IonItem lines="none">
                   <IonLabel position="stacked">Location:</IonLabel>
-                  <IonInput />
+                  <IonInput
+                    maxlength={128}
+                  />
                 </IonItem>
 
                 <IonItemDivider>
@@ -87,7 +95,7 @@ const AddEvent: React.FC = () => {
                   />
                 </IonItem>
 
-                <IonItem>
+                <IonItem lines="none">
                   <IonLabel>Privacy:</IonLabel>
                   <IonSelect interface="popover">
                     <IonSelectOption>Private</IonSelectOption>
@@ -96,13 +104,22 @@ const AddEvent: React.FC = () => {
                     <IonSelectOption>Public</IonSelectOption>
                   </IonSelect>
                 </IonItem>
+              </IonList>
+            </Col>
+          </Row>
+          <Row>
+
+          </Row>
+          <Row>
+            <Col xs={12}>
+              <IonList>
                 <IonItem lines="none">
                   <IonLabel position="stacked">Description:</IonLabel>
                   <IonTextarea 
-                    autoGrow
+                    rows={8}
                     spellCheck
                     wrap="soft"
-                  />
+                    />
                 </IonItem>
               </IonList>
             </Col>
