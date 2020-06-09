@@ -7,11 +7,11 @@ import EventResourcesList from '../components/ViewEventComponents/EventResources
 import { shareOutline, add, pencil } from 'ionicons/icons';
 import { connect, ConnectedProps, useSelector } from 'react-redux';
 import { loadEventDetails, loadingEvent, loadBlankEvent, goingToEvent, interestedInEvent, notGoingToEvent } from '../data/actions/viewEvent/viewEventActions';
-import { loadEventPosts } from '../data/actions/eventPosts/eventPostsActions';
+import { loadEventPosts, addEventPost } from '../data/actions/eventPosts/eventPostsActions';
 import { RootState } from '../data/reducers';
 import { isPlatform } from '@ionic/react';
 import { Plugins } from '@capacitor/core';
-import { blankEventDetails, EventDetails, Post, EventIdAndPosts } from '../constants/types';
+import { blankEventDetails, EventDetails, EventIdAndPosts } from '../constants/types';
 const { Share } = Plugins;
 
 const eventWithId = (state: RootState) => (id: string) => state.viewEvent.events.filter(e => e.id === id);
@@ -36,7 +36,8 @@ const connector = connect(mapStateToProps,
     goingToEvent, 
     interestedInEvent, 
     notGoingToEvent, 
-    loadEventPosts })
+    loadEventPosts,
+    addEventPost })
 type PropsFromRedux = ConnectedProps<typeof connector>
 
 type ViewEventProps = OwnProps & PropsFromRedux;
@@ -153,7 +154,7 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
   const ownerFabOnClick = segment === "details" ? editEvent : (segment === "posts" ? showAddPost : editResources);
 
   const addPost = () => {
-    console.log(postBody);
+    props.addEventPost(props.eventId, postBody, props.userToken)
     showPostModal(false);
   }
 
@@ -212,7 +213,7 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
                 <IonButton color="danger" onClick={() => showPostModal(false)}>Cancel</IonButton>
               </IonButtons>
               <IonButtons slot="end">
-                <IonButton color="primary" onClick={addPost}>Add post</IonButton>
+                <IonButton color="primary" onClick={addPost} disabled={postBody === ""}>Add post</IonButton>
               </IonButtons>
             </IonToolbar>
           </IonHeader>

@@ -19,23 +19,23 @@ export const loadEventPosts = (id: string, userToken: string): AppThunk => async
             posts: posts.posts
          }
       })
-   ))
+      ))
 }
 
-export const addEventPosts = (eventId: string, content: string, userToken: string): AppThunk => async dispatch => {
+export const addEventPost = (eventId: string, content: string, userToken: string): AppThunk => async dispatch => {
+   console.log(content)
    fetch(addEventPostEndpoint(eventId), {
-      method: "post",
+      method: 'post',
       body: JSON.stringify({ content: content }),
-      headers: { 'Authorization': `Bearer ${userToken}` }
+      headers: { 'Authorization': `Bearer ${userToken}`, 'Content-Type': 'application/json' }
    })
-      .then(res => res.json())
-      .then(data => data.body)
-      .then(post => (dispatch({
-         type: ADD_EVENT_POST,
-         payload: {
-            eventId: eventId,
-            post: post
-         }
-      })
-      ))
+   .then(res => res.json())
+   .then(data => data.body)
+   .then(post => (dispatch({
+      type: ADD_EVENT_POST,
+      payload: {
+         eventId: eventId,
+         post: post
+      }
+   })))
 }
