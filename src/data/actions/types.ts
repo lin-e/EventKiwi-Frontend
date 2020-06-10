@@ -26,11 +26,17 @@ export type FetchSocietyType = FetchSearchSocietyCardsAction | followSocietyActi
 
 
 export const FETCH_EVENTS_CARDS = "FETCH_EVENTS_CARDS";
+export const FETCH_MORE_EVENT_CARDS = "FETCH_MORE_EVENT_CARDS";
 export const FETCH_SEARCH_EVENT_CARDS = "FETCH_SEARCH_EVENT_CARDS";
 export const FETCH_MORE_SEARCH_EVENT_CARDS = "FETCH_MORE_SEARCH_EVENT_CARDS";
 
 export interface FetchEventCardsAction {
    type: typeof FETCH_EVENTS_CARDS,
+   payload: EventCardDetails[]
+}
+
+export interface FetchMoreEventCardsAction {
+   type: typeof FETCH_MORE_EVENT_CARDS,
    payload: EventCardDetails[]
 }
 
@@ -44,7 +50,7 @@ export interface FetchMoreSearchEventCardsAction {
    payload: EventCardDetails[]
 }
 
-export type FetchEventType = FetchEventCardsAction | FetchSearchEventCardsAction | FetchMoreSearchEventCardsAction;
+export type FetchEventType = FetchEventCardsAction | FetchMoreEventCardsAction | FetchSearchEventCardsAction | FetchMoreSearchEventCardsAction;
 
 
 export const FETCH_CAL_EVENTS = "FETCH_CAL_EVENTS";
