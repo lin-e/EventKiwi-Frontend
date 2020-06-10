@@ -1,18 +1,17 @@
-import React, { Component, createRef } from 'react';
+import React, { Component } from 'react';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonGrid, IonRow, IonCol, IonButton, IonModal, IonToast, IonRefresher, IonRefresherContent } from '@ionic/react';
 import './Profile.css';
 import ItemSlider from '../components/ItemSlider';
-import { SocietyBasic } from '../constants/types';
 import ProfileSocietyIcon from '../components/Profile/ProfileSocietyIcon';
 import { Container } from 'react-grid-system';
 import InterestChip from '../components/Profile/InterestChip';
 import { fetchProfileDetails, resetInvalidProfileResponse } from '../data/actions/actions';
+import { loadSocResources } from '../data/actions/resourceManagement/resourceManagementActions';
 import { logOut } from '../data/actions/userActions';
 import { RootState } from '../data/reducers';
 import { connect, ConnectedProps } from 'react-redux';
 import EmptySectionText from '../components/EmptySectionText';
 import { Redirect } from 'react-router';
-import { UserProfile } from '../data/types/dataInterfaces';
 import { Plugins } from '@capacitor/core';
 import AddInterestModal from '../components/Profile/AddInterestModal';
 
@@ -28,11 +27,12 @@ const mapStateToProps = (state: RootState) => {
     profile: state.userDetails.profile,
     isLoggedIn: state.userDetails.isLoggedIn,
     isLoading: state.userDetails.loading,
-    userToken: state.userDetails.userToken
+    userToken: state.userDetails.userToken,
+    isSoc: state.userDetails.isSoc
   }
 }
 
-const connector = connect(mapStateToProps, { fetchProfileDetails, resetInvalidProfileResponse, logOut })
+const connector = connect(mapStateToProps, { fetchProfileDetails, resetInvalidProfileResponse, logOut, loadSocResources })
 
 type PropsFromRedux = ConnectedProps<typeof connector>
 type ProfileProps = PropsFromRedux
@@ -67,6 +67,9 @@ class Profile extends Component<ProfileProps, ProfileState> {
 
   refresh() {
     this.props.fetchProfileDetails(this.props.userToken)
+    if (this.props.isSoc) {
+      this.props.loadSocResources(this.props.userToken);
+    }
   }
 
 
@@ -136,6 +139,25 @@ class Profile extends Component<ProfileProps, ProfileState> {
                   }
                 </div>
               </IonRow>
+
+              {this.props.isSoc &&  <>
+                <IonRow>
+                  <IonCol className="sectionHeader" size="8">
+                    <IonTitle className="profileTitle">My Resources</IonTitle>
+                  </IonCol>
+                  <IonCol size="4">
+                    <IonButton routerLink="/profile/resources" className="profileBtn" color="transparent">Manage</IonButton>
+                  </IonCol>
+                </IonRow>
+                <IonRow>
+                  <div className="sectionContent">
+                    <EmptySectionText mainText="No resources" subText="Add some resources to use for your events"/>
+                  </div>
+                </IonRow>
+              </>}
+
+
+
               <IonRow>
                 <IonCol>
                   <IonButton expand="block" color="danger" onClick={() => this.props.logOut(this.props.userToken)}>Log out</IonButton>

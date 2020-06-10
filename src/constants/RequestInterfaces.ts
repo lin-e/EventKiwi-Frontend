@@ -80,7 +80,11 @@ export interface resp_society_card {
 
 export interface resp_resource {
   display_name: string,
-  bucket_key: string
+  bucket_key: string,
+  events: {
+    id: string,
+    name: string
+  }[]
 }
 
 export interface resp_event_posts {

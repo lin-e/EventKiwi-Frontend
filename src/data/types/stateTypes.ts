@@ -1,6 +1,7 @@
 import { EventCardDetails, Post, ProfileDetails, EventDetails, SocietyCard, CalendarEvent, InterestDetails, EventIdAndPosts } from "../../constants/types";
 
 import { UserProfile } from "./dataInterfaces";
+import { resp_resource } from "../../constants/RequestInterfaces";
 
 export interface SocietyCardState {
    societies: SocietyCard[]
@@ -38,4 +39,8 @@ export interface ProfileDetailsState {
 
 export interface interestSearchState {
    interests: InterestDetails[]
+}
+
+export interface ResourceManagementState {
+   resources: resp_resource[]
 }

@@ -29,10 +29,14 @@ export const interestedInEventEndpoint = (id: string) =>  `${endpointURL}/events
 export const notGoingToEventEndpoint = (id: string) =>  `${endpointURL}/events/none/${id}`;
 
 export const eventPostsEndpoint = (eventId: string, lastPostId: string) =>
-   `${endpointURL}/events/posts/${eventId}/${lastPostId}/`
+   `${endpointURL}/events/posts/${eventId}/${lastPostId}/`;
 
 export const addEventPostEndpoint = (eventId: string) => 
-   `${endpointURL}/events/posts/${eventId}/new/`
+   `${endpointURL}/events/posts/${eventId}/new/`;
 
 export const deleteEventPostEndpoint = (postId: string) =>
-   `${endpointURL}/events/posts/delete/${postId}/`
+   `${endpointURL}/events/posts/delete/${postId}/`;
+
+export const socResourcesEndpoint = `${endpointURL}/file/list`;
+
+   
