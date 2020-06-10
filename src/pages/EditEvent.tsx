@@ -6,7 +6,7 @@ import { calendar, closeCircle } from 'ionicons/icons';
 import { parseISO, format, isBefore } from 'date-fns'
 import AddTagSearch from '../components/EditEvent/AddTagSearch';
 import EmptySectionText from '../components/EmptySectionText';
-import { createNewEvent, updateEvent, editEventLoad } from '../data/actions/editEventActions';
+import { createNewEvent, updateEvent, editEventLoad, deleteEvent } from '../data/actions/editEventActions';
 import { RootState } from '../data/reducers';
 import { UNIX_EPOCH, PRIVATE, SOCIETIES, MEMBERS, PUBLIC, NO_ID } from '../constants/constants';
 import './EditEvent.css'
@@ -21,12 +21,12 @@ const mapStateToProps = (state: RootState) => {
   }
 }
 
-const connector = connect(mapStateToProps, { createNewEvent, updateEvent, editEventLoad });
+const connector = connect(mapStateToProps, { createNewEvent, updateEvent, editEventLoad, deleteEvent });
 
 type PropsFromRedux = ConnectedProps<typeof connector>
 type EditEventProps =  OwnProps & PropsFromRedux
 
-const EditEvent: React.FC<EditEventProps> = ({ match, event, userToken, createNewEvent, updateEvent, editEventLoad }) => {
+const EditEvent: React.FC<EditEventProps> = ({ match, event, userToken, createNewEvent, updateEvent, editEventLoad, deleteEvent }) => {
   
   const [eventId, setEventId] = useState(event.id);
   const [title, setTitle] = useState(event.name);
@@ -48,6 +48,7 @@ const EditEvent: React.FC<EditEventProps> = ({ match, event, userToken, createNe
   const [tooManyTagsToast, setTooManyTagsToast] = useState(false);
   const [noDescriptionToast, setNoDescriptionToast] = useState(false);
   const [savedToast, setSavedToast] = useState(false);
+  const [deletedToast, setDeletedToast] = useState(false);
   
   const currDatetime = new Date();
   
@@ -360,7 +361,7 @@ const EditEvent: React.FC<EditEventProps> = ({ match, event, userToken, createNe
               text: "Delete",
               cssClass: "confirmDelete",
               handler: () => {
-                console.log("delete me");
+                deleteEvent(eventId, userToken, setDeletedToast);
               }
             }
           ]}
@@ -406,6 +407,12 @@ const EditEvent: React.FC<EditEventProps> = ({ match, event, userToken, createNe
           isOpen={savedToast}
           onDidDismiss={() => setSavedToast(false)}
           message="Event saved."
+          duration={2000}
+        />
+        <IonToast
+          isOpen={deletedToast}
+          onDidDismiss={() => setDeletedToast(false)}
+          message="Event deleted."
           duration={2000}
         />
       </IonContent>

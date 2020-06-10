@@ -1,6 +1,6 @@
 import { AppThunk } from "../types/dataInterfaces";
-import { createNewEventURL, updateEventURL, eventDetailsURL } from "../../constants/endpoints";
-import { CREATE_NEW_EVENT, LOAD_EDIT_EVENT, UPDATE_EVENT } from "./types";
+import { createNewEventURL, updateEventURL, eventDetailsURL, deleteEventURL } from "../../constants/endpoints";
+import { CREATE_NEW_EVENT, LOAD_EDIT_EVENT, UPDATE_EVENT, DELETE_EVENT } from "./types";
 import { convertResToEventDetails, EventDetails, blankEventDetails } from "../../constants/types";
 import { resp_event_details } from "../../constants/RequestInterfaces";
 
@@ -80,6 +80,23 @@ export const updateEvent = (event: NewEventDetails, id: string, token: string, s
     return (dispatch({
       type: UPDATE_EVENT,
       payload: convertResToEventDetails(details.body as resp_event_details)
+    }))
+  })
+}
+
+export const deleteEvent = (id: string, token: string, setCompleted: (complete: boolean) => void): AppThunk => async dispatch => {
+  const options = {
+    method: "GET",
+    headers: {
+        "Authorization": `Bearer ${token}`,
+    },
+  }
+  fetch(deleteEventURL(id), options)
+  .then(status => {
+    setCompleted(true);
+    return (dispatch({
+      type: DELETE_EVENT,
+      status: status
     }))
   })
 }
