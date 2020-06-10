@@ -1,7 +1,7 @@
 import { AppThunk } from "../../types/dataInterfaces"
 import { GET_SOC_RESOURCES } from "./resourceManagementTypes"
 import { resp_resource } from "../../../constants/RequestInterfaces"
-import { socResourcesEndpoint, socResourceUploadEndpoint, socResourceDeleteEndpoint } from "../../../constants/endpoints"
+import { socResourcesEndpoint, socResourceUploadEndpoint, socResourceDeleteEndpoint, socAttachResourcesToEventEndpoint } from "../../../constants/endpoints"
 
 export const loadSocResources = (userToken: string): AppThunk => async dispatch => {
    fetch(socResourcesEndpoint, {
@@ -37,4 +37,14 @@ export const deleteFile = (id: string, userToken: string): AppThunk => async dis
    })
       .then(res => console.log(res))
       .then(() => dispatch(loadSocResources(userToken)))
+}
+
+export const attachResourcesToEvent = (eventId: string, resources: string[], userToken: string): AppThunk => async dispatch => {
+   fetch(socAttachResourcesToEventEndpoint(eventId), {
+      method: 'post',
+      body: JSON.stringify({ files: resources }),
+      headers: { 'Authorization': `Bearer ${userToken}`, 'Content-Type': 'application/json'  }
+   })
+      .then(res => res.json())
+      .then(data => console.log(data))
 }

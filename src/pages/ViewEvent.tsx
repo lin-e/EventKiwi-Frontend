@@ -8,7 +8,7 @@ import { shareOutline, add, pencil } from 'ionicons/icons';
 import { connect, ConnectedProps, useSelector } from 'react-redux';
 import { loadEventDetails, loadingEvent, loadBlankEvent, goingToEvent, interestedInEvent, notGoingToEvent } from '../data/actions/viewEvent/viewEventActions';
 import { loadEventPosts, addEventPost } from '../data/actions/eventPosts/eventPostsActions';
-import { loadSocResources } from '../data/actions/resourceManagement/resourceManagementActions';
+import { loadSocResources, attachResourcesToEvent } from '../data/actions/resourceManagement/resourceManagementActions';
 import { RootState } from '../data/reducers';
 import { isPlatform } from '@ionic/react';
 import { Plugins } from '@capacitor/core';
@@ -43,7 +43,8 @@ const connector = connect(mapStateToProps,
     notGoingToEvent,
     loadEventPosts,
     addEventPost,
-    loadSocResources
+    loadSocResources,
+    attachResourcesToEvent
   })
 type PropsFromRedux = ConnectedProps<typeof connector>
 
@@ -177,7 +178,7 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
 
   const addResources = (resources: string[]) => {
     if (resources.length > 0) {
-      console.log(resources)
+      props.attachResourcesToEvent(props.eventId, resources, props.userToken);
     }
   }
 
