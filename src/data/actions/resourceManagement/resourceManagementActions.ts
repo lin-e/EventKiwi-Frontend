@@ -1,7 +1,7 @@
 import { AppThunk } from "../../types/dataInterfaces"
 import { GET_SOC_RESOURCES } from "./resourceManagementTypes"
 import { resp_resource } from "../../../constants/RequestInterfaces"
-import { socResourcesEndpoint } from "../../../constants/endpoints"
+import { socResourcesEndpoint, socResourceUploadEndpoint } from "../../../constants/endpoints"
 
 export const loadSocResources = (userToken: string): AppThunk => async dispatch => {
    fetch(socResourcesEndpoint, {
@@ -14,4 +14,18 @@ export const loadSocResources = (userToken: string): AppThunk => async dispatch 
       type: GET_SOC_RESOURCES,
       payload: resources
    })))
+}
+
+
+export const uploadFile = (file: File, userToken: string): AppThunk => async dispatch => {
+   const form = new FormData();
+    form.append("upload", file)
+
+    fetch(socResourceUploadEndpoint, {
+      method: 'post',
+      body: form,
+      headers: { 'Authorization': `Bearer ${userToken}` }
+    })
+   .then(res => console.log(res))
+   .then(() => dispatch(loadSocResources(userToken)))
 }
