@@ -1,7 +1,9 @@
 import { AppThunk } from "../../types/dataInterfaces"
 import { GET_SOC_RESOURCES } from "./resourceManagementTypes"
 import { resp_resource } from "../../../constants/RequestInterfaces"
-import { socResourcesEndpoint, socResourceUploadEndpoint, socResourceDeleteEndpoint, socAttachResourcesToEventEndpoint } from "../../../constants/endpoints"
+import { socResourcesEndpoint, socResourceUploadEndpoint, socResourceDeleteEndpoint, socAttachResourcesToEventEndpoint, socRemoveResourcesFromEventEndpoint } from "../../../constants/endpoints"
+import { convertResToEventDetails } from "../../../constants/types"
+import { LOAD_EVENT_DETAILS } from "../viewEvent/viewEventTypes"
 
 export const loadSocResources = (userToken: string): AppThunk => async dispatch => {
    fetch(socResourcesEndpoint, {
@@ -46,5 +48,23 @@ export const attachResourcesToEvent = (eventId: string, resources: string[], use
       headers: { 'Authorization': `Bearer ${userToken}`, 'Content-Type': 'application/json'  }
    })
       .then(res => res.json())
-      .then(data => console.log(data))
+      .then(data => convertResToEventDetails(data.body))
+      .then(details => dispatch({
+         type: LOAD_EVENT_DETAILS,
+         payload: details
+      }))
+}
+
+export const removeResourceFromEvent = (eventId: string, resource: string, userToken: string): AppThunk => async dispatch => {
+   fetch(socRemoveResourcesFromEventEndpoint(eventId), {
+      method: 'post',
+      body: JSON.stringify({ files: [resource] }),
+      headers: { 'Authorization': `Bearer ${userToken}`, 'Content-Type': 'application/json'  }
+   })
+      .then(res => res.json())
+      .then(data => convertResToEventDetails(data.body))
+      .then(details => dispatch({
+         type: LOAD_EVENT_DETAILS,
+         payload: details
+      }))
 }

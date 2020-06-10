@@ -211,7 +211,7 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
 
         <EventPostsList posts={eventPosts} isPoster={goingStatus === EVENT_OWNER} hide={!posts} numPosts={eventPosts.length} />
 
-        <EventResourcesList resources={eventDescription.resources} tab={props.activeTab} hide={!resources} />
+        <EventResourcesList eventId={props.eventId} isOwner={goingStatus === EVENT_OWNER} resources={eventDescription.resources} tab={props.activeTab} hide={!resources} />
 
         {goingStatus === EVENT_OWNER &&
           <IonFab vertical="bottom" horizontal="end" slot="fixed">
