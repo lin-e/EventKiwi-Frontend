@@ -7,6 +7,7 @@ import "./ResourceManagement.css";
 import EventResource from '../components/ViewEventComponents/EventResource';
 import EmptySectionText from '../components/EmptySectionText';
 import { add } from 'ionicons/icons';
+import { Container, Row, Col } from 'react-grid-system';
 
 interface OwnProps { }
 
@@ -61,16 +62,16 @@ const ResourceManagement: React.FC<ResourceManagementProps> = (props) => {
 
       <IonContent>
         {props.resources.length > 0 ?
-          <IonGrid>
-            <IonRow>
+          <Container>
+            <Row>
               {props.resources.map(r =>
-                <IonCol key={`soc-resource-${r.bucket_key}`} size="6">
-                  <IonItem lines="none" detail className="socResource">
+                <Col key={`soc-resource-${r.bucket_key}`} lg={6} md={12} sm={12}>
+                  <IonItem  detail className="socResource">
                     <EventResource name={r.display_name} />
                   </IonItem>
-                </IonCol>)}
-            </IonRow>
-          </IonGrid>
+                </Col>)}
+            </Row>
+          </Container>
           : <EmptySectionText mainText="No resources" subText="Add some resources to use for your events" />}
       </IonContent>
 
