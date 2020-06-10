@@ -1,16 +1,15 @@
 import React, { useState, MouseEvent } from 'react';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonLabel, IonTextarea, IonInput, IonText, IonCard, IonDatetime, IonButtons, IonBackButton, IonList, IonItem, IonSelect, IonSelectOption, IonIcon, IonItemDivider, IonButton, IonChip, IonModal, IonToast } from '@ionic/react';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonLabel, IonTextarea, IonInput, IonCard, IonDatetime, IonButtons, IonBackButton, IonList, IonItem, IonSelect, IonSelectOption, IonIcon, IonItemDivider, IonButton, IonChip, IonModal, IonToast } from '@ionic/react';
 import { Container, Row, Col } from 'react-grid-system';
+import { ConnectedProps, connect } from 'react-redux';
 import { calendar, closeCircle } from 'ionicons/icons';
 import { parseISO, format, isBefore } from 'date-fns'
-
-import './AddEvent.css'
-import EmptySectionText from '../../components/EmptySectionText';
-import AddTagSearch from '../../components/EditEvent/AddTagSearch';
-import { UNIX_EPOCH, PRIVATE, SOCIETIES, MEMBERS, PUBLIC } from '../../constants/constants';
-import { createNewEvent } from '../../data/actions/editEventActions';
-import { ConnectedProps, connect } from 'react-redux';
-import { RootState } from '../../data/reducers';
+import AddTagSearch from '../components/EditEvent/AddTagSearch';
+import EmptySectionText from '../components/EmptySectionText';
+import { createNewEvent } from '../data/actions/editEventActions';
+import { RootState } from '../data/reducers';
+import { UNIX_EPOCH, PRIVATE, SOCIETIES, MEMBERS, PUBLIC } from '../constants/constants';
+import './EditEvent.css'
 
 
 const mapStateToProps = (state: RootState) => {
