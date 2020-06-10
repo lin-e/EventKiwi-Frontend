@@ -46,6 +46,8 @@ const AddEvent: React.FC<AddEventProps> = ({ event, userToken, createNewEvent, u
 
   const currDatetime = new Date();
 
+  const exists = () => (eventId !== "")
+
   const mapPrivacy = (privacyLevel: string) => {
     switch(privacyLevel) {
       case "Private":
@@ -121,6 +123,13 @@ const AddEvent: React.FC<AddEventProps> = ({ event, userToken, createNewEvent, u
     return false;
   }
 
+  const eventCreated = (complete: boolean) => {
+    setSavedToast(complete);
+    if (complete) {
+      setEventId(event.id);
+    }
+  }
+
   const saveEvent = (e: MouseEvent) => {
     e.preventDefault();
 
@@ -137,7 +146,7 @@ const AddEvent: React.FC<AddEventProps> = ({ event, userToken, createNewEvent, u
       }
       
       if (eventId === "") {
-        createNewEvent(updatedDetails, userToken, setSavedToast);
+        createNewEvent(updatedDetails, userToken, eventCreated);
       } else {
         updateEvent(updatedDetails, eventId, userToken, setSavedToast)
       }
@@ -290,6 +299,14 @@ const AddEvent: React.FC<AddEventProps> = ({ event, userToken, createNewEvent, u
                     />
                 </IonItem>
               </IonList>
+            </Col>
+          </Row>
+
+          <Row>
+            <Col xs={12}>
+              {exists &&
+                <IonButton color="danger" fill="outline">Delete Event</IonButton>
+              }
             </Col>
           </Row>
         
