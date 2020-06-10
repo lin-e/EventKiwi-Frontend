@@ -123,6 +123,7 @@ export type UserType = LoginAction | LoadUserDataAction | LogoutAction;
 
 export const LOAD_EDIT_EVENT = "LOAD_EDIT_EVENT";
 export const CREATE_NEW_EVENT = "CREATE_NEW_EVENT";
+export const UPDATE_EVENT = "UPDATE_EVENT";
 
 interface LoadEditEventAction {
    type: typeof LOAD_EDIT_EVENT,
@@ -134,7 +135,12 @@ interface CreateNewEventAction {
    payload: EventDetails
 }
 
-export type EventEditType = LoadEditEventAction | CreateNewEventAction;
+interface UpdateEventAction {
+   type: typeof UPDATE_EVENT,
+   payload: EventDetails
+}
+
+export type EventEditType = LoadEditEventAction | CreateNewEventAction | UpdateEventAction;
 
 export const GET_EVENT_POSTS = "GET_EVENT_POSTS";
 export const GET_DISCOVER_EVENT_POSTS = "GET_DISCOVER_EVENT_POSTS";

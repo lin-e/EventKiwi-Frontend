@@ -6,7 +6,7 @@ import { calendar, closeCircle } from 'ionicons/icons';
 import { parseISO, format, isBefore } from 'date-fns'
 import AddTagSearch from '../components/EditEvent/AddTagSearch';
 import EmptySectionText from '../components/EmptySectionText';
-import { createNewEvent } from '../data/actions/editEventActions';
+import { createNewEvent, updateEvent } from '../data/actions/editEventActions';
 import { RootState } from '../data/reducers';
 import { UNIX_EPOCH, PRIVATE, SOCIETIES, MEMBERS, PUBLIC } from '../constants/constants';
 import './EditEvent.css'
@@ -19,12 +19,13 @@ const mapStateToProps = (state: RootState) => {
   }
 }
 
-const connector = connect(mapStateToProps, { createNewEvent });
+const connector = connect(mapStateToProps, { createNewEvent, updateEvent });
 
 type PropsFromRedux = ConnectedProps<typeof connector>
 type AddEventProps = PropsFromRedux
 
-const AddEvent: React.FC<AddEventProps> = ({ event, userToken, createNewEvent }) => {
+const AddEvent: React.FC<AddEventProps> = ({ event, userToken, createNewEvent, updateEvent }) => {
+  const [eventId, setEventId] = useState(event.id);
   const [title, setTitle] = useState(event.name);
   const [location, setLocation] = useState(event.location);
   const [startDatetime, setStartDatetime] = useState(event.datetimeStart);
@@ -124,7 +125,7 @@ const AddEvent: React.FC<AddEventProps> = ({ event, userToken, createNewEvent })
     e.preventDefault();
 
     if (validEvent()) {
-      createNewEvent({
+      const updatedDetails = {
         name: title,
         location: location,
         desc: description,
@@ -133,7 +134,13 @@ const AddEvent: React.FC<AddEventProps> = ({ event, userToken, createNewEvent })
         start: startDatetime.toISOString(),
         end: endDatetime.toISOString(),
         img: "https://picsum.photos/600/400"
-      }, userToken, setSavedToast);
+      }
+      
+      if (eventId === "") {
+        createNewEvent(updatedDetails, userToken, setSavedToast);
+      } else {
+        updateEvent(updatedDetails, eventId, userToken, setSavedToast)
+      }
     }
   }
 
