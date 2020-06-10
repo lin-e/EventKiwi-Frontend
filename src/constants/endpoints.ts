@@ -39,5 +39,6 @@ export const deleteEventPostEndpoint = (postId: string) =>
 
 export const socResourcesEndpoint = `${endpointURL}/file/list`;
 export const socResourceUploadEndpoint = `${endpointURL}/file/upload`;
-
+export const socResourceDeleteEndpoint = (id: string) =>
+   `${endpointURL}/file/delete/${id}`;
    

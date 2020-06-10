@@ -1,13 +1,14 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { RootState } from '../data/reducers';
-import { IonPage, IonHeader, IonToolbar, IonButtons, IonBackButton, IonTitle, IonContent, IonGrid, IonRow, IonCol, IonItem, IonFab, IonFabButton, IonIcon, IonModal, IonButton, IonLabel, IonTextarea } from '@ionic/react';
-import { loadSocResources, uploadFile } from '../data/actions/resourceManagement/resourceManagementActions';
+import { IonPage, IonHeader, IonToolbar, IonButtons, IonBackButton, IonTitle, IonContent, IonGrid, IonRow, IonCol, IonItem, IonFab, IonFabButton, IonIcon, IonModal, IonButton, IonLabel, IonTextarea, IonItemSliding, IonItemOptions, IonItemOption } from '@ionic/react';
+import { loadSocResources, uploadFile, deleteFile } from '../data/actions/resourceManagement/resourceManagementActions';
 import "./ResourceManagement.css";
 import EventResource from '../components/ViewEventComponents/EventResource';
 import EmptySectionText from '../components/EmptySectionText';
 import { add } from 'ionicons/icons';
 import { Container, Row, Col } from 'react-grid-system';
+import { post } from 'fetch-mock';
 
 interface OwnProps { }
 
@@ -19,7 +20,7 @@ const mapStateToProps = (state: RootState) => ({
   resources: state.resourceManagement.resources
 })
 
-const connector = connect(mapStateToProps, { loadSocResources, uploadFile })
+const connector = connect(mapStateToProps, { loadSocResources, uploadFile, deleteFile })
 type PropsFromRedux = ConnectedProps<typeof connector>
 
 type ResourceManagementProps = OwnProps & PropsFromRedux;
@@ -51,9 +52,15 @@ const ResourceManagement: React.FC<ResourceManagementProps> = (props) => {
             <Row>
               {props.resources.map(r =>
                 <Col key={`soc-resource-${r.bucket_key}`} lg={6} md={12} sm={12}>
-                  <IonItem detail className="socResource">
-                    <EventResource name={r.display_name} />
-                  </IonItem>
+                  <IonItemSliding>
+                    <IonItem detail>
+                      <EventResource name={r.display_name} />
+                    </IonItem>
+
+                    <IonItemOptions side="end">
+                      <IonItemOption color="danger" onClick={() => props.deleteFile(r.bucket_key, props.userToken)}>Delete</IonItemOption>
+                    </IonItemOptions>
+                  </IonItemSliding>
                 </Col>)}
             </Row>
           </Container>
@@ -66,7 +73,7 @@ const ResourceManagement: React.FC<ResourceManagementProps> = (props) => {
         </IonFabButton>
       </IonFab>
 
-      <input 
+      <input
         ref={fileInputRef}
         hidden
         type="file"

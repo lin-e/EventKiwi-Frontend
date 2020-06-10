@@ -149,7 +149,7 @@ class Profile extends Component<ProfileProps, ProfileState> {
                   </IonCol>
                   <IonCol size="4">
                     <IonButton routerLink="/profile/resources" className="profileBtn" color="transparent">
-                      {this.props.socResources.length > 4 ? "See more" : "Manage"}
+                      Manage
                     </IonButton>
                   </IonCol>
                 </IonRow>
