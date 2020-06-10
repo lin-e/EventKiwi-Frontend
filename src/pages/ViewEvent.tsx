@@ -78,7 +78,7 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
 
   const resourceSelectorRef = useRef<HTMLIonSelectElement>(null);
 
-  const unusedResources = props.socResources.filter(r => !eventDescription.resources.includes(convertResToResource(r)));
+  const unusedResources = props.socResources.filter(r => !eventDescription.resources.some(s => s.id === r.bucket_key));
 
   const [postModal, showPostModal] = useState<boolean>(false);
   const [postBody, setPostBody] = useState<string>("");
@@ -267,7 +267,6 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
             ref={resourceSelectorRef}
             multiple
             onIonChange={e => addResources(e.detail.value as string[])}>
-
             {unusedResources.map(r => (
               <IonSelectOption key={r.bucket_key} value={r.bucket_key}>
                 {r.display_name}
