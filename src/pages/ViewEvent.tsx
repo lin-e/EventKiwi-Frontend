@@ -46,10 +46,9 @@ const connector = connect(mapStateToProps,
     loadSocResources,
     attachResourcesToEvent
   })
+
 type PropsFromRedux = ConnectedProps<typeof connector>
-
 type ViewEventProps = OwnProps & PropsFromRedux;
-
 
 const ViewEvent: React.FC<ViewEventProps> = (props) => {
   const [segment, setSegment] = useState<'details' | 'posts' | 'resources'>('details');

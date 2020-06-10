@@ -8,6 +8,7 @@ import { eventPostReducer } from "./eventPostsReducer";
 import { societyCardsReducer } from "./societyCardsReducer";
 import { interestSearchReducer } from "./interestSearchReducer";
 import { resourceManagementReducer } from "./resourceManagementReducer";
+import { eventEditReducer } from "./eventEditReducer";
 
 export const rootReducer = combineReducers({
    societyCards: societyCardsReducer,
@@ -18,7 +19,8 @@ export const rootReducer = combineReducers({
    eventPosts: eventPostReducer,
    profileDetails: profileDetailsReducer,
    interestSearch: interestSearchReducer,
-   resourceManagement: resourceManagementReducer
+   resourceManagement: resourceManagementReducer,
+   editedEvent: eventEditReducer
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

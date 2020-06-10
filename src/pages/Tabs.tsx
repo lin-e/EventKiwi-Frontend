@@ -8,6 +8,7 @@ import { calendar, compass, person } from "ionicons/icons";
 import EventsTabEventPage from "./EventsTabEventPage";
 import DiscoverTabEventPage from "./DiscoverTabEventPage";
 import StandaloneEventPage from "./StandaloneEventPage";
+import AddEvent from "./EditEvent";
 import Licences from "./Licences";
 import ResourceManagement from "./ResourceManagement";
 
@@ -15,6 +16,7 @@ const Tabs: React.FC = () => (
    <IonTabs>
       <IonRouterOutlet>
          <Route path="/events" render={() => <Events />} exact={true} />
+         <Route path="/events/add" render={() => <AddEvent />} exact />
          <Route path="/discover" render={() => <Discover />} exact={true} />
          <Route path="/discover/event/:id" component={DiscoverTabEventPage} exact />
          <Route path="/events/event/:id" component={EventsTabEventPage} exact />

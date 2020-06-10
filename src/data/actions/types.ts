@@ -27,6 +27,7 @@ export type FetchSocietyType = FetchSearchSocietyCardsAction | followSocietyActi
 
 export const FETCH_EVENTS_CARDS = "FETCH_EVENTS_CARDS";
 export const FETCH_SEARCH_EVENT_CARDS = "FETCH_SEARCH_EVENT_CARDS";
+export const FETCH_MORE_SEARCH_EVENT_CARDS = "FETCH_MORE_SEARCH_EVENT_CARDS";
 
 export interface FetchEventCardsAction {
    type: typeof FETCH_EVENTS_CARDS,
@@ -38,7 +39,12 @@ export interface FetchSearchEventCardsAction {
    payload: EventCardDetails[]
 }
 
-export type FetchEventType = FetchEventCardsAction | FetchSearchEventCardsAction;
+export interface FetchMoreSearchEventCardsAction {
+   type: typeof FETCH_MORE_SEARCH_EVENT_CARDS,
+   payload: EventCardDetails[]
+}
+
+export type FetchEventType = FetchEventCardsAction | FetchSearchEventCardsAction | FetchMoreSearchEventCardsAction;
 
 
 export const FETCH_CAL_EVENTS = "FETCH_CAL_EVENTS";
@@ -114,3 +120,39 @@ interface LoadUserDataAction {
 }
 
 export type UserType = LoginAction | LoadUserDataAction | LogoutAction;
+
+export const LOAD_EDIT_EVENT = "LOAD_EDIT_EVENT";
+export const CREATE_NEW_EVENT = "CREATE_NEW_EVENT";
+
+interface LoadEditEventAction {
+   type: typeof LOAD_EDIT_EVENT,
+   payload: EventDetails
+}
+
+interface CreateNewEventAction {
+   type: typeof CREATE_NEW_EVENT,
+   payload: EventDetails
+}
+
+export type EventEditType = LoadEditEventAction | CreateNewEventAction;
+
+export const GET_EVENT_POSTS = "GET_EVENT_POSTS";
+export const GET_DISCOVER_EVENT_POSTS = "GET_DISCOVER_EVENT_POSTS";
+export const GET_EVENTS_EVENT_POSTS = "GET_EVENTS_EVENT_POSTS";
+
+interface GetEventPostsAction {
+   type: typeof GET_EVENT_POSTS,
+   payload: Post[]
+}
+
+interface GetDiscoverEventPostsAction {
+   type: typeof GET_DISCOVER_EVENT_POSTS,
+   payload: Post[]
+}
+
+interface GetEventsEventPostsAction {
+   type: typeof GET_EVENTS_EVENT_POSTS,
+   payload: Post[]
+}
+
+export type EventPostType = GetEventPostsAction | GetDiscoverEventPostsAction | GetEventsEventPostsAction;
