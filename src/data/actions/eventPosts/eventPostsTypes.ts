@@ -1,9 +1,8 @@
 import { Post } from "../../../constants/types";
 
 export const GET_EVENT_POSTS = "GET_EVENT_POSTS";
-export const GET_DISCOVER_EVENT_POSTS = "GET_DISCOVER_EVENT_POSTS";
-export const GET_EVENTS_EVENT_POSTS = "GET_EVENTS_EVENT_POSTS";
 export const ADD_EVENT_POST = "ADD_EVENT_POST";
+export const DELETE_EVENT_POST = "DELETE_EVENT_POST";
 
 interface GetEventPostsAction {
    type: typeof GET_EVENT_POSTS,
@@ -21,4 +20,12 @@ interface AddEventPostsAction {
    }
 }
 
-export type EventPostType = GetEventPostsAction | AddEventPostsAction;
+interface DeleteEventPostsAction {
+   type: typeof DELETE_EVENT_POST,
+   payload: {
+      eventId: string,
+      postId: string
+   }
+}
+
+export type EventPostType = GetEventPostsAction | AddEventPostsAction | DeleteEventPostsAction;
