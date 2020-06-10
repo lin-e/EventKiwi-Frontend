@@ -96,7 +96,6 @@ const Events: React.FC<EventsProps> = (props) => {
 
   const newEvent = (e: MouseEvent) => {
     e.preventDefault();
-    editEventLoad(blankEventDetails);
     history.push("/events/add");
   }
 
@@ -143,7 +142,7 @@ const Events: React.FC<EventsProps> = (props) => {
               <IonIcon icon={calendar}/>
             </IonFabButton>
             {isSociety &&
-              <IonFabButton onClick={newEvent} routerLink="/events/add">
+              <IonFabButton routerLink="/events/add">
                 <IonIcon icon={add} />
               </IonFabButton>
             }

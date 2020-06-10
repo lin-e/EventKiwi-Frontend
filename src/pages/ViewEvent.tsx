@@ -7,12 +7,14 @@ import EventResourcesList from '../components/ViewEventComponents/EventResources
 import { shareOutline, add, pencil } from 'ionicons/icons';
 import { connect, ConnectedProps, useSelector } from 'react-redux';
 import { loadEventDetails, loadingEvent, loadBlankEvent, goingToEvent, interestedInEvent, notGoingToEvent } from '../data/actions/viewEvent/viewEventActions';
+import { editEventLoad } from '../data/actions/editEventActions'
 import { loadEventPosts, addEventPost } from '../data/actions/eventPosts/eventPostsActions';
 import { RootState } from '../data/reducers';
 import { isPlatform } from '@ionic/react';
 import { Plugins } from '@capacitor/core';
 import { blankEventDetails, EventDetails, EventIdAndPosts } from '../constants/types';
 import { EVENT_OWNER } from '../constants/constants';
+import { useHistory } from 'react-router';
 const { Share } = Plugins;
 
 const eventWithId = (state: RootState) => (id: string) => state.viewEvent.events.filter(e => e.id === id);
@@ -38,7 +40,8 @@ const connector = connect(mapStateToProps,
     interestedInEvent, 
     notGoingToEvent, 
     loadEventPosts,
-    addEventPost })
+    addEventPost,
+    editEventLoad })
 
 type PropsFromRedux = ConnectedProps<typeof connector>
 type ViewEventProps = OwnProps & PropsFromRedux;
@@ -70,6 +73,8 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
 
   const [postModal, showPostModal] = useState<boolean>(false);
   const [postBody, setPostBody] = useState<string>("");
+
+  const history = useHistory();
 
   const resetView = () => {
     setDetailsY(0);
@@ -138,7 +143,7 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
   }
 
   const editEvent = () => {
-    console.log("edit clicked")
+    history.push(`/events/edit/${props.eventId}`);
   }
 
   const showAddPost = () => {
@@ -147,7 +152,7 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
   }
 
   const editResources = () => {
-    console.log("edit resources clicked")
+    console.log("edit resources clicked");
   }
 
   const ownerFabIcon = segment === "details" ? pencil : (segment === "posts" ? add : shareOutline);

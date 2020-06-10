@@ -1,4 +1,4 @@
-import React, { useState, MouseEvent } from 'react';
+import React, { useState, MouseEvent, useEffect } from 'react';
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonLabel, IonTextarea, IonInput, IonCard, IonDatetime, IonButtons, IonBackButton, IonList, IonItem, IonSelect, IonSelectOption, IonIcon, IonItemDivider, IonButton, IonChip, IonModal, IonToast } from '@ionic/react';
 import { Container, Row, Col } from 'react-grid-system';
 import { ConnectedProps, connect } from 'react-redux';
@@ -6,11 +6,13 @@ import { calendar, closeCircle } from 'ionicons/icons';
 import { parseISO, format, isBefore } from 'date-fns'
 import AddTagSearch from '../components/EditEvent/AddTagSearch';
 import EmptySectionText from '../components/EmptySectionText';
-import { createNewEvent, updateEvent } from '../data/actions/editEventActions';
+import { createNewEvent, updateEvent, editEventLoad } from '../data/actions/editEventActions';
 import { RootState } from '../data/reducers';
-import { UNIX_EPOCH, PRIVATE, SOCIETIES, MEMBERS, PUBLIC } from '../constants/constants';
+import { UNIX_EPOCH, PRIVATE, SOCIETIES, MEMBERS, PUBLIC, NO_ID } from '../constants/constants';
 import './EditEvent.css'
+import { RouteComponentProps } from 'react-router';
 
+interface OwnProps extends RouteComponentProps<{ id?: string }> { };
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -19,12 +21,13 @@ const mapStateToProps = (state: RootState) => {
   }
 }
 
-const connector = connect(mapStateToProps, { createNewEvent, updateEvent });
+const connector = connect(mapStateToProps, { createNewEvent, updateEvent, editEventLoad });
 
 type PropsFromRedux = ConnectedProps<typeof connector>
-type AddEventProps = PropsFromRedux
+type EditEventProps =  OwnProps & PropsFromRedux
 
-const AddEvent: React.FC<AddEventProps> = ({ event, userToken, createNewEvent, updateEvent }) => {
+const EditEvent: React.FC<EditEventProps> = ({ match, event, userToken, createNewEvent, updateEvent, editEventLoad }) => {
+  
   const [eventId, setEventId] = useState(event.id);
   const [title, setTitle] = useState(event.name);
   const [location, setLocation] = useState(event.location);
@@ -34,6 +37,7 @@ const AddEvent: React.FC<AddEventProps> = ({ event, userToken, createNewEvent, u
   const [tagList, setTagList] = useState<string[]>(event.tags);
   const [description, setDescription] = useState(event.description);
   
+  const [exists, setExists] = useState(false);
   const [showTagSearch, setShowTagSearch] = useState(false);
   
   const [noTitleToast, setNoTitleToast] = useState(false);
@@ -43,10 +47,33 @@ const AddEvent: React.FC<AddEventProps> = ({ event, userToken, createNewEvent, u
   const [tooManyTagsToast, setTooManyTagsToast] = useState(false);
   const [noDescriptionToast, setNoDescriptionToast] = useState(false);
   const [savedToast, setSavedToast] = useState(false);
-
+  
   const currDatetime = new Date();
+  
+  const updateState = () => {
+    setEventId(event.id);
+    setTitle(event.name);
+    setLocation(event.location);
+    setStartDatetime(event.datetimeStart);
+    setEndDatetime(event.datetimeEnd);
+    setPrivacy(PRIVATE);
+    setTagList(event.tags);
+    setDescription(event.description);
 
-  const exists = () => (eventId !== "")
+    setExists((event.id !== ""));
+  }
+
+  useEffect(() => {
+    updateState()
+  }, [event]);
+
+  useEffect(() => {
+    if (match.params.id === undefined) {
+      editEventLoad(NO_ID, userToken);
+    } else {
+      editEventLoad(match.params.id, userToken);
+    }
+  }, []);
 
   const mapPrivacy = (privacyLevel: string) => {
     switch(privacyLevel) {
@@ -158,7 +185,7 @@ const AddEvent: React.FC<AddEventProps> = ({ event, userToken, createNewEvent, u
       <IonHeader>
         <IonToolbar>
           <IonButtons  slot="start">
-            <IonBackButton color="danger" defaultHref={`/events`} />
+            <IonBackButton color="danger" />
           </IonButtons>
           <IonTitle>Create new Event</IonTitle>
           <IonButtons  slot="end">
@@ -364,4 +391,4 @@ const AddEvent: React.FC<AddEventProps> = ({ event, userToken, createNewEvent, u
   );
 }
 
-export default connector(AddEvent);
+export default connector(EditEvent);

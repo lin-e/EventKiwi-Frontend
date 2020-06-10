@@ -1,7 +1,7 @@
 import { AppThunk } from "../types/dataInterfaces";
-import { createNewEventURL, updateEventURL } from "../../constants/endpoints";
+import { createNewEventURL, updateEventURL, eventDetailsURL } from "../../constants/endpoints";
 import { CREATE_NEW_EVENT, LOAD_EDIT_EVENT, UPDATE_EVENT } from "./types";
-import { convertResToEventDetails, EventDetails } from "../../constants/types";
+import { convertResToEventDetails, EventDetails, blankEventDetails } from "../../constants/types";
 import { resp_event_details } from "../../constants/RequestInterfaces";
 
 export interface NewEventDetails {
@@ -15,10 +15,27 @@ export interface NewEventDetails {
   img: string
 }
 
-export const editEventLoad = (event: EventDetails) => {
-  return ({
-    type: LOAD_EDIT_EVENT,
-    payload: event
+export const editEventLoad = (id: string, token: string): AppThunk => async dispatch => {
+  if (id === "") {
+    return (dispatch({
+      type: LOAD_EDIT_EVENT,
+      payload: blankEventDetails
+    }))
+  }
+
+  const options = {
+    method: "get",
+    headers: { 'Authorization': `Bearer ${token}` }
+  }
+
+  fetch(eventDetailsURL(id), options)
+  .then(res => res.json())
+  .then(data => convertResToEventDetails(data))
+  .then(details => {
+    return (dispatch({
+      type: LOAD_EDIT_EVENT,
+      payload: details
+    }))
   })
 }
 
