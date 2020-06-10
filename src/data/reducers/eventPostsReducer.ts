@@ -1,4 +1,4 @@
-import { GET_EVENT_POSTS, EventPostType, ADD_EVENT_POST } from "../actions/eventPosts/eventPostsTypes";
+import { GET_EVENT_POSTS, EventPostType, ADD_EVENT_POST, DELETE_EVENT_POST } from "../actions/eventPosts/eventPostsTypes";
 import { EventPostsState } from "../types/stateTypes";
 
 const initialState: EventPostsState = {
@@ -25,6 +25,15 @@ export function eventPostReducer(state = initialState, action: EventPostType): E
             posts: ADD_EVENT_newEventPosts
          }
 
+      case DELETE_EVENT_POST:
+         const DELETE_EVENT_newEventPosts = state.posts.filter(ep => ep.eventId !== action.payload.eventId);
+         const eventWithDeletedPost = state.posts.filter(ep => ep.eventId === action.payload.eventId)[0];
+         eventWithDeletedPost.posts = eventWithDeletedPost.posts.filter(p => p.id !== action.payload.postId);
+         DELETE_EVENT_newEventPosts.unshift(eventWithDeletedPost);
+         return {
+            ...state,
+            posts: DELETE_EVENT_newEventPosts
+         }
       default:
          return state;
 

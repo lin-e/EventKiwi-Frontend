@@ -1,6 +1,6 @@
 import { AppThunk } from "../../types/dataInterfaces"
-import { eventPostsEndpoint, addEventPostEndpoint } from "../../../constants/endpoints"
-import { GET_EVENT_POSTS, ADD_EVENT_POST } from "./eventPostsTypes"
+import { eventPostsEndpoint, addEventPostEndpoint, deleteEventPostEndpoint } from "../../../constants/endpoints"
+import { GET_EVENT_POSTS, ADD_EVENT_POST, DELETE_EVENT_POST } from "./eventPostsTypes"
 import { convertResToEventPosts, convertResToPost } from "../../../constants/types"
 
 
@@ -28,13 +28,33 @@ export const addEventPost = (eventId: string, content: string, userToken: string
       body: JSON.stringify({ content: content }),
       headers: { 'Authorization': `Bearer ${userToken}`, 'Content-Type': 'application/json' }
    })
-   .then(res => res.json())
-   .then(data => convertResToPost(data.body))
-   .then(post => (dispatch({
-      type: ADD_EVENT_POST,
-      payload: {
-         eventId: eventId,
-         post: post
-      }
-   })))
+      .then(res => res.json())
+      .then(data => convertResToPost(data.body))
+      .then(post => (dispatch({
+         type: ADD_EVENT_POST,
+         payload: {
+            eventId: eventId,
+            post: post
+         }
+      })))
+}
+
+export const deleteEventPost = (postId: string, eventId: string, userToken: string): AppThunk => async dispatch => {
+   console.log(`postId: ${postId}, eventId: ${eventId}`)
+   fetch(deleteEventPostEndpoint(postId), {
+      method: 'get',
+      headers: { 'Authorization': `Bearer ${userToken}` }
+   })
+      .then(res => res.json())
+      .then(data => {
+         if (!(data.body as string).includes("ERROR")) {
+            return dispatch({
+               type: DELETE_EVENT_POST,
+               payload: {
+                  eventId: eventId,
+                  postId: postId
+               }
+            })
+         }
+      })
 }
