@@ -148,7 +148,9 @@ class Profile extends Component<ProfileProps, ProfileState> {
                     <IonTitle className="profileTitle">My Resources</IonTitle>
                   </IonCol>
                   <IonCol size="4">
-                    <IonButton routerLink="/profile/resources" className="profileBtn" color="transparent">See more</IonButton>
+                    <IonButton routerLink="/profile/resources" className="profileBtn" color="transparent">
+                      {this.props.socResources.length > 4 ? "See more" : "Manage"}
+                    </IonButton>
                   </IonCol>
                 </IonRow>
                 <IonRow>
@@ -158,7 +160,7 @@ class Profile extends Component<ProfileProps, ProfileState> {
                         <IonRow>
                           {this.props.socResources.slice(0,4).map(r =>
                             <IonCol size="6">
-                              <IonItem detail className="socResource">
+                              <IonItem lines="none" detail className="socResource">
                                 <EventResource name={r.display_name} />
                               </IonItem>
                             </IonCol>)}
