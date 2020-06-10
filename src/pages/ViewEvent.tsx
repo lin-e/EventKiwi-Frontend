@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { IonContent, IonPage, IonHeader, IonToolbar, IonButtons, IonBackButton, IonSegment, IonSegmentButton, IonLabel, IonIcon, IonFab, IonFabButton, IonToast, IonModal, IonButton, IonTitle, IonFooter, IonItem, IonInput, IonTextarea, IonList } from '@ionic/react'
+import { IonContent, IonPage, IonHeader, IonToolbar, IonButtons, IonBackButton, IonSegment, IonSegmentButton, IonLabel, IonIcon, IonFab, IonFabButton, IonToast, IonModal, IonButton, IonTitle, IonFooter, IonItem, IonInput, IonTextarea, IonList, IonSelect, IonSelectOption } from '@ionic/react'
 import EventDescription from '../components/ViewEventComponents/EventDescription';
 import "./ViewEvent.css";
 import EventPostsList from '../components/ViewEventComponents/EventPostsList';
@@ -12,7 +12,7 @@ import { loadSocResources } from '../data/actions/resourceManagement/resourceMan
 import { RootState } from '../data/reducers';
 import { isPlatform } from '@ionic/react';
 import { Plugins } from '@capacitor/core';
-import { blankEventDetails, EventDetails, EventIdAndPosts } from '../constants/types';
+import { blankEventDetails, EventDetails, EventIdAndPosts, convertResToResource } from '../constants/types';
 import { EVENT_OWNER } from '../constants/constants';
 import EventResource from '../components/ViewEventComponents/EventResource';
 const { Share } = Plugins;
@@ -75,8 +75,9 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
   const postsWithMatchingId: EventIdAndPosts[] = useSelector(postsWithEventId)(props.eventId)
   const eventPosts = postsWithMatchingId.length > 0 ? postsWithMatchingId[0].posts : [];
 
-  const [addResourcesModal, showAddResourcesModal] = useState<boolean>(false);
-  const [selectedResources, setSelectedResources] = useState<string[]>([]);
+  const resourceSelectorRef = useRef<HTMLIonSelectElement>(null);
+
+  const unusedResources = props.socResources.filter(r => !eventDescription.resources.includes(convertResToResource(r)));
 
   const [postModal, showPostModal] = useState<boolean>(false);
   const [postBody, setPostBody] = useState<string>("");
@@ -163,8 +164,7 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
   }
 
   const showAddResources = () => {
-    setSelectedResources([]);
-    showAddResourcesModal(true);
+    resourceSelectorRef.current!.open();
   }
 
   const ownerFabIcon = segment === "details" ? pencil : (segment === "posts" ? add : add);
@@ -175,8 +175,10 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
     showPostModal(false);
   }
 
-  const addResources = () => {
-    showAddResourcesModal(false)
+  const addResources = (resources: string[]) => {
+    if (resources.length > 0) {
+      console.log(resources)
+    }
   }
 
 
@@ -257,50 +259,22 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
 
 
 
+        <IonItem hidden>
+          <IonLabel>Add resources</IonLabel>
+          <IonSelect
+            okText="Add"
+            ref={resourceSelectorRef}
+            multiple
+            onIonChange={e => addResources(e.detail.value as string[])}>
 
+            {unusedResources.map(r => (
+              <IonSelectOption key={r.bucket_key} value={r.bucket_key}>
+                {r.display_name}
+              </IonSelectOption>
+            ))}
 
-
-
-        <IonModal
-          isOpen={addResourcesModal}
-          swipeToClose={true}
-          onDidDismiss={() => showAddResourcesModal(false)}>
-
-          <IonHeader>
-
-            <IonToolbar>
-              <IonButtons slot="start">
-                <IonButton color="danger" onClick={() => showAddResourcesModal(false)}>Cancel</IonButton>
-              </IonButtons>
-              <IonButtons slot="end">
-                <IonButton color="primary" onClick={addResources} disabled={selectedResources.length === 0}>
-                  {`Add file${selectedResources.length === 1 ? "s" : ""}`}
-                </IonButton>
-              </IonButtons>
-            </IonToolbar>
-          </IonHeader>
-
-          <IonContent>
-            <IonList>
-              {props.socResources.map(r => <>
-                <IonItem>
-                  <EventResource name={r.display_name} />
-                </IonItem>
-              </>)}
-
-            </IonList>
-
-          </IonContent>
-
-        </IonModal>
-
-
-
-
-
-
-
-
+          </IonSelect>
+        </IonItem>
 
 
         {/* Text area used for copying share url to clipboard */}
