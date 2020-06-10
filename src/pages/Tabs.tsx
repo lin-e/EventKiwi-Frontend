@@ -9,6 +9,7 @@ import EventsTabEventPage from "./EventsTabEventPage";
 import DiscoverTabEventPage from "./DiscoverTabEventPage";
 import StandaloneEventPage from "./StandaloneEventPage";
 import AddEvent from "./AddEvent";
+import Licences from "./Licences";
 
 const Tabs: React.FC = () => (
    <IonTabs>
@@ -19,7 +20,8 @@ const Tabs: React.FC = () => (
          <Route path="/discover/event/:id" component={DiscoverTabEventPage} exact />
          <Route path="/events/event/:id" component={EventsTabEventPage} exact />
          <Route path="/event/:id" component={StandaloneEventPage} exact />
-         <Route path="/profile" render={() => <Profile />} />
+         <Route path="/profile" render={() => <Profile />} exact={true} />
+         <Route path="/profile/licences" render={() => <Licences />} />
          <Route path="/" render={() => <Redirect to="/events" />} exact={true} />
       </IonRouterOutlet>
       <IonTabBar slot="bottom">

@@ -143,7 +143,10 @@ class Profile extends Component<ProfileProps, ProfileState> {
                 <IonCol>
                   <IonButton expand="block" onClick={this.openUnionWebsite}>My Union</IonButton>
                 </IonCol>
+              </IonRow>
 
+              <IonRow>
+                <IonButton routerLink="/profile/licences" className="profileBtn" color="transparent">Licences</IonButton>
               </IonRow>
             </IonGrid>
 

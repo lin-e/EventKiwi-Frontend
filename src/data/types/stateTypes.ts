@@ -1,4 +1,4 @@
-import { EventCardDetails, Post, ProfileDetails, EventDetails, SocietyCard, CalendarEvent, InterestDetails } from "../../constants/types";
+import { EventCardDetails, Post, ProfileDetails, EventDetails, SocietyCard, CalendarEvent, InterestDetails, EventIdAndPosts } from "../../constants/types";
 
 import { UserProfile } from "./dataInterfaces";
 
@@ -12,16 +12,12 @@ export interface EventCardState {
 }
 
 export interface ViewEventState {
-   event: EventDetails,
-   eventsEvent: EventDetails,
-   discoverEvent: EventDetails,
+   events: EventDetails[],
    loading: boolean
 }
 
 export interface EventPostsState {
-   posts: Post[],
-   discoverPosts: Post[],
-   eventsPost: Post[]
+   posts: EventIdAndPosts[]
 }
 
 export interface EventEditState {
@@ -32,7 +28,8 @@ export interface UserState {
    loading: boolean,
    isLoggedIn: boolean,
    userToken: string,
-   profile: UserProfile
+   profile: UserProfile,
+   isSoc: boolean
 }
 
 export interface CalendarEventsState {
