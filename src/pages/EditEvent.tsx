@@ -1,5 +1,5 @@
 import React, { useState, MouseEvent, useEffect } from 'react';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonLabel, IonTextarea, IonInput, IonCard, IonDatetime, IonButtons, IonBackButton, IonList, IonItem, IonSelect, IonSelectOption, IonIcon, IonItemDivider, IonButton, IonChip, IonModal, IonToast } from '@ionic/react';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonLabel, IonTextarea, IonInput, IonCard, IonDatetime, IonButtons, IonBackButton, IonList, IonItem, IonSelect, IonSelectOption, IonIcon, IonItemDivider, IonButton, IonChip, IonModal, IonToast, IonAlert } from '@ionic/react';
 import { Container, Row, Col } from 'react-grid-system';
 import { ConnectedProps, connect } from 'react-redux';
 import { calendar, closeCircle } from 'ionicons/icons';
@@ -39,6 +39,7 @@ const EditEvent: React.FC<EditEventProps> = ({ match, event, userToken, createNe
   
   const [exists, setExists] = useState(false);
   const [showTagSearch, setShowTagSearch] = useState(false);
+  const [showConfirmDelete, setShowConfirmDelete] = useState(false);
   
   const [noTitleToast, setNoTitleToast] = useState(false);
   const [noLocationToast, setNoLocationToast] = useState(false);
@@ -312,7 +313,7 @@ const EditEvent: React.FC<EditEventProps> = ({ match, event, userToken, createNe
             </Col>
           </Row>
 
-          <Row>
+          <Row className="descriptionRow">
             <Col xs={12}>
               <IonList>
                 <IonItem lines="none">
@@ -332,7 +333,7 @@ const EditEvent: React.FC<EditEventProps> = ({ match, event, userToken, createNe
           <Row>
             <Col xs={12}>
               {exists &&
-                <IonButton color="danger" fill="outline">Delete Event</IonButton>
+                <IonButton onClick={() => setShowConfirmDelete(true)} expand="block" color="danger" fill="outline">Delete Event</IonButton>
               }
             </Col>
           </Row>
@@ -343,6 +344,27 @@ const EditEvent: React.FC<EditEventProps> = ({ match, event, userToken, createNe
           <AddTagSearch currentTags={tagList} addTag={addTag} removeTag={removeTag} />
           <IonButton onClick={() => setShowTagSearch(false)} className="dismissBtn">Done</IonButton>
         </IonModal>
+
+        <IonAlert 
+          isOpen={showConfirmDelete}
+          onDidDismiss={() => setShowConfirmDelete(false)}
+          header="Delete event"
+          message="Are you sure you want to delete this event?"
+          buttons={[
+            {
+              text: "Cancel",
+              role: "cancel",
+              cssClass: "secondary",
+            },
+            {
+              text: "Delete",
+              cssClass: "confirmDelete",
+              handler: () => {
+                console.log("delete me");
+              }
+            }
+          ]}
+        />
 
         <IonToast
           isOpen={noTitleToast}
