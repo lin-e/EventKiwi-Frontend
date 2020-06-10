@@ -1,7 +1,7 @@
 import { AppThunk } from "../types/dataInterfaces";
 import { createNewEventURL } from "../../constants/endpoints";
-import { CREATE_NEW_EVENT } from "./types";
-import { convertResToEventDetails } from "../../constants/types";
+import { CREATE_NEW_EVENT, LOAD_EDIT_EVENT } from "./types";
+import { convertResToEventDetails, EventDetails } from "../../constants/types";
 import { resp_event_details } from "../../constants/RequestInterfaces";
 
 export interface NewEventDetails {
@@ -34,5 +34,12 @@ export const createNewEvent = (event: NewEventDetails, token: string, setComplet
       type: CREATE_NEW_EVENT,
       payload: convertResToEventDetails(details.body as resp_event_details)
     }))
+  })
+}
+
+export const editEventLoad = (event: EventDetails) => {
+  return ({
+    type: LOAD_EDIT_EVENT,
+    payload: event
   })
 }

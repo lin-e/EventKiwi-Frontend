@@ -7,7 +7,9 @@ import { fetchCalEvents } from '../data/actions/actions'
 import { loadBlankEvent } from '../data/actions/viewEvent/viewEventActions';
 import { connect, ConnectedProps } from 'react-redux';
 import { RootState } from '../data/reducers';
-import { Redirect } from 'react-router';
+import { Redirect, useHistory } from 'react-router';
+import { blankEventDetails, EventDetails } from '../constants/types';
+import { editEventLoad } from '../data/actions/editEventActions';
 
 const mapStateToProps = (state: RootState) => ({
   isLoggedIn: state.userDetails.isLoggedIn,
@@ -15,7 +17,7 @@ const mapStateToProps = (state: RootState) => ({
   userToken: state.userDetails.userToken
 })
 
-const connector = connect(mapStateToProps, { fetchCalEvents, loadBlankEvent });
+const connector = connect(mapStateToProps, { fetchCalEvents, loadBlankEvent, editEventLoad });
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 type EventsProps = PropsFromRedux
@@ -35,6 +37,8 @@ const Events: React.FC<EventsProps> = (props) => {
 
   const contentRef = React.useRef<HTMLIonContentElement>(null);
   const refresherRef = React.useRef<HTMLIonRefresherElement>(null);
+
+  const history = useHistory();
 
   const refresh = () => {
     props.fetchCalEvents(refresherRef.current!, props.userToken);
@@ -90,6 +94,12 @@ const Events: React.FC<EventsProps> = (props) => {
     setGridViewToast(true);
   }
 
+  const newEvent = (e: MouseEvent) => {
+    e.preventDefault();
+    editEventLoad(blankEventDetails);
+    history.push("/events/add");
+  }
+
   if (!props.isLoggedIn && !props.isLoading) {
     return <Redirect to="/auth" />
   }
@@ -133,7 +143,7 @@ const Events: React.FC<EventsProps> = (props) => {
               <IonIcon icon={calendar}/>
             </IonFabButton>
             {isSociety &&
-              <IonFabButton routerLink="/events/add">
+              <IonFabButton onClick={newEvent} routerLink="/events/add">
                 <IonIcon icon={add} />
               </IonFabButton>
             }

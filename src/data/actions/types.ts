@@ -121,14 +121,20 @@ interface LoadUserDataAction {
 
 export type UserType = LoginAction | LoadUserDataAction | LogoutAction;
 
+export const LOAD_EDIT_EVENT = "LOAD_EDIT_EVENT";
 export const CREATE_NEW_EVENT = "CREATE_NEW_EVENT";
+
+interface LoadEditEventAction {
+   type: typeof LOAD_EDIT_EVENT,
+   payload: EventDetails
+}
 
 interface CreateNewEventAction {
    type: typeof CREATE_NEW_EVENT,
    payload: EventDetails
 }
 
-export type EventEditType = CreateNewEventAction;
+export type EventEditType = LoadEditEventAction | CreateNewEventAction;
 
 export const GET_EVENT_POSTS = "GET_EVENT_POSTS";
 export const GET_DISCOVER_EVENT_POSTS = "GET_DISCOVER_EVENT_POSTS";

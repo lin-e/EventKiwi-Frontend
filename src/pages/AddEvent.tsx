@@ -1,20 +1,21 @@
 import React, { useState, MouseEvent } from 'react';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonGrid, IonRow, IonCol, IonLabel, IonTextarea, IonInput, IonText, IonCard, IonDatetime, IonButtons, IonBackButton, IonList, IonItem, IonSelect, IonSelectOption, IonIcon, IonItemDivider, IonButton, IonChip, IonModal, IonToast } from '@ionic/react';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonLabel, IonTextarea, IonInput, IonText, IonCard, IonDatetime, IonButtons, IonBackButton, IonList, IonItem, IonSelect, IonSelectOption, IonIcon, IonItemDivider, IonButton, IonChip, IonModal, IonToast } from '@ionic/react';
 import { Container, Row, Col } from 'react-grid-system';
 import { calendar, closeCircle } from 'ionicons/icons';
 import { parseISO, format, isBefore } from 'date-fns'
 
 import './AddEvent.css'
-import EmptySectionText from '../components/EmptySectionText';
-import AddTagSearch from '../components/EditEvent/AddTagSearch';
-import { UNIX_EPOCH, PRIVATE, SOCIETIES, MEMBERS, PUBLIC } from '../constants/constants';
-import { createNewEvent } from '../data/actions/editEventActions';
+import EmptySectionText from '../../components/EmptySectionText';
+import AddTagSearch from '../../components/EditEvent/AddTagSearch';
+import { UNIX_EPOCH, PRIVATE, SOCIETIES, MEMBERS, PUBLIC } from '../../constants/constants';
+import { createNewEvent } from '../../data/actions/editEventActions';
 import { ConnectedProps, connect } from 'react-redux';
-import { RootState } from '../data/reducers';
+import { RootState } from '../../data/reducers';
 
 
 const mapStateToProps = (state: RootState) => {
   return {
+    event: state.editedEvent.event,
     userToken: state.userDetails.userToken
   }
 }
@@ -24,14 +25,14 @@ const connector = connect(mapStateToProps, { createNewEvent });
 type PropsFromRedux = ConnectedProps<typeof connector>
 type AddEventProps = PropsFromRedux
 
-const AddEvent: React.FC<AddEventProps> = ({userToken, createNewEvent}) => {
-  const [title, setTitle] = useState("");
-  const [location, setLocation] = useState("");
-  const [startDatetime, setStartDatetime] = useState(new Date());
-  const [endDatetime, setEndDatetime] = useState(new Date());
+const AddEvent: React.FC<AddEventProps> = ({ event, userToken, createNewEvent }) => {
+  const [title, setTitle] = useState(event.name);
+  const [location, setLocation] = useState(event.location);
+  const [startDatetime, setStartDatetime] = useState(event.datetimeStart);
+  const [endDatetime, setEndDatetime] = useState(event.datetimeEnd);
   const [privacy, setPrivacy] = useState(PRIVATE);
-  const [tagList, setTagList] = useState<string[]>([]);
-  const [description, setDescription] = useState("");
+  const [tagList, setTagList] = useState<string[]>(event.tags);
+  const [description, setDescription] = useState(event.description);
   
   const [showTagSearch, setShowTagSearch] = useState(false);
   
@@ -44,21 +45,6 @@ const AddEvent: React.FC<AddEventProps> = ({userToken, createNewEvent}) => {
   const [savedToast, setSavedToast] = useState(false);
 
   const currDatetime = new Date();
-
-  const clearInputs = () => {
-    setTitle("");
-    setLocation("");
-    setStartDatetime(new Date());
-    setEndDatetime(new Date());
-    setPrivacy(PRIVATE);
-    setTagList([]);
-    setDescription("");
-  }
-
-  const eventSaved = (complete: boolean) => {
-    setSavedToast(complete);
-    clearInputs();
-  }
 
   const mapPrivacy = (privacyLevel: string) => {
     switch(privacyLevel) {
@@ -148,7 +134,7 @@ const AddEvent: React.FC<AddEventProps> = ({userToken, createNewEvent}) => {
         start: startDatetime.toISOString(),
         end: endDatetime.toISOString(),
         img: "https://picsum.photos/600/400"
-      }, userToken, eventSaved);
+      }, userToken, setSavedToast);
     }
   }
 

@@ -8,7 +8,7 @@ import { calendar, compass, person } from "ionicons/icons";
 import EventsTabEventPage from "./EventsTabEventPage";
 import DiscoverTabEventPage from "./DiscoverTabEventPage";
 import StandaloneEventPage from "./StandaloneEventPage";
-import AddEvent from "./AddEvent";
+import AddEvent from "./EventEditing/AddEvent";
 import Licences from "./Licences";
 
 const Tabs: React.FC = () => (
