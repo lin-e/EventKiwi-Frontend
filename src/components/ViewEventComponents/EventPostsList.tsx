@@ -19,7 +19,6 @@ interface OwnProps {
    hide: boolean,
    posts: Post[],
    numPosts: number,
-   eventId: string,
    isPoster: boolean
 }
 
