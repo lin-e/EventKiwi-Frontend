@@ -1,5 +1,5 @@
 import React, { useState, MouseEvent } from 'react';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonGrid, IonRow, IonCol, IonLabel, IonTextarea, IonInput, IonText, IonCard, IonDatetime, IonButtons, IonBackButton, IonList, IonItem, IonSelect, IonSelectOption, IonIcon, IonItemDivider, IonButton, IonChip, IonModal } from '@ionic/react';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonGrid, IonRow, IonCol, IonLabel, IonTextarea, IonInput, IonText, IonCard, IonDatetime, IonButtons, IonBackButton, IonList, IonItem, IonSelect, IonSelectOption, IonIcon, IonItemDivider, IonButton, IonChip, IonModal, IonToast } from '@ionic/react';
 import { Container, Row, Col } from 'react-grid-system';
 import { calendar, closeCircle } from 'ionicons/icons';
 import { parseISO, format, isBefore } from 'date-fns'
@@ -35,14 +35,30 @@ const AddEvent: React.FC<AddEventProps> = ({userToken, createNewEvent}) => {
   
   const [showTagSearch, setShowTagSearch] = useState(false);
   
-  const [endBeforeStartToast, setEndBeforeStartToast] = useState(false);
   const [noTitleToast, setNoTitleToast] = useState(false);
   const [noLocationToast, setNoLocationToast] = useState(false);
-  const [noDescriptionToast, setNoDescriptionToast] = useState(false);
+  const [endBeforeStartToast, setEndBeforeStartToast] = useState(false);
   const [noTagsToast, setNoTagsToast] = useState(false);
   const [tooManyTagsToast, setTooManyTagsToast] = useState(false);
+  const [noDescriptionToast, setNoDescriptionToast] = useState(false);
+  const [savedToast, setSavedToast] = useState(false);
 
   const currDatetime = new Date();
+
+  const clearInputs = () => {
+    setTitle("");
+    setLocation("");
+    setStartDatetime(new Date());
+    setEndDatetime(new Date());
+    setPrivacy(PRIVATE);
+    setTagList([]);
+    setDescription("");
+  }
+
+  const eventSaved = (complete: boolean) => {
+    setSavedToast(complete);
+    clearInputs();
+  }
 
   const mapPrivacy = (privacyLevel: string) => {
     switch(privacyLevel) {
@@ -100,18 +116,18 @@ const AddEvent: React.FC<AddEventProps> = ({userToken, createNewEvent}) => {
   }
 
   const validEvent = () => {
-    if (!isBefore(startDatetime, endDatetime)) {
-      setEndBeforeStartToast(true);
-    } else if (title === "") {
+    if (title === "") {
       setNoTitleToast(true);
     } else if (location === "") {
       setNoLocationToast(true);
-    } else if (description === "") {
-      setNoDescriptionToast(true);
+    } else if (!isBefore(startDatetime, endDatetime)) {
+      setEndBeforeStartToast(true);
     } else if (tagList.length === 0) {
       setNoTagsToast(true);
     } else if (tagList.length > 8) {
       setTooManyTagsToast(true);
+    } else if (description === "") {
+      setNoDescriptionToast(true);
     } else {
       return true;
     }
@@ -132,7 +148,7 @@ const AddEvent: React.FC<AddEventProps> = ({userToken, createNewEvent}) => {
         start: startDatetime.toISOString(),
         end: endDatetime.toISOString(),
         img: "https://picsum.photos/600/400"
-      }, userToken);
+      }, userToken, eventSaved);
     }
   }
 
@@ -165,6 +181,7 @@ const AddEvent: React.FC<AddEventProps> = ({userToken, createNewEvent}) => {
             <IonItem lines="none">
               <IonLabel position="stacked">Title:</IonLabel>
               <IonTextarea 
+                value={title}
                 spellCheck
                 wrap="soft"
                 required
@@ -184,9 +201,11 @@ const AddEvent: React.FC<AddEventProps> = ({userToken, createNewEvent}) => {
 
             <Col md={6} sm={12}>
               <IonList className="detailsList">
+
                 <IonItem lines="none">
                   <IonLabel position="stacked">Location:</IonLabel>
                   <IonInput
+                    value={location}
                     maxlength={128}
                     onIonChange={updateLocation}
                   />
@@ -270,7 +289,8 @@ const AddEvent: React.FC<AddEventProps> = ({userToken, createNewEvent}) => {
               <IonList>
                 <IonItem lines="none">
                   <IonLabel position="stacked">Description:</IonLabel>
-                  <IonTextarea 
+                  <IonTextarea
+                    value={description}
                     rows={8}
                     spellCheck
                     wrap="soft"
@@ -287,6 +307,49 @@ const AddEvent: React.FC<AddEventProps> = ({userToken, createNewEvent}) => {
           <AddTagSearch currentTags={tagList} addTag={addTag} removeTag={removeTag} />
           <IonButton onClick={() => setShowTagSearch(false)} className="dismissBtn">Done</IonButton>
         </IonModal>
+
+        <IonToast
+          isOpen={noTitleToast}
+          onDidDismiss={() => setNoTitleToast(false)}
+          message="Please enter a title."
+          duration={2500}
+        />
+        <IonToast
+          isOpen={noLocationToast}
+          onDidDismiss={() => setNoLocationToast(false)}
+          message="Please enter an event location."
+          duration={2500}
+        />
+        <IonToast
+          isOpen={endBeforeStartToast}
+          onDidDismiss={() => setEndBeforeStartToast(false)}
+          message="Please enter an end date/time that is after the start of the event."
+          duration={2500}
+        />
+        <IonToast
+          isOpen={noTagsToast}
+          onDidDismiss={() => setNoTagsToast(false)}
+          message="Please add at least one tag to the event (max 8)."
+          duration={2500}
+        />
+        <IonToast
+          isOpen={tooManyTagsToast}
+          onDidDismiss={() => setTooManyTagsToast(false)}
+          message="Please only choose a maximum of 8 tags."
+          duration={2500}
+        />
+        <IonToast
+          isOpen={noDescriptionToast}
+          onDidDismiss={() => setNoDescriptionToast(false)}
+          message="Please enter an event description."
+          duration={2500}
+        />
+        <IonToast
+          isOpen={savedToast}
+          onDidDismiss={() => setSavedToast(false)}
+          message="Event saved."
+          duration={2000}
+        />
       </IonContent>
     </IonPage>
   );

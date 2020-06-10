@@ -15,7 +15,7 @@ export interface NewEventDetails {
   img: string
 }
 
-export const createNewEvent = (event: NewEventDetails, token: string): AppThunk => async dispatch => {
+export const createNewEvent = (event: NewEventDetails, token: string, setCompleted: (completed: boolean) => void): AppThunk => async dispatch => {
   const options = {
     method: "POST",
     headers: {
@@ -25,7 +25,10 @@ export const createNewEvent = (event: NewEventDetails, token: string): AppThunk 
     body: JSON.stringify(event)
   }
   fetch(createNewEventURL, options)
-  .then(response => response.json())
+  .then(response => {
+    setCompleted(response.status === 1)
+    return(response.json())
+  })
   .then(details => {
     return (dispatch({
       type: CREATE_NEW_EVENT,
