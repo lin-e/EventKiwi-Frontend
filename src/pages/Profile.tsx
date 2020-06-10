@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonGrid, IonRow, IonCol, IonButton, IonModal, IonToast, IonRefresher, IonRefresherContent } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonGrid, IonRow, IonCol, IonButton, IonModal, IonToast, IonRefresher, IonRefresherContent, IonItem, IonCard } from '@ionic/react';
 import './Profile.css';
 import ItemSlider from '../components/ItemSlider';
 import ProfileSocietyIcon from '../components/Profile/ProfileSocietyIcon';
@@ -14,6 +14,7 @@ import EmptySectionText from '../components/EmptySectionText';
 import { Redirect } from 'react-router';
 import { Plugins } from '@capacitor/core';
 import AddInterestModal from '../components/Profile/AddInterestModal';
+import EventResource from '../components/ViewEventComponents/EventResource';
 
 const { Browser } = Plugins;
 
@@ -28,7 +29,8 @@ const mapStateToProps = (state: RootState) => {
     isLoggedIn: state.userDetails.isLoggedIn,
     isLoading: state.userDetails.loading,
     userToken: state.userDetails.userToken,
-    isSoc: state.userDetails.isSoc
+    isSoc: state.userDetails.isSoc,
+    socResources: state.resourceManagement.resources
   }
 }
 
@@ -60,7 +62,7 @@ class Profile extends Component<ProfileProps, ProfileState> {
   }
 
   componentDidUpdate(prevProps: ProfileProps) {
-    if(this.props.userToken !== prevProps.userToken) {
+    if (this.props.userToken !== prevProps.userToken) {
       this.refresh()
     }
   }
@@ -113,7 +115,7 @@ class Profile extends Component<ProfileProps, ProfileState> {
                         <ProfileSocietyIcon name={soc.shortName} logo={soc.imgSrc} key={soc.shortName} />
                       ))}
                     </ItemSlider> :
-                    <EmptySectionText mainText="No followed societies" subText="Try following or joining some societies to see what is on!"/>
+                    <EmptySectionText mainText="No followed societies" subText="Try following or joining some societies to see what is on!" />
 
                   }
                 </div>
@@ -132,26 +134,38 @@ class Profile extends Component<ProfileProps, ProfileState> {
                   {this.props.interests.length !== 0 ?
                     <div className="interests">
                       {this.props.interests.map((interest) => (
-                      <InterestChip interest={interest} key={interest}/>
-                    ))}
+                        <InterestChip interest={interest} key={interest} />
+                      ))}
                     </div> :
-                    <EmptySectionText mainText="No followed interests" subText="Try adding some interests to find more of what you like!"/>
+                    <EmptySectionText mainText="No followed interests" subText="Try adding some interests to find more of what you like!" />
                   }
                 </div>
               </IonRow>
 
-              {this.props.isSoc &&  <>
+              {this.props.isSoc && <>
                 <IonRow>
                   <IonCol className="sectionHeader" size="8">
                     <IonTitle className="profileTitle">My Resources</IonTitle>
                   </IonCol>
                   <IonCol size="4">
-                    <IonButton routerLink="/profile/resources" className="profileBtn" color="transparent">Manage</IonButton>
+                    <IonButton routerLink="/profile/resources" className="profileBtn" color="transparent">See more</IonButton>
                   </IonCol>
                 </IonRow>
                 <IonRow>
                   <div className="sectionContent">
-                    <EmptySectionText mainText="No resources" subText="Add some resources to use for your events"/>
+                    {this.props.socResources.length > 0 ?
+                      <IonGrid>
+                        <IonRow>
+                          {this.props.socResources.slice(0,4).map(r =>
+                            <IonCol size="6">
+                              <IonItem detail className="socResource">
+                                <EventResource name={r.display_name} />
+                              </IonItem>
+                            </IonCol>)}
+                        </IonRow>
+                      </IonGrid>
+                      : <EmptySectionText mainText="No resources" subText="Add some resources to use for your events" />}
+
                   </div>
                 </IonRow>
               </>}
