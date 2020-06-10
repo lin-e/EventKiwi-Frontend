@@ -7,3 +7,7 @@
     opacity: 1;
     transition: opacity 10s;
 }
+
+.resultsEnd {
+    min-height: 80px !important;
+}

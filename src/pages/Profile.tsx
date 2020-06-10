@@ -121,7 +121,7 @@ class Profile extends Component<ProfileProps, ProfileState> {
                   <IonTitle className="profileTitle">My Interests</IonTitle>
                 </IonCol>
                 <IonCol size="4">
-                  <IonButton className="profileBtn" color="transparent" onClick={() => this.setState({ showInterestModal: true })}>Manage</IonButton>
+                  <IonButton className="profileBtn" fill="clear" onClick={() => this.setState({ showInterestModal: true })}>Edit</IonButton>
                 </IonCol>
               </IonRow>
               <IonRow>
@@ -129,7 +129,7 @@ class Profile extends Component<ProfileProps, ProfileState> {
                   {this.props.interests.length !== 0 ?
                     <div className="interests">
                       {this.props.interests.map((interest) => (
-                      <InterestChip interest={interest} key={interest}/>
+                      <InterestChip interest={interest} key={interest} />
                     ))}
                     </div> :
                     <EmptySectionText mainText="No followed interests" subText="Try adding some interests to find more of what you like!"/>

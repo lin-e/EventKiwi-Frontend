@@ -12,6 +12,8 @@ export const discoverSearchSocietyCardURL = `${endpointURL}/societies/search`;
 export const followSocietyURL = (id: string) => `${endpointURL}/societies/follow/${id}`;
 export const unfollowSocietyURL = (id: string) => `${endpointURL}/societies/unfollow/${id}`;
 
+export const createNewEventURL = `${endpointURL}/events/create`;
+
 export const eventDetailsURL = (id: string) => `${endpointURL}/events/details/${id}`;
 export const eventResourcesURL = `${endpointURL}/events/resources/`;
 export const resourceDownloadURL = (id: string) => `${productionURL}/file/get/${id}`;

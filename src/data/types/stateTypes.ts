@@ -7,7 +7,8 @@ export interface SocietyCardState {
 }
 
 export interface EventCardState {
-   events: EventCardDetails[]
+   events: EventCardDetails[],
+   moreResults: boolean
 }
 
 export interface ViewEventState {
@@ -17,6 +18,10 @@ export interface ViewEventState {
 
 export interface EventPostsState {
    posts: EventIdAndPosts[]
+}
+
+export interface EventEditState {
+   event: EventDetails
 }
 
 export interface UserState {
