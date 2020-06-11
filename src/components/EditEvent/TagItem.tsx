@@ -1,5 +1,5 @@
 import React, { MouseEvent, useState, useEffect } from 'react';
-import { IonGrid, IonCol, IonItem, IonRow, IonLabel, IonButton } from '@ionic/react';
+import { IonGrid, IonCol, IonItem, IonRow, IonLabel, IonButton, IonToast } from '@ionic/react';
 import { InterestDetails } from '../../constants/types';
 import { ConnectedProps, connect } from 'react-redux';
 import { RootState } from '../../data/reducers';
@@ -26,7 +26,21 @@ type TagItemProps = OwnProps & PropsFromRedux
 
 const TagItem: React.FC<TagItemProps> = ({ tag, currentTags,addTag, removeTag }) => {
   const [added, setAdded] = useState(currentTags.includes(tag.name));
-  
+  const [tooLongToast, setTooLongToast] = useState(false);
+  const [invalidCharacterToast, setInvalidCharacterToast] = useState(false);
+
+  const validTag = (input: string) => {
+    const rejectRegex = /[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi;
+    if (input.length > 32) {
+      setTooLongToast(true);
+    } else if (rejectRegex.test(input)) {
+      setInvalidCharacterToast(true);
+    } else {
+      return true;
+    }
+    return false;
+  }
+
   const toggleInterest = (e: MouseEvent) => {
     e.preventDefault();
 
@@ -34,8 +48,10 @@ const TagItem: React.FC<TagItemProps> = ({ tag, currentTags,addTag, removeTag })
       removeTag(tag.name)
       setAdded(false);
     } else {
-      addTag(tag.name)
-      setAdded(true)
+      if (validTag(tag.name)) {
+        addTag(tag.name)
+        setAdded(true)
+      }
     }
   }
   
@@ -44,24 +60,40 @@ const TagItem: React.FC<TagItemProps> = ({ tag, currentTags,addTag, removeTag })
   }, [tag]);
 
   return (
-    <IonItem>
-      <IonGrid>
-        <IonRow>
-          <IonCol size="8">
-            <IonLabel>
-              <div className="tagName">{tag.name}</div>
-              <p>{`${tag.numInterested} ${(tag.numInterested == 1) ? "person" : "people"} interested`}</p>
-            </IonLabel>
-          </IonCol>
-          <IonCol size="4">
-            {added ?
-              <IonButton color="danger" fill="outline" className="interestBtn" onClick={toggleInterest}>Remove</IonButton> :
-              <IonButton color="primary" fill="solid" className="interestBtn" onClick={toggleInterest}>Add</IonButton>
-            }
-          </IonCol>
-        </IonRow>
-      </IonGrid>
-    </IonItem>
+    <>
+      <IonItem>
+        <IonGrid>
+          <IonRow>
+            <IonCol size="8">
+              <IonLabel>
+                <div className="tagName">{tag.name}</div>
+                <p>{`${tag.numInterested} ${(tag.numInterested == 1) ? "person" : "people"} interested`}</p>
+              </IonLabel>
+            </IonCol>
+            <IonCol size="4">
+              {added ?
+                <IonButton color="danger" fill="outline" className="interestBtn" onClick={toggleInterest}>Remove</IonButton> :
+                <IonButton color="primary" fill="solid" className="interestBtn" onClick={toggleInterest}>Add</IonButton>
+              }
+            </IonCol>
+          </IonRow>
+        </IonGrid>
+      </IonItem>
+      <IonToast
+        isOpen={tooLongToast}
+        onDidDismiss={() => setTooLongToast(false)}
+        message="Interests can not be longer that 32 characters."
+        position="bottom"
+        duration={2500}
+      />
+      <IonToast
+        isOpen={invalidCharacterToast}
+        onDidDismiss={() => setInvalidCharacterToast(false)}
+        message={`Interests can not contain the following characters: \`~!@#$%^&*()_|+-=?;:'",.<>{}[]\\/`}
+        position="bottom"
+        duration={2500}
+      />
+    </>
   );
 }
 
