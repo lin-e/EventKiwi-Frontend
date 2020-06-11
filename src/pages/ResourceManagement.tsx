@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { RootState } from '../data/reducers';
-import { IonPage, IonHeader, IonToolbar, IonButtons, IonBackButton, IonTitle, IonContent, IonGrid, IonRow, IonCol, IonItem, IonFab, IonFabButton, IonIcon, IonModal, IonButton, IonLabel, IonTextarea, IonItemSliding, IonItemOptions, IonItemOption, IonText } from '@ionic/react';
+import { IonPage, IonHeader, IonToolbar, IonButtons, IonBackButton, IonTitle, IonContent, IonGrid, IonRow, IonCol, IonItem, IonFab, IonFabButton, IonIcon, IonModal, IonButton, IonLabel, IonTextarea, IonItemSliding, IonItemOptions, IonItemOption, IonText, IonAlert } from '@ionic/react';
 import { loadSocResources, uploadFile, deleteFile } from '../data/actions/resourceManagement/resourceManagementActions';
 import "./ResourceManagement.css";
 import EventResource from '../components/ViewEventComponents/EventResource';
@@ -31,9 +31,10 @@ const ResourceManagement: React.FC<ResourceManagementProps> = (props) => {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const [deleteAlert, showDeleteAlert] = useState<boolean>(false);
 
   const [resourceModal, showResourceModal] = useState<boolean>(false);
-  const [selectedResource, setSelectedResource] = useState<resp_resource>({display_name:"", bucket_key:"", events:[]});
+  const [selectedResource, setSelectedResource] = useState<resp_resource>({ display_name: "", bucket_key: "", events: [] });
 
   useEffect(() => {
     if (props.userToken !== "") {
@@ -46,8 +47,20 @@ const ResourceManagement: React.FC<ResourceManagementProps> = (props) => {
     showResourceModal(true);
   }
 
-  const modalDeleteFile = (bucket_key: string) => {
+  const modalDeleteClicked = (resource: resp_resource) => {
+    setSelectedResource(resource);
+    showDeleteAlert(true);
+  }
+
+  const slidingDeleteClicked = (resource: resp_resource) => {
+    setSelectedResource(resource);
+    showDeleteAlert(true);
+  }
+
+
+  const deleteFile = (bucket_key: string) => {
     props.deleteFile(bucket_key, props.userToken);
+    showDeleteAlert(false);
     showResourceModal(false);
   }
 
@@ -75,7 +88,7 @@ const ResourceManagement: React.FC<ResourceManagementProps> = (props) => {
                     </IonItem>
 
                     <IonItemOptions side="end">
-                      <IonItemOption color="danger" onClick={() => props.deleteFile(r.bucket_key, props.userToken)}>Delete</IonItemOption>
+                      <IonItemOption color="danger" onClick={() => slidingDeleteClicked(r)}>Delete</IonItemOption>
                     </IonItemOptions>
                   </IonItemSliding>
                 </Col>)}
@@ -116,24 +129,40 @@ const ResourceManagement: React.FC<ResourceManagementProps> = (props) => {
             <IonText>
               <h3>{selectedResource.display_name}</h3>
               {selectedResource.events.length > 0 ?
-              <>
-                 <h5>Used in:</h5>
-                 {selectedResource.events.map(e => <h6 id={e.name}>- {e.name}</h6>)}
-              </> 
-               : <h5>Not used in any events</h5>}
-              
+                <>
+                  <h5>Used in:</h5>
+                  {selectedResource.events.map(e => <h6 id={e.name}>- {e.name}</h6>)}
+                </>
+                : <h5>Not used in any events</h5>}
+
             </IonText>
             <IonRow>
               <IonCol>
                 <IonButton expand="block" href={resourceDownloadURL(selectedResource.bucket_key)} download={selectedResource.display_name}>Download</IonButton>
               </IonCol>
               <IonCol>
-                <IonButton expand="block" color="danger" onClick={() => modalDeleteFile(selectedResource.bucket_key)}>Delete</IonButton>
+                <IonButton expand="block" color="danger" onClick={() => modalDeleteClicked(selectedResource)}>Delete</IonButton>
               </IonCol>
             </IonRow>
           </Container>
         </IonContent>
       </IonModal>
+
+
+      <IonAlert
+        isOpen={deleteAlert}
+        onDidDismiss={() => showDeleteAlert(false)}
+        cssClass='my-custom-class'
+        header={`Delete resource`}
+        subHeader={`Are you sure you want to delete "${selectedResource.display_name}"?`}
+        message="This action cannot be undone"
+        buttons={['CANCEL', {
+          text: 'OK',
+          handler: () => {
+            deleteFile(selectedResource.bucket_key);
+          }
+        }]}
+      />
     </IonPage>
   );
 };
