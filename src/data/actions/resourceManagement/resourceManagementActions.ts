@@ -53,6 +53,7 @@ export const attachResourcesToEvent = (eventId: string, resources: string[], use
          type: LOAD_EVENT_DETAILS,
          payload: details
       }))
+      .then(() => dispatch(loadSocResources(userToken)))
 }
 
 export const removeResourceFromEvent = (eventId: string, resource: string, userToken: string): AppThunk => async dispatch => {
@@ -67,4 +68,5 @@ export const removeResourceFromEvent = (eventId: string, resource: string, userT
          type: LOAD_EVENT_DETAILS,
          payload: details
       }))
+      .then(() => dispatch(loadSocResources(userToken)))
 }

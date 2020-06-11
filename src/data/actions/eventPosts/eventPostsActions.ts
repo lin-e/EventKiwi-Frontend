@@ -40,7 +40,6 @@ export const addEventPost = (eventId: string, content: string, userToken: string
 }
 
 export const deleteEventPost = (postId: string, eventId: string, userToken: string): AppThunk => async dispatch => {
-   console.log(`postId: ${postId}, eventId: ${eventId}`)
    fetch(deleteEventPostEndpoint(postId), {
       method: 'get',
       headers: { 'Authorization': `Bearer ${userToken}` }
