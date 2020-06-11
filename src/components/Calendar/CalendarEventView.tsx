@@ -44,7 +44,7 @@ const CalendarEventView: React.FC<CalendarEventViewProps> = ({hide, groupedEvent
             </IonLabel>
           </IonItemDivider>
           {eventGroup.events.map((eventOnDay) => (
-            <CalendarEventItem event={eventOnDay} />
+            <CalendarEventItem key={eventOnDay.id} event={eventOnDay} />
           ))}
         </IonItemGroup>
         ))}
