@@ -7,7 +7,6 @@ import { Container } from 'react-grid-system';
 import InterestChip from '../components/Profile/InterestChip';
 import { fetchProfileDetails, resetInvalidProfileResponse } from '../data/actions/actions';
 import { loadSocResources } from '../data/actions/resourceManagement/resourceManagementActions';
-import { logOut } from '../data/actions/userActions';
 import { RootState } from '../data/reducers';
 import { connect, ConnectedProps } from 'react-redux';
 import EmptySectionText from '../components/EmptySectionText';
@@ -34,7 +33,7 @@ const mapStateToProps = (state: RootState) => {
   }
 }
 
-const connector = connect(mapStateToProps, { fetchProfileDetails, resetInvalidProfileResponse, logOut, loadSocResources })
+const connector = connect(mapStateToProps, { fetchProfileDetails, resetInvalidProfileResponse, loadSocResources })
 
 type PropsFromRedux = ConnectedProps<typeof connector>
 type ProfileProps = PropsFromRedux
@@ -176,7 +175,7 @@ class Profile extends Component<ProfileProps, ProfileState> {
 
               <IonRow>
                 <IonCol>
-                  <IonButton expand="block" color="danger" onClick={() => this.props.logOut(this.props.userToken)}>Log out</IonButton>
+                  <IonButton expand="block" color="danger" routerLink="/signout">Log out</IonButton>
                 </IonCol>
                 <IonCol>
                   <IonButton expand="block" onClick={this.openUnionWebsite}>My Union</IonButton>
@@ -196,7 +195,7 @@ class Profile extends Component<ProfileProps, ProfileState> {
           </IonModal>
 
           <IonToast
-            isOpen={this.props.invalidResponse}
+            isOpen={this.props.invalidResponse && this.props.isLoggedIn}
             onDidDismiss={this.props.resetInvalidProfileResponse}
             message="Could not retrieve profile right now, please try again later."
             duration={2000}

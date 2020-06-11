@@ -21,17 +21,17 @@ export const logIn = (msToken: string): AppThunk => async dispatch => {
       body: JSON.stringify({ token: msToken }),
       headers: { 'Content-Type': 'application/json' }
    })
-   .then(res => res.json())
-   .then(data => {
-      saveUserData(data, true)
-      return data
-   })
-   .then(user => (
-      dispatch({
-         type: USER_LOGIN,
-         payload: user
+      .then(res => res.json())
+      .then(data => {
+         saveUserData(data, true)
+         return data
       })
-   ))
+      .then(user => (
+         dispatch({
+            type: USER_LOGIN,
+            payload: user
+         })
+      ))
 }
 
 
@@ -62,6 +62,9 @@ const getUserData = async () => {
    }
 }
 
+export const removeUser = () => ({
+   type: USER_LOGOUT
+})
 
 export const logOut = (userToken: string): AppThunk => async dispatch => {
    fetch(deAuthEndpoint, {
@@ -70,11 +73,6 @@ export const logOut = (userToken: string): AppThunk => async dispatch => {
    })
       .then(res => console.log(res))
       .then(() => clearUserData())
-      .then(() => (
-         dispatch({
-            type: USER_LOGOUT
-         })
-      ))
 }
 
 const clearUserData = async () => {
