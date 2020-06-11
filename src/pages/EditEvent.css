@@ -55,6 +55,14 @@ ion-list {
     transform: translateY(0);
 }
 
+.descriptionRow {
+    margin-bottom: 16px;
+}
+
+.confirmDelete {
+    color: var(--ion-color-danger) !important;
+}
+
 .dismissBtn {
     margin-bottom: 8px;
 }

@@ -148,7 +148,7 @@ class Profile extends Component<ProfileProps, ProfileState> {
                     <IonTitle className="profileTitle">My Resources</IonTitle>
                   </IonCol>
                   <IonCol size="4">
-                    <IonButton routerLink="/profile/resources" className="profileBtn" color="transparent">
+                    <IonButton routerLink="/profile/resources" className="profileBtn" fill="clear">
                       Manage
                     </IonButton>
                   </IonCol>
@@ -184,7 +184,7 @@ class Profile extends Component<ProfileProps, ProfileState> {
               </IonRow>
 
               <IonRow>
-                <IonButton routerLink="/profile/licences" className="profileBtn" color="transparent">Licences</IonButton>
+                <IonButton routerLink="/profile/licences" className="profileBtn" fill="clear">Licences</IonButton>
               </IonRow>
             </IonGrid>
 

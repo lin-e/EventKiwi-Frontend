@@ -1,4 +1,4 @@
-import React, { useState, useRef, MouseEvent } from 'react';
+import React from 'react';
 import { CalendarEvent } from '../../constants/types'
 import { IonItemSliding, IonGrid, IonCol, IonRow, IonItem, IonText, IonIcon } from '@ionic/react';
 import { getDateRangeNoStartDate } from '../../utils/DateTimeTools'

@@ -13,6 +13,8 @@ export const followSocietyURL = (id: string) => `${endpointURL}/societies/follow
 export const unfollowSocietyURL = (id: string) => `${endpointURL}/societies/unfollow/${id}`;
 
 export const createNewEventURL = `${endpointURL}/events/create`;
+export const updateEventURL = (id: string) => `${endpointURL}/events/edit/${id}`;
+export const deleteEventURL = (id: string) => `${endpointURL}/events/delete/${id}`;
 
 export const eventDetailsURL = (id: string) => `${endpointURL}/events/details/${id}`;
 export const eventResourcesURL = `${endpointURL}/events/resources/`;

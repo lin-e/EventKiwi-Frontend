@@ -1,16 +1,18 @@
-import React, { useState, MouseEvent } from 'react';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonLabel, IonTextarea, IonInput, IonCard, IonDatetime, IonButtons, IonBackButton, IonList, IonItem, IonSelect, IonSelectOption, IonIcon, IonItemDivider, IonButton, IonChip, IonModal, IonToast } from '@ionic/react';
+import React, { useState, MouseEvent, useEffect } from 'react';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonLabel, IonTextarea, IonInput, IonCard, IonDatetime, IonButtons, IonBackButton, IonList, IonItem, IonSelect, IonSelectOption, IonIcon, IonItemDivider, IonButton, IonChip, IonModal, IonToast, IonAlert } from '@ionic/react';
 import { Container, Row, Col } from 'react-grid-system';
 import { ConnectedProps, connect } from 'react-redux';
 import { calendar, closeCircle } from 'ionicons/icons';
 import { parseISO, format, isBefore } from 'date-fns'
 import AddTagSearch from '../components/EditEvent/AddTagSearch';
 import EmptySectionText from '../components/EmptySectionText';
-import { createNewEvent } from '../data/actions/editEventActions';
+import { createNewEvent, updateEvent, editEventLoad, deleteEvent } from '../data/actions/editEventActions';
 import { RootState } from '../data/reducers';
-import { UNIX_EPOCH, PRIVATE, SOCIETIES, MEMBERS, PUBLIC } from '../constants/constants';
+import { UNIX_EPOCH, PRIVATE, SOCIETIES, MEMBERS, PUBLIC, NO_ID } from '../constants/constants';
 import './EditEvent.css'
+import { RouteComponentProps } from 'react-router';
 
+interface OwnProps extends RouteComponentProps<{ id?: string }> { };
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -19,12 +21,14 @@ const mapStateToProps = (state: RootState) => {
   }
 }
 
-const connector = connect(mapStateToProps, { createNewEvent });
+const connector = connect(mapStateToProps, { createNewEvent, updateEvent, editEventLoad, deleteEvent });
 
 type PropsFromRedux = ConnectedProps<typeof connector>
-type AddEventProps = PropsFromRedux
+type EditEventProps =  OwnProps & PropsFromRedux
 
-const AddEvent: React.FC<AddEventProps> = ({ event, userToken, createNewEvent }) => {
+const EditEvent: React.FC<EditEventProps> = ({ match, event, userToken, createNewEvent, updateEvent, editEventLoad, deleteEvent }) => {
+  
+  const [eventId, setEventId] = useState(event.id);
   const [title, setTitle] = useState(event.name);
   const [location, setLocation] = useState(event.location);
   const [startDatetime, setStartDatetime] = useState(event.datetimeStart);
@@ -33,7 +37,9 @@ const AddEvent: React.FC<AddEventProps> = ({ event, userToken, createNewEvent })
   const [tagList, setTagList] = useState<string[]>(event.tags);
   const [description, setDescription] = useState(event.description);
   
+  const [exists, setExists] = useState(false);
   const [showTagSearch, setShowTagSearch] = useState(false);
+  const [showConfirmDelete, setShowConfirmDelete] = useState(false);
   
   const [noTitleToast, setNoTitleToast] = useState(false);
   const [noLocationToast, setNoLocationToast] = useState(false);
@@ -42,8 +48,34 @@ const AddEvent: React.FC<AddEventProps> = ({ event, userToken, createNewEvent })
   const [tooManyTagsToast, setTooManyTagsToast] = useState(false);
   const [noDescriptionToast, setNoDescriptionToast] = useState(false);
   const [savedToast, setSavedToast] = useState(false);
-
+  const [deletedToast, setDeletedToast] = useState(false);
+  
   const currDatetime = new Date();
+  
+  const updateState = () => {
+    setEventId(event.id);
+    setTitle(event.name);
+    setLocation(event.location);
+    setStartDatetime(event.datetimeStart);
+    setEndDatetime(event.datetimeEnd);
+    setPrivacy(PRIVATE);
+    setTagList(event.tags);
+    setDescription(event.description);
+
+    setExists((event.id !== ""));
+  }
+
+  useEffect(() => {
+    updateState()
+  }, [event]);
+
+  useEffect(() => {
+    if (match.params.id === undefined) {
+      editEventLoad(NO_ID, userToken);
+    } else {
+      editEventLoad(match.params.id, userToken);
+    }
+  }, []);
 
   const mapPrivacy = (privacyLevel: string) => {
     switch(privacyLevel) {
@@ -120,11 +152,18 @@ const AddEvent: React.FC<AddEventProps> = ({ event, userToken, createNewEvent })
     return false;
   }
 
+  const eventCreated = (complete: boolean) => {
+    setSavedToast(complete);
+    if (complete) {
+      setEventId(event.id);
+    }
+  }
+
   const saveEvent = (e: MouseEvent) => {
     e.preventDefault();
 
     if (validEvent()) {
-      createNewEvent({
+      const updatedDetails = {
         name: title,
         location: location,
         desc: description,
@@ -133,7 +172,13 @@ const AddEvent: React.FC<AddEventProps> = ({ event, userToken, createNewEvent })
         start: startDatetime.toISOString(),
         end: endDatetime.toISOString(),
         img: "https://picsum.photos/600/400"
-      }, userToken, setSavedToast);
+      }
+      
+      if (eventId === "") {
+        createNewEvent(updatedDetails, userToken, eventCreated);
+      } else {
+        updateEvent(updatedDetails, eventId, userToken, setSavedToast)
+      }
     }
   }
 
@@ -142,7 +187,7 @@ const AddEvent: React.FC<AddEventProps> = ({ event, userToken, createNewEvent })
       <IonHeader>
         <IonToolbar>
           <IonButtons  slot="start">
-            <IonBackButton color="danger" defaultHref={`/events`} />
+            <IonBackButton color="danger" />
           </IonButtons>
           <IonTitle>Create new Event</IonTitle>
           <IonButtons  slot="end">
@@ -269,7 +314,7 @@ const AddEvent: React.FC<AddEventProps> = ({ event, userToken, createNewEvent })
             </Col>
           </Row>
 
-          <Row>
+          <Row className="descriptionRow">
             <Col xs={12}>
               <IonList>
                 <IonItem lines="none">
@@ -285,6 +330,14 @@ const AddEvent: React.FC<AddEventProps> = ({ event, userToken, createNewEvent })
               </IonList>
             </Col>
           </Row>
+
+          <Row>
+            <Col xs={12}>
+              {exists &&
+                <IonButton onClick={() => setShowConfirmDelete(true)} expand="block" color="danger" fill="outline">Delete Event</IonButton>
+              }
+            </Col>
+          </Row>
         
         </Container>
 
@@ -292,6 +345,27 @@ const AddEvent: React.FC<AddEventProps> = ({ event, userToken, createNewEvent })
           <AddTagSearch currentTags={tagList} addTag={addTag} removeTag={removeTag} />
           <IonButton onClick={() => setShowTagSearch(false)} className="dismissBtn">Done</IonButton>
         </IonModal>
+
+        <IonAlert 
+          isOpen={showConfirmDelete}
+          onDidDismiss={() => setShowConfirmDelete(false)}
+          header="Delete event"
+          message="Are you sure you want to delete this event?"
+          buttons={[
+            {
+              text: "Cancel",
+              role: "cancel",
+              cssClass: "secondary",
+            },
+            {
+              text: "Delete",
+              cssClass: "confirmDelete",
+              handler: () => {
+                deleteEvent(eventId, userToken, setDeletedToast);
+              }
+            }
+          ]}
+        />
 
         <IonToast
           isOpen={noTitleToast}
@@ -335,9 +409,15 @@ const AddEvent: React.FC<AddEventProps> = ({ event, userToken, createNewEvent })
           message="Event saved."
           duration={2000}
         />
+        <IonToast
+          isOpen={deletedToast}
+          onDidDismiss={() => setDeletedToast(false)}
+          message="Event deleted."
+          duration={2000}
+        />
       </IonContent>
     </IonPage>
   );
 }
 
-export default connector(AddEvent);
+export default connector(EditEvent);

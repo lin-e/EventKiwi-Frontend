@@ -8,12 +8,12 @@ import { loadBlankEvent } from '../data/actions/viewEvent/viewEventActions';
 import { connect, ConnectedProps } from 'react-redux';
 import { RootState } from '../data/reducers';
 import { Redirect, useHistory } from 'react-router';
-import { blankEventDetails, EventDetails } from '../constants/types';
 import { editEventLoad } from '../data/actions/editEventActions';
 
 const mapStateToProps = (state: RootState) => ({
   isLoggedIn: state.userDetails.isLoggedIn,
   isLoading: state.userDetails.loading,
+  isSociety: state.userDetails.isSoc,
   userToken: state.userDetails.userToken
 })
 
@@ -32,8 +32,6 @@ const Events: React.FC<EventsProps> = (props) => {
 
   const [viewType, setViewType] = useState<'list' | 'grid'>('list');
   const [gridViewToast, setGridViewToast] = useState(false);
-
-  const isSociety: boolean = true;
 
   const contentRef = React.useRef<HTMLIonContentElement>(null);
   const refresherRef = React.useRef<HTMLIonRefresherElement>(null);
@@ -94,12 +92,6 @@ const Events: React.FC<EventsProps> = (props) => {
     setGridViewToast(true);
   }
 
-  const newEvent = (e: MouseEvent) => {
-    e.preventDefault();
-    editEventLoad(blankEventDetails);
-    history.push("/events/add");
-  }
-
   if (!props.isLoggedIn && !props.isLoading) {
     return <Redirect to="/auth" />
   }
@@ -142,8 +134,8 @@ const Events: React.FC<EventsProps> = (props) => {
             <IonFabButton onClick={showGridView}>
               <IonIcon icon={calendar}/>
             </IonFabButton>
-            {isSociety &&
-              <IonFabButton onClick={newEvent} routerLink="/events/add">
+            {props.isSociety &&
+              <IonFabButton routerLink="/events/add">
                 <IonIcon icon={add} />
               </IonFabButton>
             }

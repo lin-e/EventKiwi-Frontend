@@ -7,6 +7,7 @@ import EventResourcesList from '../components/ViewEventComponents/EventResources
 import { shareOutline, add, pencil } from 'ionicons/icons';
 import { connect, ConnectedProps, useSelector } from 'react-redux';
 import { loadEventDetails, loadingEvent, loadBlankEvent, goingToEvent, interestedInEvent, notGoingToEvent } from '../data/actions/viewEvent/viewEventActions';
+import { editEventLoad } from '../data/actions/editEventActions'
 import { loadEventPosts, addEventPost } from '../data/actions/eventPosts/eventPostsActions';
 import { loadSocResources, attachResourcesToEvent } from '../data/actions/resourceManagement/resourceManagementActions';
 import { RootState } from '../data/reducers';
@@ -14,6 +15,7 @@ import { isPlatform } from '@ionic/react';
 import { Plugins } from '@capacitor/core';
 import { blankEventDetails, EventDetails, EventIdAndPosts, convertResToResource } from '../constants/types';
 import { EVENT_OWNER } from '../constants/constants';
+import { useHistory } from 'react-router';
 import EventResource from '../components/ViewEventComponents/EventResource';
 const { Share } = Plugins;
 
@@ -43,6 +45,7 @@ const connector = connect(mapStateToProps,
     notGoingToEvent,
     loadEventPosts,
     addEventPost,
+    editEventLoad,
     loadSocResources,
     attachResourcesToEvent
   })
@@ -81,6 +84,8 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
 
   const [postModal, showPostModal] = useState<boolean>(false);
   const [postBody, setPostBody] = useState<string>("");
+
+  const history = useHistory();
 
   const resetView = () => {
     setDetailsY(0);
@@ -155,7 +160,7 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
   }
 
   const editEvent = () => {
-    console.log("edit clicked")
+    history.push(`/events/edit/${props.eventId}`);
   }
 
   const showAddPost = () => {
