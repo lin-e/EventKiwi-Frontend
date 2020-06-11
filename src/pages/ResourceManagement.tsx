@@ -33,7 +33,7 @@ const ResourceManagement: React.FC<ResourceManagementProps> = (props) => {
   const [deleteAlert, showDeleteAlert] = useState<boolean>(false);
 
   const [resourceModal, showResourceModal] = useState<boolean>(false);
-  const [selectedResource, setSelectedResource] = useState<resp_resource>({ display_name: "", bucket_key: "", events: [] });
+  const [selectedResource, setSelectedResource] = useState<resp_resource>({ display_name: "", bucket_key: "", download_count: 0, events: [] });
 
   useEffect(() => {
     if (props.userToken !== "") {
