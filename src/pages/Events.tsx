@@ -100,9 +100,6 @@ const Events: React.FC<EventsProps> = (props) => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Your Events</IonTitle>
-        </IonToolbar>
-        <IonToolbar>
         <IonSegment value={segment} onIonChange={changeTab}>
             <IonSegmentButton value="upcoming">
               <IonLabel>Upcoming</IonLabel>
