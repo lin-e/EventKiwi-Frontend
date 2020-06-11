@@ -26,15 +26,25 @@ export const profileInterestDeleteURL = `${endpointURL}/profile/interests/delete
 export const authEndpoint = `${endpointURL}/auth/new/`;
 export const deAuthEndpoint = `${endpointURL}/auth/end/`;
 
-export const goingToEventEndpoint = (id: string) =>  `${endpointURL}/events/going/${id}`;
-export const interestedInEventEndpoint = (id: string) =>  `${endpointURL}/events/interested/${id}`;
-export const notGoingToEventEndpoint = (id: string) =>  `${endpointURL}/events/none/${id}`;
+export const goingToEventEndpoint = (id: string) => `${endpointURL}/events/going/${id}`;
+export const interestedInEventEndpoint = (id: string) => `${endpointURL}/events/interested/${id}`;
+export const notGoingToEventEndpoint = (id: string) => `${endpointURL}/events/none/${id}`;
 
 export const eventPostsEndpoint = (eventId: string, lastPostId: string) =>
-   `${endpointURL}/events/posts/${eventId}/${lastPostId}/`
+   `${endpointURL}/events/posts/${eventId}/${lastPostId}/`;
 
-export const addEventPostEndpoint = (eventId: string) => 
-   `${endpointURL}/events/posts/${eventId}/new/`
+export const addEventPostEndpoint = (eventId: string) =>
+   `${endpointURL}/events/posts/${eventId}/new/`;
 
 export const deleteEventPostEndpoint = (postId: string) =>
-   `${endpointURL}/events/posts/delete/${postId}/`
+   `${endpointURL}/events/posts/delete/${postId}/`;
+
+export const socResourcesEndpoint = `${endpointURL}/file/list`;
+export const socResourceUploadEndpoint = `${endpointURL}/file/upload`;
+export const socResourceDeleteEndpoint = (resourceId: string) =>
+   `${endpointURL}/file/delete/${resourceId}`;
+export const socAttachResourcesToEventEndpoint = (eventId: string) =>
+   `${endpointURL}/file/add/${eventId}`;
+export const socRemoveResourcesFromEventEndpoint = (eventId: string) =>
+   `${endpointURL}/file/remove/${eventId}`;
+

@@ -10,6 +10,7 @@ import DiscoverTabEventPage from "./DiscoverTabEventPage";
 import StandaloneEventPage from "./StandaloneEventPage";
 import AddEvent from "./EditEvent";
 import Licences from "./Licences";
+import ResourceManagement from "./ResourceManagement";
 
 const Tabs: React.FC = () => (
    <IonTabs>
@@ -22,7 +23,8 @@ const Tabs: React.FC = () => (
          <Route path="/event/:id" component={StandaloneEventPage} exact />
          <Route path="/profile" render={() => <Profile />} exact={true} />
          <Route path="/profile/licences" render={() => <Licences />} />
-         <Route path="/" render={() => <Redirect to="/events" />} exact={true} />
+         <Route path="/profile/resources" render={() => <ResourceManagement />} exact={true} />
+         <Route path="/" render={() => <Redirect to="/discover" />} exact={true} />
       </IonRouterOutlet>
       <IonTabBar slot="bottom">
          <IonTabButton tab="events" href="/events">

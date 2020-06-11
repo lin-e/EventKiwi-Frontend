@@ -7,6 +7,7 @@ import { viewEventReducer } from "./viewEventReducer";
 import { eventPostReducer } from "./eventPostsReducer";
 import { societyCardsReducer } from "./societyCardsReducer";
 import { interestSearchReducer } from "./interestSearchReducer";
+import { resourceManagementReducer } from "./resourceManagementReducer";
 import { eventEditReducer } from "./eventEditReducer";
 
 export const rootReducer = combineReducers({
@@ -18,7 +19,7 @@ export const rootReducer = combineReducers({
    eventPosts: eventPostReducer,
    profileDetails: profileDetailsReducer,
    interestSearch: interestSearchReducer,
-   viewEventReducer: viewEventReducer,
+   resourceManagement: resourceManagementReducer,
    editedEvent: eventEditReducer
 });
 
