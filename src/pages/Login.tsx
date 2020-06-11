@@ -6,7 +6,9 @@ import { RootState } from '../data/reducers';
 import { Redirect, RouteComponentProps } from 'react-router';
 import MicrosoftLogin from "react-microsoft-login";
 import { logIn } from "../data/actions/userActions";
-import { Container } from 'react-grid-system';
+import { Container, Col } from 'react-grid-system';
+import { faIcons, faHatWizard } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const mapStateToProps = (state: RootState) => ({
    loggedIn: state.userDetails.isLoggedIn
@@ -45,7 +47,10 @@ const Login: React.FC<LoginProps> = (props) => {
                         <IonCardHeader>
                            <br />
                            <IonRow>
-                              <IonCardTitle className="horizontalCentre">Imperial Events</IonCardTitle>
+                              <IonCardTitle className="horizontalCentre"><FontAwesomeIcon icon={faHatWizard} size="2x" /></IonCardTitle>
+                           </IonRow>
+                           <IonRow>
+                              <IonCardTitle className="horizontalCentre">Event Wizard</IonCardTitle>
                            </IonRow>
                         </IonCardHeader>
                         <IonCardContent>
