@@ -1,4 +1,4 @@
-import React, { MouseEvent, useState } from 'react';
+import React, { MouseEvent, useState, useEffect } from 'react';
 import { IonGrid, IonCol, IonItem, IonRow, IonLabel, IonButton } from '@ionic/react';
 import { InterestDetails } from '../../constants/types';
 import { addProfileInterest, removeProfileInterest } from '../../data/actions/actions';
@@ -23,19 +23,23 @@ type PropsFromRedux = ConnectedProps<typeof connector>
 type InterestItemProps = OwnProps & PropsFromRedux
 
 const InterestItem: React.FC<InterestItemProps> = ({ interest, interestList, userToken, addProfileInterest, removeProfileInterest }) => {
-  const [interested, setinterested] = useState(interestList.includes(interest.name));
+  const [interested, setInterested] = useState(interestList.includes(interest.name));
   
   const toggleInterest = (e: MouseEvent) => {
     e.preventDefault();
 
     if (interested) {
       removeProfileInterest(interest.name, userToken)
-      setinterested(false);
+      setInterested(false);
     } else {
       addProfileInterest(interest.name, userToken)
-      setinterested(true)
+      setInterested(true)
     }
   }
+
+  useEffect(() => {
+    setInterested(interestList.includes(interest.name))
+  }, [interest]);
   
   return (
     <IonItem>

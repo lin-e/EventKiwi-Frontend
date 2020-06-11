@@ -1,7 +1,7 @@
 import React from 'react';
 import { IonList, IonItemGroup, IonItemDivider, IonLabel } from '@ionic/react'
 import './CalendarEventView.css'
-import { CalendarEvent } from '../../constants/types';
+import { CalendarEvent, EventGroupByDate } from '../../constants/types';
 import { sameDay, getLongDate } from '../../utils/DateTimeTools';
 import CalendarEventItem from './CalendarEventItem';
 import { RootState } from '../../data/reducers';
@@ -11,11 +11,11 @@ import { Container } from 'react-grid-system';
 import { groupByDate } from '../../utils/EventFilterTootls';
 
 interface OwnProps {
-  hide: boolean
+  hide: boolean,
+  groupedEvents: EventGroupByDate[]
 }
 
 const mapStateToProps = (state: RootState) => ({
-  groupedEvents: groupByDate(state.calEvents.events),
   loadingUser: state.userDetails.loading
 })
 
@@ -25,31 +25,32 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 type CalendarEventViewProps = OwnProps & PropsFromRedux;
 
 const CalendarEventView: React.FC<CalendarEventViewProps> = ({hide, groupedEvents, loadingUser}) => {
-  if (!loadingUser && groupedEvents === []) {
-    return (
-      <EmptySectionText mainText="No Events Found" subText="Find some events and societies in the Discover tab!" />
-    )
-  }
+  
 
   const currDate = new Date(Date.now())
   
   return (
-    <Container className="calendarContainer" hidden={hide}>
-      <IonList>
-        {groupedEvents.map((eventGroup) => (
-          <IonItemGroup key={`date-${eventGroup.date.getDate()}-${eventGroup.date.getMonth() + 1}`}>
-          <IonItemDivider sticky color="imperial">
-            <IonLabel>
-              {(sameDay(eventGroup.date, currDate) ? "Today - " : "") + getLongDate(eventGroup.date)}
-            </IonLabel>
-          </IonItemDivider>
-          {eventGroup.events.map((eventOnDay) => (
-            <CalendarEventItem key={eventOnDay.id} event={eventOnDay} />
+    <div hidden={hide} className="calContent">
+      {(!loadingUser && groupedEvents.length === 0) &&
+        <EmptySectionText mainText="No Events Found" subText="Find some events and societies in the Discover tab!" />
+      }
+      <Container className="calendarContainer">
+        <IonList>
+          {groupedEvents.map((eventGroup) => (
+            <IonItemGroup key={`date-${eventGroup.date.getDate()}-${eventGroup.date.getMonth() + 1}`}>
+            <IonItemDivider sticky color="imperial">
+              <IonLabel>
+                {(sameDay(eventGroup.date, currDate) ? "Today - " : "") + getLongDate(eventGroup.date)}
+              </IonLabel>
+            </IonItemDivider>
+            {eventGroup.events.map((eventOnDay) => (
+              <CalendarEventItem key={eventOnDay.id} event={eventOnDay} />
+            ))}
+          </IonItemGroup>
           ))}
-        </IonItemGroup>
-        ))}
-      </IonList>
-    </Container>
+        </IonList>
+      </Container>
+    </div>
   )
 }
 

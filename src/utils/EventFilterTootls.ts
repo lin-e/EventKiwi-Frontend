@@ -1,4 +1,4 @@
-import { CalendarEvent, EventGroupByDate } from "../constants/types";
+import { CalendarEvent, EventGroupByDate, SocietyCal } from "../constants/types";
 import { sameDay } from "./DateTimeTools";
 
 export function groupByDate(events: CalendarEvent[]) {
@@ -25,4 +25,19 @@ export function groupByDate(events: CalendarEvent[]) {
   })
 
   return groupedItems;
+}
+
+export const myEvent = (event: CalendarEvent, socId: string) => {
+  return event.organiser.id === socId;
+}
+
+export const getSocs = (events: CalendarEvent[]) => {
+  const socs = (events.map(e => e.organiser));
+  let uniqueSocs: SocietyCal[] = []
+  socs.forEach(s => {
+    if (!uniqueSocs.some(soc => s.id === soc.id)) {
+      uniqueSocs.push(s);
+    }
+  })
+  return uniqueSocs;
 }
