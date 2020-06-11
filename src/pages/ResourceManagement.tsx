@@ -64,10 +64,7 @@ const ResourceManagement: React.FC<ResourceManagementProps> = (props) => {
   }
 
   const uploadFiles = (files: FileList) => {
-    for (let i = 0; i < files.length; i++) {
-      console.log(files.item(i)?.name)
-    }
-
+    props.uploadFile(files, props.userToken);
   }
 
   return (

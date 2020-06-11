@@ -19,9 +19,12 @@ export const loadSocResources = (userToken: string): AppThunk => async dispatch 
 }
 
 
-export const uploadFile = (file: File, userToken: string): AppThunk => async dispatch => {
+export const uploadFile = (files: FileList, userToken: string): AppThunk => async dispatch => {
    const form = new FormData();
-   form.append("upload", file)
+
+   for (let i = 0; i < files.length; i++) {
+      form.append("upload", files.item(i)!)
+   }
 
    fetch(socResourceUploadEndpoint, {
       method: 'post',
@@ -45,7 +48,7 @@ export const attachResourcesToEvent = (eventId: string, resources: string[], use
    fetch(socAttachResourcesToEventEndpoint(eventId), {
       method: 'post',
       body: JSON.stringify({ files: resources }),
-      headers: { 'Authorization': `Bearer ${userToken}`, 'Content-Type': 'application/json'  }
+      headers: { 'Authorization': `Bearer ${userToken}`, 'Content-Type': 'application/json' }
    })
       .then(res => res.json())
       .then(data => convertResToEventDetails(data.body))
@@ -60,7 +63,7 @@ export const removeResourceFromEvent = (eventId: string, resource: string, userT
    fetch(socRemoveResourcesFromEventEndpoint(eventId), {
       method: 'post',
       body: JSON.stringify({ files: [resource] }),
-      headers: { 'Authorization': `Bearer ${userToken}`, 'Content-Type': 'application/json'  }
+      headers: { 'Authorization': `Bearer ${userToken}`, 'Content-Type': 'application/json' }
    })
       .then(res => res.json())
       .then(data => convertResToEventDetails(data.body))
