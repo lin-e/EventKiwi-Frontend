@@ -135,6 +135,7 @@ const ResourceManagement: React.FC<ResourceManagementProps> = (props) => {
           <Container>
             <IonText>
               <h3>{selectedResource.display_name}</h3>
+              <h5>Downloaded {selectedResource.download_count} time{selectedResource.download_count !== 1 ? "s" : ""}</h5>
               {selectedResource.events.length > 0 ?
                 <>
                   <h5>Used in:</h5>
