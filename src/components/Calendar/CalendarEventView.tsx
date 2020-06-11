@@ -12,7 +12,8 @@ import { groupByDate } from '../../utils/EventFilterTootls';
 
 interface OwnProps {
   hide: boolean,
-  groupedEvents: EventGroupByDate[]
+  groupedEvents: EventGroupByDate[],
+  socEvents: boolean
 }
 
 const mapStateToProps = (state: RootState) => ({
@@ -24,7 +25,7 @@ const connector = connect(mapStateToProps)
 type PropsFromRedux = ConnectedProps<typeof connector>;
 type CalendarEventViewProps = OwnProps & PropsFromRedux;
 
-const CalendarEventView: React.FC<CalendarEventViewProps> = ({hide, groupedEvents, loadingUser}) => {
+const CalendarEventView: React.FC<CalendarEventViewProps> = ({hide, groupedEvents, socEvents, loadingUser}) => {
   
 
   const currDate = new Date(Date.now())
@@ -32,7 +33,9 @@ const CalendarEventView: React.FC<CalendarEventViewProps> = ({hide, groupedEvent
   return (
     <div hidden={hide} className="calContent">
       {(!loadingUser && groupedEvents.length === 0) &&
-        <EmptySectionText mainText="No Events Found" subText="Find some events and societies in the Discover tab!" />
+        socEvents ?
+          <EmptySectionText mainText="No Events Created" subText="Press the plus in the button's menu to create a new event for your society!" /> :
+          <EmptySectionText mainText="No Events Found" subText="Find some events and societies in the Discover tab!" />
       }
       <Container className="calendarContainer">
         <IonList>

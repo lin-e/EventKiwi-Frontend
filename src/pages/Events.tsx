@@ -165,10 +165,10 @@ const Events: React.FC<EventsProps> = (props) => {
         </IonRefresher>
 
         {props.isSociety &&
-          <CalendarEventView hide={!myEvents} groupedEvents={groupByDate(socEvents)} />
+          <CalendarEventView hide={!myEvents} groupedEvents={groupByDate(socEvents)}socEvents={true} />
         }
-        <CalendarEventView hide={!upcoming} groupedEvents={groupByDate(applyFilters(filters, futureEvents))}/>
-        <CalendarEventView hide={!past} groupedEvents={groupByDate(applyFilters(filters, pastEvents)).reverse()}/>
+        <CalendarEventView hide={!upcoming} groupedEvents={groupByDate(applyFilters(filters, futureEvents))} socEvents={false} />
+        <CalendarEventView hide={!past} groupedEvents={groupByDate(applyFilters(filters, pastEvents)).reverse()} socEvents={false} />
 
         <IonFab vertical="bottom" horizontal="end" slot="fixed">
           <IonFabButton>
