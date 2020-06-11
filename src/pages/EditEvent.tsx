@@ -121,7 +121,6 @@ const EditEvent: React.FC<EditEventProps> = ({ match, event, userToken, createNe
   }
 
   const updatePrivacy = (e: CustomEvent) => {
-    console.log(e.detail.value);
     setPrivacy(mapPrivacy(e.detail.value));
   }
 

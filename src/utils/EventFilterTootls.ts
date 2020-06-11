@@ -41,3 +41,9 @@ export const getSocs = (events: CalendarEvent[]) => {
   })
   return uniqueSocs;
 }
+
+
+
+export const applyFilters = (filters: number[], events: CalendarEvent[]) => {
+  return events.filter(e => filters.includes(e.status));
+}
