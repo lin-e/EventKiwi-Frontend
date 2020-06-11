@@ -131,6 +131,7 @@ export const LOAD_EDIT_EVENT = "LOAD_EDIT_EVENT";
 export const CREATE_NEW_EVENT = "CREATE_NEW_EVENT";
 export const UPDATE_EVENT = "UPDATE_EVENT";
 export const DELETE_EVENT = "DELETE_EVENT";
+export const UPLOAD_EVENT_IMAGE = "UPLOAD_EVENT_IMAGE";
 
 interface LoadEditEventAction {
    type: typeof LOAD_EDIT_EVENT,
@@ -152,7 +153,12 @@ interface DeleteEventAction {
    status: string
 }
 
-export type EventEditType = LoadEditEventAction | CreateNewEventAction | UpdateEventAction | DeleteEventAction;
+interface UploadImageAction {
+   type: typeof UPLOAD_EVENT_IMAGE,
+   payload: string
+}
+
+export type EventEditType = LoadEditEventAction | CreateNewEventAction | UpdateEventAction | DeleteEventAction | UploadImageAction;
 
 export const GET_EVENT_POSTS = "GET_EVENT_POSTS";
 export const GET_DISCOVER_EVENT_POSTS = "GET_DISCOVER_EVENT_POSTS";

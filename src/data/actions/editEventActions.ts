@@ -1,8 +1,8 @@
 import { AppThunk } from "../types/dataInterfaces";
-import { createNewEventURL, updateEventURL, eventDetailsURL, deleteEventURL } from "../../constants/endpoints";
-import { CREATE_NEW_EVENT, LOAD_EDIT_EVENT, UPDATE_EVENT, DELETE_EVENT } from "./types";
+import { createNewEventURL, updateEventURL, eventDetailsURL, deleteEventURL, uploadImageURL, endpointImgSrc } from "../../constants/endpoints";
+import { CREATE_NEW_EVENT, LOAD_EDIT_EVENT, UPDATE_EVENT, DELETE_EVENT, UPLOAD_EVENT_IMAGE } from "./types";
 import { convertResToEventDetails, EventDetails, blankEventDetails } from "../../constants/types";
-import { resp_event_details } from "../../constants/RequestInterfaces";
+import { resp_event_details, resp_image_upload } from "../../constants/RequestInterfaces";
 
 export interface NewEventDetails {
   name: string,
@@ -87,7 +87,7 @@ export const deleteEvent = (id: string, token: string, setCompleted: (complete: 
     method: "GET",
     headers: {
         "Authorization": `Bearer ${token}`,
-    },
+    }
   }
   fetch(deleteEventURL(id), options)
   .then(status => {
@@ -96,5 +96,29 @@ export const deleteEvent = (id: string, token: string, setCompleted: (complete: 
       type: DELETE_EVENT,
       status: status
     }))
+  })
+}
+
+export const uploadImage = (image: File, token: string, setImage: (src: string) => void): AppThunk => async dispatch => {
+  const form = new FormData();
+  form.append("upload", image);
+  const options = {
+    method: "POST",
+    body: form,
+    headers: {
+      "Authorization": `Bearer ${token}`,
+    }
+  }
+  fetch(uploadImageURL, options)
+  .then(response => response.json())
+  .then(data => data as resp_image_upload)
+  .then(details => {
+    if (details.status == 1) {
+      setImage(endpointImgSrc(details.body));
+      return (dispatch({
+        type: UPLOAD_EVENT_IMAGE,
+        payload: endpointImgSrc(details.body)
+      }))
+    }
   })
 }

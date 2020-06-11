@@ -153,6 +153,12 @@ export const fetchMoreSearchEventCards = (searchTerm: string, offset: number, to
 
 
 export const fetchCalEvents = (refresher: HTMLIonRefresherElement, token: string): AppThunk => async dispatch => {
+   if (token === "") {
+      return(dispatch({
+         type: FETCH_CAL_EVENTS,
+         payload: []
+      }))
+   }
    const options = {
       headers: {
          "Authorization": `Bearer ${token}`
