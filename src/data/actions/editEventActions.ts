@@ -72,11 +72,9 @@ export const updateEvent = (event: NewEventDetails, id: string, token: string, s
     body: JSON.stringify(event)
   }
   fetch(updateEventURL(id), options)
-  .then(response => {
-    setCompleted(response.status === 1)
-    return(response.json())
-  })
+  .then(response => response.json())
   .then(details => {
+    setCompleted(details.status === 1)
     return (dispatch({
       type: UPDATE_EVENT,
       payload: convertResToEventDetails(details.body as resp_event_details)

@@ -1,4 +1,4 @@
-import React, { Component, createRef, useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonSearchbar, IonRefresher, IonRefresherContent, IonList, IonCol, IonRow, IonGrid, IonButton, IonIcon, IonButtons } from '@ionic/react';
 import { add } from 'ionicons/icons'
 import './Discover.css';
