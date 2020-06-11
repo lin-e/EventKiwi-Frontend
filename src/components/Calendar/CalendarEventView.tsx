@@ -1,7 +1,7 @@
 import React from 'react';
 import { IonList, IonItemGroup, IonItemDivider, IonLabel } from '@ionic/react'
 import './CalendarEventView.css'
-import { CalendarEvent } from '../../constants/types';
+import { CalendarEvent, EventGroupByDate } from '../../constants/types';
 import { sameDay, getLongDate } from '../../utils/DateTimeTools';
 import CalendarEventItem from './CalendarEventItem';
 import { RootState } from '../../data/reducers';
@@ -11,11 +11,11 @@ import { Container } from 'react-grid-system';
 import { groupByDate } from '../../utils/EventFilterTootls';
 
 interface OwnProps {
-  hide: boolean
+  hide: boolean,
+  groupedEvents: EventGroupByDate[]
 }
 
 const mapStateToProps = (state: RootState) => ({
-  groupedEvents: groupByDate(state.calEvents.events),
   loadingUser: state.userDetails.loading
 })
 

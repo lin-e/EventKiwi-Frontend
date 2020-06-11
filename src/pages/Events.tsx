@@ -9,8 +9,11 @@ import { connect, ConnectedProps } from 'react-redux';
 import { RootState } from '../data/reducers';
 import { Redirect, useHistory } from 'react-router';
 import { editEventLoad } from '../data/actions/editEventActions';
+import { groupByDate } from '../utils/EventFilterTootls';
 
 const mapStateToProps = (state: RootState) => ({
+  futureEvents: state.calEvents.events,
+  pastEvents: state.calEvents.events,
   isLoggedIn: state.userDetails.isLoggedIn,
   isLoading: state.userDetails.loading,
   isSociety: state.userDetails.isSoc,
@@ -35,8 +38,6 @@ const Events: React.FC<EventsProps> = (props) => {
 
   const contentRef = React.useRef<HTMLIonContentElement>(null);
   const refresherRef = React.useRef<HTMLIonRefresherElement>(null);
-
-  const history = useHistory();
 
   const refresh = () => {
     props.fetchCalEvents(refresherRef.current!, props.userToken);
@@ -118,7 +119,8 @@ const Events: React.FC<EventsProps> = (props) => {
           <IonRefresherContent></IonRefresherContent>
         </IonRefresher>
 
-        <CalendarEventView hide={!upcoming}/>
+        <CalendarEventView hide={!upcoming} groupedEvents={groupByDate(props.futureEvents)}/>
+        <CalendarEventView hide={upcoming} groupedEvents={groupByDate(props.pastEvents)}/>
 
         <IonFab vertical="bottom" horizontal="end" slot="fixed">
           <IonFabButton>
