@@ -49,6 +49,7 @@ const EditEvent: React.FC<EditEventProps> = ({ match, event, userToken, createNe
   const [noTagsToast, setNoTagsToast] = useState(false);
   const [tooManyTagsToast, setTooManyTagsToast] = useState(false);
   const [noDescriptionToast, setNoDescriptionToast] = useState(false);
+  const [imgUploadedToast, setImgUploadedToast] = useState(false);
   const [savedToast, setSavedToast] = useState(false);
   const [deletedToast, setDeletedToast] = useState(false);
   
@@ -134,6 +135,11 @@ const EditEvent: React.FC<EditEventProps> = ({ match, event, userToken, createNe
 
   const removeTag = (toRemove: string) => {
     setTagList(tagList.filter(tag => tag !== toRemove));
+  }
+
+  const imageUploaded = (src: string) => {
+    setEventImg(src);
+    setImgUploadedToast(true);
   }
 
   const validEvent = () => {
@@ -409,6 +415,12 @@ const EditEvent: React.FC<EditEventProps> = ({ match, event, userToken, createNe
           duration={2500}
         />
         <IonToast
+          isOpen={imgUploadedToast}
+          onDidDismiss={() => setImgUploadedToast(false)}
+          message="Image uplaoded."
+          duration={2000}
+        />
+        <IonToast
           isOpen={savedToast}
           onDidDismiss={() => setSavedToast(false)}
           message="Event saved."
@@ -427,7 +439,7 @@ const EditEvent: React.FC<EditEventProps> = ({ match, event, userToken, createNe
         hidden
         type="file"
         accept="image/*"
-        onChange={e => uploadImage((e.nativeEvent.target as HTMLInputElement).files?.item(0) || ({} as File), userToken, setEventImg)}
+        onChange={e => uploadImage((e.nativeEvent.target as HTMLInputElement).files?.item(0) || ({} as File), userToken, imageUploaded)}
       />
     </IonPage>
   );
