@@ -26,3 +26,7 @@ export function groupByDate(events: CalendarEvent[]) {
 
   return groupedItems;
 }
+
+export const myEvent = (event: CalendarEvent, socId: string) => {
+  return event.organiser.id === socId;
+}

@@ -1,6 +1,7 @@
 import React, { useEffect, useState, MouseEvent } from 'react';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonRefresher, IonRefresherContent, useIonViewDidEnter, IonFab, IonFabButton, IonIcon, IonFabList, IonSegment, IonSegmentButton, IonLabel, IonToast } from '@ionic/react';
 import { chevronUp, options, calendar, add } from 'ionicons/icons'
+import { isFuture } from 'date-fns'
 import './Events.css';
 import CalendarEventView from '../components/Calendar/CalendarEventView';
 import { fetchCalEvents } from '../data/actions/actions'
@@ -9,14 +10,15 @@ import { connect, ConnectedProps } from 'react-redux';
 import { RootState } from '../data/reducers';
 import { Redirect, useHistory } from 'react-router';
 import { editEventLoad } from '../data/actions/editEventActions';
-import { groupByDate } from '../utils/EventFilterTootls';
+import { groupByDate, myEvent } from '../utils/EventFilterTootls';
+import { CalendarEvent } from '../constants/types';
 
 const mapStateToProps = (state: RootState) => ({
-  futureEvents: state.calEvents.events,
-  pastEvents: state.calEvents.events,
+  events: state.calEvents.events,
   isLoggedIn: state.userDetails.isLoggedIn,
   isLoading: state.userDetails.loading,
   isSociety: state.userDetails.isSoc,
+  socId: state.userDetails.profile.society,
   userToken: state.userDetails.userToken
 })
 
@@ -29,6 +31,15 @@ const Events: React.FC<EventsProps> = (props) => {
   const [segment, setSegment] = useState<'upcoming' | 'past'>('upcoming');
   const [upcomingY, setUpcomingY] = useState(0);
   const [pastY, setPastY] = useState(0);
+
+  const [socEvents, futureEvents, pastEvents]:CalendarEvent[][] = props.events.reduce(([s, f, p]: CalendarEvent[][], e) => (
+    myEvent(e, props.socId) ?
+      [[...s, e], f, p] :
+      (isFuture(e.datetimeEnd) ?
+        [s, [...f, e], p] :
+        [s, f, [...p, e]]
+      )
+  ), [[], [], []]);
 
   const upcoming = segment === 'upcoming';
   const past = segment === 'past';
@@ -119,8 +130,8 @@ const Events: React.FC<EventsProps> = (props) => {
           <IonRefresherContent></IonRefresherContent>
         </IonRefresher>
 
-        <CalendarEventView hide={!upcoming} groupedEvents={groupByDate(props.futureEvents)}/>
-        <CalendarEventView hide={upcoming} groupedEvents={groupByDate(props.pastEvents)}/>
+        <CalendarEventView hide={!upcoming} groupedEvents={groupByDate(futureEvents)}/>
+        <CalendarEventView hide={upcoming} groupedEvents={groupByDate(pastEvents)}/>
 
         <IonFab vertical="bottom" horizontal="end" slot="fixed">
           <IonFabButton>
