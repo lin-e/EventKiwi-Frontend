@@ -81,8 +81,9 @@ export interface resp_society_card {
 export interface resp_resource {
   display_name: string,
   bucket_key: string,
+  download_count: number,
   events: {
-    id: string,
+    id: number,
     name: string
   }[]
 }
