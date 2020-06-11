@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { IonContent, IonPage, IonHeader, IonToolbar, IonButtons, IonBackButton, IonSegment, IonSegmentButton, IonLabel, IonIcon, IonFab, IonFabButton, IonToast, IonModal, IonButton, IonTitle, IonFooter, IonItem, IonInput, IonTextarea } from '@ionic/react'
+import { IonContent, IonPage, IonHeader, IonToolbar, IonButtons, IonBackButton, IonSegment, IonSegmentButton, IonLabel, IonIcon, IonFab, IonFabButton, IonToast, IonModal, IonButton, IonTitle, IonFooter, IonItem, IonInput, IonTextarea, IonList, IonSelect, IonSelectOption } from '@ionic/react'
 import EventDescription from '../components/ViewEventComponents/EventDescription';
 import "./ViewEvent.css";
 import EventPostsList from '../components/ViewEventComponents/EventPostsList';
@@ -9,12 +9,14 @@ import { connect, ConnectedProps, useSelector } from 'react-redux';
 import { loadEventDetails, loadingEvent, loadBlankEvent, goingToEvent, interestedInEvent, notGoingToEvent } from '../data/actions/viewEvent/viewEventActions';
 import { editEventLoad } from '../data/actions/editEventActions'
 import { loadEventPosts, addEventPost } from '../data/actions/eventPosts/eventPostsActions';
+import { loadSocResources, attachResourcesToEvent } from '../data/actions/resourceManagement/resourceManagementActions';
 import { RootState } from '../data/reducers';
 import { isPlatform } from '@ionic/react';
 import { Plugins } from '@capacitor/core';
-import { blankEventDetails, EventDetails, EventIdAndPosts } from '../constants/types';
+import { blankEventDetails, EventDetails, EventIdAndPosts, convertResToResource } from '../constants/types';
 import { EVENT_OWNER } from '../constants/constants';
 import { useHistory } from 'react-router';
+import EventResource from '../components/ViewEventComponents/EventResource';
 const { Share } = Plugins;
 
 const eventWithId = (state: RootState) => (id: string) => state.viewEvent.events.filter(e => e.id === id);
@@ -29,19 +31,24 @@ const mapStateToProps = (state: RootState) => ({
   userToken: state.userDetails.userToken,
   isLoading: state.viewEvent.loading,
   isLoggedIn: state.userDetails.isLoggedIn,
-  events: state.viewEvent.events
+  events: state.viewEvent.events,
+  socResources: state.resourceManagement.resources
 })
 
 const connector = connect(mapStateToProps,
-  { loadEventDetails, 
-    loadBlankEvent, 
-    loadingEvent, 
-    goingToEvent, 
-    interestedInEvent, 
-    notGoingToEvent, 
+  {
+    loadEventDetails,
+    loadBlankEvent,
+    loadingEvent,
+    goingToEvent,
+    interestedInEvent,
+    notGoingToEvent,
     loadEventPosts,
     addEventPost,
-    editEventLoad })
+    editEventLoad,
+    loadSocResources,
+    attachResourcesToEvent
+  })
 
 type PropsFromRedux = ConnectedProps<typeof connector>
 type ViewEventProps = OwnProps & PropsFromRedux;
@@ -71,6 +78,10 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
   const postsWithMatchingId: EventIdAndPosts[] = useSelector(postsWithEventId)(props.eventId)
   const eventPosts = postsWithMatchingId.length > 0 ? postsWithMatchingId[0].posts : [];
 
+  const resourceSelectorRef = useRef<HTMLIonSelectElement>(null);
+
+  const unusedResources = props.socResources.filter(r => !eventDescription.resources.some(s => s.id === r.bucket_key));
+
   const [postModal, showPostModal] = useState<boolean>(false);
   const [postBody, setPostBody] = useState<string>("");
 
@@ -87,6 +98,12 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
   }
 
   useEffect(resetView, [props.eventId])
+
+  useEffect(() => {
+    if (goingStatus === EVENT_OWNER) {
+      props.loadSocResources(props.userToken)
+    }
+  }, [goingStatus])
 
   const changeTab = (e: { detail: { value: any; }; }) => {
     const nextSegment = e.detail.value as any;
@@ -151,17 +168,24 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
     showPostModal(true);
   }
 
-  const editResources = () => {
-    console.log("edit resources clicked");
+  const showAddResources = () => {
+    resourceSelectorRef.current!.open();
   }
 
-  const ownerFabIcon = segment === "details" ? pencil : (segment === "posts" ? add : shareOutline);
-  const ownerFabOnClick = segment === "details" ? editEvent : (segment === "posts" ? showAddPost : editResources);
+  const ownerFabIcon = segment === "details" ? pencil : (segment === "posts" ? add : add);
+  const ownerFabOnClick = segment === "details" ? editEvent : (segment === "posts" ? showAddPost : showAddResources);
 
   const addPost = () => {
     props.addEventPost(props.eventId, postBody, props.userToken)
     showPostModal(false);
   }
+
+  const addResources = (resources: string[]) => {
+    if (resources.length > 0) {
+      props.attachResourcesToEvent(props.eventId, resources, props.userToken);
+    }
+  }
+
 
   return (
     <IonPage>
@@ -191,16 +215,16 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
 
         <EventPostsList posts={eventPosts} isPoster={goingStatus === EVENT_OWNER} hide={!posts} numPosts={eventPosts.length} />
 
-        <EventResourcesList resources={eventDescription.resources} tab={props.activeTab} hide={!resources} />
+        <EventResourcesList eventId={props.eventId} isOwner={goingStatus === EVENT_OWNER} resources={eventDescription.resources} tab={props.activeTab} hide={!resources} />
 
-        {goingStatus === EVENT_OWNER && 
+        {goingStatus === EVENT_OWNER &&
           <IonFab vertical="bottom" horizontal="end" slot="fixed">
             <IonFabButton onClick={ownerFabOnClick} color="primary">
               <IonIcon icon={ownerFabIcon} />
             </IonFabButton>
           </IonFab>}
 
-        {goingStatus !== EVENT_OWNER && 
+        {goingStatus !== EVENT_OWNER &&
           <IonFab vertical="bottom" horizontal="end" slot="fixed">
             <IonFabButton onClick={shareClicked} color="primary">
               <IonIcon icon={shareOutline} />
@@ -237,6 +261,25 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
             </IonItem>
           </IonContent>
         </IonModal>
+
+
+
+        <IonItem hidden>
+          <IonLabel>Add resources</IonLabel>
+          <IonSelect
+            okText="Add"
+            ref={resourceSelectorRef}
+            multiple
+            onIonChange={e => addResources(e.detail.value as string[])}>
+            {unusedResources.map(r => (
+              <IonSelectOption key={r.bucket_key} value={r.bucket_key}>
+                {r.display_name}
+              </IonSelectOption>
+            ))}
+
+          </IonSelect>
+        </IonItem>
+
 
         {/* Text area used for copying share url to clipboard */}
         <textarea readOnly hidden={true} ref={shareUrlTextRef} id="shareUrl" value={shareUrl} />
