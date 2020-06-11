@@ -1,14 +1,13 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { RootState } from '../data/reducers';
-import { IonPage, IonHeader, IonToolbar, IonButtons, IonBackButton, IonTitle, IonContent, IonGrid, IonRow, IonCol, IonItem, IonFab, IonFabButton, IonIcon, IonModal, IonButton, IonLabel, IonTextarea, IonItemSliding, IonItemOptions, IonItemOption, IonText, IonAlert } from '@ionic/react';
+import { IonPage, IonHeader, IonToolbar, IonButtons, IonBackButton, IonTitle, IonContent, IonRow, IonCol, IonItem, IonFab, IonFabButton, IonIcon, IonModal, IonButton, IonItemSliding, IonItemOptions, IonItemOption, IonText, IonAlert } from '@ionic/react';
 import { loadSocResources, uploadFile, deleteFile } from '../data/actions/resourceManagement/resourceManagementActions';
 import "./ResourceManagement.css";
 import EventResource from '../components/ViewEventComponents/EventResource';
 import EmptySectionText from '../components/EmptySectionText';
 import { add } from 'ionicons/icons';
 import { Container, Row, Col } from 'react-grid-system';
-import { post } from 'fetch-mock';
 import { resp_resource } from '../constants/RequestInterfaces';
 import { resourceDownloadURL } from '../constants/endpoints';
 
