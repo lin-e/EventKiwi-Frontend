@@ -77,7 +77,7 @@ const ResourceManagement: React.FC<ResourceManagementProps> = (props) => {
 
       <IonContent>
         {props.resources.length > 0 ?
-          <Container>
+          <Container className="resourceContainer">
             <Row>
               {props.resources.map(r =>
                 <Col key={`soc-resource-${r.bucket_key}`} lg={6} md={12} sm={12}>
