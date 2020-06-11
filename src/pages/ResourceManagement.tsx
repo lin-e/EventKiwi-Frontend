@@ -10,6 +10,7 @@ import { add } from 'ionicons/icons';
 import { Container, Row, Col } from 'react-grid-system';
 import { post } from 'fetch-mock';
 import { resp_resource } from '../constants/RequestInterfaces';
+import { resourceDownloadURL } from '../constants/endpoints';
 
 interface OwnProps { }
 
@@ -124,7 +125,7 @@ const ResourceManagement: React.FC<ResourceManagementProps> = (props) => {
             </IonText>
             <IonRow>
               <IonCol>
-                <IonButton expand="block">Download</IonButton>
+                <IonButton expand="block" href={resourceDownloadURL(selectedResource.bucket_key)} download={selectedResource.display_name}>Download</IonButton>
               </IonCol>
               <IonCol>
                 <IonButton expand="block" color="danger" onClick={() => modalDeleteFile(selectedResource.bucket_key)}>Delete</IonButton>
