@@ -20,10 +20,10 @@ const connector = connect(
 type PropsFromRedux = ConnectedProps<typeof connector>
 type LoginProps = PropsFromRedux & RouteComponentProps<any>;
 
-const Login: React.FC<LoginProps> = (props, state) => {
+const Login: React.FC<LoginProps> = (props) => {
 
    if (props.loggedIn) {
-      return <Redirect to="/events" />
+      return <Redirect to="/discover" />
    }
 
    const authHandler = (err: any, data: any) => {

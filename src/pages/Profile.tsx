@@ -133,8 +133,8 @@ class Profile extends Component<ProfileProps, ProfileState> {
                   {this.props.interests.length !== 0 ?
                     <div className="interests">
                       {this.props.interests.map((interest) => (
-                      <InterestChip interest={interest} key={interest} />
-                    ))}
+                        <InterestChip interest={interest} key={interest} />
+                      ))}
                     </div> :
                     <EmptySectionText mainText="No followed interests" subText="Try adding some interests to find more of what you like!" />
                   }
@@ -157,7 +157,7 @@ class Profile extends Component<ProfileProps, ProfileState> {
                     {this.props.socResources.length > 0 ?
                       <IonGrid>
                         <IonRow>
-                          {this.props.socResources.slice(0,4).map(r =>
+                          {this.props.socResources.slice(0, 4).map(r =>
                             <IonCol size="6">
                               <IonItem lines="none" detail className="socResource">
                                 <EventResource name={r.display_name} />
@@ -171,6 +171,11 @@ class Profile extends Component<ProfileProps, ProfileState> {
                 </IonRow>
               </>}
 
+              <IonRow>
+                <IonCol>
+                  <IonButton expand="block" onClick={this.openUnionWebsite}>My Union</IonButton>
+                </IonCol>
+              </IonRow>
 
 
               <IonRow>
@@ -178,7 +183,7 @@ class Profile extends Component<ProfileProps, ProfileState> {
                   <IonButton expand="block" color="danger" routerLink="/signout">Log out</IonButton>
                 </IonCol>
                 <IonCol>
-                  <IonButton expand="block" onClick={this.openUnionWebsite}>My Union</IonButton>
+                  <IonButton expand="block" color="danger" routerLink="/signout/all">Log out of all devices</IonButton>
                 </IonCol>
               </IonRow>
 

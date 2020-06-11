@@ -1,7 +1,7 @@
 import { USER_LOGIN, LOAD_USER_DATA, USER_LOGOUT } from "./types";
 import { AuthResponse, blankProfile, AppThunk } from "../types/dataInterfaces";
 import { Plugins } from '@capacitor/core';
-import { authEndpoint, deAuthEndpoint } from "../../constants/endpoints";
+import { authEndpoint, deAuthEndpoint, deAuthAllEndpoint } from "../../constants/endpoints";
 const { Storage } = Plugins;
 
 const IS_LOGGED_IN = 'isLoggedIn';
@@ -66,8 +66,17 @@ export const removeUser = () => ({
    type: USER_LOGOUT
 })
 
-export const logOut = (userToken: string): AppThunk => async dispatch => {
+export const logOut = (userToken: string): AppThunk => async () => {
    fetch(deAuthEndpoint, {
+      method: "get",
+      headers: { 'Authorization': `Bearer ${userToken}` }
+   })
+      .then(res => console.log(res))
+      .then(() => clearUserData())
+}
+
+export const logOutAll = (userToken: string): AppThunk => async () => {
+   fetch(deAuthAllEndpoint, {
       method: "get",
       headers: { 'Authorization': `Bearer ${userToken}` }
    })
