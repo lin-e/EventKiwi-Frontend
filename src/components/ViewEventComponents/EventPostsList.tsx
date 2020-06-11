@@ -8,6 +8,7 @@ import { ConnectedProps, connect } from 'react-redux';
 import { getLongDate, getTime } from '../../utils/DateTimeTools';
 import { Post } from '../../constants/types';
 import { deleteEventPost } from '../../data/actions/eventPosts/eventPostsActions';
+import { Container } from 'react-grid-system';
 
 const mapStateToProps = (state: RootState) => ({
    userToken: state.userDetails.userToken
@@ -32,28 +33,30 @@ const EventPostsList: React.FC<EventPostsListProps> = (props) => {
             <CentredTextContainer name={"No posts for this event"} />
          }
          {props.posts.length > 0 &&
-            <IonList>
-               {props.posts.map(post => {
-                  return (
-                     <IonItemSliding  key={`event-post-${post.id}`} disabled={!props.isPoster}>
-                        <IonItem>
-                           <div className="restrictedWidth">
-                              <EventPost
-                                 postContent={post.body}
-                                 postTime={`${getLongDate(post.time)}, ${getTime(post.time)}`}
-                                 organiserName={post.organiser.name}
-                                 organiserLogo={post.organiser.image}
-                              />
-                           </div>
-                        </IonItem>
+            <Container className="postContainer">
+               <IonList>
+                  {props.posts.map(post => {
+                     return (
+                        <IonItemSliding key={`event-post-${post.id}`} disabled={!props.isPoster}>
+                           <IonItem>
+                              <div className="restrictedWidth">
+                                 <EventPost
+                                    postContent={post.body}
+                                    postTime={`${getLongDate(post.time)}, ${getTime(post.time)}`}
+                                    organiserName={post.organiser.name}
+                                    organiserLogo={post.organiser.image}
+                                 />
+                              </div>
+                           </IonItem>
 
-                        <IonItemOptions side="end">
-                           <IonItemOption color="danger" onClick={() => props.deleteEventPost(post.id, post.eventId, props.userToken)}>Delete</IonItemOption>
-                        </IonItemOptions>
-                     </IonItemSliding>
-                  )
-               })}
-            </IonList>
+                           <IonItemOptions side="end">
+                              <IonItemOption color="danger" onClick={() => props.deleteEventPost(post.id, post.eventId, props.userToken)}>Delete</IonItemOption>
+                           </IonItemOptions>
+                        </IonItemSliding>
+                     )
+                  })}
+               </IonList>
+            </Container>
          }
       </div>
    )
