@@ -189,7 +189,7 @@ const EditEvent: React.FC<EditEventProps> = ({ match, event, userToken, createNe
           <IonButtons  slot="start">
             <IonBackButton color="danger" />
           </IonButtons>
-          <IonTitle>Create new Event</IonTitle>
+          <IonTitle>{(exists ? "Edit " : "Create new ") + "Event"}</IonTitle>
           <IonButtons  slot="end">
             <IonButton onClick={saveEvent} color="primary">Save</IonButton>
           </IonButtons>
@@ -298,7 +298,7 @@ const EditEvent: React.FC<EditEventProps> = ({ match, event, userToken, createNe
                 {tagList.length !== 0 ?
                   <div className="tag">
                     {tagList.map((tag) => (
-                      <IonChip>
+                      <IonChip key={tag}>
                         <IonLabel>{tag}</IonLabel>
                         <IonIcon icon={closeCircle} onClick={() => removeTag(tag)}/>
                       </IonChip>
