@@ -110,6 +110,7 @@ export type FetchInterestType = FetchSearchInterestsAction;
 export const USER_LOGIN = "USER_LOGIN";
 export const LOAD_USER_DATA = "LOAD_USER_DATA";
 export const USER_LOGOUT = "USER_LOGOUT";
+export const INVALID_USER = "INVALID_USER";
 
 interface LoginAction {
    type: typeof USER_LOGIN,
@@ -120,12 +121,16 @@ interface LogoutAction {
    type: typeof USER_LOGOUT
 }
 
+interface InvalidUserAction {
+   type: typeof INVALID_USER
+}
+
 interface LoadUserDataAction {
    type: typeof LOAD_USER_DATA,
    payload: UserState
 }
 
-export type UserType = LoginAction | LoadUserDataAction | LogoutAction;
+export type UserType = LoginAction | LoadUserDataAction | LogoutAction | InvalidUserAction;
 
 export const LOAD_EDIT_EVENT = "LOAD_EDIT_EVENT";
 export const CREATE_NEW_EVENT = "CREATE_NEW_EVENT";

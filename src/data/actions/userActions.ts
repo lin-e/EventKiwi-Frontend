@@ -1,7 +1,7 @@
-import { USER_LOGIN, LOAD_USER_DATA, USER_LOGOUT } from "./types";
+import { USER_LOGIN, LOAD_USER_DATA, USER_LOGOUT, INVALID_USER } from "./types";
 import { AuthResponse, blankProfile, AppThunk } from "../types/dataInterfaces";
 import { Plugins } from '@capacitor/core';
-import { authEndpoint, deAuthEndpoint } from "../../constants/endpoints";
+import { authEndpoint, deAuthEndpoint, deAuthAllEndpoint } from "../../constants/endpoints";
 const { Storage } = Plugins;
 
 const IS_LOGGED_IN = 'isLoggedIn';
@@ -21,26 +21,35 @@ export const logIn = (msToken: string): AppThunk => async dispatch => {
       body: JSON.stringify({ token: msToken }),
       headers: { 'Content-Type': 'application/json' }
    })
-   .then(res => res.json())
-   .then(data => {
-      saveUserData(data, true)
-      return data
-   })
-   .then(user => (
-      dispatch({
-         type: USER_LOGIN,
-         payload: user
+      .then(res => res.json())
+      .then(data => {
+         saveUserData(data, true)
+         return data
       })
-   ))
+      .then(user => (
+         dispatch({
+            type: USER_LOGIN,
+            payload: user
+         })
+      ))
 }
 
 
 export const loadUserData = (): AppThunk => async dispatch => {
    const data = await getUserData();
-   dispatch({
-      type: LOAD_USER_DATA,
-      payload: data
-   });
+   fetch("https://staging.drp.social/auth/valid", {
+      headers: { 'Authorization': `Bearer ${data.userToken}` }
+   })
+      .then(res => dispatch({
+         type: LOAD_USER_DATA,
+         payload: data
+      }))
+      .then(err => {
+         clearUserData();
+         return dispatch({
+            type: INVALID_USER
+         });
+      })
 }
 
 const getUserData = async () => {
@@ -62,19 +71,26 @@ const getUserData = async () => {
    }
 }
 
+export const removeUser = () => ({
+   type: USER_LOGOUT
+})
 
-export const logOut = (userToken: string): AppThunk => async dispatch => {
+export const logOut = (userToken: string): AppThunk => async () => {
    fetch(deAuthEndpoint, {
       method: "get",
       headers: { 'Authorization': `Bearer ${userToken}` }
    })
       .then(res => console.log(res))
       .then(() => clearUserData())
-      .then(() => (
-         dispatch({
-            type: USER_LOGOUT
-         })
-      ))
+}
+
+export const logOutAll = (userToken: string): AppThunk => async () => {
+   fetch(deAuthAllEndpoint, {
+      method: "get",
+      headers: { 'Authorization': `Bearer ${userToken}` }
+   })
+      .then(res => console.log(res))
+      .then(() => clearUserData())
 }
 
 const clearUserData = async () => {
