@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Redirect } from 'react-router-dom';
 import {
   IonApp,
   IonRouterOutlet
@@ -26,12 +26,21 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 import { connect, ConnectedProps } from 'react-redux';
-import { loadUserData } from "./data/actions/userActions";
+import { loadUserData, logOut, removeUser, logOutAll } from "./data/actions/userActions";
 import Tabs from './pages/Tabs';
+import { RootState } from './data/reducers';
+
+
+const mapStateToProps = (state: RootState) => ({
+  userToken: state.userDetails.userToken
+})
 
 const connector = connect(
-  null,
-  { loadUserData }
+  mapStateToProps,
+  { loadUserData,
+    logOut,
+    logOutAll,
+    removeUser }
 );
 
 type PropsFromRedux = ConnectedProps<typeof connector>
@@ -42,17 +51,27 @@ const App: React.FC<AppProps> = (props) => {
   useEffect(() => {
     props.loadUserData()
   }, []);
-  
+
   return (
     <IonApp>
       <IonReactRouter>
         <IonRouterOutlet>
           <Route path="/auth" component={Login} exact />
+          <Route exact path="/signout" render={() => {
+            props.logOut(props.userToken);
+            props.removeUser();
+            return <Redirect to="/auth" />
+          }} />
+          <Route exact path="/signout/all" render={() => {
+            props.logOutAll(props.userToken);
+            props.removeUser();
+            return <Redirect to="/auth" />
+          }} />
           <Route path="/" render={() => <Tabs />} />
         </IonRouterOutlet>
       </IonReactRouter>
     </IonApp>
-  )  
+  )
 };
 
 export default connector(App);

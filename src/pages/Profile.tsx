@@ -7,7 +7,6 @@ import { Container } from 'react-grid-system';
 import InterestChip from '../components/Profile/InterestChip';
 import { fetchProfileDetails, resetInvalidProfileResponse } from '../data/actions/actions';
 import { loadSocResources } from '../data/actions/resourceManagement/resourceManagementActions';
-import { logOut } from '../data/actions/userActions';
 import { RootState } from '../data/reducers';
 import { connect, ConnectedProps } from 'react-redux';
 import EmptySectionText from '../components/EmptySectionText';
@@ -34,7 +33,7 @@ const mapStateToProps = (state: RootState) => {
   }
 }
 
-const connector = connect(mapStateToProps, { fetchProfileDetails, resetInvalidProfileResponse, logOut, loadSocResources })
+const connector = connect(mapStateToProps, { fetchProfileDetails, resetInvalidProfileResponse, loadSocResources })
 
 type PropsFromRedux = ConnectedProps<typeof connector>
 type ProfileProps = PropsFromRedux
@@ -134,8 +133,8 @@ class Profile extends Component<ProfileProps, ProfileState> {
                   {this.props.interests.length !== 0 ?
                     <div className="interests">
                       {this.props.interests.map((interest) => (
-                      <InterestChip interest={interest} key={interest} />
-                    ))}
+                        <InterestChip interest={interest} key={interest} />
+                      ))}
                     </div> :
                     <EmptySectionText mainText="No followed interests" subText="Try adding some interests to find more of what you like!" />
                   }
@@ -158,7 +157,7 @@ class Profile extends Component<ProfileProps, ProfileState> {
                     {this.props.socResources.length > 0 ?
                       <IonGrid>
                         <IonRow>
-                          {this.props.socResources.slice(0,4).map(r =>
+                          {this.props.socResources.slice(0, 4).map(r =>
                             <IonCol size="6">
                               <IonItem lines="none" detail className="socResource">
                                 <EventResource name={r.display_name} />
@@ -172,14 +171,19 @@ class Profile extends Component<ProfileProps, ProfileState> {
                 </IonRow>
               </>}
 
+              <IonRow>
+                <IonCol>
+                  <IonButton expand="block" onClick={this.openUnionWebsite}>My Union</IonButton>
+                </IonCol>
+              </IonRow>
 
 
               <IonRow>
                 <IonCol>
-                  <IonButton expand="block" color="danger" onClick={() => this.props.logOut(this.props.userToken)}>Log out</IonButton>
+                  <IonButton expand="block" color="danger" routerLink="/signout">Log out</IonButton>
                 </IonCol>
                 <IonCol>
-                  <IonButton expand="block" onClick={this.openUnionWebsite}>My Union</IonButton>
+                  <IonButton expand="block" color="danger" routerLink="/signout/all">Log out of all devices</IonButton>
                 </IonCol>
               </IonRow>
 
@@ -196,7 +200,7 @@ class Profile extends Component<ProfileProps, ProfileState> {
           </IonModal>
 
           <IonToast
-            isOpen={this.props.invalidResponse}
+            isOpen={this.props.invalidResponse && this.props.isLoggedIn}
             onDidDismiss={this.props.resetInvalidProfileResponse}
             message="Could not retrieve profile right now, please try again later."
             duration={2000}

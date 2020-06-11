@@ -8,6 +8,7 @@ import { RootState } from '../../data/reducers';
 import { connect, ConnectedProps } from 'react-redux';
 import { Resource } from '../../constants/types';
 import { removeResourceFromEvent } from '../../data/actions/resourceManagement/resourceManagementActions';
+import { Container } from 'react-grid-system';
 
 const mapStateToProps = (state: RootState) => ({
    userToken: state.userDetails.userToken
@@ -47,28 +48,30 @@ const EventResourcesList: React.FC<EventResourcesListProps> = (props) => {
          }
 
          {props.resources.length > 0 &&
-            <IonList>
-               {props.resources.map(resource => {
-                  return (
-                     <IonItemSliding disabled={!props.isOwner} key={`event-resource-${resource.id}`}>
-                        <IonItem href={resourceDownloadURL(resource.id)} detail download={resource.name}>
-                           <div className="restrictedWidth">
-                              <EventResource name={resource.name} />
-                           </div>
-                        </IonItem>
+            <Container className="resourceContainer" >
+               <IonList>
+                  {props.resources.map(resource => {
+                     return (
+                        <IonItemSliding disabled={!props.isOwner} key={`event-resource-${resource.id}`}>
+                           <IonItem href={resourceDownloadURL(resource.id)} detail download={resource.name}>
+                              <div className="restrictedWidth">
+                                 <EventResource name={resource.name} />
+                              </div>
+                           </IonItem>
 
-                        <IonItemOptions side="end">
-                           <IonItemOption
-                              color="danger"
-                              onClick={() => removeClicked(resource)}>
-                              Remove
+                           <IonItemOptions side="end">
+                              <IonItemOption
+                                 color="danger"
+                                 onClick={() => removeClicked(resource)}>
+                                 Remove
                         </IonItemOption>
-                        </IonItemOptions>
-                     </IonItemSliding>
-
-                  )
-               })}
-            </IonList>}
+                           </IonItemOptions>
+                        </IonItemSliding>
+                     )
+                  })}
+               </IonList>
+            </Container>
+         }
 
          <IonAlert
             isOpen={deleteAlert}

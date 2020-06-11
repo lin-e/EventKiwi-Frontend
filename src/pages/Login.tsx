@@ -6,7 +6,9 @@ import { RootState } from '../data/reducers';
 import { Redirect, RouteComponentProps } from 'react-router';
 import MicrosoftLogin from "react-microsoft-login";
 import { logIn } from "../data/actions/userActions";
-import { Container } from 'react-grid-system';
+import { Container, Col } from 'react-grid-system';
+import { faIcons, faHatWizard } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const mapStateToProps = (state: RootState) => ({
    loggedIn: state.userDetails.isLoggedIn
@@ -20,10 +22,10 @@ const connector = connect(
 type PropsFromRedux = ConnectedProps<typeof connector>
 type LoginProps = PropsFromRedux & RouteComponentProps<any>;
 
-const Login: React.FC<LoginProps> = (props, state) => {
+const Login: React.FC<LoginProps> = (props) => {
 
    if (props.loggedIn) {
-      return <Redirect to="/events" />
+      return <Redirect to="/discover" />
    }
 
    const authHandler = (err: any, data: any) => {
@@ -45,7 +47,10 @@ const Login: React.FC<LoginProps> = (props, state) => {
                         <IonCardHeader>
                            <br />
                            <IonRow>
-                              <IonCardTitle className="horizontalCentre">Imperial Events</IonCardTitle>
+                              <IonCardTitle className="horizontalCentre"><FontAwesomeIcon icon={faHatWizard} size="2x" /></IonCardTitle>
+                           </IonRow>
+                           <IonRow>
+                              <IonCardTitle className="horizontalCentre">Event Wizard</IonCardTitle>
                            </IonRow>
                         </IonCardHeader>
                         <IonCardContent>
