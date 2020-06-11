@@ -28,15 +28,15 @@ type PropsFromRedux = ConnectedProps<typeof connector>
 type AddTagSearchProps = OwnProps & PropsFromRedux
 
 const AddTagSearch: React.FC<AddTagSearchProps> = ({ currentTags, addTag, removeTag, searchResults, userToken, fetchSearchInterests }) => {
-  const [searchTerm, setsearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
   
   const searchBarUpdate = (e: CustomEvent) => {
     if (e.detail.value === undefined) {
-      setsearchTerm("");
+      setSearchTerm("");
       fetchSearchInterests("", userToken)
     } else {
       const newSearchTerm = e.detail.value!.trim().toLowerCase();
-      setsearchTerm(newSearchTerm);
+      setSearchTerm(newSearchTerm);
       fetchSearchInterests(newSearchTerm, userToken);
     }
   }

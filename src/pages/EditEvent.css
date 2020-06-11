@@ -1,15 +1,24 @@
+.imageInput {
+    margin-top: 8px;
+    margin-bottom: 16px;
+}
+
 .uploadImageCard {
     width: 100%;
     margin-left: 0px;
-    margin-top: 8px;
-    margin-bottom: 8px;
     align-content: flex-start;
     height: auto;
 }
 
-img .uploadImage {
+.uploadImage {
     width: fit-content;
     object-fit: cover;
+}
+
+@media only screen and (min-width: 900px) {
+    .uploadImage {
+        height: 35vh !important;
+    }
 }
 
 ion-list {

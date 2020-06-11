@@ -78,6 +78,11 @@ export interface resp_society_card {
   following: number
 }
 
+export interface resp_image_upload {
+  status: number,
+  body: string
+}
+
 export interface resp_resource {
   display_name: string,
   bucket_key: string,

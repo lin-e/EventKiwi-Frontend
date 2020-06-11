@@ -1,4 +1,4 @@
-import React, { useState, MouseEvent, useEffect } from 'react';
+import React, { useState, MouseEvent, useEffect, useRef } from 'react';
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonLabel, IonTextarea, IonInput, IonCard, IonDatetime, IonButtons, IonBackButton, IonList, IonItem, IonSelect, IonSelectOption, IonIcon, IonItemDivider, IonButton, IonChip, IonModal, IonToast, IonAlert } from '@ionic/react';
 import { Container, Row, Col } from 'react-grid-system';
 import { ConnectedProps, connect } from 'react-redux';
@@ -6,11 +6,12 @@ import { calendar, closeCircle } from 'ionicons/icons';
 import { parseISO, format, isBefore } from 'date-fns'
 import AddTagSearch from '../components/EditEvent/AddTagSearch';
 import EmptySectionText from '../components/EmptySectionText';
-import { createNewEvent, updateEvent, editEventLoad, deleteEvent } from '../data/actions/editEventActions';
+import { createNewEvent, updateEvent, editEventLoad, deleteEvent, uploadImage } from '../data/actions/editEventActions';
 import { RootState } from '../data/reducers';
 import { UNIX_EPOCH, PRIVATE, SOCIETIES, MEMBERS, PUBLIC, NO_ID } from '../constants/constants';
 import './EditEvent.css'
 import { RouteComponentProps } from 'react-router';
+import { blankEventDetails } from '../constants/types';
 
 interface OwnProps extends RouteComponentProps<{ id?: string }> { };
 
@@ -21,12 +22,12 @@ const mapStateToProps = (state: RootState) => {
   }
 }
 
-const connector = connect(mapStateToProps, { createNewEvent, updateEvent, editEventLoad, deleteEvent });
+const connector = connect(mapStateToProps, { createNewEvent, updateEvent, editEventLoad, deleteEvent, uploadImage });
 
 type PropsFromRedux = ConnectedProps<typeof connector>
 type EditEventProps =  OwnProps & PropsFromRedux
 
-const EditEvent: React.FC<EditEventProps> = ({ match, event, userToken, createNewEvent, updateEvent, editEventLoad, deleteEvent }) => {
+const EditEvent: React.FC<EditEventProps> = ({ match, event, userToken, createNewEvent, updateEvent, editEventLoad, deleteEvent, uploadImage }) => {
   
   const [eventId, setEventId] = useState(event.id);
   const [title, setTitle] = useState(event.name);
@@ -34,6 +35,7 @@ const EditEvent: React.FC<EditEventProps> = ({ match, event, userToken, createNe
   const [startDatetime, setStartDatetime] = useState(event.datetimeStart);
   const [endDatetime, setEndDatetime] = useState(event.datetimeEnd);
   const [privacy, setPrivacy] = useState(PRIVATE);
+  const [eventImg, setEventImg] = useState(event.images[0]);
   const [tagList, setTagList] = useState<string[]>(event.tags);
   const [description, setDescription] = useState(event.description);
   
@@ -50,6 +52,7 @@ const EditEvent: React.FC<EditEventProps> = ({ match, event, userToken, createNe
   const [savedToast, setSavedToast] = useState(false);
   const [deletedToast, setDeletedToast] = useState(false);
   
+  const imgInputRef = useRef<HTMLInputElement>(null);
   const currDatetime = new Date();
   
   const updateState = () => {
@@ -59,6 +62,7 @@ const EditEvent: React.FC<EditEventProps> = ({ match, event, userToken, createNe
     setStartDatetime(event.datetimeStart);
     setEndDatetime(event.datetimeEnd);
     setPrivacy(PRIVATE);
+    setEventImg(event.images[0]);
     setTagList(event.tags);
     setDescription(event.description);
 
@@ -171,7 +175,7 @@ const EditEvent: React.FC<EditEventProps> = ({ match, event, userToken, createNe
         tags: tagList,
         start: startDatetime.toISOString(),
         end: endDatetime.toISOString(),
-        img: "https://picsum.photos/600/400"
+        img: eventImg
       }
       
       if (eventId === "") {
@@ -187,7 +191,7 @@ const EditEvent: React.FC<EditEventProps> = ({ match, event, userToken, createNe
       <IonHeader>
         <IonToolbar>
           <IonButtons  slot="start">
-            <IonBackButton color="danger" />
+            <IonBackButton defaultHref="/events"/>
           </IonButtons>
           <IonTitle>{(exists ? "Edit " : "Create new ") + "Event"}</IonTitle>
           <IonButtons  slot="end">
@@ -223,10 +227,11 @@ const EditEvent: React.FC<EditEventProps> = ({ match, event, userToken, createNe
           </IonList>
 
           <Row className="coreDetailsRow">
-            <Col md={6} sm={12}>
+            <Col md={6} sm={12} className="imageInput">
               <IonCard className="uploadImageCard">
-                <img className="uploadImage" src="https://picsum.photos/800/400" alt="event banner image" />
+                <img className="uploadImage" src={eventImg} alt="event banner image" />
               </IonCard>
+              <IonButton onClick={() => imgInputRef.current!.click()} expand="block">Upload Image</IonButton>
             </Col>
 
             <Col md={6} sm={12}>
@@ -416,6 +421,14 @@ const EditEvent: React.FC<EditEventProps> = ({ match, event, userToken, createNe
           duration={2000}
         />
       </IonContent>
+
+      <input 
+        ref={imgInputRef}
+        hidden
+        type="file"
+        accept="image/*"
+        onChange={e => uploadImage((e.nativeEvent.target as HTMLInputElement).files?.item(0) || ({} as File), userToken, setEventImg)}
+      />
     </IonPage>
   );
 }
