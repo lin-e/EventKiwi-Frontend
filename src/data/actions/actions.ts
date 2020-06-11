@@ -66,6 +66,12 @@ export const unfollowSociety = (id: string, token: string): AppThunk => async di
 
 export const fetchEventCards = (refresher: HTMLIonRefresherElement, token: string)
    : AppThunk => async dispatch => {
+   if (token === "") {
+      return(dispatch({
+         type: FETCH_EVENTS_CARDS,
+         payload: []
+      }))
+   }
    const url = new URL(discoverEventCardURL);
    const options = {
       headers: {
