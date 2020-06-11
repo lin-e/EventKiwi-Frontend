@@ -44,7 +44,7 @@ export const loadUserData = (): AppThunk => async dispatch => {
          type: LOAD_USER_DATA,
          payload: data
       }))
-      .then(err => {
+      .catch(err => {
          clearUserData();
          return dispatch({
             type: INVALID_USER
