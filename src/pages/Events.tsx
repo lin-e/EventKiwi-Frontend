@@ -1,5 +1,5 @@
-import React, { useEffect, useState, MouseEvent } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonRefresher, IonRefresherContent, useIonViewDidEnter, IonFab, IonFabButton, IonIcon, IonFabList, IonSegment, IonSegmentButton, IonLabel, IonToast, IonButtons, IonButton, IonPopover, IonList } from '@ionic/react';
+import React, { useEffect, useState, MouseEvent, useRef } from 'react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonRefresher, IonRefresherContent, useIonViewDidEnter, IonFab, IonFabButton, IonIcon, IonFabList, IonSegment, IonSegmentButton, IonLabel, IonToast, IonButtons, IonButton, IonPopover, IonList, IonSelect, IonSelectOption, IonItem } from '@ionic/react';
 import { chevronUp, options, calendar, add, informationCircleOutline } from 'ionicons/icons'
 import { isFuture } from 'date-fns'
 import './Events.css';
@@ -10,7 +10,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { RootState } from '../data/reducers';
 import { Redirect, useHistory } from 'react-router';
 import { editEventLoad } from '../data/actions/editEventActions';
-import { groupByDate, myEvent, getSocs } from '../utils/EventFilterTootls';
+import { groupByDate, myEvent, getSocs, applyFilters } from '../utils/EventFilterTootls';
 import { CalendarEvent } from '../constants/types';
 import SocBasicInfo from '../components/Calendar/SocBasicInfo';
 
@@ -38,6 +38,11 @@ const Events: React.FC<EventsProps> = (props) => {
     open: false,
     event: undefined
   });
+  const filterRef = useRef<HTMLIonSelectElement>(null);
+  const [filters, setFilters] = useState<number[]>([0, 1, 2]);
+  const updateFilter = (e: CustomEvent) => {
+    setFilters(e.detail.value as number[]);
+  }
 
   const [socEvents, futureEvents, pastEvents]:CalendarEvent[][] = props.events.reduce(([s, f, p]: CalendarEvent[][], e) => (
     myEvent(e, props.socId) ?
@@ -162,15 +167,15 @@ const Events: React.FC<EventsProps> = (props) => {
         {props.isSociety &&
           <CalendarEventView hide={!myEvents} groupedEvents={groupByDate(socEvents)} />
         }
-        <CalendarEventView hide={!upcoming} groupedEvents={groupByDate(futureEvents)}/>
-        <CalendarEventView hide={!past} groupedEvents={groupByDate(pastEvents).reverse()}/>
+        <CalendarEventView hide={!upcoming} groupedEvents={groupByDate(applyFilters(filters, futureEvents))}/>
+        <CalendarEventView hide={!past} groupedEvents={groupByDate(applyFilters(filters, pastEvents)).reverse()}/>
 
         <IonFab vertical="bottom" horizontal="end" slot="fixed">
           <IonFabButton>
             <IonIcon icon={chevronUp} />
           </IonFabButton>
           <IonFabList side="top">
-            <IonFabButton>
+            <IonFabButton onClick={() => filterRef.current!.open()}>
               <IonIcon icon={options}/>
             </IonFabButton>
             <IonFabButton onClick={showGridView}>
@@ -204,6 +209,14 @@ const Events: React.FC<EventsProps> = (props) => {
             ))}
           </IonList>
         </IonPopover>
+        <IonItem hidden>
+          <IonLabel>Filter Calendar</IonLabel>
+          <IonSelect interface="alert" value={filters} defaultChecked okText="Apply" multiple onIonChange={updateFilter} ref={filterRef}>
+            <IonSelectOption value={0}>Following</IonSelectOption>
+            <IonSelectOption value={1}>Interested</IonSelectOption>
+            <IonSelectOption value={2}>Going</IonSelectOption>
+          </IonSelect>
+        </IonItem>
       </IonContent>
     </IonPage>
   );
