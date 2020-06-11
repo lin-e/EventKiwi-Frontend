@@ -46,14 +46,14 @@ const Discover: React.FC<DiscoverProps> = (props) => {
   }, [props.userToken]);
 
   const searchBarUpdate = (e: CustomEvent) => {
-    setSearchTerm((e.detail.value == undefined) ? "" : e.detail.value!.trim());
+    const newTerm = (e.detail.value == undefined) ? "" : e.detail.value!.trim()
+    setSearchTerm(newTerm);
     setSocExpanded(false);
-    search(searchTerm);
+    search(newTerm);
   }
 
   const search = (searchTerm: string) => {
     if (searchTerm == "") {
-      console.log(props.userToken);
       props.fetchEventCards(refresherRef.current!, props.userToken);
     } else {
       setSearchOffset(0);
