@@ -45,6 +45,11 @@ const ResourceManagement: React.FC<ResourceManagementProps> = (props) => {
     showResourceModal(true);
   }
 
+  const modalDeleteFile = (bucket_key: string) => {
+    props.deleteFile(bucket_key, props.userToken);
+    showResourceModal(false);
+  }
+
   return (
     <IonPage>
 
@@ -98,7 +103,6 @@ const ResourceManagement: React.FC<ResourceManagementProps> = (props) => {
         onDidDismiss={() => showResourceModal(false)}>
 
         <IonHeader>
-
           <IonToolbar>
             <IonButtons slot="start">
               <IonButton color="primary" onClick={() => showResourceModal(false)}>Done</IonButton>
@@ -107,9 +111,6 @@ const ResourceManagement: React.FC<ResourceManagementProps> = (props) => {
         </IonHeader>
 
         <IonContent>
-          {/* <br />
-          <IonTitle>{selectedResource.display_name}</IonTitle> */}
-
           <Container>
             <IonText>
               <h3>{selectedResource.display_name}</h3>
@@ -123,17 +124,13 @@ const ResourceManagement: React.FC<ResourceManagementProps> = (props) => {
             </IonText>
             <IonRow>
               <IonCol>
-              <IonButton expand="block">Download</IonButton>
-
+                <IonButton expand="block">Download</IonButton>
               </IonCol>
               <IonCol>
-              <IonButton expand="block" color="danger">Delete</IonButton>
+                <IonButton expand="block" color="danger" onClick={() => modalDeleteFile(selectedResource.bucket_key)}>Delete</IonButton>
               </IonCol>
-
             </IonRow>
-
           </Container>
-
         </IonContent>
       </IonModal>
     </IonPage>
