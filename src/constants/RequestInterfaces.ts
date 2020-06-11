@@ -86,8 +86,9 @@ export interface resp_image_upload {
 export interface resp_resource {
   display_name: string,
   bucket_key: string,
+  download_count: number,
   events: {
-    id: string,
+    id: number,
     name: string
   }[]
 }
