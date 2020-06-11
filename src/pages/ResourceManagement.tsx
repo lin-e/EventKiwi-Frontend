@@ -152,7 +152,6 @@ const ResourceManagement: React.FC<ResourceManagementProps> = (props) => {
       <IonAlert
         isOpen={deleteAlert}
         onDidDismiss={() => showDeleteAlert(false)}
-        cssClass='my-custom-class'
         header={`Delete resource`}
         subHeader={`Are you sure you want to delete "${selectedResource.display_name}"?`}
         message="This action cannot be undone"

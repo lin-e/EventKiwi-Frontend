@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import './EventResourcesList.css';
-import { IonList, IonItem, IonItemSliding, IonItemOptions, IonItemOption } from '@ionic/react';
+import { IonList, IonItem, IonItemSliding, IonItemOptions, IonItemOption, IonAlert } from '@ionic/react';
 import EventResource from './EventResource';
 import CentredTextContainer from '../CentredTextContainer';
 import { resourceDownloadURL } from '../../constants/endpoints';
@@ -26,6 +26,20 @@ interface OwnProps {
 type PropsFromRedux = ConnectedProps<typeof connector>
 type EventResourcesListProps = OwnProps & PropsFromRedux;
 const EventResourcesList: React.FC<EventResourcesListProps> = (props) => {
+
+   const [deleteAlert, showDeleteAlert] = useState<boolean>(false);
+   const [selectedResource, setSelectedResource] = useState<Resource>({ name: "", id: "" });
+
+   const removeClicked = (resource: Resource) => {
+      setSelectedResource(resource);
+      showDeleteAlert(true);
+   }
+
+   const removeFile = () => {
+      props.removeResourceFromEvent(props.eventId, selectedResource.id, props.userToken);
+      showDeleteAlert(false);
+   }
+
    return (
       <div style={props.hide ? { display: "none" } : {}}>
          {props.resources.length === 0 &&
@@ -46,7 +60,7 @@ const EventResourcesList: React.FC<EventResourcesListProps> = (props) => {
                         <IonItemOptions side="end">
                            <IonItemOption
                               color="danger"
-                              onClick={() => props.removeResourceFromEvent(props.eventId, resource.id, props.userToken)}>
+                              onClick={() => removeClicked(resource)}>
                               Remove
                         </IonItemOption>
                         </IonItemOptions>
@@ -54,8 +68,18 @@ const EventResourcesList: React.FC<EventResourcesListProps> = (props) => {
 
                   )
                })}
-            </IonList>
-         }
+            </IonList>}
+
+         <IonAlert
+            isOpen={deleteAlert}
+            onDidDismiss={() => showDeleteAlert(false)}
+            header={`Remove resource`}
+            message={`Are you sure you want to remove "${selectedResource.name}" from this event?`}
+            buttons={['CANCEL', {
+               text: 'OK',
+               handler: removeFile
+            }]}
+         />
       </div>
    )
 }
