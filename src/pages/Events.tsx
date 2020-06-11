@@ -1,6 +1,6 @@
 import React, { useEffect, useState, MouseEvent } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonRefresher, IonRefresherContent, useIonViewDidEnter, IonFab, IonFabButton, IonIcon, IonFabList, IonSegment, IonSegmentButton, IonLabel, IonToast } from '@ionic/react';
-import { chevronUp, options, calendar, add } from 'ionicons/icons'
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonRefresher, IonRefresherContent, useIonViewDidEnter, IonFab, IonFabButton, IonIcon, IonFabList, IonSegment, IonSegmentButton, IonLabel, IonToast, IonButtons, IonButton, IonPopover, IonList } from '@ionic/react';
+import { chevronUp, options, calendar, add, informationCircleOutline } from 'ionicons/icons'
 import { isFuture } from 'date-fns'
 import './Events.css';
 import CalendarEventView from '../components/Calendar/CalendarEventView';
@@ -10,8 +10,9 @@ import { connect, ConnectedProps } from 'react-redux';
 import { RootState } from '../data/reducers';
 import { Redirect, useHistory } from 'react-router';
 import { editEventLoad } from '../data/actions/editEventActions';
-import { groupByDate, myEvent } from '../utils/EventFilterTootls';
+import { groupByDate, myEvent, getSocs } from '../utils/EventFilterTootls';
 import { CalendarEvent } from '../constants/types';
+import SocBasicInfo from '../components/Calendar/SocBasicInfo';
 
 const mapStateToProps = (state: RootState) => ({
   events: state.calEvents.events,
@@ -32,6 +33,11 @@ const Events: React.FC<EventsProps> = (props) => {
   const [myEventsY, setMyEventsY] = useState(0);
   const [upcomingY, setUpcomingY] = useState(0);
   const [pastY, setPastY] = useState(0);
+
+  const [showInfo, setShowInfo] = useState<{open: boolean, event: Event | undefined}>({
+    open: false,
+    event: undefined
+  });
 
   const [socEvents, futureEvents, pastEvents]:CalendarEvent[][] = props.events.reduce(([s, f, p]: CalendarEvent[][], e) => (
     myEvent(e, props.socId) ?
@@ -134,6 +140,15 @@ const Events: React.FC<EventsProps> = (props) => {
               <IonLabel>Past</IonLabel>
             </IonSegmentButton>
           </IonSegment>
+          <IonButtons slot="end">
+            <IonButton onClick={(e) => setShowInfo({
+                open: true,
+                event: e.nativeEvent
+              })}
+            >
+              <IonIcon icon={informationCircleOutline}/>
+            </IonButton>
+          </IonButtons>
         </IonToolbar>
       </IonHeader>
 
@@ -178,6 +193,17 @@ const Events: React.FC<EventsProps> = (props) => {
           cssClass="ion-text-center"
           animated
         />
+        <IonPopover
+          isOpen={showInfo.open}
+          event={showInfo.event}
+          onDidDismiss={() => setShowInfo({open: false, event: undefined})}
+        >
+          <IonList>
+            {getSocs(props.events).map(org => (
+              <SocBasicInfo society={org} key={org.id}/>
+            ))}
+          </IonList>
+        </IonPopover>
       </IonContent>
     </IonPage>
   );
