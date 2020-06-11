@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonSearchbar, IonRefresher, IonRefresherContent, IonList, IonCol, IonRow, IonGrid, IonButton, IonIcon, IonButtons } from '@ionic/react';
-import { add } from 'ionicons/icons'
+import { add, options } from 'ionicons/icons'
 import './Discover.css';
 import { connect, ConnectedProps } from 'react-redux';
 import { fetchEventCards, fetchSearchEventCards, fetchMoreEventCards, fetchMoreSearchEventCards, fetchSearchSocietyCards } from "../data/actions/actions";
@@ -103,7 +103,18 @@ const Discover: React.FC<DiscoverProps> = (props) => {
 
       
       <Container>
-        <IonSearchbar ref={searchBar} onIonChange={searchBarUpdate} debounce={500} enterkeyhint="search" type="search"/>
+        <IonGrid>
+          <IonRow>
+            <IonCol sizeMd="11" sizeXs="10">
+              <IonSearchbar ref={searchBar} onIonChange={searchBarUpdate} debounce={500} enterkeyhint="search" type="search"/>
+            </IonCol>
+            <IonCol sizeMd="1" sizeXs="2" className="btnCol">
+              <IonButton fill="clear" className="filterBtn">
+                <IonIcon icon={options}/>
+              </IonButton>
+            </IonCol>
+          </IonRow>
+        </IonGrid>
         
         {(searchTerm !== "" && props.societies.length !== 0) &&
             <IonGrid>
