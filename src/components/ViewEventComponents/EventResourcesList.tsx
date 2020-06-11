@@ -78,8 +78,8 @@ const EventResourcesList: React.FC<EventResourcesListProps> = (props) => {
             onDidDismiss={() => showDeleteAlert(false)}
             header={`Remove resource`}
             message={`Are you sure you want to remove "${selectedResource.name}" from this event?`}
-            buttons={['CANCEL', {
-               text: 'OK',
+            buttons={['Cancel', {
+               text: 'Ok',
                handler: removeFile
             }]}
          />

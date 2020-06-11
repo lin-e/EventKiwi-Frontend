@@ -128,11 +128,27 @@ export interface Post {
   body: string
 }
 
+
 export interface PostOrganiser {
   id: string,
   image: string,
   name: string,
   short: string
+}
+
+export const blankPostOrganiser: PostOrganiser = {
+  id: "",
+  image: "",
+  name: "",
+  short: ""
+}
+
+export const blankPost: Post = {
+  id: "",
+  eventId: "",
+  organiser: blankPostOrganiser,
+  body: "",
+  time: new Date()
 }
 
 

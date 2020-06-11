@@ -63,6 +63,13 @@ const ResourceManagement: React.FC<ResourceManagementProps> = (props) => {
     showResourceModal(false);
   }
 
+  const uploadFiles = (files: FileList) => {
+    for (let i = 0; i < files.length; i++) {
+      console.log(files.item(i)?.name)
+    }
+
+  }
+
   return (
     <IonPage>
 
@@ -106,7 +113,8 @@ const ResourceManagement: React.FC<ResourceManagementProps> = (props) => {
         ref={fileInputRef}
         hidden
         type="file"
-        onChange={e => props.uploadFile((e.nativeEvent.target as HTMLInputElement).files?.item(0) || ({} as File), props.userToken)}>
+        multiple
+        onChange={e => uploadFiles((e.nativeEvent.target as HTMLInputElement).files!)}>
       </input>
 
 
@@ -154,8 +162,8 @@ const ResourceManagement: React.FC<ResourceManagementProps> = (props) => {
         header={`Delete resource`}
         subHeader={`Are you sure you want to delete "${selectedResource.display_name}"?`}
         message="This action cannot be undone"
-        buttons={['CANCEL', {
-          text: 'OK',
+        buttons={['Cancel', {
+          text: 'Ok',
           handler: () => {
             deleteFile(selectedResource.bucket_key);
           }
