@@ -1,4 +1,4 @@
-import { USER_LOGIN, LOAD_USER_DATA, USER_LOGOUT } from "./types";
+import { USER_LOGIN, LOAD_USER_DATA, USER_LOGOUT, INVALID_USER } from "./types";
 import { AuthResponse, blankProfile, AppThunk } from "../types/dataInterfaces";
 import { Plugins } from '@capacitor/core';
 import { authEndpoint, deAuthEndpoint, deAuthAllEndpoint } from "../../constants/endpoints";
@@ -37,10 +37,19 @@ export const logIn = (msToken: string): AppThunk => async dispatch => {
 
 export const loadUserData = (): AppThunk => async dispatch => {
    const data = await getUserData();
-   dispatch({
-      type: LOAD_USER_DATA,
-      payload: data
-   });
+   fetch("https://staging.drp.social/auth/valid", {
+      headers: { 'Authorization': `Bearer ${data.userToken}` }
+   })
+      .then(res => dispatch({
+         type: LOAD_USER_DATA,
+         payload: data
+      }))
+      .then(err => {
+         clearUserData();
+         return dispatch({
+            type: INVALID_USER
+         });
+      })
 }
 
 const getUserData = async () => {
