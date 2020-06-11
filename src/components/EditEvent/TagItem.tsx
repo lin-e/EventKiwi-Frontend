@@ -1,4 +1,4 @@
-import React, { MouseEvent, useState } from 'react';
+import React, { MouseEvent, useState, useEffect } from 'react';
 import { IonGrid, IonCol, IonItem, IonRow, IonLabel, IonButton } from '@ionic/react';
 import { InterestDetails } from '../../constants/types';
 import { ConnectedProps, connect } from 'react-redux';
@@ -24,7 +24,7 @@ const connector = connect(mapStateToProps)
 type PropsFromRedux = ConnectedProps<typeof connector>
 type TagItemProps = OwnProps & PropsFromRedux
 
-const TagItem: React.FC<TagItemProps> = ({ tag, currentTags,addTag, removeTag, interestList, userToken }) => {
+const TagItem: React.FC<TagItemProps> = ({ tag, currentTags,addTag, removeTag }) => {
   const [added, setAdded] = useState(currentTags.includes(tag.name));
   
   const toggleInterest = (e: MouseEvent) => {
@@ -39,6 +39,10 @@ const TagItem: React.FC<TagItemProps> = ({ tag, currentTags,addTag, removeTag, i
     }
   }
   
+  useEffect(() => {
+    setAdded(currentTags.includes(tag.name))
+  }, [tag]);
+
   return (
     <IonItem>
       <IonGrid>
