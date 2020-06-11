@@ -28,7 +28,8 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 type EventsProps = PropsFromRedux
 
 const Events: React.FC<EventsProps> = (props) => {
-  const [segment, setSegment] = useState<'upcoming' | 'past'>('upcoming');
+  const [segment, setSegment] = useState<'my events' | 'upcoming' | 'past'>('upcoming');
+  const [myEventsY, setMyEventsY] = useState(0);
   const [upcomingY, setUpcomingY] = useState(0);
   const [pastY, setPastY] = useState(0);
 
@@ -41,6 +42,7 @@ const Events: React.FC<EventsProps> = (props) => {
       )
   ), [[], [], []]);
 
+  const myEvents = segment === 'my events'
   const upcoming = segment === 'upcoming';
   const past = segment === 'past';
 
@@ -65,6 +67,9 @@ const Events: React.FC<EventsProps> = (props) => {
     const nextSegment = e.detail.value as any;
 
     switch (nextSegment) {
+      case 'my events':
+        contentRef.current!.scrollToPoint(0, myEventsY);
+        break;
       case 'upcoming':
         contentRef.current!.scrollToPoint(0, upcomingY);
         break;
@@ -77,6 +82,7 @@ const Events: React.FC<EventsProps> = (props) => {
   }
 
   const resetView = () => {
+    setMyEventsY(0);
     setUpcomingY(0);
     setPastY(0);
     try {
@@ -87,6 +93,9 @@ const Events: React.FC<EventsProps> = (props) => {
 
   const saveY = (y: number) => {
     switch (segment) {
+      case 'my events':
+        setMyEventsY(y);
+        break;
       case 'upcoming':
         setUpcomingY(y);
         break;
@@ -113,6 +122,11 @@ const Events: React.FC<EventsProps> = (props) => {
       <IonHeader>
         <IonToolbar>
         <IonSegment value={segment} onIonChange={changeTab}>
+            {props.isSociety &&
+              <IonSegmentButton value="my events">
+                <IonLabel>My Events</IonLabel>
+              </IonSegmentButton>
+            }
             <IonSegmentButton value="upcoming">
               <IonLabel>Upcoming</IonLabel>
             </IonSegmentButton>
@@ -130,8 +144,11 @@ const Events: React.FC<EventsProps> = (props) => {
           <IonRefresherContent></IonRefresherContent>
         </IonRefresher>
 
+        {props.isSociety &&
+          <CalendarEventView hide={!myEvents} groupedEvents={groupByDate(socEvents)} />
+        }
         <CalendarEventView hide={!upcoming} groupedEvents={groupByDate(futureEvents)}/>
-        <CalendarEventView hide={upcoming} groupedEvents={groupByDate(pastEvents)}/>
+        <CalendarEventView hide={!past} groupedEvents={groupByDate(pastEvents).reverse()}/>
 
         <IonFab vertical="bottom" horizontal="end" slot="fixed">
           <IonFabButton>
