@@ -32,10 +32,11 @@ export const goingToEventEndpoint = (id: string) =>  `${endpointURL}/events/goin
 export const interestedInEventEndpoint = (id: string) =>  `${endpointURL}/events/interested/${id}`;
 export const notGoingToEventEndpoint = (id: string) =>  `${endpointURL}/events/none/${id}`;
 
-export const eventPostsEndpoint = (eventId: string, lastPostId: string) => {
- return `${endpointURL}/events/posts/${eventId}/${lastPostId}/`
-}
+export const eventPostsEndpoint = (eventId: string, lastPostId: string) =>
+   `${endpointURL}/events/posts/${eventId}/${lastPostId}/`
 
-export const addEventPostEndpoint = (eventId: string) => {
- return `${endpointURL}/events/posts/${eventId}/new/`
-}
+export const addEventPostEndpoint = (eventId: string) => 
+   `${endpointURL}/events/posts/${eventId}/new/`
+
+export const deleteEventPostEndpoint = (postId: string) =>
+   `${endpointURL}/events/posts/delete/${postId}/`

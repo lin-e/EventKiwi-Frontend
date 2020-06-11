@@ -189,7 +189,7 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
 
         <EventDescription goingStatus={goingStatus} shareUrl={shareUrl} eventId={props.eventId} eventDescription={eventDescription} tab={props.activeTab} hide={!details} />
 
-        <EventPostsList posts={eventPosts} hide={!posts} numPosts={eventPosts.length} />
+        <EventPostsList posts={eventPosts} isPoster={goingStatus === EVENT_OWNER} hide={!posts} numPosts={eventPosts.length} />
 
         <EventResourcesList resources={eventDescription.resources} tab={props.activeTab} hide={!resources} />
 

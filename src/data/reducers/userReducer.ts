@@ -23,13 +23,17 @@ export function userReducer(state = initialState, action: UserType): UserState {
             loading: false
          }
       case LOAD_USER_DATA:
+         var isSoc = false;
+         if (action.payload.profile !== undefined) {
+            isSoc = action.payload.profile.society !== "0";
+         }
          return {
             ...state,
             isLoggedIn: action.payload.isLoggedIn,
             userToken: action.payload.userToken,
             profile: action.payload.profile,
             loading: action.payload.loading,
-            isSoc: action.payload.profile.society !== "0",
+            isSoc: isSoc,
          }
       case USER_LOGOUT:
          return {
