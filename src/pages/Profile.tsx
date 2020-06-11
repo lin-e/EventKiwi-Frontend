@@ -158,8 +158,8 @@ class Profile extends Component<ProfileProps, ProfileState> {
                       <IonGrid>
                         <IonRow>
                           {this.props.socResources.slice(0, 4).map(r =>
-                            <IonCol size="6">
-                              <IonItem lines="none" detail className="socResource">
+                            <IonCol size="auto">
+                              <IonItem lines="none" className="socResource">
                                 <EventResource name={r.display_name} />
                               </IonItem>
                             </IonCol>)}
