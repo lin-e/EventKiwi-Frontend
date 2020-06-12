@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { IonText, IonCard, IonCardSubtitle, IonCol, IonGrid, IonRow, IonButton, IonIcon, IonToast, IonSkeletonText, IonChip, isPlatform } from '@ionic/react';
+import { IonText, IonCard, IonCardSubtitle, IonCol, IonGrid, IonRow, IonButton, IonIcon, IonToast, IonSkeletonText, IonChip, isPlatform, IonImg } from '@ionic/react';
 import './EventDescription.css';
 import { Container, Row, Col } from 'react-grid-system';
 import ExpandTextView from '../ExpandTextView';
@@ -104,7 +104,7 @@ const EventDescription: React.FC<EventDescriptionProps> = (props) => {
             <Row>
                <Col md={6} sm={12}>
                   <IonCard className="eventImageCard">
-                     <img className="eventImage" src={props.eventDescription.images[0]} alt={props.eventDescription.name}></img>
+                     <IonImg className="eventImage" src={props.eventDescription.images[0]} alt={props.eventDescription.name}/>
                   </IonCard>
                </Col>
 
