@@ -247,10 +247,14 @@ const EditEvent: React.FC<EditEventProps> = ({ match, event, userToken, createNe
               <Container>
                 <Row>
                   <IonCol>
-                    <IonButton onClick={() => imgInputRef.current!.click()} expand="block"> <IonIcon icon={imageOutline} />&nbsp; Upload Image</IonButton>
+                    <IonButton onClick={() => imgInputRef.current!.click()} expand="block">
+                      <IonIcon icon={imageOutline} />&nbsp; Upload Image
+                    </IonButton>
                   </IonCol>
                   <IonCol>
-                    <IonButton onClick={() => fileInputRef.current!.click()} expand="block"> <IonIcon icon={cloudUpload} />&nbsp;Upload Resources</IonButton>
+                    <IonButton onClick={() => fileInputRef.current!.click()} expand="block">
+                      <IonIcon icon={cloudUpload} />&nbsp;{selectedFiles.length === undefined ? "Upload Resources" : `Selected ${selectedFiles.length} file${selectedFiles.length !== 1 ? "s" : ""}`}
+                    </IonButton>
                   </IonCol>
                 </Row>
               </Container>
