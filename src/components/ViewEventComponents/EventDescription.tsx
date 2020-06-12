@@ -159,7 +159,12 @@ const EventDescription: React.FC<EventDescriptionProps> = (props) => {
                      <Col>
                         {props.eventDescription.tags.map(tag => (
                            <IonChip
-                              onClick={() => {props.fetchTagEventCards(tag, blankFilters, null, props.userToken); history.push('/discover')}}
+                              onClick={(e) => {
+                                 e.stopPropagation();
+                                 e.preventDefault();
+                                 props.fetchTagEventCards(tag, blankFilters, null, props.userToken);
+                                 history.push('/discover')
+                              }}
                               key={`tag-${tag}=${props.eventDescription.id}`}
                            >
                               {tag}

@@ -26,6 +26,7 @@ type InterestChipProps = OwnProps & PropsFromRedux
 const InterestChip: React.FC<InterestChipProps> = (props) => {
 
   const removeInterest = (e: MouseEvent) => {
+    e.stopPropagation();
     e.preventDefault();
     props.removeProfileInterest(props.interest, props.userToken)
   }
@@ -34,7 +35,12 @@ const InterestChip: React.FC<InterestChipProps> = (props) => {
 
   return (
     <IonChip
-      onClick={() => {props.fetchTagEventCards(props.interest, blankFilters, null, props.userToken); history.push('/discover')}}
+      onClick={(e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        props.fetchTagEventCards(props.interest, blankFilters, null, props.userToken);
+        history.push('/discover')
+      }}
     >
       <IonLabel>{props.interest}</IonLabel>
       <IonIcon icon={closeCircle} onClick={removeInterest}/>
