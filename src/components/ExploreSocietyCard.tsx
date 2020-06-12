@@ -9,8 +9,6 @@ import { followSociety, unfollowSociety } from '../data/actions/actions'
 import { FOLLOWING } from '../constants/constants';
 
 
-const NUM_FOLLOWERS = 0;
-
 const mapStateToProps = (state: RootState) => {
   return {
     userToken: state.userDetails.userToken
@@ -52,7 +50,7 @@ const ExploreSocietyCard: React.FC<ExploreSocietyCardProps> = ({ soc, userToken,
             <Row>
               <Col xs={6} className="followerText">
                 <IonLabel>
-                  <p>{`${NUM_FOLLOWERS} followers`}</p>
+                  <p>{`${soc.followers} followers`}</p>
                 </IonLabel>
               </Col>
               <Col xs={6}>

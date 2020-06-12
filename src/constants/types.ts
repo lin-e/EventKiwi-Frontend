@@ -40,6 +40,7 @@ export interface SocietyCard {
   shortName: string;
   colour: string;
   following: number;
+  followers: number;
 }
 
 export const blankSociety = {
@@ -261,7 +262,8 @@ export const convertResToSocCard = (res: resp_society_card): SocietyCard => ({
   colour: res.colour,
   shortName: res.short_name,
   imageSrc: res.society_image_src,
-  following: res.following
+  following: res.following,
+  followers: parseInt(res.total_followers, 0)
 })
 
 export const convertResToSocCal = (res: resp_society_cal): SocietyCal => ({
