@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonSearchbar, IonRefresher, IonRefresherContent, IonList, IonCol, IonRow, IonGrid, IonButton, IonIcon, IonButtons, IonModal } from '@ionic/react';
-import { add, options } from 'ionicons/icons'
+import { add, options, filter } from 'ionicons/icons'
 import './Discover.css';
 import { connect, ConnectedProps } from 'react-redux';
 import { fetchEventCards, fetchSearchEventCards, fetchMoreEventCards, fetchMoreSearchEventCards, fetchSearchSocietyCards } from "../data/actions/actions";
@@ -19,6 +19,7 @@ const mapStateToProps = (state: RootState) => {
   return {
     societies: state.societyCards.societies,
     events: state.eventCards.events,
+    filters: state.searchFilters,
     moreResults: state.eventCards.moreResults,
     isLoggedIn: state.userDetails.isLoggedIn,
     isLoading: state.userDetails.loading,
@@ -47,6 +48,12 @@ const Discover: React.FC<DiscoverProps> = (props) => {
     search("")
   }, [props.userToken]);
 
+  useEffect(() => {
+    if (searchTerm !== "") {
+      search(searchTerm);
+    }
+  }, [props.filters])
+
   const searchBarUpdate = (e: CustomEvent) => {
     const newTerm = (e.detail.value == undefined) ? "" : e.detail.value!.trim()
     setSearchTerm(newTerm);
@@ -60,7 +67,7 @@ const Discover: React.FC<DiscoverProps> = (props) => {
     } else {
       setSearchOffset(0);
       props.fetchSearchSocietyCards(searchTerm, refresherRef.current!, props.userToken)
-      props.fetchSearchEventCards(searchTerm, refresherRef.current!, props.userToken);
+      props.fetchSearchEventCards(searchTerm, props.filters, refresherRef.current!, props.userToken);
     }
   }
 
