@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonSearchbar, IonRefresher, IonRefresherContent, IonList, IonCol, IonRow, IonGrid, IonButton, IonIcon, IonButtons, IonModal } from '@ionic/react';
-import { add, options, filter } from 'ionicons/icons'
+import { add, options } from 'ionicons/icons'
 import './Discover.css';
 import { connect, ConnectedProps } from 'react-redux';
 import { fetchEventCards, fetchSearchEventCards, fetchMoreEventCards, fetchMoreSearchEventCards, fetchSearchSocietyCards } from "../data/actions/actions";
@@ -12,7 +12,7 @@ import ExploreEventCard from '../components/ExploreEventCard';
 import EmptySectionText from '../components/EmptySectionText';
 import ExploreSocietyCard from '../components/ExploreSocietyCard';
 import { SocietyCard } from '../constants/types';
-import { MAX_SOCS_DISPLAY } from '../constants/constants';
+import { MAX_SOCS_DISPLAY, EVENT_SEARCH_BATCH_SIZE } from '../constants/constants';
 import SearchFilterModal from '../components/SearchFilterModal';
 
 const mapStateToProps = (state: RootState) => {
@@ -40,7 +40,7 @@ const Discover: React.FC<DiscoverProps> = (props) => {
   const searchBar = useRef<HTMLIonSearchbarElement>(null);
 
   const [searchTerm, setSearchTerm] = useState("");
-  const [searchOffset, setSearchOffset] = useState(0);
+  const [searchBatchNum, setSearchBatchNum] = useState(0);
   const [socExpanded, setSocExpanded] = useState(false);
   const [showFilterModal, setShowFilterModal] = useState(false);
 
@@ -65,19 +65,19 @@ const Discover: React.FC<DiscoverProps> = (props) => {
     if (searchTerm == "") {
       props.fetchEventCards(refresherRef.current!, props.userToken);
     } else {
-      setSearchOffset(0);
+      setSearchBatchNum(0);
       props.fetchSearchSocietyCards(searchTerm, refresherRef.current!, props.userToken)
       props.fetchSearchEventCards(searchTerm, props.filters, refresherRef.current!, props.userToken);
     }
   }
 
   const loadMoreEvents = (searchTerm: string) => {
-    setSearchOffset(props.events.length);
     if (searchTerm == "") {
-      props.fetchMoreEventCards(props.events.length, props.userToken);
+      props.fetchMoreEventCards((searchBatchNum + 1) * EVENT_SEARCH_BATCH_SIZE, props.userToken);
     } else {
-      props.fetchMoreSearchEventCards(searchTerm, props.events.length, props.userToken);
+      props.fetchMoreSearchEventCards(searchTerm, (searchBatchNum + 1) * EVENT_SEARCH_BATCH_SIZE, props.userToken);
     }
+    setSearchBatchNum(searchBatchNum + 1);
   }
 
   const renderSocCard = (society: SocietyCard) => {
