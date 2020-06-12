@@ -3,9 +3,9 @@ import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonSearchbar, Ion
 import { add, options } from 'ionicons/icons'
 import './Discover.css';
 import { connect, ConnectedProps } from 'react-redux';
-import { fetchEventCards, fetchSearchEventCards, fetchMoreEventCards, fetchMoreSearchEventCards, fetchSearchSocietyCards } from "../data/actions/actions";
+import { fetchEventCards, fetchSearchEventCards, fetchMoreEventCards, fetchMoreSearchEventCards, fetchSearchSocietyCards, fetchTagEventCards, fetchMoreTagEventCards } from "../data/actions/actions";
 import { RootState } from '../data/reducers';
-import { Redirect } from 'react-router';
+import { Redirect, useHistory } from 'react-router';
 import { Container, Row, Col } from 'react-grid-system';
 import SkeletonTextEventCard from '../components/SkeletonTextEventCard';
 import ExploreEventCard from '../components/ExploreEventCard';
@@ -15,12 +15,15 @@ import { SocietyCard } from '../constants/types';
 import { MAX_SOCS_DISPLAY, EVENT_SEARCH_BATCH_SIZE } from '../constants/constants';
 import SearchFilterModal from '../components/SearchFilterModal';
 
+
 const mapStateToProps = (state: RootState) => {
   return {
     societies: state.societyCards.societies,
     events: state.eventCards.events,
-    filters: state.searchFilters,
     moreResults: state.eventCards.moreResults,
+    tagSearch: state.eventCards.isTagSearch,
+    tagName: state.eventCards.tagName,
+    filters: state.searchFilters,
     isLoggedIn: state.userDetails.isLoggedIn,
     isLoading: state.userDetails.loading,
     userToken: state.userDetails.userToken
@@ -29,11 +32,11 @@ const mapStateToProps = (state: RootState) => {
 
 const connector = connect(
   mapStateToProps,
-  { fetchSearchSocietyCards, fetchEventCards, fetchMoreEventCards, fetchSearchEventCards, fetchMoreSearchEventCards }
+  { fetchSearchSocietyCards, fetchEventCards, fetchMoreEventCards, fetchSearchEventCards, fetchMoreSearchEventCards, fetchTagEventCards, fetchMoreTagEventCards }
 )
 
 type PropsFromRedux = ConnectedProps<typeof connector>
-type DiscoverProps = PropsFromRedux;
+type DiscoverProps =  PropsFromRedux;
 
 const Discover: React.FC<DiscoverProps> = (props) => {
   const refresherRef = useRef<HTMLIonRefresherElement>(null);
@@ -44,25 +47,36 @@ const Discover: React.FC<DiscoverProps> = (props) => {
   const [socExpanded, setSocExpanded] = useState(false);
   const [showFilterModal, setShowFilterModal] = useState(false);
 
+  const [isTagSearch, setIsTagSearch] = useState(props.tagSearch);
+
+  const history = useHistory();
+
   useEffect(() => {
-    search("")
+    search("", props.tagSearch)
   }, [props.userToken]);
 
   useEffect(() => {
-    if (searchTerm !== "") {
-      search(searchTerm);
+    setIsTagSearch(props.tagSearch);
+  }, [props.tagSearch])
+
+  useEffect(() => {
+    if (searchTerm !== "" || isTagSearch) {
+      search(searchTerm, isTagSearch);
     }
   }, [props.filters])
 
   const searchBarUpdate = (e: CustomEvent) => {
     const newTerm = (e.detail.value == undefined) ? "" : e.detail.value!.trim()
+    setIsTagSearch(false);
     setSearchTerm(newTerm);
     setSocExpanded(false);
     search(newTerm);
   }
 
-  const search = (searchTerm: string) => {
-    if (searchTerm == "") {
+  const search = (searchTerm: string, tagSearch: boolean = false) => {
+    if (tagSearch) {
+      props.fetchTagEventCards(props.tagName, props.filters, refresherRef.current!, props.userToken);
+    } else if (searchTerm == "") {
       props.fetchEventCards(refresherRef.current!, props.userToken);
     } else {
       setSearchBatchNum(0);
@@ -72,10 +86,13 @@ const Discover: React.FC<DiscoverProps> = (props) => {
   }
 
   const loadMoreEvents = (searchTerm: string) => {
+    if (isTagSearch) {
+      props.fetchMoreTagEventCards(props.tagName, props.filters,(searchBatchNum + 1) * EVENT_SEARCH_BATCH_SIZE, props.userToken)
+    }
     if (searchTerm == "") {
       props.fetchMoreEventCards((searchBatchNum + 1) * EVENT_SEARCH_BATCH_SIZE, props.userToken);
     } else {
-      props.fetchMoreSearchEventCards(searchTerm, (searchBatchNum + 1) * EVENT_SEARCH_BATCH_SIZE, props.userToken);
+      props.fetchMoreSearchEventCards(searchTerm, props.filters, (searchBatchNum + 1) * EVENT_SEARCH_BATCH_SIZE, props.userToken);
     }
     setSearchBatchNum(searchBatchNum + 1);
   }
@@ -106,7 +123,7 @@ const Discover: React.FC<DiscoverProps> = (props) => {
         </IonToolbar>
       </IonHeader>  
 
-      <IonRefresher ref={refresherRef} slot="fixed" onIonRefresh={() => search(searchTerm)}>
+      <IonRefresher ref={refresherRef} slot="fixed" onIonRefresh={() => search(searchTerm, isTagSearch)}>
         <IonRefresherContent></IonRefresherContent>
       </IonRefresher>
 
@@ -123,6 +140,16 @@ const Discover: React.FC<DiscoverProps> = (props) => {
               </IonButton>
             </IonCol>
           </IonRow>
+          {isTagSearch &&
+            <IonRow>
+              <IonCol size="6">
+                <h3>{`Events tagged with '${props.tagName}'`}</h3>
+              </IonCol>
+              <IonCol size="6">
+                <IonButton onClick={() => {setIsTagSearch(false); search("")}} fill="clear" className="filterBtn">Clear tag search</IonButton>
+              </IonCol>
+            </IonRow>
+          }
         </IonGrid>
         
         {(searchTerm !== "" && props.societies.length !== 0) &&
@@ -149,7 +176,7 @@ const Discover: React.FC<DiscoverProps> = (props) => {
         }
         <Row>
             {props.events.length === 0 && 
-              ((searchTerm === "") ?
+              ((searchTerm === "" && !isTagSearch) ?
                 [1,2,3,4,5,6].map(x =>
                   <Col key={"skeleton" + x.toString()} lg={4} md={6}>
                       <SkeletonTextEventCard />
@@ -157,7 +184,7 @@ const Discover: React.FC<DiscoverProps> = (props) => {
                 ) :
                 <Col>
                   <EmptySectionText 
-                    mainText={`No events found for '${searchTerm.trim()}'`}
+                    mainText={`No events found for '${isTagSearch ? props.tagName : searchTerm.trim()}'`}
                     subText="Try searching for something else, or suggest the topic to a society!" />
                 </Col>
               )
@@ -187,8 +214,10 @@ const Discover: React.FC<DiscoverProps> = (props) => {
             {props.events.length > 0 && !props.moreResults &&
               <Col xs={12} className="resultsEnd">
                 <EmptySectionText 
-                  mainText={searchTerm === "" ? "No more events found" : `No more results for "${searchTerm}"`}
-                  subText={searchTerm === "" ? "Try searching for more events later" : "Try searching for something else!"}
+                  mainText={searchTerm === "" && !isTagSearch ?
+                    "No more events found" :
+                    `No more results for "${isTagSearch ? props.tagName : searchTerm}"`}
+                  subText={searchTerm === "" && !isTagSearch ? "Try searching for more events later" : "Try searching for something else!"}
                 />
               </Col>
             }

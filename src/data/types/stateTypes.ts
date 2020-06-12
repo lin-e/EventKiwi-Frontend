@@ -9,7 +9,9 @@ export interface SocietyCardState {
 
 export interface EventCardState {
    events: EventCardDetails[],
-   moreResults: boolean
+   moreResults: boolean,
+   isTagSearch: boolean,
+   tagName: string
 }
 
 export interface ViewEventState {
