@@ -6,8 +6,9 @@ import { getDateRange } from '../utils/DateTimeTools';
 import { Society } from '../constants/types';
 import { loadBlankEvent } from '../data/actions/viewEvent/viewEventActions';
 import { connect, ConnectedProps } from 'react-redux';
+import { useHistory } from 'react-router';
 
-const connector = connect(null, {loadBlankEvent})
+const connector = connect(null, { loadBlankEvent })
 
 type PropsFromRedux = ConnectedProps<typeof connector>
 type ExploreEventCardProps = PropsFromRedux & {
@@ -22,6 +23,9 @@ type ExploreEventCardProps = PropsFromRedux & {
 };
 
 const ExploreEventCard: React.FC<ExploreEventCardProps> = ({ name, organiser, image, location, datetimeStart, datetimeEnd, tags, id, loadBlankEvent }) => {
+
+  const history = useHistory();
+
   return (
     <IonCard onClick={() => loadBlankEvent("discover")} routerLink={`/discover/event/${id}`}>
 
@@ -59,7 +63,7 @@ const ExploreEventCard: React.FC<ExploreEventCardProps> = ({ name, organiser, im
           <IonIcon icon={pricetags} />
           </IonCol>
           {tags.slice(0, 3).map((tag, index) => (
-              <IonChip key={"tag chip " + index.toString()}>{tag}</IonChip>
+              <IonChip onClick={() => history.push(`/discover/tag/${tag}`)} key={"tag chip " + index.toString()}>{tag}</IonChip>
           ))}
           </IonRow>
 

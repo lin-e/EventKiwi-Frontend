@@ -28,6 +28,8 @@ export const FETCH_EVENTS_CARDS = "FETCH_EVENTS_CARDS";
 export const FETCH_MORE_EVENT_CARDS = "FETCH_MORE_EVENT_CARDS";
 export const FETCH_SEARCH_EVENT_CARDS = "FETCH_SEARCH_EVENT_CARDS";
 export const FETCH_MORE_SEARCH_EVENT_CARDS = "FETCH_MORE_SEARCH_EVENT_CARDS";
+export const FETCH_TAG_EVENT_CARDS = "FETCH_TAG_EVENT_CARDS";
+export const FETCH_MORE_TAG_EVENT_CARDS = "FETCH_MORE_TAG_EVENT_CARDS";
 
 export interface FetchEventCardsAction {
    type: typeof FETCH_EVENTS_CARDS,
@@ -49,7 +51,17 @@ export interface FetchMoreSearchEventCardsAction {
    payload: EventCardDetails[]
 }
 
-export type FetchEventType = FetchEventCardsAction | FetchMoreEventCardsAction | FetchSearchEventCardsAction | FetchMoreSearchEventCardsAction;
+export interface FetchTagEventCardsAction {
+   type: typeof FETCH_TAG_EVENT_CARDS,
+   payload: EventCardDetails[]
+}
+
+export interface FetchMoreTagEventCardsAction {
+   type: typeof FETCH_MORE_TAG_EVENT_CARDS,
+   payload: EventCardDetails[]
+}
+
+export type FetchEventType = FetchEventCardsAction | FetchMoreEventCardsAction | FetchSearchEventCardsAction | FetchMoreSearchEventCardsAction | FetchTagEventCardsAction | FetchMoreTagEventCardsAction;
 
 
 export const UPDATE_SEARCH_FILTERS = "UPDATE_SEARCH_FILTERS";
