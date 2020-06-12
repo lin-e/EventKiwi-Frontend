@@ -1,5 +1,5 @@
 import React, { useState, MouseEvent, useEffect, useRef } from 'react';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonLabel, IonTextarea, IonInput, IonCard, IonDatetime, IonButtons, IonBackButton, IonList, IonItem, IonSelect, IonSelectOption, IonIcon, IonItemDivider, IonButton, IonChip, IonModal, IonToast, IonAlert, IonCol } from '@ionic/react';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonLabel, IonTextarea, IonInput, IonCard, IonDatetime, IonButtons, IonBackButton, IonList, IonItem, IonSelect, IonSelectOption, IonIcon, IonItemDivider, IonButton, IonChip, IonModal, IonToast, IonAlert, IonCol, IonImg } from '@ionic/react';
 import { Container, Row, Col } from 'react-grid-system';
 import { ConnectedProps, connect } from 'react-redux';
 import { calendar, closeCircle, imageOutline, cloudUpload } from 'ionicons/icons';
@@ -242,7 +242,7 @@ const EditEvent: React.FC<EditEventProps> = ({ match, event, userToken, createNe
           <Row className="coreDetailsRow">
             <Col md={6} sm={12} className="imageInput">
               <IonCard className="uploadImageCard">
-                <img className="uploadImage" src={eventImg} alt="event banner image" />
+                <IonImg className="uploadImage" src={eventImg} alt="event banner image" />
               </IonCard>
               <Container>
                 <Row>
