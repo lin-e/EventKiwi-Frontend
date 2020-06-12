@@ -11,3 +11,13 @@
 .resultsEnd {
     min-height: 80px !important;
 }
+
+.filterBtn {
+    margin-top: 8px;
+    height: 42px;
+    float: right;
+}
+
+.dismissBtn {
+    margin: 8px;
+}

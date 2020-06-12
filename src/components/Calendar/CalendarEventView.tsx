@@ -33,9 +33,9 @@ const CalendarEventView: React.FC<CalendarEventViewProps> = ({hide, groupedEvent
   return (
     <div hidden={hide} className="calContent">
       {(!loadingUser && groupedEvents.length === 0) &&
-        socEvents ?
+        (socEvents ?
           <EmptySectionText mainText="No Events Created" subText="Press the plus in the button's menu to create a new event for your society!" /> :
-          <EmptySectionText mainText="No Events Found" subText="Find some events and societies in the Discover tab!" />
+          <EmptySectionText mainText="No Events Found" subText="Find some events and societies in the Discover tab!" />)
       }
       <Container className="calendarContainer">
         <IonList>
