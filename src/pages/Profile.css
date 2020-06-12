@@ -51,3 +51,20 @@
 .socResource {
     border-radius: 4px;
 }
+
+.resourceStats {
+    text-align: center;
+    position: relative !important;
+}
+
+.resourceStats strong {
+    font-size: 20px;
+    line-height: 26px;
+}
+
+.resourceStats p {
+    font-size: 16px;
+    line-height: 22px;
+    color: #8c8c8c;
+    margin: 0;
+}

@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonGrid, IonRow, IonCol, IonButton, IonModal, IonToast, IonRefresher, IonRefresherContent, IonItem, IonCard } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonGrid, IonRow, IonCol, IonButton, IonModal, IonToast, IonRefresher, IonRefresherContent, IonItem, IonCard, IonText, IonCardTitle } from '@ionic/react';
 import './Profile.css';
 import ItemSlider from '../components/ItemSlider';
 import ProfileSocietyIcon from '../components/Profile/ProfileSocietyIcon';
-import { Container } from 'react-grid-system';
+import { Container, Row, Col } from 'react-grid-system';
 import InterestChip from '../components/Profile/InterestChip';
 import { fetchProfileDetails, resetInvalidProfileResponse } from '../data/actions/actions';
 import { loadSocResources } from '../data/actions/resourceManagement/resourceManagementActions';
@@ -13,8 +13,7 @@ import EmptySectionText from '../components/EmptySectionText';
 import { Redirect } from 'react-router';
 import { Plugins } from '@capacitor/core';
 import AddInterestModal from '../components/Profile/AddInterestModal';
-import EventResource from '../components/ViewEventComponents/EventResource';
-
+import { resp_resource } from '../constants/RequestInterfaces';
 const { Browser } = Plugins;
 
 
@@ -76,6 +75,14 @@ class Profile extends Component<ProfileProps, ProfileState> {
 
   async openUnionWebsite() {
     await Browser.open({ url: "https://www.imperialcollegeunion.org/" });
+  }
+
+  numDownloads(resources: resp_resource[]) {
+    var total = 0;
+    for (let i = 0; i < resources.length; i++) {
+      total += resources[i].download_count
+    }
+    return total;
   }
 
   render() {
@@ -154,17 +161,35 @@ class Profile extends Component<ProfileProps, ProfileState> {
                 </IonRow>
                 <IonRow>
                   <div className="sectionContent">
-                    {this.props.socResources.length > 0 ?
+                    {this.props.socResources.length > 0 ? <>
                       <IonGrid>
                         <IonRow>
-                          {this.props.socResources.slice(0, 4).map(r =>
-                            <IonCol size="auto">
-                              <IonItem lines="none" className="socResource">
-                                <EventResource name={r.display_name} />
-                              </IonItem>
-                            </IonCol>)}
+                          <IonCol size="12" className="resourceStats">
+                            <IonText>
+                              <strong>
+                                You have {this.props.socResources.length} resource{this.props.socResources.length !== 1 ? "s" : ""}
+                              </strong>
+                              <br />
+                              <strong>
+                                With {this.numDownloads(this.props.socResources)} download{this.numDownloads(this.props.socResources) !== 1 ? "s" : ""} in total
+                              </strong>
+
+                              <p>Add more files by pressing manage above</p>
+                            </IonText>
+                          </IonCol>
                         </IonRow>
                       </IonGrid>
+                    </>
+                      // <IonGrid>
+                      //   <IonRow>
+                      //     {this.props.socResources.slice(0, 4).map(r =>
+                      //       <IonCol size="6">
+                      //         <IonItem lines="none" detail detailIcon="none" className="socResource">
+                      //           <EventResource name={r.display_name} />
+                      //         </IonItem>
+                      //       </IonCol>)}
+                      //   </IonRow>
+                      // </IonGrid>
                       : <EmptySectionText mainText="No resources" subText="Add some resources to use for your events" />}
 
                   </div>
