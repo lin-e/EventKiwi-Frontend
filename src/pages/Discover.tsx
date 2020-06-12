@@ -12,13 +12,14 @@ import ExploreEventCard from '../components/ExploreEventCard';
 import EmptySectionText from '../components/EmptySectionText';
 import ExploreSocietyCard from '../components/ExploreSocietyCard';
 import { SocietyCard } from '../constants/types';
-import { MAX_SOCS_DISPLAY } from '../constants/constants';
+import { MAX_SOCS_DISPLAY, EVENT_SEARCH_BATCH_SIZE } from '../constants/constants';
 import SearchFilterModal from '../components/SearchFilterModal';
 
 const mapStateToProps = (state: RootState) => {
   return {
     societies: state.societyCards.societies,
     events: state.eventCards.events,
+    filters: state.searchFilters,
     moreResults: state.eventCards.moreResults,
     isLoggedIn: state.userDetails.isLoggedIn,
     isLoading: state.userDetails.loading,
@@ -39,13 +40,19 @@ const Discover: React.FC<DiscoverProps> = (props) => {
   const searchBar = useRef<HTMLIonSearchbarElement>(null);
 
   const [searchTerm, setSearchTerm] = useState("");
-  const [searchOffset, setSearchOffset] = useState(0);
+  const [searchBatchNum, setSearchBatchNum] = useState(0);
   const [socExpanded, setSocExpanded] = useState(false);
   const [showFilterModal, setShowFilterModal] = useState(false);
 
   useEffect(() => {
     search("")
   }, [props.userToken]);
+
+  useEffect(() => {
+    if (searchTerm !== "") {
+      search(searchTerm);
+    }
+  }, [props.filters])
 
   const searchBarUpdate = (e: CustomEvent) => {
     const newTerm = (e.detail.value == undefined) ? "" : e.detail.value!.trim()
@@ -58,19 +65,19 @@ const Discover: React.FC<DiscoverProps> = (props) => {
     if (searchTerm == "") {
       props.fetchEventCards(refresherRef.current!, props.userToken);
     } else {
-      setSearchOffset(0);
+      setSearchBatchNum(0);
       props.fetchSearchSocietyCards(searchTerm, refresherRef.current!, props.userToken)
-      props.fetchSearchEventCards(searchTerm, refresherRef.current!, props.userToken);
+      props.fetchSearchEventCards(searchTerm, props.filters, refresherRef.current!, props.userToken);
     }
   }
 
   const loadMoreEvents = (searchTerm: string) => {
-    setSearchOffset(props.events.length);
     if (searchTerm == "") {
-      props.fetchMoreEventCards(props.events.length, props.userToken);
+      props.fetchMoreEventCards((searchBatchNum + 1) * EVENT_SEARCH_BATCH_SIZE, props.userToken);
     } else {
-      props.fetchMoreSearchEventCards(searchTerm, props.events.length, props.userToken);
+      props.fetchMoreSearchEventCards(searchTerm, (searchBatchNum + 1) * EVENT_SEARCH_BATCH_SIZE, props.userToken);
     }
+    setSearchBatchNum(searchBatchNum + 1);
   }
 
   const renderSocCard = (society: SocietyCard) => {
@@ -189,8 +196,7 @@ const Discover: React.FC<DiscoverProps> = (props) => {
       </Container>
       
       <IonModal isOpen={showFilterModal} onDidDismiss={() => setShowFilterModal(false)}>
-        <SearchFilterModal />
-        <IonButton onClick={() => setShowFilterModal(false)} className="dismissBtn">Done</IonButton>
+        <SearchFilterModal showModalFunc={setShowFilterModal}/>
       </IonModal>
     </IonContent>
   </IonPage>

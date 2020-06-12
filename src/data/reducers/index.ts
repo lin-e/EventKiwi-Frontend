@@ -9,10 +9,12 @@ import { societyCardsReducer } from "./societyCardsReducer";
 import { interestSearchReducer } from "./interestSearchReducer";
 import { resourceManagementReducer } from "./resourceManagementReducer";
 import { eventEditReducer } from "./eventEditReducer";
+import { searchFilterReducer } from "./searchFilterReducer";
 
 export const rootReducer = combineReducers({
    societyCards: societyCardsReducer,
    eventCards: eventCardsReducer,
+   searchFilters: searchFilterReducer,
    userDetails: userReducer,
    calEvents: calEventReducer,
    viewEvent: viewEventReducer,

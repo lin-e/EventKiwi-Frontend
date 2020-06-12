@@ -49,3 +49,11 @@ export interface interestSearchState {
 export interface ResourceManagementState {
    resources: resp_resource[]
 }
+
+export interface SearchFiltersState {
+   includePast: boolean,
+   useStart: boolean,
+   start: Date,
+   useEnd: boolean,
+   end: Date
+ }

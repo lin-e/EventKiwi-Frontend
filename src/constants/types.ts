@@ -115,6 +115,13 @@ export const blankEventDetails = {
   goingStatus: -1
 }
 
+export interface SearchFilters {
+  includePast: boolean,
+  useStart: boolean,
+  start: Date,
+  useEnd: boolean,
+  end: Date
+}
 
 export interface Resource {
    name: string,

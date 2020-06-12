@@ -1,7 +1,6 @@
-import { EventCardDetails, ProfileDetails, EventDetails, Society, SocietyCard, Post, CalendarEvent, InterestDetails } from "../../constants/types";
+import { EventCardDetails, ProfileDetails, EventDetails, Society, SocietyCard, Post, CalendarEvent, InterestDetails, SearchFilters } from "../../constants/types";
 import { AuthResponse } from "../types/dataInterfaces";
 import { UserState } from "../types/stateTypes";
-import { ViewEventType } from "./viewEvent/viewEventTypes";
 
 export const FETCH_SEARCH_SOCIETY_CARDS = "FETCH_SEARCH_SOCIETY_CARDS";
 export const FOLLOW_SOCIETY = "FOLLOW_SOCIETY";
@@ -51,6 +50,16 @@ export interface FetchMoreSearchEventCardsAction {
 }
 
 export type FetchEventType = FetchEventCardsAction | FetchMoreEventCardsAction | FetchSearchEventCardsAction | FetchMoreSearchEventCardsAction;
+
+
+export const UPDATE_SEARCH_FILTERS = "UPDATE_SEARCH_FILTERS";
+
+export interface UpdateSearchFiltersAction {
+   type: typeof UPDATE_SEARCH_FILTERS,
+   payload: SearchFilters
+}
+
+export type SearchFiltersType = UpdateSearchFiltersAction;
 
 
 export const FETCH_CAL_EVENTS = "FETCH_CAL_EVENTS";
