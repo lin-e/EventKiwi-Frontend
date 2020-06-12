@@ -75,7 +75,8 @@ export interface resp_society_card {
   society_image_src: string,
   colour: string,
   short_name: string,
-  following: number
+  following: number,
+  total_followers: string
 }
 
 export interface resp_image_upload {
