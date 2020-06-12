@@ -111,7 +111,7 @@ const Discover: React.FC<DiscoverProps> = (props) => {
               <IonSearchbar ref={searchBar} onIonChange={searchBarUpdate} debounce={500} enterkeyhint="search" type="search"/>
             </IonCol>
             <IonCol sizeMd="1" sizeXs="2" className="btnCol">
-              <IonButton fill="clear" className="filterBtn">
+              <IonButton onClick={() => setShowFilterModal(true)} fill="clear" className="filterBtn">
                 <IonIcon icon={options}/>
               </IonButton>
             </IonCol>
