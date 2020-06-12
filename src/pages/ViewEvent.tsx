@@ -4,19 +4,18 @@ import EventDescription from '../components/ViewEventComponents/EventDescription
 import "./ViewEvent.css";
 import EventPostsList from '../components/ViewEventComponents/EventPostsList';
 import EventResourcesList from '../components/ViewEventComponents/EventResourcesList';
-import { shareOutline, add, pencil, logoVimeo, logoChrome, logoReact, list, cloudUpload } from 'ionicons/icons';
+import { shareOutline, add, pencil, list, cloudUpload } from 'ionicons/icons';
 import { connect, ConnectedProps, useSelector } from 'react-redux';
 import { loadEventDetails, loadingEvent, loadBlankEvent, goingToEvent, interestedInEvent, notGoingToEvent } from '../data/actions/viewEvent/viewEventActions';
 import { editEventLoad } from '../data/actions/editEventActions'
 import { loadEventPosts, addEventPost } from '../data/actions/eventPosts/eventPostsActions';
-import { loadSocResources, attachResourcesToEvent } from '../data/actions/resourceManagement/resourceManagementActions';
+import { loadSocResources, attachResourcesToEvent, uploadFilesAndAttachToevent } from '../data/actions/resourceManagement/resourceManagementActions';
 import { RootState } from '../data/reducers';
 import { isPlatform } from '@ionic/react';
 import { Plugins } from '@capacitor/core';
-import { blankEventDetails, EventDetails, EventIdAndPosts, convertResToResource } from '../constants/types';
+import { blankEventDetails, EventDetails, EventIdAndPosts } from '../constants/types';
 import { EVENT_OWNER } from '../constants/constants';
 import { useHistory } from 'react-router';
-import EventResource from '../components/ViewEventComponents/EventResource';
 const { Share } = Plugins;
 
 const eventWithId = (state: RootState) => (id: string) => state.viewEvent.events.filter(e => e.id === id);
@@ -47,7 +46,8 @@ const connector = connect(mapStateToProps,
     addEventPost,
     editEventLoad,
     loadSocResources,
-    attachResourcesToEvent
+    attachResourcesToEvent,
+    uploadFilesAndAttachToevent
   })
 
 type PropsFromRedux = ConnectedProps<typeof connector>
@@ -189,7 +189,7 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
   }
 
   const uploadFiles = (files: FileList) => {
-
+    props.uploadFilesAndAttachToevent(props.eventId, files, props.userToken);
   }
 
 

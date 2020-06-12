@@ -4,6 +4,7 @@ import { resp_resource } from "../../../constants/RequestInterfaces"
 import { socResourcesEndpoint, socResourceUploadEndpoint, socResourceDeleteEndpoint, socAttachResourcesToEventEndpoint, socRemoveResourcesFromEventEndpoint } from "../../../constants/endpoints"
 import { convertResToEventDetails } from "../../../constants/types"
 import { LOAD_EVENT_DETAILS } from "../viewEvent/viewEventTypes"
+import { key } from "ionicons/icons"
 
 export const loadSocResources = (userToken: string): AppThunk => async dispatch => {
    fetch(socResourcesEndpoint, {
@@ -72,4 +73,27 @@ export const removeResourceFromEvent = (eventId: string, resource: string, userT
          payload: details
       }))
       .then(() => dispatch(loadSocResources(userToken)))
+}
+
+export const uploadFilesAndAttachToevent = (eventId: string, files: FileList, userToken: string): AppThunk => async dispatch => {
+   const form = new FormData();
+
+   for (let i = 0; i < files.length; i++) {
+      form.append("upload", files.item(i)!)
+   }
+
+   fetch(socResourceUploadEndpoint, {
+      method: 'post',
+      body: form,
+      headers: { 'Authorization': `Bearer ${userToken}` }
+   })
+      .then(res => res.json())
+      .then(data => {
+         let keys: string[] = [];
+         (data as {key:string, name: string}[]).forEach(element => {
+            keys.push(element.key)
+         });
+         return keys;
+      })
+      .then(keys => dispatch(attachResourcesToEvent(eventId, keys, userToken)))
 }
