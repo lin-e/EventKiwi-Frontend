@@ -52,7 +52,7 @@ const Discover: React.FC<DiscoverProps> = (props) => {
   const history = useHistory();
 
   useEffect(() => {
-    search("", isTagSearch)
+    search("", props.tagSearch)
   }, [props.userToken]);
 
   useEffect(() => {
@@ -176,7 +176,7 @@ const Discover: React.FC<DiscoverProps> = (props) => {
         }
         <Row>
             {props.events.length === 0 && 
-              ((searchTerm === "") ?
+              ((searchTerm === "" && !isTagSearch) ?
                 [1,2,3,4,5,6].map(x =>
                   <Col key={"skeleton" + x.toString()} lg={4} md={6}>
                       <SkeletonTextEventCard />
@@ -184,7 +184,7 @@ const Discover: React.FC<DiscoverProps> = (props) => {
                 ) :
                 <Col>
                   <EmptySectionText 
-                    mainText={`No events found for '${searchTerm.trim()}'`}
+                    mainText={`No events found for '${isTagSearch ? props.tagName : searchTerm.trim()}'`}
                     subText="Try searching for something else, or suggest the topic to a society!" />
                 </Col>
               )
