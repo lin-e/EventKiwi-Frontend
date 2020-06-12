@@ -85,6 +85,8 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
   const [postModal, showPostModal] = useState<boolean>(false);
   const [postBody, setPostBody] = useState<string>("");
 
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const history = useHistory();
 
   const resetView = () => {
@@ -186,6 +188,10 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
     }
   }
 
+  const uploadFiles = (files: FileList) => {
+
+  }
+
 
   return (
     <IonPage>
@@ -228,7 +234,7 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
                   <IonIcon icon={list} />
                 </IonFabButton>
 
-                <IonFabButton color="primary">
+                <IonFabButton onClick={() => fileInputRef.current!.click()} color="primary">
                   <IonIcon icon={cloudUpload} />
                 </IonFabButton>
               </IonFabList>}
@@ -289,6 +295,15 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
 
           </IonSelect>
         </IonItem>
+
+        <input
+          ref={fileInputRef}
+          hidden
+          type="file"
+          multiple
+          onChange={e => uploadFiles((e.nativeEvent.target as HTMLInputElement).files!)}>
+        </input>
+
 
 
         {/* Text area used for copying share url to clipboard */}
