@@ -1,6 +1,6 @@
 import React from 'react';
 import './ExploreEventCard.css';
-import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonIcon, IonChip, IonGrid, IonRow, IonCol } from '@ionic/react';
+import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonIcon, IonChip, IonGrid, IonRow, IonCol, IonImg } from '@ionic/react';
 import { time, location as locationIcon, pricetags } from "ionicons/icons";
 import { getDateRange } from '../utils/DateTimeTools';
 import { Society, blankFilters } from '../constants/types';
@@ -37,7 +37,7 @@ const ExploreEventCard: React.FC<ExploreEventCardProps> = ({ name, organiser, im
   return (
     <IonCard onClick={() => loadBlankEvent("discover")} routerLink={`/discover/event/${id}`}>
 
-      <img src={image} className="banner" alt={name}/>
+      <IonImg src={image} className="banner" alt={name}/>
 
       <IonCardHeader>
         <IonCardSubtitle>By {organiser.name}</IonCardSubtitle>
