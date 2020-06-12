@@ -189,8 +189,7 @@ const Discover: React.FC<DiscoverProps> = (props) => {
       </Container>
       
       <IonModal isOpen={showFilterModal} onDidDismiss={() => setShowFilterModal(false)}>
-        <SearchFilterModal />
-        <IonButton onClick={() => setShowFilterModal(false)} className="dismissBtn">Done</IonButton>
+        <SearchFilterModal showModalFunc={setShowFilterModal}/>
       </IonModal>
     </IonContent>
   </IonPage>
