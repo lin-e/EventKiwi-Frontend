@@ -17,3 +17,7 @@
     height: 42px;
     float: right;
 }
+
+.dismissBtn {
+    margin: 8px;
+}

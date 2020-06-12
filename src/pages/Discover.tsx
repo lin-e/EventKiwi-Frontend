@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonSearchbar, IonRefresher, IonRefresherContent, IonList, IonCol, IonRow, IonGrid, IonButton, IonIcon, IonButtons } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonSearchbar, IonRefresher, IonRefresherContent, IonList, IonCol, IonRow, IonGrid, IonButton, IonIcon, IonButtons, IonItem, IonModal } from '@ionic/react';
 import { add, options } from 'ionicons/icons'
 import './Discover.css';
 import { connect, ConnectedProps } from 'react-redux';
@@ -13,6 +13,7 @@ import EmptySectionText from '../components/EmptySectionText';
 import ExploreSocietyCard from '../components/ExploreSocietyCard';
 import { SocietyCard } from '../constants/types';
 import { MAX_SOCS_DISPLAY } from '../constants/constants';
+import SearchFilterModal from '../components/SearchFilterModal';
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -40,6 +41,7 @@ const Discover: React.FC<DiscoverProps> = (props) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchOffset, setSearchOffset] = useState(0);
   const [socExpanded, setSocExpanded] = useState(false);
+  const [showFilterModal, setShowFilterModal] = useState(false);
 
   useEffect(() => {
     search("")
@@ -186,6 +188,10 @@ const Discover: React.FC<DiscoverProps> = (props) => {
         </Row>
       </Container>
       
+      <IonModal isOpen={showFilterModal} onDidDismiss={() => setShowFilterModal(false)}>
+        <SearchFilterModal />
+        <IonButton onClick={() => setShowFilterModal(false)} className="dismissBtn">Done</IonButton>
+      </IonModal>
     </IonContent>
   </IonPage>
   );
