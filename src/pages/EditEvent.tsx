@@ -191,9 +191,9 @@ const EditEvent: React.FC<EditEventProps> = ({ match, event, userToken, createNe
       }
 
       if (eventId === "") {
-        createNewEvent(updatedDetails, userToken, eventCreated);
+        createNewEvent(updatedDetails, selectedFiles, userToken, eventCreated);
       } else {
-        updateEvent(updatedDetails, eventId, userToken, setSavedToast)
+        updateEvent(updatedDetails, selectedFiles, eventId, userToken, setSavedToast)
       }
     }
   }

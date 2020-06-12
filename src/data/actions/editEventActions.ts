@@ -3,6 +3,7 @@ import { createNewEventURL, updateEventURL, eventDetailsURL, deleteEventURL, upl
 import { CREATE_NEW_EVENT, LOAD_EDIT_EVENT, UPDATE_EVENT, DELETE_EVENT, UPLOAD_EVENT_IMAGE } from "./types";
 import { convertResToEventDetails, EventDetails, blankEventDetails } from "../../constants/types";
 import { resp_event_details, resp_image_upload } from "../../constants/RequestInterfaces";
+import { uploadFilesAndAttachToevent } from "./resourceManagement/resourceManagementActions";
 
 export interface NewEventDetails {
   name: string,
@@ -29,72 +30,77 @@ export const editEventLoad = (id: string, token: string): AppThunk => async disp
   }
 
   fetch(eventDetailsURL(id), options)
-  .then(res => res.json())
-  .then(data => convertResToEventDetails(data))
-  .then(details => {
-    return (dispatch({
-      type: LOAD_EDIT_EVENT,
-      payload: details
-    }))
-  })
+    .then(res => res.json())
+    .then(data => convertResToEventDetails(data))
+    .then(details => {
+      return (dispatch({
+        type: LOAD_EDIT_EVENT,
+        payload: details
+      }))
+    })
 }
 
-export const createNewEvent = (event: NewEventDetails, token: string, setCompleted: (completed: boolean) => void): AppThunk => async dispatch => {
+export const createNewEvent = (event: NewEventDetails, files: FileList, token: string, setCompleted: (completed: boolean) => void): AppThunk => async dispatch => {
   const options = {
     method: "POST",
     headers: {
-       "Authorization": `Bearer ${token}`,
-       'Content-Type': 'application/json'
+      "Authorization": `Bearer ${token}`,
+      'Content-Type': 'application/json'
     },
     body: JSON.stringify(event)
   }
+
+  var eventDetails: EventDetails = blankEventDetails
+
   fetch(createNewEventURL, options)
-  .then(response => response.json())
-  .then(details => {
-    setCompleted(details.status === 1)
-    return (dispatch({
+    .then(response => response.json())
+    .then(details => {
+      setCompleted(details.status === 1)
+      eventDetails = convertResToEventDetails(details.body as resp_event_details);
+    })
+    .then(() => dispatch({
       type: CREATE_NEW_EVENT,
-      payload: convertResToEventDetails(details.body as resp_event_details)
+      payload: eventDetails
     }))
-  })
+    .then(() => dispatch(uploadFilesAndAttachToevent(eventDetails.id, files, token)))
 }
 
-export const updateEvent = (event: NewEventDetails, id: string, token: string, setCompleted: (completed: boolean) => void): AppThunk => 
-    async dispatch => {
-  const options = {
-    method: "POST",
-    headers: {
+export const updateEvent = (event: NewEventDetails, files: FileList, id: string, token: string, setCompleted: (completed: boolean) => void): AppThunk =>
+  async dispatch => {
+    const options = {
+      method: "POST",
+      headers: {
         "Authorization": `Bearer ${token}`,
         'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(event)
+      },
+      body: JSON.stringify(event)
+    }
+    fetch(updateEventURL(id), options)
+      .then(response => response.json())
+      .then(details => {
+        setCompleted(details.status === 1)
+        return (dispatch({
+          type: UPDATE_EVENT,
+          payload: convertResToEventDetails(details.body as resp_event_details)
+        }))
+      })
   }
-  fetch(updateEventURL(id), options)
-  .then(response => response.json())
-  .then(details => {
-    setCompleted(details.status === 1)
-    return (dispatch({
-      type: UPDATE_EVENT,
-      payload: convertResToEventDetails(details.body as resp_event_details)
-    }))
-  })
-}
 
 export const deleteEvent = (id: string, token: string, setCompleted: (complete: boolean) => void): AppThunk => async dispatch => {
   const options = {
     method: "GET",
     headers: {
-        "Authorization": `Bearer ${token}`,
+      "Authorization": `Bearer ${token}`,
     }
   }
   fetch(deleteEventURL(id), options)
-  .then(status => {
-    setCompleted(true);
-    return (dispatch({
-      type: DELETE_EVENT,
-      status: status
-    }))
-  })
+    .then(status => {
+      setCompleted(true);
+      return (dispatch({
+        type: DELETE_EVENT,
+        status: status
+      }))
+    })
 }
 
 export const uploadImage = (image: File, token: string, setImage: (src: string) => void): AppThunk => async dispatch => {
@@ -108,15 +114,15 @@ export const uploadImage = (image: File, token: string, setImage: (src: string) 
     }
   }
   fetch(uploadImageURL, options)
-  .then(response => response.json())
-  .then(data => data as resp_image_upload)
-  .then(details => {
-    if (details.status == 1) {
-      setImage(endpointImgSrc(details.body));
-      return (dispatch({
-        type: UPLOAD_EVENT_IMAGE,
-        payload: endpointImgSrc(details.body)
-      }))
-    }
-  })
+    .then(response => response.json())
+    .then(data => data as resp_image_upload)
+    .then(details => {
+      if (details.status == 1) {
+        setImage(endpointImgSrc(details.body));
+        return (dispatch({
+          type: UPLOAD_EVENT_IMAGE,
+          payload: endpointImgSrc(details.body)
+        }))
+      }
+    })
 }
