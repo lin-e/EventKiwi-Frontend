@@ -26,10 +26,17 @@ export type FetchSocietyType = FetchSearchSocietyCardsAction | followSocietyActi
 
 
 export const FETCH_EVENTS_CARDS = "FETCH_EVENTS_CARDS";
+export const FETCH_MORE_EVENT_CARDS = "FETCH_MORE_EVENT_CARDS";
 export const FETCH_SEARCH_EVENT_CARDS = "FETCH_SEARCH_EVENT_CARDS";
+export const FETCH_MORE_SEARCH_EVENT_CARDS = "FETCH_MORE_SEARCH_EVENT_CARDS";
 
 export interface FetchEventCardsAction {
    type: typeof FETCH_EVENTS_CARDS,
+   payload: EventCardDetails[]
+}
+
+export interface FetchMoreEventCardsAction {
+   type: typeof FETCH_MORE_EVENT_CARDS,
    payload: EventCardDetails[]
 }
 
@@ -38,7 +45,12 @@ export interface FetchSearchEventCardsAction {
    payload: EventCardDetails[]
 }
 
-export type FetchEventType = FetchEventCardsAction | FetchSearchEventCardsAction;
+export interface FetchMoreSearchEventCardsAction {
+   type: typeof FETCH_MORE_SEARCH_EVENT_CARDS,
+   payload: EventCardDetails[]
+}
+
+export type FetchEventType = FetchEventCardsAction | FetchMoreEventCardsAction | FetchSearchEventCardsAction | FetchMoreSearchEventCardsAction;
 
 
 export const FETCH_CAL_EVENTS = "FETCH_CAL_EVENTS";
@@ -98,6 +110,7 @@ export type FetchInterestType = FetchSearchInterestsAction;
 export const USER_LOGIN = "USER_LOGIN";
 export const LOAD_USER_DATA = "LOAD_USER_DATA";
 export const USER_LOGOUT = "USER_LOGOUT";
+export const INVALID_USER = "INVALID_USER";
 
 interface LoginAction {
    type: typeof USER_LOGIN,
@@ -108,12 +121,49 @@ interface LogoutAction {
    type: typeof USER_LOGOUT
 }
 
+interface InvalidUserAction {
+   type: typeof INVALID_USER
+}
+
 interface LoadUserDataAction {
    type: typeof LOAD_USER_DATA,
    payload: UserState
 }
 
-export type UserType = LoginAction | LoadUserDataAction | LogoutAction;
+export type UserType = LoginAction | LoadUserDataAction | LogoutAction | InvalidUserAction;
+
+export const LOAD_EDIT_EVENT = "LOAD_EDIT_EVENT";
+export const CREATE_NEW_EVENT = "CREATE_NEW_EVENT";
+export const UPDATE_EVENT = "UPDATE_EVENT";
+export const DELETE_EVENT = "DELETE_EVENT";
+export const UPLOAD_EVENT_IMAGE = "UPLOAD_EVENT_IMAGE";
+
+interface LoadEditEventAction {
+   type: typeof LOAD_EDIT_EVENT,
+   payload: EventDetails
+}
+
+interface CreateNewEventAction {
+   type: typeof CREATE_NEW_EVENT,
+   payload: EventDetails
+}
+
+interface UpdateEventAction {
+   type: typeof UPDATE_EVENT,
+   payload: EventDetails
+}
+
+interface DeleteEventAction {
+   type: typeof DELETE_EVENT,
+   status: string
+}
+
+interface UploadImageAction {
+   type: typeof UPLOAD_EVENT_IMAGE,
+   payload: string
+}
+
+export type EventEditType = LoadEditEventAction | CreateNewEventAction | UpdateEventAction | DeleteEventAction | UploadImageAction;
 
 export const GET_EVENT_POSTS = "GET_EVENT_POSTS";
 export const GET_DISCOVER_EVENT_POSTS = "GET_DISCOVER_EVENT_POSTS";

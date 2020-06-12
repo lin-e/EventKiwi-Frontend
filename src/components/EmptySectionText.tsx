@@ -3,12 +3,13 @@ import './EmptySectionText.css'
 
 interface EmptySectionTextProps {
   mainText: string,
-  subText: string
+  subText: string,
+  className?: string
 }
 
-const EmptySectionText: React.FC<EmptySectionTextProps> = ({mainText, subText}) => {
+const EmptySectionText: React.FC<EmptySectionTextProps> = ({mainText, subText, className=""}) => {
   return (
-    <div className="textContainer">
+    <div className={`textContainer ${className}`}>
       <strong>{mainText}</strong>
       <p>{subText}</p>
     </div>

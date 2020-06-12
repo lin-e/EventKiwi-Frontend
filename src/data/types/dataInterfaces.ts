@@ -5,19 +5,22 @@ import { Action } from "redux"
 export interface UserProfile {
    firstname: string,
    surname: string,
-   email: string
+   email: string,
+   society: string
 }
 
 export const blankProfile: UserProfile = {
    firstname: "",
    surname: "",
-   email: ""
+   email: "",
+   society: "0"
 }
 
 export interface AuthResponseBodyProfile {
    firstname: string,
    surname: string,
-   email: string
+   email: string,
+   society: string
 }
 
 

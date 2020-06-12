@@ -43,3 +43,25 @@
     object-fit: cover;
     margin-left: -20px;
 }
+
+.detailsText {
+    font-size: 12pt !important;
+    text-align: left;
+    margin-left: 0px;
+    padding: 0% !important;
+}
+
+.timeLocationGrid {
+    margin-left: 0px;
+    padding: 0px;
+}
+
+.timeLocationRow {
+    margin-left: 0px;
+    padding: 0px;
+}
+
+.timeLocationCol {
+    padding-left: 0px;
+    text-align: center;
+}

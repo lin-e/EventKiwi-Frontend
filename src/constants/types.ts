@@ -92,6 +92,11 @@ export interface CalendarEvent {
   status: number
 }
 
+export interface EventGroupByDate {
+  date: Date,
+  events: CalendarEvent[]
+}
+
 export const blankEventDetails = {
   id: "",
   name: "",
@@ -123,11 +128,34 @@ export interface Post {
   body: string
 }
 
+
 export interface PostOrganiser {
   id: string,
   image: string,
   name: string,
   short: string
+}
+
+export const blankPostOrganiser: PostOrganiser = {
+  id: "",
+  image: "",
+  name: "",
+  short: ""
+}
+
+export const blankPost: Post = {
+  id: "",
+  eventId: "",
+  organiser: blankPostOrganiser,
+  body: "",
+  time: new Date()
+}
+
+
+
+export interface EventIdAndPosts {
+  eventId: string,
+  posts: Post[]
 }
 
 export interface EventPosts {
@@ -164,7 +192,7 @@ export const convertResToResource = (res: resp_resource): Resource => ({
 export const convertResToEventDetails = (res: resp_event_details): EventDetails => ({
   id: res.event_id,
   name: res.event_name,
-  organiser: convertResToSoc(res.society),
+  organiser: convertResToSoc(res.society as resp_society),
   images: [res.event_image_src],
   location: res.location,
   datetimeStart: new Date(res.start_datetime),

@@ -23,7 +23,6 @@
     height: 32px;
     margin-top: 0px;
     margin-bottom: 0px;
-    color: var(--ion-color-primary);
 }
 
 @media only screen and (max-width: 900px) {
@@ -36,7 +35,7 @@
     overflow: hidden;
     margin-bottom: 48px;
     background-color: var(--ion-color-light);
-    border-radius: 25px;
+    border-radius: 5px;
     min-width: 100%;
     min-height: 48px;
 }
@@ -47,4 +46,25 @@
 
 .dismissBtn {
     margin: 8px;
+}
+
+.socResource {
+    border-radius: 4px;
+}
+
+.resourceStats {
+    text-align: center;
+    position: relative !important;
+}
+
+.resourceStats strong {
+    font-size: 20px;
+    line-height: 26px;
+}
+
+.resourceStats p {
+    font-size: 16px;
+    line-height: 22px;
+    color: #8c8c8c;
+    margin: 0;
 }

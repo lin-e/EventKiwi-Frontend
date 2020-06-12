@@ -1,21 +1,19 @@
-import React, { Component, createRef } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonGrid, IonRow, IonCol, IonButton, IonModal, IonToast, IonRefresher, IonRefresherContent } from '@ionic/react';
+import React, { Component } from 'react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonGrid, IonRow, IonCol, IonButton, IonModal, IonToast, IonRefresher, IonRefresherContent, IonItem, IonCard, IonText, IonCardTitle } from '@ionic/react';
 import './Profile.css';
 import ItemSlider from '../components/ItemSlider';
-import { SocietyBasic } from '../constants/types';
 import ProfileSocietyIcon from '../components/Profile/ProfileSocietyIcon';
-import { Container } from 'react-grid-system';
+import { Container, Row, Col } from 'react-grid-system';
 import InterestChip from '../components/Profile/InterestChip';
 import { fetchProfileDetails, resetInvalidProfileResponse } from '../data/actions/actions';
-import { logOut } from '../data/actions/userActions';
+import { loadSocResources } from '../data/actions/resourceManagement/resourceManagementActions';
 import { RootState } from '../data/reducers';
 import { connect, ConnectedProps } from 'react-redux';
 import EmptySectionText from '../components/EmptySectionText';
 import { Redirect } from 'react-router';
-import { UserProfile } from '../data/types/dataInterfaces';
 import { Plugins } from '@capacitor/core';
 import AddInterestModal from '../components/Profile/AddInterestModal';
-
+import { resp_resource } from '../constants/RequestInterfaces';
 const { Browser } = Plugins;
 
 
@@ -28,11 +26,13 @@ const mapStateToProps = (state: RootState) => {
     profile: state.userDetails.profile,
     isLoggedIn: state.userDetails.isLoggedIn,
     isLoading: state.userDetails.loading,
-    userToken: state.userDetails.userToken
+    userToken: state.userDetails.userToken,
+    isSoc: state.userDetails.isSoc,
+    socResources: state.resourceManagement.resources
   }
 }
 
-const connector = connect(mapStateToProps, { fetchProfileDetails, resetInvalidProfileResponse, logOut })
+const connector = connect(mapStateToProps, { fetchProfileDetails, resetInvalidProfileResponse, loadSocResources })
 
 type PropsFromRedux = ConnectedProps<typeof connector>
 type ProfileProps = PropsFromRedux
@@ -60,18 +60,29 @@ class Profile extends Component<ProfileProps, ProfileState> {
   }
 
   componentDidUpdate(prevProps: ProfileProps) {
-    if(this.props.userToken !== prevProps.userToken) {
+    if (this.props.userToken !== prevProps.userToken) {
       this.refresh()
     }
   }
 
   refresh() {
     this.props.fetchProfileDetails(this.props.userToken)
+    if (this.props.isSoc) {
+      this.props.loadSocResources(this.props.userToken);
+    }
   }
 
 
   async openUnionWebsite() {
     await Browser.open({ url: "https://www.imperialcollegeunion.org/" });
+  }
+
+  numDownloads(resources: resp_resource[]) {
+    var total = 0;
+    for (let i = 0; i < resources.length; i++) {
+      total += resources[i].download_count
+    }
+    return total;
   }
 
   render() {
@@ -110,7 +121,7 @@ class Profile extends Component<ProfileProps, ProfileState> {
                         <ProfileSocietyIcon name={soc.shortName} logo={soc.imgSrc} key={soc.shortName} />
                       ))}
                     </ItemSlider> :
-                    <EmptySectionText mainText="No followed societies" subText="Try following or joining some societies to see what is on!"/>
+                    <EmptySectionText mainText="No followed societies" subText="Try following or joining some societies to see what is on!" />
 
                   }
                 </div>
@@ -121,7 +132,7 @@ class Profile extends Component<ProfileProps, ProfileState> {
                   <IonTitle className="profileTitle">My Interests</IonTitle>
                 </IonCol>
                 <IonCol size="4">
-                  <IonButton className="profileBtn" color="transparent" onClick={() => this.setState({ showInterestModal: true })}>Manage</IonButton>
+                  <IonButton className="profileBtn" fill="clear" onClick={() => this.setState({ showInterestModal: true })}>Edit</IonButton>
                 </IonCol>
               </IonRow>
               <IonRow>
@@ -129,21 +140,80 @@ class Profile extends Component<ProfileProps, ProfileState> {
                   {this.props.interests.length !== 0 ?
                     <div className="interests">
                       {this.props.interests.map((interest) => (
-                      <InterestChip interest={interest} key={interest}/>
-                    ))}
+                        <InterestChip interest={interest} key={interest} />
+                      ))}
                     </div> :
-                    <EmptySectionText mainText="No followed interests" subText="Try adding some interests to find more of what you like!"/>
+                    <EmptySectionText mainText="No followed interests" subText="Try adding some interests to find more of what you like!" />
                   }
                 </div>
               </IonRow>
+
+              {this.props.isSoc && <>
+                <IonRow>
+                  <IonCol className="sectionHeader" size="8">
+                    <IonTitle className="profileTitle">My Resources</IonTitle>
+                  </IonCol>
+                  <IonCol size="4">
+                    <IonButton routerLink="/profile/resources" className="profileBtn" fill="clear">
+                      Manage
+                    </IonButton>
+                  </IonCol>
+                </IonRow>
+                <IonRow>
+                  <div className="sectionContent">
+                    {this.props.socResources.length > 0 ? <>
+                      <IonGrid>
+                        <IonRow>
+                          <IonCol size="12" className="resourceStats">
+                            <IonText>
+                              <strong>
+                                You have {this.props.socResources.length} resource{this.props.socResources.length !== 1 ? "s" : ""}
+                              </strong>
+                              <br />
+                              <strong>
+                                With {this.numDownloads(this.props.socResources)} download{this.numDownloads(this.props.socResources) !== 1 ? "s" : ""} in total
+                              </strong>
+
+                              <p>Add more files by pressing manage above</p>
+                            </IonText>
+                          </IonCol>
+                        </IonRow>
+                      </IonGrid>
+                    </>
+                      // <IonGrid>
+                      //   <IonRow>
+                      //     {this.props.socResources.slice(0, 4).map(r =>
+                      //       <IonCol size="6">
+                      //         <IonItem lines="none" detail detailIcon="none" className="socResource">
+                      //           <EventResource name={r.display_name} />
+                      //         </IonItem>
+                      //       </IonCol>)}
+                      //   </IonRow>
+                      // </IonGrid>
+                      : <EmptySectionText mainText="No resources" subText="Add some resources to use for your events" />}
+
+                  </div>
+                </IonRow>
+              </>}
+
               <IonRow>
-                <IonCol>
-                  <IonButton expand="block" color="danger" onClick={() => this.props.logOut(this.props.userToken)}>Log out</IonButton>
-                </IonCol>
                 <IonCol>
                   <IonButton expand="block" onClick={this.openUnionWebsite}>My Union</IonButton>
                 </IonCol>
+              </IonRow>
 
+
+              <IonRow>
+                <IonCol>
+                  <IonButton expand="block" color="danger" routerLink="/signout">Log out</IonButton>
+                </IonCol>
+                <IonCol>
+                  <IonButton expand="block" color="danger" routerLink="/signout/all">Log out of all devices</IonButton>
+                </IonCol>
+              </IonRow>
+
+              <IonRow>
+                <IonButton routerLink="/profile/licences" className="profileBtn" fill="clear">Licences</IonButton>
               </IonRow>
             </IonGrid>
 
@@ -155,7 +225,7 @@ class Profile extends Component<ProfileProps, ProfileState> {
           </IonModal>
 
           <IonToast
-            isOpen={this.props.invalidResponse}
+            isOpen={this.props.invalidResponse && this.props.isLoggedIn}
             onDidDismiss={this.props.resetInvalidProfileResponse}
             message="Could not retrieve profile right now, please try again later."
             duration={2000}

@@ -1,7 +1,7 @@
 import React, { useState, MouseEvent } from 'react';
-import { IonLabel, IonSearchbar, IonButton, IonToast, IonTitle, IonContent, IonList } from '@ionic/react';
+import { IonSearchbar, IonContent, IonList } from '@ionic/react';
 import { RootState } from '../../data/reducers';
-import { fetchSearchInterests, addProfileInterest } from '../../data/actions/actions'
+import { fetchSearchInterests } from '../../data/actions/actions'
 import { ConnectedProps, connect } from 'react-redux';
 import './AddInterestModal.css'
 import InterestItem from './InterestItem';
@@ -9,20 +9,19 @@ import InterestItem from './InterestItem';
 const mapStateToProps = (state: RootState) => {
   return {
     searchResults: state.interestSearch.interests,
-    interests: state.profileDetails.profileDetails.interests,
     userToken: state.userDetails.userToken
   }
 }
 
 const connector = connect(
   mapStateToProps,
-  { fetchSearchInterests, addProfileInterest }
+  { fetchSearchInterests }
 )
 
 type PropsFromRedux = ConnectedProps<typeof connector>
 type AddInterestModalProps = PropsFromRedux
 
-const AddInterestModal: React.FC<AddInterestModalProps> = ({ searchResults, interests, userToken, fetchSearchInterests, addProfileInterest }) => {
+const AddInterestModal: React.FC<AddInterestModalProps> = ({ searchResults, userToken, fetchSearchInterests }) => {
   const [searchTerm, setsearchTerm] = useState("");
   
   const searchBarUpdate = (e: CustomEvent) => {

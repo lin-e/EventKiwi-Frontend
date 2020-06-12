@@ -1,33 +1,36 @@
-import { EventCardDetails, Post, ProfileDetails, EventDetails, SocietyCard, CalendarEvent, InterestDetails } from "../../constants/types";
+import { EventCardDetails, Post, ProfileDetails, EventDetails, SocietyCard, CalendarEvent, InterestDetails, EventIdAndPosts } from "../../constants/types";
 
 import { UserProfile } from "./dataInterfaces";
+import { resp_resource } from "../../constants/RequestInterfaces";
 
 export interface SocietyCardState {
    societies: SocietyCard[]
 }
 
 export interface EventCardState {
-   events: EventCardDetails[]
+   events: EventCardDetails[],
+   moreResults: boolean
 }
 
 export interface ViewEventState {
-   event: EventDetails,
-   eventsEvent: EventDetails,
-   discoverEvent: EventDetails,
+   events: EventDetails[],
    loading: boolean
 }
 
 export interface EventPostsState {
-   posts: Post[],
-   discoverPosts: Post[],
-   eventsPost: Post[]
+   posts: EventIdAndPosts[]
+}
+
+export interface EventEditState {
+   event: EventDetails
 }
 
 export interface UserState {
    loading: boolean,
    isLoggedIn: boolean,
    userToken: string,
-   profile: UserProfile
+   profile: UserProfile,
+   isSoc: boolean
 }
 
 export interface CalendarEventsState {
@@ -41,4 +44,8 @@ export interface ProfileDetailsState {
 
 export interface interestSearchState {
    interests: InterestDetails[]
+}
+
+export interface ResourceManagementState {
+   resources: resp_resource[]
 }

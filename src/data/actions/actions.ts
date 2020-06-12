@@ -1,7 +1,7 @@
 import { ThunkAction } from "redux-thunk"
 import { RootState } from "../reducers"
 import { Action } from "redux"
-import { FETCH_EVENTS_CARDS, FETCH_SEARCH_EVENT_CARDS, FETCH_CAL_EVENTS, FETCH_PROFILE_DETAILS, REMOVE_PROFILE_INTEREST, FETCH_PROFILE_DETAILS_FAILED, RESET_PROFILE_INVALID_RESPONSE, ADD_PROFILE_INTEREST, FETCH_SEARCH_SOCIETY_CARDS, FOLLOW_SOCIETY, UNFOLLOW_SOCIETY, FETCH_SEARCH_INTERESTS } from "./types"
+import { FETCH_EVENTS_CARDS, FETCH_SEARCH_EVENT_CARDS, FETCH_CAL_EVENTS, FETCH_PROFILE_DETAILS, REMOVE_PROFILE_INTEREST, FETCH_PROFILE_DETAILS_FAILED, RESET_PROFILE_INVALID_RESPONSE, ADD_PROFILE_INTEREST, FETCH_SEARCH_SOCIETY_CARDS, FOLLOW_SOCIETY, UNFOLLOW_SOCIETY, FETCH_SEARCH_INTERESTS, FETCH_MORE_SEARCH_EVENT_CARDS, FETCH_MORE_EVENT_CARDS } from "./types"
 import { discoverEventCardURL, discoverSeachEventCardURL, profileDetailsURL, profileInterestDeleteURL, profileInterestAddURL, discoverSearchSocietyCardURL, followSocietyURL, unfollowSocietyURL, calendarEventsURL, profileInterestSearchURL } from "../../constants/endpoints"
 import { resp_event_card_details, resp_profile_details, resp_society_card, resp_calendar_event, resp_search_interests } from "../../constants/RequestInterfaces"
 import { convertResToEventCard, convertResToProfileDetails, convertResToInterest, convertResToSocCard, convertResToCalEvent } from "../../constants/types"
@@ -64,9 +64,22 @@ export const unfollowSociety = (id: string, token: string): AppThunk => async di
    })
 }
 
-export const fetchEventCards = (refresher: HTMLIonRefresherElement)
+export const fetchEventCards = (refresher: HTMLIonRefresherElement, token: string)
    : AppThunk => async dispatch => {
-   fetch(discoverEventCardURL)
+   if (token === "") {
+      return(dispatch({
+         type: FETCH_EVENTS_CARDS,
+         payload: []
+      }))
+   }
+   const url = new URL(discoverEventCardURL);
+   const options = {
+      headers: {
+         "Authorization": `Bearer ${token}`
+      }
+   }
+   url.searchParams.append("n", "0");
+   fetch(url.toString(), options)
    .then(response => response.json())
    .then(cards => {
       if (refresher !== null) {
@@ -74,6 +87,24 @@ export const fetchEventCards = (refresher: HTMLIonRefresherElement)
       }
       return (dispatch({
          type: FETCH_EVENTS_CARDS,
+         payload: (cards as resp_event_card_details[]).map(convertResToEventCard)
+      }))
+   })
+}
+
+export const fetchMoreEventCards = (offset: number, token: string): AppThunk => async dispatch => {
+   let url = new URL(discoverEventCardURL);
+   const options = {
+      headers: {
+         "Authorization": `Bearer ${token}`
+      }
+   }
+   url.searchParams.append("n", offset.toString());
+   fetch(url.toString(), options)
+   .then(response => response.json())
+   .then(cards => {
+      return (dispatch({
+         type: FETCH_MORE_EVENT_CARDS,
          payload: (cards as resp_event_card_details[]).map(convertResToEventCard)
       }))
    })
@@ -87,6 +118,7 @@ export const fetchSearchEventCards = (searchTerm: string, refresher: HTMLIonRefr
       }
    }
    url.searchParams.append("q", searchTerm);
+   url.searchParams.append("n", "0");
    fetch(url.toString(), options)
    .then(response => response.json())
    .then(cards => {
@@ -100,8 +132,33 @@ export const fetchSearchEventCards = (searchTerm: string, refresher: HTMLIonRefr
    })
 }
 
+export const fetchMoreSearchEventCards = (searchTerm: string, offset: number, token: string): AppThunk => async dispatch => {
+   let url = new URL(discoverSeachEventCardURL);
+   const options = {
+      headers: {
+         "Authorization": `Bearer ${token}`
+      }
+   }
+   url.searchParams.append("q", searchTerm);
+   url.searchParams.append("n", offset.toString());
+   fetch(url.toString(), options)
+   .then(response => response.json())
+   .then(cards => {
+      return (dispatch({
+         type: FETCH_MORE_SEARCH_EVENT_CARDS,
+         payload: (cards as resp_event_card_details[]).map(convertResToEventCard)
+      }))
+   })
+}
+
 
 export const fetchCalEvents = (refresher: HTMLIonRefresherElement, token: string): AppThunk => async dispatch => {
+   if (token === "") {
+      return(dispatch({
+         type: FETCH_CAL_EVENTS,
+         payload: []
+      }))
+   }
    const options = {
       headers: {
          "Authorization": `Bearer ${token}`
