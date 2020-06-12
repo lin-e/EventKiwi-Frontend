@@ -16,6 +16,7 @@ import SocBasicInfo from '../components/Calendar/SocBasicInfo';
 
 const mapStateToProps = (state: RootState) => ({
   events: state.calEvents.events,
+  viewEvents: state.viewEvent.events,
   isLoggedIn: state.userDetails.isLoggedIn,
   isLoading: state.userDetails.loading,
   isSociety: state.userDetails.isSoc,
@@ -68,7 +69,9 @@ const Events: React.FC<EventsProps> = (props) => {
     resetView();
   }
 
-  useEffect(() => { refresh() }, [props.userToken])
+  useEffect(() => {
+    props.fetchCalEvents(refresherRef.current!, props.userToken);
+  }, [props.userToken, props.viewEvents])
 
   useIonViewDidEnter(() => {
     props.loadBlankEvent("events");

@@ -3,11 +3,20 @@ import './ExploreEventCard.css';
 import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonIcon, IonChip, IonGrid, IonRow, IonCol } from '@ionic/react';
 import { time, location as locationIcon, pricetags } from "ionicons/icons";
 import { getDateRange } from '../utils/DateTimeTools';
-import { Society } from '../constants/types';
+import { Society, blankFilters } from '../constants/types';
 import { loadBlankEvent } from '../data/actions/viewEvent/viewEventActions';
+import { fetchTagEventCards } from '../data/actions/actions'
 import { connect, ConnectedProps } from 'react-redux';
+import { useHistory } from 'react-router';
+import { RootState } from '../data/reducers';
 
-const connector = connect(null, {loadBlankEvent})
+const mapStateToProps = (state: RootState) => {
+  return {
+    userToken: state.userDetails.userToken
+  }
+}
+
+const connector = connect(mapStateToProps, { loadBlankEvent, fetchTagEventCards })
 
 type PropsFromRedux = ConnectedProps<typeof connector>
 type ExploreEventCardProps = PropsFromRedux & {
@@ -21,7 +30,10 @@ type ExploreEventCardProps = PropsFromRedux & {
   id: string;
 };
 
-const ExploreEventCard: React.FC<ExploreEventCardProps> = ({ name, organiser, image, location, datetimeStart, datetimeEnd, tags, id, loadBlankEvent }) => {
+const ExploreEventCard: React.FC<ExploreEventCardProps> = ({ name, organiser, image, location, datetimeStart, datetimeEnd, tags, id, userToken, loadBlankEvent, fetchTagEventCards }) => {
+
+  const history = useHistory();
+
   return (
     <IonCard onClick={() => loadBlankEvent("discover")} routerLink={`/discover/event/${id}`}>
 
@@ -59,7 +71,17 @@ const ExploreEventCard: React.FC<ExploreEventCardProps> = ({ name, organiser, im
           <IonIcon icon={pricetags} />
           </IonCol>
           {tags.slice(0, 3).map((tag, index) => (
-              <IonChip key={"tag chip " + index.toString()}>{tag}</IonChip>
+              <IonChip
+                onClick={(e) => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                  fetchTagEventCards(tag, blankFilters, null, userToken);
+                  history.push(`/discover`)
+                }}
+                key={"tag chip " + index.toString()}
+              >
+                {tag}
+              </IonChip>
           ))}
           </IonRow>
 
