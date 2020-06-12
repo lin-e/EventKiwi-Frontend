@@ -6,10 +6,11 @@ import './CalendarEventItem.css'
 import { star, checkmarkCircle } from 'ionicons/icons';
 
 interface CalendarEventItemProps {
-  event: CalendarEvent
+  event: CalendarEvent,
+  myEvent?: boolean
 }
 
-const CalendarEventItem: React.FC<CalendarEventItemProps> = ({ event }) => {
+const CalendarEventItem: React.FC<CalendarEventItemProps> = ({ event, myEvent }) => {
   const barCol = {"--socCol" : event.organiser.colour}
 
   return (
@@ -21,14 +22,16 @@ const CalendarEventItem: React.FC<CalendarEventItemProps> = ({ event }) => {
               {event.name}
             </div>
           </IonCol>
-          <IonCol size="1" className="goingStatusSymbol">
-            {event.status === 2 &&
-              <IonIcon icon={checkmarkCircle} color="success"/>
-            }
-            {event.status === 1 &&
-              <IonIcon icon={star} color="warning" />
-            }
-          </IonCol>
+          {!myEvent &&
+            <IonCol size="1" className="goingStatusSymbol">
+              {event.status === 2 &&
+                <IonIcon icon={checkmarkCircle} color="success"/>
+              }
+              {event.status === 1 &&
+                <IonIcon icon={star} color="warning" />
+              }
+            </IonCol>
+          }
         </IonRow>
         <IonRow>
           <IonCol size="6" className="detailCol">
@@ -48,5 +51,7 @@ const CalendarEventItem: React.FC<CalendarEventItemProps> = ({ event }) => {
     </IonItem>
   )
 }
+
+CalendarEventItem.defaultProps = {myEvent: false};
 
 export default CalendarEventItem
