@@ -1,13 +1,14 @@
 import React, { MouseEvent } from 'react';
 import { IonChip, IonLabel, IonIcon } from '@ionic/react';
 import { closeCircle } from 'ionicons/icons';
-import { removeProfileInterest } from '../../data/actions/actions';
+import { removeProfileInterest, fetchTagEventCards } from '../../data/actions/actions';
 import { connect, ConnectedProps } from 'react-redux';
 import { RootState } from '../../data/reducers';
+import { blankFilters } from '../../constants/types';
+import { useHistory } from 'react-router';
 
 interface OwnProps {
   interest: string,
-  clickFunc: (e: MouseEvent<HTMLIonChipElement>) => void,
 }
 
 const mapStateToProps = (state: RootState) => {
@@ -16,35 +17,29 @@ const mapStateToProps = (state: RootState) => {
   }
 }
 
-export const connector = connect(mapStateToProps, { removeProfileInterest });
+export const connector = connect(mapStateToProps, { removeProfileInterest, fetchTagEventCards });
 
 type PropsFromRedux = ConnectedProps<typeof connector>
 
 type InterestChipProps = OwnProps & PropsFromRedux
 
-class InterestChip extends React.Component<InterestChipProps> {
-  static defaultProps = {
-    clickFunc: () => {},
-  };
+const InterestChip: React.FC<InterestChipProps> = (props) => {
 
-  constructor(props: InterestChipProps) {
-    super(props);
-    this.removeInterest = this.removeInterest.bind(this);
-  }
-
-  removeInterest(e: MouseEvent) {
+  const removeInterest = (e: MouseEvent) => {
     e.preventDefault();
-    this.props.removeProfileInterest(this.props.interest, this.props.userToken)
+    props.removeProfileInterest(props.interest, props.userToken)
   }
+  
+  const history = useHistory();
 
-  render() {
-    return (
-      <IonChip onClick={this.props.clickFunc}>
-        <IonLabel>{this.props.interest}</IonLabel>
-        <IonIcon icon={closeCircle} onClick={this.removeInterest}/>
-      </IonChip>
-    );
-  }
+  return (
+    <IonChip
+      onClick={() => {props.fetchTagEventCards(props.interest, blankFilters, null, props.userToken); history.push('/discover')}}
+    >
+      <IonLabel>{props.interest}</IonLabel>
+      <IonIcon icon={closeCircle} onClick={removeInterest}/>
+    </IonChip>
+  );
 }
 
 
