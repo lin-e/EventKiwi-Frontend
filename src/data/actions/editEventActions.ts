@@ -49,11 +49,9 @@ export const createNewEvent = (event: NewEventDetails, token: string, setComplet
     body: JSON.stringify(event)
   }
   fetch(createNewEventURL, options)
-  .then(response => {
-    setCompleted(response.status === 1)
-    return(response.json())
-  })
+  .then(response => response.json())
   .then(details => {
+    setCompleted(details.status === 1)
     return (dispatch({
       type: CREATE_NEW_EVENT,
       payload: convertResToEventDetails(details.body as resp_event_details)

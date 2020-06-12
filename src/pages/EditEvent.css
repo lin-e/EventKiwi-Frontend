@@ -43,7 +43,7 @@ ion-list {
     overflow: hidden;
     margin-top: 0px;
     margin-bottom: 16px;
-    background-color: var(--ion-item-background);
+    background-color: var(--ion-color-light);
     border-radius: 5px;
     min-width: 100%;
     min-height: 48px;

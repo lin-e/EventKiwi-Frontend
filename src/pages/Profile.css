@@ -35,7 +35,7 @@
     overflow: hidden;
     margin-bottom: 48px;
     background-color: var(--ion-color-light);
-    border-radius: 25px;
+    border-radius: 5px;
     min-width: 100%;
     min-height: 48px;
 }
@@ -46,8 +46,4 @@
 
 .dismissBtn {
     margin: 8px;
-}
-
-.socResource {
-    border-radius: 4px;
 }

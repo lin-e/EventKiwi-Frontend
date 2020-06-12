@@ -71,8 +71,12 @@ const EditEvent: React.FC<EditEventProps> = ({ match, event, userToken, createNe
   }
 
   useEffect(() => {
-    updateState()
-  }, [event]);
+    setEventImg(event.images[0]);
+  }, [event.images]);
+
+  useEffect(() => {
+    updateState();
+  }, [event.id]);
 
   useEffect(() => {
     if (match.params.id === undefined) {
@@ -219,7 +223,8 @@ const EditEvent: React.FC<EditEventProps> = ({ match, event, userToken, createNe
           <IonList>
             <IonItem lines="none">
               <IonLabel position="stacked">Title:</IonLabel>
-              <IonTextarea 
+              <IonTextarea
+                placeholder="e.g. Society Games Night"
                 value={title}
                 spellCheck
                 wrap="soft"
@@ -245,6 +250,7 @@ const EditEvent: React.FC<EditEventProps> = ({ match, event, userToken, createNe
                 <IonItem lines="none">
                   <IonLabel position="stacked">Location:</IonLabel>
                   <IonInput
+                    placeholder="e.g. Huxley 301"
                     value={location}
                     maxlength={128}
                     onIonChange={updateLocation}
@@ -330,6 +336,7 @@ const EditEvent: React.FC<EditEventProps> = ({ match, event, userToken, createNe
                 <IonItem lines="none">
                   <IonLabel position="stacked">Description:</IonLabel>
                   <IonTextarea
+                    placeholder="A brief description"
                     value={description}
                     rows={8}
                     spellCheck
@@ -416,7 +423,7 @@ const EditEvent: React.FC<EditEventProps> = ({ match, event, userToken, createNe
         <IonToast
           isOpen={imgUploadedToast}
           onDidDismiss={() => setImgUploadedToast(false)}
-          message="Image uplaoded."
+          message="Image uploaded."
           duration={2000}
         />
         <IonToast

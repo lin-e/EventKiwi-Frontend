@@ -99,7 +99,6 @@ const Events: React.FC<EventsProps> = (props) => {
     try {
       contentRef.current!.scrollToTop();
     } catch { /* contentRef has not yet loaded */ }
-    setSegment('upcoming');
   }
 
   const saveY = (y: number) => {

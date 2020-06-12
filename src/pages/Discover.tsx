@@ -67,9 +67,9 @@ const Discover: React.FC<DiscoverProps> = (props) => {
   const loadMoreEvents = (searchTerm: string) => {
     setSearchOffset(props.events.length);
     if (searchTerm == "") {
-      props.fetchMoreEventCards(searchOffset, props.userToken);
+      props.fetchMoreEventCards(props.events.length, props.userToken);
     } else {
-      props.fetchMoreSearchEventCards(searchTerm, searchOffset, props.userToken);
+      props.fetchMoreSearchEventCards(searchTerm, props.events.length, props.userToken);
     }
   }
 
