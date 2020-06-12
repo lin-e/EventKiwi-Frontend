@@ -50,12 +50,12 @@ export const createNewEvent = (event: NewEventDetails, files: FileList, token: s
     body: JSON.stringify(event)
   }
 
-  var eventDetails: EventDetails = blankEventDetails
+  var eventDetails: EventDetails = blankEventDetails;
 
   fetch(createNewEventURL, options)
     .then(response => response.json())
     .then(details => {
-      setCompleted(details.status === 1)
+      setCompleted(details.status === 1);
       eventDetails = convertResToEventDetails(details.body as resp_event_details);
     })
     .then(() => dispatch({
@@ -75,15 +75,20 @@ export const updateEvent = (event: NewEventDetails, files: FileList, id: string,
       },
       body: JSON.stringify(event)
     }
+
+    var eventDetails: EventDetails = blankEventDetails;
+
     fetch(updateEventURL(id), options)
       .then(response => response.json())
       .then(details => {
-        setCompleted(details.status === 1)
-        return (dispatch({
-          type: UPDATE_EVENT,
-          payload: convertResToEventDetails(details.body as resp_event_details)
-        }))
+        setCompleted(details.status === 1);
+        eventDetails = convertResToEventDetails(details.body as resp_event_details);
       })
+      .then(() => dispatch({
+        type: UPDATE_EVENT,
+        payload: eventDetails
+      }))
+      .then(() => dispatch(uploadFilesAndAttachToevent(eventDetails.id, files, token)))
   }
 
 export const deleteEvent = (id: string, token: string, setCompleted: (complete: boolean) => void): AppThunk => async dispatch => {
