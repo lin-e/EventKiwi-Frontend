@@ -7,6 +7,8 @@ import { UNIX_EPOCH } from '../constants/constants';
 const SearchFilterModal = () => {
   const currDatetime = new Date(Date.now())
   const [pastEvents, setPastEvents] = useState(false);
+  const [useStart, setUseStart] = useState(false);
+  const [useEnd, setUseEnd] = useState(false);
   const [startDatetime, setStartDatetime] = useState(currDatetime);
   const [endDatetime, setEndDatetime] = useState(currDatetime);
 
@@ -22,13 +24,14 @@ const SearchFilterModal = () => {
         <h3>Search Filters</h3>
         <IonList>
           <IonItem>
-            <IonLabel>Include Past Events</IonLabel>
+            <IonLabel>Include Past Events:</IonLabel>
             <IonCheckbox slot="end" checked={pastEvents} onIonChange={e => setPastEvents(e.detail.checked)} />
           </IonItem>
-          <IonItemDivider>
-            <IonLabel>Date range start:</IonLabel>
-          </IonItemDivider>
           <IonItem>
+            <IonLabel>Use Start Date:</IonLabel>
+            <IonCheckbox slot="end" checked={useStart} onIonChange={e => setUseStart(e.detail.checked)}/>
+          </IonItem>
+          <IonItem disabled={!useStart}>
             <IonIcon icon={calendar} slot="start" />
             <IonDatetime
               value={startDatetime.toISOString()}
@@ -41,10 +44,11 @@ const SearchFilterModal = () => {
           </IonItem>
         </IonList>
 
-        <IonItemDivider>
-          <IonLabel>End:</IonLabel>
-        </IonItemDivider>
         <IonItem>
+          <IonLabel>Use Start Date:</IonLabel>
+          <IonCheckbox slot="end" checked={useEnd} onIonChange={e => setUseEnd(e.detail.checked)}/>
+        </IonItem>
+        <IonItem disabled={!useEnd}>
           <IonIcon icon={calendar} slot="start" />
           <IonDatetime 
             value={endDatetime.toISOString()}

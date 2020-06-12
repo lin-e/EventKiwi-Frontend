@@ -67,9 +67,9 @@ const Discover: React.FC<DiscoverProps> = (props) => {
   const loadMoreEvents = (searchTerm: string) => {
     setSearchOffset(props.events.length);
     if (searchTerm == "") {
-      props.fetchMoreEventCards(searchOffset, props.userToken);
+      props.fetchMoreEventCards(props.events.length, props.userToken);
     } else {
-      props.fetchMoreSearchEventCards(searchTerm, searchOffset, props.userToken);
+      props.fetchMoreSearchEventCards(searchTerm, props.events.length, props.userToken);
     }
   }
 
@@ -111,7 +111,7 @@ const Discover: React.FC<DiscoverProps> = (props) => {
               <IonSearchbar ref={searchBar} onIonChange={searchBarUpdate} debounce={500} enterkeyhint="search" type="search"/>
             </IonCol>
             <IonCol sizeMd="1" sizeXs="2" className="btnCol">
-              <IonButton fill="clear" className="filterBtn">
+              <IonButton onClick={() => setShowFilterModal(true)} fill="clear" className="filterBtn">
                 <IonIcon icon={options}/>
               </IonButton>
             </IonCol>

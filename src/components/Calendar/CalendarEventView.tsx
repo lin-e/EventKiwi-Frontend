@@ -32,27 +32,27 @@ const CalendarEventView: React.FC<CalendarEventViewProps> = ({hide, groupedEvent
   
   return (
     <div hidden={hide} className="calContent">
-      {(!loadingUser && groupedEvents.length === 0) &&
+      {(!loadingUser && groupedEvents.length === 0) ?
         (socEvents ?
           <EmptySectionText mainText="No Events Created" subText="Press the plus in the button's menu to create a new event for your society!" /> :
-          <EmptySectionText mainText="No Events Found" subText="Find some events and societies in the Discover tab!" />)
-      }
-      <Container className="calendarContainer">
-        <IonList>
-          {groupedEvents.map((eventGroup) => (
-            <IonItemGroup key={`date-${eventGroup.date.getDate()}-${eventGroup.date.getMonth() + 1}`}>
-            <IonItemDivider sticky color="imperial">
-              <IonLabel>
-                {(sameDay(eventGroup.date, currDate) ? "Today - " : "") + getLongDate(eventGroup.date)}
-              </IonLabel>
-            </IonItemDivider>
-            {eventGroup.events.map((eventOnDay) => (
-              <CalendarEventItem key={eventOnDay.id} event={eventOnDay} />
+          <EmptySectionText mainText="No Events Found" subText="Find some events and societies in the Discover tab!" />) :
+        (<Container className="calendarContainer">
+          <IonList>
+            {groupedEvents.map((eventGroup) => (
+              <IonItemGroup key={`date-${eventGroup.date.getDate()}-${eventGroup.date.getMonth() + 1}`}>
+                <IonItemDivider sticky color="imperial">
+                <IonLabel>
+                  {(sameDay(eventGroup.date, currDate) ? "Today - " : "") + getLongDate(eventGroup.date)}
+                </IonLabel>
+              </IonItemDivider>
+              {eventGroup.events.map((eventOnDay) => (
+                <CalendarEventItem key={eventOnDay.id} event={eventOnDay} />
+                ))}
+            </IonItemGroup>
             ))}
-          </IonItemGroup>
-          ))}
-        </IonList>
-      </Container>
+          </IonList>
+        </Container>)
+      }
     </div>
   )
 }
