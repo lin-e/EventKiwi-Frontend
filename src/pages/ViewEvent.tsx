@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { IonContent, IonPage, IonHeader, IonToolbar, IonButtons, IonBackButton, IonSegment, IonSegmentButton, IonLabel, IonIcon, IonFab, IonFabButton, IonToast, IonModal, IonButton, IonTitle, IonFooter, IonItem, IonInput, IonTextarea, IonList, IonSelect, IonSelectOption } from '@ionic/react'
+import { IonContent, IonPage, IonHeader, IonToolbar, IonButtons, IonBackButton, IonSegment, IonSegmentButton, IonLabel, IonIcon, IonFab, IonFabButton, IonToast, IonModal, IonButton, IonTitle, IonFooter, IonItem, IonInput, IonTextarea, IonList, IonSelect, IonSelectOption, IonFabList } from '@ionic/react'
 import EventDescription from '../components/ViewEventComponents/EventDescription';
 import "./ViewEvent.css";
 import EventPostsList from '../components/ViewEventComponents/EventPostsList';
 import EventResourcesList from '../components/ViewEventComponents/EventResourcesList';
-import { shareOutline, add, pencil } from 'ionicons/icons';
+import { shareOutline, add, pencil, logoVimeo, logoChrome, logoReact, list, cloudUpload } from 'ionicons/icons';
 import { connect, ConnectedProps, useSelector } from 'react-redux';
 import { loadEventDetails, loadingEvent, loadBlankEvent, goingToEvent, interestedInEvent, notGoingToEvent } from '../data/actions/viewEvent/viewEventActions';
 import { editEventLoad } from '../data/actions/editEventActions'
@@ -173,7 +173,7 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
   }
 
   const ownerFabIcon = segment === "details" ? pencil : (segment === "posts" ? add : add);
-  const ownerFabOnClick = segment === "details" ? editEvent : (segment === "posts" ? showAddPost : showAddResources);
+  const ownerFabOnClick = segment === "details" ? editEvent : (segment === "posts" ? showAddPost : () => { });
 
   const addPost = () => {
     props.addEventPost(props.eventId, postBody, props.userToken)
@@ -222,6 +222,16 @@ const ViewEvent: React.FC<ViewEventProps> = (props) => {
             <IonFabButton onClick={ownerFabOnClick} color="primary">
               <IonIcon icon={ownerFabIcon} />
             </IonFabButton>
+            {segment === "resources" &&
+              <IonFabList side="top">
+                <IonFabButton color="primary" onClick={showAddResources}>
+                  <IonIcon icon={list} />
+                </IonFabButton>
+
+                <IonFabButton color="primary">
+                  <IonIcon icon={cloudUpload} />
+                </IonFabButton>
+              </IonFabList>}
           </IonFab>}
 
         {goingStatus !== EVENT_OWNER &&
