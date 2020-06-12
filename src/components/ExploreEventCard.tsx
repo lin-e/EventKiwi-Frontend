@@ -63,7 +63,7 @@ const ExploreEventCard: React.FC<ExploreEventCardProps> = ({ name, organiser, im
           <IonIcon icon={pricetags} />
           </IonCol>
           {tags.slice(0, 3).map((tag, index) => (
-              <IonChip onClick={() => history.push(`/discover/tag/${tag}`)} key={"tag chip " + index.toString()}>{tag}</IonChip>
+              <IonChip onClick={() => {console.log("clicked chip"); history.push(`/discover/tag/${tag}`)}} key={"tag chip " + index.toString()}>{tag}</IonChip>
           ))}
           </IonRow>
 

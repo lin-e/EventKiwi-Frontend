@@ -11,7 +11,9 @@ import { ConnectedProps, connect } from 'react-redux';
 import { checkmarkCircleOutline, starOutline, time, location as locationIcon, shareOutline } from 'ionicons/icons';
 import { INTERESTED, GOING, EVENT_OWNER } from '../../constants/constants';
 import { goingToEvent, interestedInEvent, notGoingToEvent } from '../../data/actions/viewEvent/viewEventActions';
-import { EventDetails } from '../../constants/types';
+import { EventDetails, blankFilters } from '../../constants/types';
+import { useHistory } from 'react-router';
+import { fetchTagEventCards } from '../../data/actions/actions';
 const { Share } = Plugins;
 
 const mapStateToProps = (state: RootState) => ({
@@ -19,7 +21,7 @@ const mapStateToProps = (state: RootState) => ({
    isLoggedIn: state.userDetails.isLoggedIn
 })
 
-const connector = connect(mapStateToProps, { goingToEvent, interestedInEvent, notGoingToEvent })
+const connector = connect(mapStateToProps, { goingToEvent, interestedInEvent, notGoingToEvent, fetchTagEventCards })
 
 interface OwnProps {
    hide: boolean,
@@ -40,6 +42,8 @@ const EventDescription: React.FC<EventDescriptionProps> = (props) => {
    const [shareUrlToast, showShareUrlToast] = useState<boolean>(false);
 
    const shareUrlTextRef = useRef<HTMLTextAreaElement>(null);
+
+   const history = useHistory();
 
    const interestedClicked = () => {
       if (props.eventDescription.goingStatus !== INTERESTED) {
@@ -153,7 +157,14 @@ const EventDescription: React.FC<EventDescriptionProps> = (props) => {
                   </Row>
                   <Row>
                      <Col>
-                        {props.eventDescription.tags.map(tag => <IonChip key={`tag-${tag}=${props.eventDescription.id}`}>{tag}</IonChip>)}
+                        {props.eventDescription.tags.map(tag => (
+                           <IonChip
+                              onClick={() => {props.fetchTagEventCards(tag, blankFilters, null, props.userToken); history.push('/discover')}}
+                              key={`tag-${tag}=${props.eventDescription.id}`}
+                           >
+                              {tag}
+                           </IonChip>)
+                        )}
                      </Col>
                   </Row>
                   <Row>

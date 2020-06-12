@@ -53,12 +53,14 @@ export interface FetchMoreSearchEventCardsAction {
 
 export interface FetchTagEventCardsAction {
    type: typeof FETCH_TAG_EVENT_CARDS,
-   payload: EventCardDetails[]
+   payload: EventCardDetails[],
+   tag: string
 }
 
 export interface FetchMoreTagEventCardsAction {
    type: typeof FETCH_MORE_TAG_EVENT_CARDS,
-   payload: EventCardDetails[]
+   payload: EventCardDetails[],
+   tag: string
 }
 
 export type FetchEventType = FetchEventCardsAction | FetchMoreEventCardsAction | FetchSearchEventCardsAction | FetchMoreSearchEventCardsAction | FetchTagEventCardsAction | FetchMoreTagEventCardsAction;

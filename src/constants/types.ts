@@ -123,6 +123,14 @@ export interface SearchFilters {
   end: Date
 }
 
+export const blankFilters = {
+  includePast: false,
+  useStart: false,
+  start: new Date(Date.now()),
+  useEnd: false,
+  end: new Date(Date.now())
+}
+
 export interface Resource {
    name: string,
    id: string

@@ -169,7 +169,7 @@ export const fetchMoreSearchEventCards = (searchTerm: string, filters: SearchFil
    })
 }
 
-export const fetchTagEventCards = (tag: string, filters: SearchFilters, refresher: HTMLIonRefresherElement, token: string): AppThunk => 
+export const fetchTagEventCards = (tag: string, filters: SearchFilters, refresher: HTMLIonRefresherElement | null, token: string): AppThunk => 
    async dispatch => {
       let url = new URL(discoverSearchEventCardURL);
       const options = {
@@ -196,7 +196,8 @@ export const fetchTagEventCards = (tag: string, filters: SearchFilters, refreshe
          }
          return (dispatch({
             type: FETCH_TAG_EVENT_CARDS,
-            payload: (cards as resp_event_card_details[]).map(convertResToEventCard)
+            payload: (cards as resp_event_card_details[]).map(convertResToEventCard),
+            tag: tag
          }))
       })
 }
@@ -225,7 +226,8 @@ export const fetchMoreTagEventCards = (tag: string, filters: SearchFilters, offs
       .then(cards => {
          return (dispatch({
             type: FETCH_MORE_TAG_EVENT_CARDS,
-            payload: (cards as resp_event_card_details[]).map(convertResToEventCard)
+            payload: (cards as resp_event_card_details[]).map(convertResToEventCard),
+            tag: tag
          }))
       })
 }

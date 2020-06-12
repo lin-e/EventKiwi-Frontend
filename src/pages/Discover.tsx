@@ -5,7 +5,7 @@ import './Discover.css';
 import { connect, ConnectedProps } from 'react-redux';
 import { fetchEventCards, fetchSearchEventCards, fetchMoreEventCards, fetchMoreSearchEventCards, fetchSearchSocietyCards, fetchTagEventCards, fetchMoreTagEventCards } from "../data/actions/actions";
 import { RootState } from '../data/reducers';
-import { Redirect } from 'react-router';
+import { Redirect, useHistory } from 'react-router';
 import { Container, Row, Col } from 'react-grid-system';
 import SkeletonTextEventCard from '../components/SkeletonTextEventCard';
 import ExploreEventCard from '../components/ExploreEventCard';
@@ -15,17 +15,15 @@ import { SocietyCard } from '../constants/types';
 import { MAX_SOCS_DISPLAY, EVENT_SEARCH_BATCH_SIZE } from '../constants/constants';
 import SearchFilterModal from '../components/SearchFilterModal';
 
-interface OwnProps {
-  tagSearch?: boolean,
-  tagName?: string
-}
 
 const mapStateToProps = (state: RootState) => {
   return {
     societies: state.societyCards.societies,
     events: state.eventCards.events,
-    filters: state.searchFilters,
     moreResults: state.eventCards.moreResults,
+    tagSearch: state.eventCards.isTagSearch,
+    tagName: state.eventCards.tagName,
+    filters: state.searchFilters,
     isLoggedIn: state.userDetails.isLoggedIn,
     isLoading: state.userDetails.loading,
     userToken: state.userDetails.userToken
@@ -38,7 +36,7 @@ const connector = connect(
 )
 
 type PropsFromRedux = ConnectedProps<typeof connector>
-type DiscoverProps = OwnProps & PropsFromRedux;
+type DiscoverProps =  PropsFromRedux;
 
 const Discover: React.FC<DiscoverProps> = (props) => {
   const refresherRef = useRef<HTMLIonRefresherElement>(null);
@@ -51,13 +49,19 @@ const Discover: React.FC<DiscoverProps> = (props) => {
 
   const [isTagSearch, setIsTagSearch] = useState(props.tagSearch);
 
+  const history = useHistory();
+
   useEffect(() => {
-    search("")
+    search("", isTagSearch)
   }, [props.userToken]);
 
   useEffect(() => {
+    setIsTagSearch(props.tagSearch);
+  }, [props.tagSearch])
+
+  useEffect(() => {
     if (searchTerm !== "") {
-      search(searchTerm);
+      search(searchTerm, isTagSearch);
     }
   }, [props.filters])
 
@@ -69,9 +73,9 @@ const Discover: React.FC<DiscoverProps> = (props) => {
     search(newTerm);
   }
 
-  const search = (searchTerm: string) => {
-    if (isTagSearch) {
-      props.fetchTagEventCards(props.tagName!, props.filters, refresherRef.current!, props.userToken);
+  const search = (searchTerm: string, tagSearch: boolean = false) => {
+    if (tagSearch) {
+      props.fetchTagEventCards(props.tagName, props.filters, refresherRef.current!, props.userToken);
     } else if (searchTerm == "") {
       props.fetchEventCards(refresherRef.current!, props.userToken);
     } else {
@@ -83,7 +87,7 @@ const Discover: React.FC<DiscoverProps> = (props) => {
 
   const loadMoreEvents = (searchTerm: string) => {
     if (isTagSearch) {
-      props.fetchMoreTagEventCards(props.tagName!, props.filters,(searchBatchNum + 1) * EVENT_SEARCH_BATCH_SIZE, props.userToken)
+      props.fetchMoreTagEventCards(props.tagName, props.filters,(searchBatchNum + 1) * EVENT_SEARCH_BATCH_SIZE, props.userToken)
     }
     if (searchTerm == "") {
       props.fetchMoreEventCards((searchBatchNum + 1) * EVENT_SEARCH_BATCH_SIZE, props.userToken);
@@ -119,7 +123,7 @@ const Discover: React.FC<DiscoverProps> = (props) => {
         </IonToolbar>
       </IonHeader>  
 
-      <IonRefresher ref={refresherRef} slot="fixed" onIonRefresh={() => search(searchTerm)}>
+      <IonRefresher ref={refresherRef} slot="fixed" onIonRefresh={() => search(searchTerm, isTagSearch)}>
         <IonRefresherContent></IonRefresherContent>
       </IonRefresher>
 
@@ -217,10 +221,5 @@ const Discover: React.FC<DiscoverProps> = (props) => {
   </IonPage>
   );
 }
-
-Discover.defaultProps = {
-  tagSearch: false,
-  tagName: ""
-};
 
 export default connector(Discover);
