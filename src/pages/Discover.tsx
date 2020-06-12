@@ -60,7 +60,7 @@ const Discover: React.FC<DiscoverProps> = (props) => {
   }, [props.tagSearch])
 
   useEffect(() => {
-    if (searchTerm !== "") {
+    if (searchTerm !== "" || isTagSearch) {
       search(searchTerm, isTagSearch);
     }
   }, [props.filters])
@@ -140,6 +140,16 @@ const Discover: React.FC<DiscoverProps> = (props) => {
               </IonButton>
             </IonCol>
           </IonRow>
+          {isTagSearch &&
+            <IonRow>
+              <IonCol size="6">
+                <h3>{`Events tagged with '${props.tagName}'`}</h3>
+              </IonCol>
+              <IonCol size="6">
+                <IonButton onClick={() => {setIsTagSearch(false); search("")}} fill="clear" className="filterBtn">Clear tag search</IonButton>
+              </IonCol>
+            </IonRow>
+          }
         </IonGrid>
         
         {(searchTerm !== "" && props.societies.length !== 0) &&
@@ -203,12 +213,12 @@ const Discover: React.FC<DiscoverProps> = (props) => {
             }
             {props.events.length > 0 && !props.moreResults &&
               <Col xs={12} className="resultsEnd">
-                {!isTagSearch &&
-                  <EmptySectionText 
-                    mainText={searchTerm === "" ? "No more events found" : `No more results for "${searchTerm}"`}
-                    subText={searchTerm === "" ? "Try searching for more events later" : "Try searching for something else!"}
-                  />
-                }
+                <EmptySectionText 
+                  mainText={searchTerm === "" && !isTagSearch ?
+                    "No more events found" :
+                    `No more results for "${isTagSearch ? props.tagName : searchTerm}"`}
+                  subText={searchTerm === "" && !isTagSearch ? "Try searching for more events later" : "Try searching for something else!"}
+                />
               </Col>
             }
         </Row>
