@@ -69,7 +69,9 @@ const Events: React.FC<EventsProps> = (props) => {
     resetView();
   }
 
-  useEffect(() => { refresh() }, [props.userToken, props.viewEvents])
+  useEffect(() => {
+    props.fetchCalEvents(refresherRef.current!, props.userToken);
+  }, [props.userToken, props.viewEvents])
 
   useIonViewDidEnter(() => {
     props.loadBlankEvent("events");
