@@ -64,7 +64,7 @@ export const unfollowSociety = (id: string, token: string): AppThunk => async di
    })
 }
 
-export const fetchEventCards = (refresher: HTMLIonRefresherElement, token: string)
+export const fetchEventCards = (filters: SearchFilters, refresher: HTMLIonRefresherElement, token: string)
    : AppThunk => async dispatch => {
    if (token === "") {
       return(dispatch({
@@ -78,7 +78,16 @@ export const fetchEventCards = (refresher: HTMLIonRefresherElement, token: strin
          "Authorization": `Bearer ${token}`
       }
    }
+
+   if (filters.useStart) {
+      url.searchParams.append("start", filters.start.toISOString())
+   }
+   if (filters.useEnd) {
+      url.searchParams.append("end", filters.end.toISOString())
+   }
+   url.searchParams.append("finished", filters.includePast.toString())
    url.searchParams.append("n", "0");
+
    fetch(url.toString(), options)
    .then(response => response.json())
    .then(cards => {
@@ -92,14 +101,22 @@ export const fetchEventCards = (refresher: HTMLIonRefresherElement, token: strin
    })
 }
 
-export const fetchMoreEventCards = (offset: number, token: string): AppThunk => async dispatch => {
+export const fetchMoreEventCards = (filters: SearchFilters, offset: number, token: string): AppThunk => async dispatch => {
    let url = new URL(discoverEventCardURL);
    const options = {
       headers: {
          "Authorization": `Bearer ${token}`
       }
    }
+
+   if (filters.useStart) {
+      url.searchParams.append("start", filters.start.toISOString())
+   }
+   if (filters.useEnd) {
+      url.searchParams.append("end", filters.end.toISOString())
+   }
    url.searchParams.append("n", offset.toString());
+
    fetch(url.toString(), options)
    .then(response => response.json())
    .then(cards => {
