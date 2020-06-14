@@ -14,6 +14,7 @@ import { goingToEvent, interestedInEvent, notGoingToEvent } from '../../data/act
 import { EventDetails, blankFilters } from '../../constants/types';
 import { useHistory } from 'react-router';
 import { fetchTagEventCards } from '../../data/actions/actions';
+import { isBefore } from 'date-fns/fp'
 const { Share } = Plugins;
 
 const mapStateToProps = (state: RootState) => ({
@@ -87,6 +88,8 @@ const EventDescription: React.FC<EventDescriptionProps> = (props) => {
       }
    }
 
+   const isOver = !isBefore(props.eventDescription.datetimeEnd, Date.now()) ;
+
    return (
       <div style={props.hide ? { display: "none" } : {}}>
          <Container>
@@ -138,10 +141,11 @@ const EventDescription: React.FC<EventDescriptionProps> = (props) => {
                            </IonCardSubtitle>
                         </div>}
                      </Col>
+
                      {props.isLoggedIn && props.goingStatus !== EVENT_OWNER &&
                         <Col lg={7}>
                            <IonButton onClick={goingClicked} color={props.goingStatus === GOING ? "success" : "medium"}>
-                              Going&nbsp; <IonIcon icon={checkmarkCircleOutline} />
+                              {isOver ? "Went" : "Going"}&nbsp; <IonIcon icon={checkmarkCircleOutline} />
                            </IonButton>
                            <IonButton onClick={interestedClicked} color={props.goingStatus === INTERESTED ? "warning" : "medium"}>
                               Interested&nbsp; <IonIcon icon={starOutline} />
