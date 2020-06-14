@@ -118,7 +118,7 @@ class Profile extends Component<ProfileProps, ProfileState> {
                   {this.props.societies.length !== 0 ?
                     <div className="societySlider">
                       {this.props.societies.map((soc) => (
-                        <div className="socSliderInfo">
+                        <div className="socSliderInfo" key={`followedSoc-${soc.shortName}`}>
                           <ProfileSocietyIcon name={soc.shortName} logo={soc.imgSrc} key={soc.shortName} />
                         </div>
                       ))}
