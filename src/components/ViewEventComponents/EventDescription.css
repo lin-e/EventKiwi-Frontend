@@ -42,11 +42,10 @@
 .suggestedEvents {
     width: 100%;
     object-fit: cover;
-    /* margin-left: -20px; */
     white-space: nowrap;
     overflow-x: scroll;
     vertical-align: text-top;
-    scrollbar-width: none;
+    scrollbar-width: none; /* Firefox */
 }
 
 .suggestedEvents::-webkit-scrollbar { 
