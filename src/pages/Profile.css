@@ -68,3 +68,19 @@
     color: #8c8c8c;
     margin: 0;
 }
+
+.societySlider {
+    width: 100%;
+    white-space: nowrap;
+    overflow-x: scroll;
+    scrollbar-width: none; /* Firefox */
+}
+
+.societySlider::-webkit-scrollbar { 
+    display: none;  /* Safari and Chrome */
+}
+
+.socSliderInfo {
+    display: inline-block;
+    vertical-align: top; 
+}

@@ -116,12 +116,14 @@ class Profile extends Component<ProfileProps, ProfileState> {
               <IonRow>
                 <div className="sectionContent">
                   {this.props.societies.length !== 0 ?
-                    <ItemSlider width={130}>
+                    <div className="societySlider">
                       {this.props.societies.map((soc) => (
-                        <ProfileSocietyIcon name={soc.shortName} logo={soc.imgSrc} key={soc.shortName} />
+                        <div className="socSliderInfo">
+                          <ProfileSocietyIcon name={soc.shortName} logo={soc.imgSrc} key={soc.shortName} />
+                        </div>
                       ))}
-                    </ItemSlider> :
-                    <EmptySectionText mainText="No followed societies" subText="Try following or joining some societies to see what is on!" />
+                    </div>
+                    : <EmptySectionText mainText="No followed societies" subText="Try following or joining some societies to see what is on!" />
 
                   }
                 </div>
