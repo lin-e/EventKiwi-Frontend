@@ -223,23 +223,18 @@ const EventDescription: React.FC<EventDescriptionProps> = (props) => {
                </Container>
                <Container className="descriptionSuggestedEventsContainer">
                   <div className="suggestedEvents">
-                     <IonGrid>
-                        <IonRow>
-                           {props.eventDescription.similarEvents.map(event => {
-                              return <IonCol size="auto" key={`similarEventMiniEventCardCol--${event.id}`}>
-                                 <EventMiniCard
-                                    key={`similarEventMiniEventCard--${event.id}`}
-                                    tab={props.tab}
-                                    eventId={event.id}
-                                    eventName={event.name}
-                                    eventStart={event.datetimeStart}
-                                    eventEnd={event.datetimeEnd}
-                                    organiser={event.organiser.name}
-                                    image={event.image} />
-                              </IonCol>
-                           })}
-                        </IonRow>
-                     </IonGrid>
+                     {props.eventDescription.similarEvents.map(event => {
+                        return <div className="eventSuggestion">
+                           <EventMiniCard
+                              key={`similarEventMiniEventCard--${event.id}`}
+                              tab={props.tab}
+                              eventId={event.id}
+                              eventName={event.name}
+                              eventStart={event.datetimeStart}
+                              eventEnd={event.datetimeEnd}
+                              organiser={event.organiser.shortName}
+                              image={event.image} /></div>
+                     })}
                   </div>
                </Container>
             </div>}
