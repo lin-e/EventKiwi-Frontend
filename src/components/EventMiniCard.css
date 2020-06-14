@@ -20,6 +20,7 @@
 .mini_header {
     text-align: left !important;
     font-size: larger !important;
+    overflow-wrap: normal;
 }
 
 .mini_time {
