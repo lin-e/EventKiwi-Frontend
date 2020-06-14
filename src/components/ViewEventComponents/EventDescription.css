@@ -45,6 +45,12 @@
     /* margin-left: -20px; */
     white-space: nowrap;
     overflow-x: scroll;
+    vertical-align: text-top;
+    scrollbar-width: none;
+}
+
+.suggestedEvents::-webkit-scrollbar { 
+    display: none;  /* Safari and Chrome */
 }
 
 .descriptionSuggestedEventsContainer {
@@ -74,6 +80,7 @@
     text-align: center;
 }
 
-.testg {
+.eventSuggestion {
     display: inline-block;
+    vertical-align: top; 
 }

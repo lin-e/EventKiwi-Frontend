@@ -201,15 +201,16 @@ const EventDescription: React.FC<EventDescriptionProps> = (props) => {
                <Container className="descriptionSuggestedEventsContainer">
                   <div className="suggestedEvents">
                      {props.eventDescription.sameSocEvents.map(event => {
-                        return <div className="testg"><EventMiniCard
-                           key={`sameSocMiniEventCard--${event.id}`}
-                           tab={props.tab}
-                           eventId={event.id}
-                           eventName={event.name}
-                           eventStart={event.datetimeStart}
-                           eventEnd={event.datetimeEnd}
-                           organiser={event.organiser.shortName}
-                           image={event.image} /></div>
+                        return <div className="eventSuggestion">
+                           <EventMiniCard
+                              key={`sameSocMiniEventCard--${event.id}`}
+                              tab={props.tab}
+                              eventId={event.id}
+                              eventName={event.name}
+                              eventStart={event.datetimeStart}
+                              eventEnd={event.datetimeEnd}
+                              organiser={event.organiser.shortName}
+                              image={event.image} /></div>
                      })}
                   </div>
                </Container>
