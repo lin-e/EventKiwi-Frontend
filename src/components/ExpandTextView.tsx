@@ -29,14 +29,14 @@ class ExpandTextView extends Component<ExpandTextViewProps> {
                   {this.props.text.split("\n").map((item, i) => {
                      return <p key={i}>{item}</p>
                   })}
-                  <br /> <span className="clickable"><a onClick={this.showLess}>Read less</a></span>
+                  <span className="clickable"><a onClick={this.showLess}>Read less</a></span>
                </>}
 
                {!this.state.showAll && this.props.text.length > this.props.limit && <>
                   {limited.split("\n").map((item, i) => {
                      return <p key={i}>{item}</p>
                   })}
-                  <br /> <span className="clickable"><a onClick={this.showMore}>Read more</a></span>
+                  <span className="clickable"><a onClick={this.showMore}>Read more</a></span>
                </>}
             </IonText>
          </div>

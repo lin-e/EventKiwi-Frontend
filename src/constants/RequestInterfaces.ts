@@ -59,7 +59,8 @@ export interface resp_society {
 export interface resp_society_basic {
   society_image_src: string,
   short_name: string,
-  type: number
+  type: number,
+  society_id: string
 }
 
 export interface resp_society_cal {

@@ -14,6 +14,7 @@ import { goingToEvent, interestedInEvent, notGoingToEvent } from '../../data/act
 import { EventDetails, blankFilters } from '../../constants/types';
 import { useHistory } from 'react-router';
 import { fetchTagEventCards } from '../../data/actions/actions';
+import { isBefore } from 'date-fns/fp'
 const { Share } = Plugins;
 
 const mapStateToProps = (state: RootState) => ({
@@ -67,25 +68,27 @@ const EventDescription: React.FC<EventDescriptionProps> = (props) => {
 
    const shareClicked = async () => {
       if (isPlatform("desktop")) {
-        try {
-          shareUrlTextRef.current!.hidden = false;
-          shareUrlTextRef.current!.select();
-          var successful = document.execCommand('copy');
-          successful ? showShareUrlToast(true) : console.log("Unable to copy URL to clipboard");
-        } catch (err) {
-          console.error('Fallback: Unable to copy', err);
-        } finally {
-          shareUrlTextRef.current!.hidden = true;
-        }
-  
+         try {
+            shareUrlTextRef.current!.hidden = false;
+            shareUrlTextRef.current!.select();
+            var successful = document.execCommand('copy');
+            successful ? showShareUrlToast(true) : console.log("Unable to copy URL to clipboard");
+         } catch (err) {
+            console.error('Fallback: Unable to copy', err);
+         } finally {
+            shareUrlTextRef.current!.hidden = true;
+         }
+
       } else {
-        let shareRet = await Share.share({
-          title: `Share event`,
-          url: props.shareUrl,
-          dialogTitle: 'Share event'
-        });
+         let shareRet = await Share.share({
+            title: `Share event`,
+            url: props.shareUrl,
+            dialogTitle: 'Share event'
+         });
       }
-    }
+   }
+
+   const isOver = !isBefore(props.eventDescription.datetimeEnd, Date.now()) ;
 
    return (
       <div style={props.hide ? { display: "none" } : {}}>
@@ -104,7 +107,7 @@ const EventDescription: React.FC<EventDescriptionProps> = (props) => {
             <Row>
                <Col md={6} sm={12}>
                   <IonCard className="eventImageCard">
-                     <IonImg className="eventImage" src={props.eventDescription.images[0]} alt={props.eventDescription.name}/>
+                     <IonImg className="eventImage" src={props.eventDescription.images[0]} alt={props.eventDescription.name} />
                   </IonCard>
                </Col>
 
@@ -138,10 +141,11 @@ const EventDescription: React.FC<EventDescriptionProps> = (props) => {
                            </IonCardSubtitle>
                         </div>}
                      </Col>
+
                      {props.isLoggedIn && props.goingStatus !== EVENT_OWNER &&
                         <Col lg={7}>
                            <IonButton onClick={goingClicked} color={props.goingStatus === GOING ? "success" : "medium"}>
-                              Going&nbsp; <IonIcon icon={checkmarkCircleOutline} />
+                              {isOver ? "Went" : "Going"}&nbsp; <IonIcon icon={checkmarkCircleOutline} />
                            </IonButton>
                            <IonButton onClick={interestedClicked} color={props.goingStatus === INTERESTED ? "warning" : "medium"}>
                               Interested&nbsp; <IonIcon icon={starOutline} />
@@ -191,57 +195,53 @@ const EventDescription: React.FC<EventDescriptionProps> = (props) => {
 
                </Col>
             </Row>
-
-            {props.eventDescription.sameSocEvents.length > 0 &&
-               <div>
-                  <IonText><h2>More from {props.eventDescription.organiser.shortName}</h2></IonText>
-                  <div className="suggestedEvents">
-                     <IonGrid>
-                        <IonRow>
-                           {props.eventDescription.sameSocEvents.map(event => {
-                              return <IonCol size="auto" key={`sameSocMiniEventCardCol--${event.id}`}>
-
-                                 <EventMiniCard
-                                    key={`sameSocMiniEventCard--${event.id}`}
-                                    tab={props.tab}
-                                    eventId={event.id}
-                                    eventName={event.name}
-                                    eventStart={event.datetimeStart}
-                                    eventEnd={event.datetimeEnd}
-                                    organiser={event.organiser.name}
-                                    image={event.image} />
-                              </IonCol>
-                           })}
-                        </IonRow>
-                     </IonGrid>
-
-                  </div>
-               </div>}
-
-            {props.eventDescription.similarEvents.length > 0 &&
-               <div>
-                  <IonText><h2>Suggested events</h2></IonText>
-                  <div className="suggestedEvents">
-                     <IonGrid>
-                        <IonRow>
-                           {props.eventDescription.similarEvents.map(event => {
-                              return <IonCol size="auto" key={`similarEventMiniEventCardCol--${event.id}`}>
-                                 <EventMiniCard
-                                    key={`similarEventMiniEventCard--${event.id}`}
-                                    tab={props.tab}
-                                    eventId={event.id}
-                                    eventName={event.name}
-                                    eventStart={event.datetimeStart}
-                                    eventEnd={event.datetimeEnd}
-                                    organiser={event.organiser.name}
-                                    image={event.image} />
-                              </IonCol>
-                           })}
-                        </IonRow>
-                     </IonGrid>
-                  </div>
-               </div>}
          </Container>
+
+         {props.eventDescription.sameSocEvents.length > 0 &&
+            <div>
+               <Container>
+                  <IonText><h2>More from {props.eventDescription.organiser.shortName}</h2></IonText>
+               </Container>
+               <Container className="descriptionSuggestedEventsContainer">
+                  <div className="suggestedEvents">
+                     {props.eventDescription.sameSocEvents.map(event => {
+                        return <div className="eventSuggestion">
+                           <EventMiniCard
+                              key={`sameSocMiniEventCard--${event.id}`}
+                              tab={props.tab}
+                              eventId={event.id}
+                              eventName={event.name}
+                              eventStart={event.datetimeStart}
+                              eventEnd={event.datetimeEnd}
+                              organiser={event.organiser.shortName}
+                              image={event.image} /></div>
+                     })}
+                  </div>
+               </Container>
+            </div>}
+
+         {props.eventDescription.similarEvents.length > 0 &&
+            <div>
+               <Container>
+                  <IonText><h2>Suggested events</h2></IonText>
+               </Container>
+               <Container className="descriptionSuggestedEventsContainer">
+                  <div className="suggestedEvents">
+                     {props.eventDescription.similarEvents.map(event => {
+                        return <div className="eventSuggestion">
+                           <EventMiniCard
+                              key={`similarEventMiniEventCard--${event.id}`}
+                              tab={props.tab}
+                              eventId={event.id}
+                              eventName={event.name}
+                              eventStart={event.datetimeStart}
+                              eventEnd={event.datetimeEnd}
+                              organiser={event.organiser.shortName}
+                              image={event.image} /></div>
+                     })}
+                  </div>
+               </Container>
+            </div>}
 
          <IonToast
             isOpen={goingToast}

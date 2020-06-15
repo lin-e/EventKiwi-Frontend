@@ -1,10 +1,10 @@
 import { ThunkAction } from "redux-thunk"
 import { RootState } from "../reducers"
 import { Action } from "redux"
-import { FETCH_EVENTS_CARDS, FETCH_SEARCH_EVENT_CARDS, FETCH_CAL_EVENTS, FETCH_PROFILE_DETAILS, REMOVE_PROFILE_INTEREST, FETCH_PROFILE_DETAILS_FAILED, RESET_PROFILE_INVALID_RESPONSE, ADD_PROFILE_INTEREST, FETCH_SEARCH_SOCIETY_CARDS, FOLLOW_SOCIETY, UNFOLLOW_SOCIETY, FETCH_SEARCH_INTERESTS, FETCH_MORE_SEARCH_EVENT_CARDS, FETCH_MORE_EVENT_CARDS, FETCH_TAG_EVENT_CARDS, FETCH_MORE_TAG_EVENT_CARDS } from "./types"
+import { FETCH_EVENTS_CARDS, FETCH_SEARCH_EVENT_CARDS, FETCH_CAL_EVENTS, FETCH_PROFILE_DETAILS, REMOVE_PROFILE_INTEREST, FETCH_PROFILE_DETAILS_FAILED, RESET_PROFILE_INVALID_RESPONSE, ADD_PROFILE_INTEREST, FETCH_SEARCH_SOCIETY_CARDS, FOLLOW_SOCIETY, UNFOLLOW_SOCIETY, FETCH_SEARCH_INTERESTS, FETCH_MORE_SEARCH_EVENT_CARDS, FETCH_MORE_EVENT_CARDS, FETCH_TAG_EVENT_CARDS, FETCH_MORE_TAG_EVENT_CARDS, SOCIETY_UNFOLLOWED } from "./types"
 import { discoverEventCardURL, discoverSearchEventCardURL, profileDetailsURL, profileInterestDeleteURL, profileInterestAddURL, discoverSearchSocietyCardURL, followSocietyURL, unfollowSocietyURL, calendarEventsURL, profileInterestSearchURL } from "../../constants/endpoints"
 import { resp_event_card_details, resp_profile_details, resp_society_card, resp_calendar_event, resp_search_interests } from "../../constants/RequestInterfaces"
-import { convertResToEventCard, convertResToProfileDetails, convertResToInterest, convertResToSocCard, convertResToCalEvent, SearchFilters } from "../../constants/types"
+import { convertResToEventCard, convertResToProfileDetails, convertResToInterest, convertResToSocCard, convertResToCalEvent, SearchFilters, SocietyBasic } from "../../constants/types"
 
 export type AppThunk<ReturnType = void> = ThunkAction<
   ReturnType,
@@ -47,6 +47,7 @@ export const followSociety = (id: string, token: string): AppThunk => async disp
          payload: id
       }))
    })
+   .then(() => dispatch(fetchProfileDetails(token)))
 }
 
 export const unfollowSociety = (id: string, token: string): AppThunk => async dispatch => {
@@ -62,6 +63,10 @@ export const unfollowSociety = (id: string, token: string): AppThunk => async di
          payload: id
       }))
    })
+   .then(() => dispatch({
+      type: SOCIETY_UNFOLLOWED,
+      payload: id
+   }))
 }
 
 export const fetchEventCards = (filters: SearchFilters, refresher: HTMLIonRefresherElement, token: string)

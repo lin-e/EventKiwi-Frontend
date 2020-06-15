@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonGrid, IonRow, IonCol, IonButton, IonModal, IonToast, IonRefresher, IonRefresherContent, IonItem, IonCard, IonText, IonCardTitle } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonGrid, IonRow, IonCol, IonButton, IonModal, IonToast, IonText } from '@ionic/react';
 import './Profile.css';
-import ItemSlider from '../components/ItemSlider';
 import ProfileSocietyIcon from '../components/Profile/ProfileSocietyIcon';
-import { Container, Row, Col } from 'react-grid-system';
+import { Container } from 'react-grid-system';
 import InterestChip from '../components/Profile/InterestChip';
 import { fetchProfileDetails, resetInvalidProfileResponse } from '../data/actions/actions';
 import { loadSocResources } from '../data/actions/resourceManagement/resourceManagementActions';
@@ -116,12 +115,14 @@ class Profile extends Component<ProfileProps, ProfileState> {
               <IonRow>
                 <div className="sectionContent">
                   {this.props.societies.length !== 0 ?
-                    <ItemSlider width={130}>
+                    <div className="societySlider">
                       {this.props.societies.map((soc) => (
-                        <ProfileSocietyIcon name={soc.shortName} logo={soc.imgSrc} key={soc.shortName} />
+                        <div className="socSliderInfo" key={`followedSoc-${soc.shortName}`}>
+                          <ProfileSocietyIcon name={soc.shortName} logo={soc.imgSrc} key={soc.shortName} />
+                        </div>
                       ))}
-                    </ItemSlider> :
-                    <EmptySectionText mainText="No followed societies" subText="Try following or joining some societies to see what is on!" />
+                    </div>
+                    : <EmptySectionText mainText="No followed societies" subText="Try following or joining some societies to see what is on!" />
 
                   }
                 </div>

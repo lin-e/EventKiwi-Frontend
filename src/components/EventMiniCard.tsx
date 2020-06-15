@@ -1,6 +1,6 @@
 import React from 'react';
 import './EventMiniCard.css';
-import { IonCard, IonCardContent, IonCardSubtitle, IonCardTitle, IonGrid, IonRow } from '@ionic/react';
+import { IonCard, IonCardContent, IonCardSubtitle, IonCardTitle, IonGrid, IonRow, IonCol } from '@ionic/react';
 import { getDateRange } from '../utils/DateTimeTools';
 import { loadBlankEvent } from '../data/actions/viewEvent/viewEventActions';
 import { connect, ConnectedProps } from 'react-redux';
@@ -32,7 +32,7 @@ const EventMiniCard: React.FC<EventMiniCardProps> = ({ eventName, organiser, ima
             <IonCardSubtitle className="mini_organiser_name">By {organiser}</IonCardSubtitle>
           </IonRow>
           <IonRow>
-            <IonCardTitle className="mini_header">
+            <IonCardTitle className="mini_header ion-text-wrap">
             {eventName}
             </IonCardTitle>
           </IonRow>
