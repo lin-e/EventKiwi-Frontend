@@ -7,7 +7,7 @@ import { Redirect, RouteComponentProps } from 'react-router';
 import MicrosoftLogin from "react-microsoft-login";
 import { logIn } from "../data/actions/userActions";
 import { Container, Col } from 'react-grid-system';
-import { faIcons, faHatWizard } from '@fortawesome/free-solid-svg-icons';
+import { faIcons, faHatWizard, faKiwiBird } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const mapStateToProps = (state: RootState) => ({
@@ -47,10 +47,10 @@ const Login: React.FC<LoginProps> = (props) => {
                         <IonCardHeader>
                            <br />
                            <IonRow>
-                              <IonCardTitle className="horizontalCentre"><FontAwesomeIcon icon={faHatWizard} size="2x" /></IonCardTitle>
+                              <IonCardTitle className="horizontalCentre"><FontAwesomeIcon icon={faKiwiBird} size="2x" /></IonCardTitle>
                            </IonRow>
                            <IonRow>
-                              <IonCardTitle className="horizontalCentre">Event Wizard</IonCardTitle>
+                              <IonCardTitle className="horizontalCentre">Event Kiwi</IonCardTitle>
                            </IonRow>
                         </IonCardHeader>
                         <IonCardContent>
