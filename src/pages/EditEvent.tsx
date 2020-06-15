@@ -11,7 +11,6 @@ import { RootState } from '../data/reducers';
 import { UNIX_EPOCH, PRIVATE, SOCIETIES, MEMBERS, PUBLIC, NO_ID } from '../constants/constants';
 import './EditEvent.css'
 import { RouteComponentProps, useHistory } from 'react-router';
-import { blankEventDetails } from '../constants/types';
 
 interface OwnProps extends RouteComponentProps<{ id?: string }> { };
 
@@ -34,7 +33,7 @@ const EditEvent: React.FC<EditEventProps> = ({ match, event, userToken, createNe
   const [location, setLocation] = useState(event.location);
   const [startDatetime, setStartDatetime] = useState(event.datetimeStart);
   const [endDatetime, setEndDatetime] = useState(event.datetimeEnd);
-  const [privacy, setPrivacy] = useState(PRIVATE);
+  const [privacy, setPrivacy] = useState<number>(event.privacy);
   const [eventImg, setEventImg] = useState(event.images[0]);
   const [tagList, setTagList] = useState<string[]>(event.tags);
   const [description, setDescription] = useState(event.description);
@@ -65,7 +64,7 @@ const EditEvent: React.FC<EditEventProps> = ({ match, event, userToken, createNe
     setLocation(event.location);
     setStartDatetime(event.datetimeStart);
     setEndDatetime(event.datetimeEnd);
-    setPrivacy(PRIVATE);
+    setPrivacy(event.privacy);
     setEventImg(event.images[0]);
     setTagList(event.tags);
     setDescription(event.description);
@@ -326,7 +325,7 @@ const EditEvent: React.FC<EditEventProps> = ({ match, event, userToken, createNe
               <IonLabel>Tags:</IonLabel>
             </Col>
             <Col xs={4}>
-              <IonButton className="tagEditBtn" fill="clear" onClick={() => setShowTagSearch(true)}>Edit</IonButton>
+              <IonButton className="tagEditBtn" fill="clear" onClick={() => setShowTagSearch(true)}>Add</IonButton>
             </Col>
           </Row>
           <Row>
