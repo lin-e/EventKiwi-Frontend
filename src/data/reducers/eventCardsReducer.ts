@@ -15,7 +15,7 @@ export function eventCardsReducer(state = initialState, action: FetchEventType):
          return {
             ...state,
             events: action.payload,
-            moreResults: action.payload.length === EVENT_SEARCH_BATCH_SIZE,
+            moreResults: action.count === EVENT_SEARCH_BATCH_SIZE,
             isTagSearch: false,
             tagName: ""
          };
@@ -23,7 +23,7 @@ export function eventCardsReducer(state = initialState, action: FetchEventType):
          return {
             ...state,
             events: state.events.concat(action.payload.filter((event) => !state.events.includes(event))),
-            moreResults: action.payload.length === EVENT_SEARCH_BATCH_SIZE,
+            moreResults: action.count === EVENT_SEARCH_BATCH_SIZE,
             isTagSearch: false,
             tagName: ""
          };
@@ -31,7 +31,7 @@ export function eventCardsReducer(state = initialState, action: FetchEventType):
          return {
             ...state,
             events: action.payload,
-            moreResults: action.payload.length === EVENT_SEARCH_BATCH_SIZE,
+            moreResults: action.count === EVENT_SEARCH_BATCH_SIZE,
             isTagSearch: false,
             tagName: ""
          };
@@ -39,7 +39,7 @@ export function eventCardsReducer(state = initialState, action: FetchEventType):
          return {
             ...state,
             events: state.events.concat(action.payload.filter((event) => !state.events.includes(event))),
-            moreResults: action.payload.length === EVENT_SEARCH_BATCH_SIZE,
+            moreResults: action.count === EVENT_SEARCH_BATCH_SIZE,
             isTagSearch: false,
             tagName: ""
          };
@@ -47,7 +47,7 @@ export function eventCardsReducer(state = initialState, action: FetchEventType):
          return {
             ...state,
             events: action.payload,
-            moreResults: action.payload.length === EVENT_SEARCH_BATCH_SIZE,
+            moreResults: action.count === EVENT_SEARCH_BATCH_SIZE,
             isTagSearch: true,
             tagName: action.tag
          };
@@ -55,7 +55,7 @@ export function eventCardsReducer(state = initialState, action: FetchEventType):
          return {
             ...state,
             events: state.events.concat(action.payload.filter((event) => !state.events.includes(event))),
-            moreResults: action.payload.length === EVENT_SEARCH_BATCH_SIZE,
+            moreResults: action.count === EVENT_SEARCH_BATCH_SIZE,
             isTagSearch: true,
             tagName: action.tag
          };
