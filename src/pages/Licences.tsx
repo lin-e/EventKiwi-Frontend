@@ -620,6 +620,20 @@ const Licences: React.FC = () => {
                   <IonRow>
                      <IonCol>
                         <IonText>
+                           <h4>Microsoft Authentication Library for JavaScript</h4>
+                        </IonText>
+
+                        <div>
+                           <p className="licenseInfo">
+                              Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT License (the "License").
+                           </p>
+                        </div>
+                     </IonCol>
+                  </IonRow>
+
+                  <IonRow>
+                     <IonCol>
+                        <IonText>
                            <h4>Aerial image of the South Kensington Campus (3)</h4>
                         </IonText>
 
