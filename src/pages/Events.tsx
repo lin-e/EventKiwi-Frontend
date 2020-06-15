@@ -1,6 +1,6 @@
 import React, { useEffect, useState, MouseEvent, useRef } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonRefresher, IonRefresherContent, useIonViewDidEnter, IonFab, IonFabButton, IonIcon, IonFabList, IonSegment, IonSegmentButton, IonLabel, IonToast, IonButtons, IonButton, IonPopover, IonList, IonSelect, IonSelectOption, IonItem, IonItemDivider } from '@ionic/react';
-import { chevronUp, options, calendar, add, informationCircleOutline } from 'ionicons/icons'
+import { IonContent, IonHeader, IonPage, IonToolbar, IonRefresher, IonRefresherContent, useIonViewDidEnter, IonFab, IonFabButton, IonIcon, IonFabList, IonSegment, IonSegmentButton, IonLabel, IonToast, IonButtons, IonButton, IonPopover, IonList, IonSelect, IonSelectOption, IonItem } from '@ionic/react';
+import { options, calendar, add, informationCircleOutline, ellipsisVerticalSharp } from 'ionicons/icons'
 import { isFuture } from 'date-fns'
 import './Events.css';
 import CalendarEventView from '../components/Calendar/CalendarEventView';
@@ -8,7 +8,7 @@ import { fetchCalEvents } from '../data/actions/actions'
 import { loadBlankEvent } from '../data/actions/viewEvent/viewEventActions';
 import { connect, ConnectedProps } from 'react-redux';
 import { RootState } from '../data/reducers';
-import { Redirect, useHistory } from 'react-router';
+import { Redirect } from 'react-router';
 import { editEventLoad } from '../data/actions/editEventActions';
 import { groupByDate, myEvent, getSocs, applyFilters } from '../utils/EventFilterTootls';
 import { CalendarEvent } from '../constants/types';
@@ -186,7 +186,7 @@ const Events: React.FC<EventsProps> = (props) => {
 
         <IonFab vertical="bottom" horizontal="end" slot="fixed">
           <IonFabButton>
-            <IonIcon icon={chevronUp} />
+            <IonIcon icon={ellipsisVerticalSharp} />
           </IonFabButton>
           <IonFabList side="top">
             <IonFabButton onClick={() => filterRef.current!.open()}>
