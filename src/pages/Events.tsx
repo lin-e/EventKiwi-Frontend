@@ -1,5 +1,5 @@
 import React, { useEffect, useState, MouseEvent, useRef } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonRefresher, IonRefresherContent, useIonViewDidEnter, IonFab, IonFabButton, IonIcon, IonFabList, IonSegment, IonSegmentButton, IonLabel, IonToast, IonButtons, IonButton, IonPopover, IonList, IonSelect, IonSelectOption, IonItem } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonRefresher, IonRefresherContent, useIonViewDidEnter, IonFab, IonFabButton, IonIcon, IonFabList, IonSegment, IonSegmentButton, IonLabel, IonToast, IonButtons, IonButton, IonPopover, IonList, IonSelect, IonSelectOption, IonItem, IonItemDivider } from '@ionic/react';
 import { chevronUp, options, calendar, add, informationCircleOutline } from 'ionicons/icons'
 import { isFuture } from 'date-fns'
 import './Events.css';
@@ -13,6 +13,7 @@ import { editEventLoad } from '../data/actions/editEventActions';
 import { groupByDate, myEvent, getSocs, applyFilters } from '../utils/EventFilterTootls';
 import { CalendarEvent } from '../constants/types';
 import SocBasicInfo from '../components/Calendar/SocBasicInfo';
+import { FILTER_FOLLOWING, FILTER_GOING, FILTER_INTERESTED } from '../constants/constants';
 
 const mapStateToProps = (state: RootState) => ({
   events: state.calEvents.events,
@@ -21,7 +22,8 @@ const mapStateToProps = (state: RootState) => ({
   isLoading: state.userDetails.loading,
   isSociety: state.userDetails.isSoc,
   socId: state.userDetails.profile.society,
-  userToken: state.userDetails.userToken
+  userToken: state.userDetails.userToken,
+  profileSocs: state.profileDetails.profileDetails.societies
 })
 
 const connector = connect(mapStateToProps, { fetchCalEvents, loadBlankEvent, editEventLoad });
@@ -35,12 +37,14 @@ const Events: React.FC<EventsProps> = (props) => {
   const [upcomingY, setUpcomingY] = useState(0);
   const [pastY, setPastY] = useState(0);
 
+  const mySocs = getSocs(props.events);
+
   const [showInfo, setShowInfo] = useState<{open: boolean, event: Event | undefined}>({
     open: false,
     event: undefined
   });
   const filterRef = useRef<HTMLIonSelectElement>(null);
-  const [filters, setFilters] = useState<number[]>([0, 1, 2]);
+  const [filters, setFilters] = useState<number[]>([FILTER_FOLLOWING, FILTER_INTERESTED, FILTER_GOING]);
   const updateFilter = (e: CustomEvent) => {
     setFilters(e.detail.value as number[]);
   }
@@ -58,12 +62,13 @@ const Events: React.FC<EventsProps> = (props) => {
   const upcoming = segment === 'upcoming';
   const past = segment === 'past';
 
+
   const [viewType, setViewType] = useState<'list' | 'grid'>('list');
   const [gridViewToast, setGridViewToast] = useState(false);
-
+  
   const contentRef = React.useRef<HTMLIonContentElement>(null);
   const refresherRef = React.useRef<HTMLIonRefresherElement>(null);
-
+  
   const refresh = () => {
     props.fetchCalEvents(refresherRef.current!, props.userToken);
     resetView();
@@ -71,7 +76,11 @@ const Events: React.FC<EventsProps> = (props) => {
 
   useEffect(() => {
     props.fetchCalEvents(refresherRef.current!, props.userToken);
-  }, [props.userToken, props.viewEvents])
+  }, [props.userToken, props.viewEvents]);
+
+  useEffect(() => {
+    setFilters([...mySocs.map(s => parseInt(s.id)), FILTER_FOLLOWING, FILTER_INTERESTED, FILTER_GOING])
+  }, [props.events]);
 
   useIonViewDidEnter(() => {
     props.loadBlankEvent("events");
@@ -206,7 +215,7 @@ const Events: React.FC<EventsProps> = (props) => {
           onDidDismiss={() => setShowInfo({open: false, event: undefined})}
         >
           <IonList>
-            {getSocs(props.events).map(org => (
+            {mySocs.map(org => (
               <SocBasicInfo society={org} key={org.id}/>
             ))}
           </IonList>
@@ -214,9 +223,15 @@ const Events: React.FC<EventsProps> = (props) => {
         <IonItem hidden>
           <IonLabel>Filter Calendar</IonLabel>
           <IonSelect interface="alert" value={filters} defaultChecked okText="Apply" multiple onIonChange={updateFilter} ref={filterRef}>
-            <IonSelectOption value={0}>Following</IonSelectOption>
-            <IonSelectOption value={1}>Interested</IonSelectOption>
-            <IonSelectOption value={2}>Going</IonSelectOption>
+            <IonSelectOption value={FILTER_FOLLOWING}>Following</IonSelectOption>
+            <IonSelectOption value={FILTER_INTERESTED}>Interested</IonSelectOption>
+            <IonSelectOption value={FILTER_GOING}>Going</IonSelectOption>
+            <IonItemDivider>
+              <IonLabel>Societies:</IonLabel>
+            </IonItemDivider>
+            {mySocs.map(soc => (
+              <IonSelectOption value={parseInt(soc.id)} className="ion-text-wrap" key={soc.id}>{soc.name}</IonSelectOption>
+            ))}
           </IonSelect>
         </IonItem>
       </IonContent>

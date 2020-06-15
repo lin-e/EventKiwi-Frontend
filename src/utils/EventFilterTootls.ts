@@ -44,6 +44,6 @@ export const getSocs = (events: CalendarEvent[]) => {
 
 
 
-export const applyFilters = (filters: number[], events: CalendarEvent[]) => {
-  return events.filter(e => filters.includes(e.status));
+export const applyFilters = (filters: (number)[], events: CalendarEvent[]) => {
+  return events.filter(e => (filters.includes(-e.status - 1) && filters.includes(parseInt(e.organiser.id))));
 }

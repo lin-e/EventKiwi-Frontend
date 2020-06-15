@@ -63,10 +63,7 @@ export const unfollowSociety = (id: string, token: string): AppThunk => async di
          payload: id
       }))
    })
-   .then(() => dispatch({
-      type: SOCIETY_UNFOLLOWED,
-      payload: id
-   }))
+   .then(() => dispatch(fetchProfileDetails(token)))
 }
 
 export const fetchEventCards = (refresher: HTMLIonRefresherElement, token: string)

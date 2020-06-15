@@ -18,3 +18,7 @@ export const EVENT_SEARCH_BATCH_SIZE = 18;
 export const UNIX_EPOCH = new Date(0);
 
 export const NO_ID = "";
+
+export const FILTER_FOLLOWING = -1;
+export const FILTER_INTERESTED = -2;
+export const FILTER_GOING = -3;
