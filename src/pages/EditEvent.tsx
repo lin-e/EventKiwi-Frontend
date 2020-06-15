@@ -10,7 +10,7 @@ import { createNewEvent, updateEvent, editEventLoad, deleteEvent, uploadImage } 
 import { RootState } from '../data/reducers';
 import { UNIX_EPOCH, PRIVATE, SOCIETIES, MEMBERS, PUBLIC, NO_ID } from '../constants/constants';
 import './EditEvent.css'
-import { RouteComponentProps } from 'react-router';
+import { RouteComponentProps, useHistory } from 'react-router';
 import { blankEventDetails } from '../constants/types';
 
 interface OwnProps extends RouteComponentProps<{ id?: string }> { };
@@ -174,6 +174,8 @@ const EditEvent: React.FC<EditEventProps> = ({ match, event, userToken, createNe
       setEventId(event.id);
     }
   }
+  const history = useHistory();
+
 
   const saveEvent = (e: MouseEvent) => {
     e.preventDefault();
@@ -195,8 +197,11 @@ const EditEvent: React.FC<EditEventProps> = ({ match, event, userToken, createNe
       } else {
         updateEvent(updatedDetails, selectedFiles, eventId, userToken, setSavedToast)
       }
+
+      history.goBack();
     }
   }
+
 
   return (
     <IonPage>
@@ -395,6 +400,7 @@ const EditEvent: React.FC<EditEventProps> = ({ match, event, userToken, createNe
               cssClass: "confirmDelete",
               handler: () => {
                 deleteEvent(eventId, userToken, setDeletedToast);
+                history.push("/events");
               }
             }
           ]}
