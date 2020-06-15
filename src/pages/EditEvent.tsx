@@ -212,7 +212,7 @@ const EditEvent: React.FC<EditEventProps> = ({ match, event, userToken, createNe
           </IonButtons>
           <IonTitle>{(exists ? "Edit " : "Create ") + "event"}</IonTitle>
           <IonButtons slot="end">
-            <IonButton onClick={saveEvent} color="primary">Save</IonButton>
+            <IonButton onClick={saveEvent} color="primary">{exists ? "Save" : "Add"}</IonButton>
           </IonButtons>
         </IonToolbar>
       </IonHeader>
