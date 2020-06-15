@@ -4,6 +4,8 @@ import { CREATE_NEW_EVENT, LOAD_EDIT_EVENT, UPDATE_EVENT, DELETE_EVENT, UPLOAD_E
 import { convertResToEventDetails, EventDetails, blankEventDetails } from "../../constants/types";
 import { resp_event_details, resp_image_upload } from "../../constants/RequestInterfaces";
 import { uploadFilesAndAttachToevent } from "./resourceManagement/resourceManagementActions";
+import { fetchCalEvents } from "./actions";
+import { LOAD_EVENT_DETAILS } from "./viewEvent/viewEventTypes";
 
 export interface NewEventDetails {
   name: string,
@@ -63,6 +65,7 @@ export const createNewEvent = (event: NewEventDetails, files: FileList, token: s
       payload: eventDetails
     }))
     .then(() => dispatch(uploadFilesAndAttachToevent(eventDetails.id, files, token)))
+    .then(() => dispatch(fetchCalEvents(null, token)))
 }
 
 export const updateEvent = (event: NewEventDetails, files: FileList, id: string, token: string, setCompleted: (completed: boolean) => void): AppThunk =>
@@ -89,6 +92,11 @@ export const updateEvent = (event: NewEventDetails, files: FileList, id: string,
         payload: eventDetails
       }))
       .then(() => dispatch(uploadFilesAndAttachToevent(eventDetails.id, files, token)))
+      .then(() => dispatch({
+        type: LOAD_EVENT_DETAILS,
+        payload: eventDetails
+      }))
+      .then(() => dispatch(fetchCalEvents(null, token)))
   }
 
 export const deleteEvent = (id: string, token: string, setCompleted: (complete: boolean) => void): AppThunk => async dispatch => {
@@ -106,6 +114,7 @@ export const deleteEvent = (id: string, token: string, setCompleted: (complete: 
         status: status
       }))
     })
+    .then(() => dispatch(fetchCalEvents(null, token)))
 }
 
 export const uploadImage = (image: File, token: string, setImage: (src: string) => void): AppThunk => async dispatch => {
