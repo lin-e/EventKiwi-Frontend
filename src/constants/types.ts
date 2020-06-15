@@ -103,7 +103,7 @@ export const blankEventDetails = {
   id: "",
   name: "",
   organiser: blankSociety,
-  images: ["https://shilohplainfield.org/images/Blank-photo-small.png"],
+  images: ["https://static.drp.social/placeholder.png"],
   location: "",
   datetimeStart: new Date(),
   datetimeEnd: new Date(),
