@@ -1,4 +1,4 @@
-import { EventCardDetails, ProfileDetails, EventDetails, Society, SocietyCard, Post, CalendarEvent, InterestDetails, SearchFilters } from "../../constants/types";
+import { EventCardDetails, ProfileDetails, EventDetails, Society, SocietyCard, Post, CalendarEvent, InterestDetails, SearchFilters, SocietyBasic } from "../../constants/types";
 import { AuthResponse } from "../types/dataInterfaces";
 import { UserState } from "../types/stateTypes";
 
@@ -13,7 +13,7 @@ export interface FetchSearchSocietyCardsAction {
 
 export interface followSocietyAction {
    type: typeof FOLLOW_SOCIETY,
-   payload: string
+   payload: SocietyBasic
 }
 
 export interface unfollowSocietyAction {

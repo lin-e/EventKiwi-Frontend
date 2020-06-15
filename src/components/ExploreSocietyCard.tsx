@@ -3,7 +3,7 @@ import { IonGrid, IonCol, IonRow, IonLabel, IonItem, IonButton } from '@ionic/re
 import { Row, Col } from 'react-grid-system';
 import "./ExploreSocietyCard.css"
 import { connect, ConnectedProps } from 'react-redux';
-import { SocietyCard } from '../constants/types';
+import { SocietyCard, SocietyBasic } from '../constants/types';
 import { RootState } from '../data/reducers';
 import { followSociety, unfollowSociety } from '../data/actions/actions'
 import { FOLLOWING } from '../constants/constants';
@@ -32,7 +32,13 @@ const ExploreSocietyCard: React.FC<ExploreSocietyCardProps> = ({ soc, userToken,
     if (soc.following >= FOLLOWING) {
       unfollowSociety(soc.id, userToken);
     } else {
-      followSociety(soc.id, userToken)
+      const basicSocInfo: SocietyBasic = {
+        type: 1,
+        shortName: soc.shortName,
+        imgSrc: soc.imageSrc,
+        id: soc.id
+      }
+      followSociety(basicSocInfo, userToken);
     }
     
   }

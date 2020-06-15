@@ -17,7 +17,7 @@ export function societyCardsReducer(state = initialState, action: FetchSocietyTy
       return {
         ...state,
         societies: state.societies.map(society => {
-          if (society.id === action.payload) {
+          if (society.id === action.payload.id) {
             return ({
               ...society,
               following: FOLLOWING
