@@ -11,6 +11,7 @@
     max-width: 150px;
     background-blend-mode: color-dodge;
     object-fit: contain;
+    padding-bottom: 0px;
 }
 
 .truncate {
