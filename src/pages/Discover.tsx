@@ -60,9 +60,7 @@ const Discover: React.FC<DiscoverProps> = (props) => {
   }, [props.tagSearch])
 
   useEffect(() => {
-    if (searchTerm !== "" || isTagSearch) {
-      search(searchTerm, isTagSearch);
-    }
+    search(searchTerm, isTagSearch);
   }, [props.filters])
 
   const searchBarUpdate = (e: CustomEvent) => {
@@ -77,7 +75,7 @@ const Discover: React.FC<DiscoverProps> = (props) => {
     if (tagSearch) {
       props.fetchTagEventCards(props.tagName, props.filters, refresherRef.current!, props.userToken);
     } else if (searchTerm == "") {
-      props.fetchEventCards(refresherRef.current!, props.userToken);
+      props.fetchEventCards(props.filters, refresherRef.current!, props.userToken);
     } else {
       setSearchBatchNum(0);
       props.fetchSearchSocietyCards(searchTerm, refresherRef.current!, props.userToken)
@@ -90,7 +88,7 @@ const Discover: React.FC<DiscoverProps> = (props) => {
       props.fetchMoreTagEventCards(props.tagName, props.filters,(searchBatchNum + 1) * EVENT_SEARCH_BATCH_SIZE, props.userToken)
     }
     if (searchTerm == "") {
-      props.fetchMoreEventCards((searchBatchNum + 1) * EVENT_SEARCH_BATCH_SIZE, props.userToken);
+      props.fetchMoreEventCards(props.filters, (searchBatchNum + 1) * EVENT_SEARCH_BATCH_SIZE, props.userToken);
     } else {
       props.fetchMoreSearchEventCards(searchTerm, props.filters, (searchBatchNum + 1) * EVENT_SEARCH_BATCH_SIZE, props.userToken);
     }

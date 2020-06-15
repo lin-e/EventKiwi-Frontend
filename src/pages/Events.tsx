@@ -37,7 +37,7 @@ const Events: React.FC<EventsProps> = (props) => {
   const [upcomingY, setUpcomingY] = useState(0);
   const [pastY, setPastY] = useState(0);
 
-  const mySocs = getSocs(props.events);
+  const [eventSocs, setEventSocs] = useState(getSocs(props.events));
 
   const [showInfo, setShowInfo] = useState<{open: boolean, event: Event | undefined}>({
     open: false,
@@ -79,7 +79,10 @@ const Events: React.FC<EventsProps> = (props) => {
   }, [props.userToken, props.viewEvents]);
 
   useEffect(() => {
-    setFilters([...mySocs.map(s => parseInt(s.id)), FILTER_FOLLOWING, FILTER_INTERESTED, FILTER_GOING])
+    const newEventSocs = getSocs(props.events);
+    setFilters([...filters.filter(n => [...newEventSocs.map(soc => parseInt(soc.id)), FILTER_FOLLOWING, FILTER_INTERESTED, FILTER_GOING].includes(n)),
+     ...newEventSocs.map(s => parseInt(s.id)).filter(n => !eventSocs.map(soc => parseInt(soc.id)).includes(n))]);
+    setEventSocs(newEventSocs);
   }, [props.events]);
 
   useIonViewDidEnter(() => {
@@ -215,7 +218,7 @@ const Events: React.FC<EventsProps> = (props) => {
           onDidDismiss={() => setShowInfo({open: false, event: undefined})}
         >
           <IonList>
-            {mySocs.map(org => (
+            {eventSocs.map(org => (
               <SocBasicInfo society={org} key={org.id}/>
             ))}
           </IonList>
@@ -229,7 +232,7 @@ const Events: React.FC<EventsProps> = (props) => {
             <IonItemDivider>
               <IonLabel>Societies:</IonLabel>
             </IonItemDivider>
-            {mySocs.map(soc => (
+            {eventSocs.map(soc => (
               <IonSelectOption value={parseInt(soc.id)} className="ion-text-wrap" key={soc.id}>{soc.name}</IonSelectOption>
             ))}
           </IonSelect>
