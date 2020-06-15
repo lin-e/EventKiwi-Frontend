@@ -229,11 +229,8 @@ const Events: React.FC<EventsProps> = (props) => {
             <IonSelectOption value={FILTER_FOLLOWING}>Following</IonSelectOption>
             <IonSelectOption value={FILTER_INTERESTED}>Interested</IonSelectOption>
             <IonSelectOption value={FILTER_GOING}>Going</IonSelectOption>
-            <IonItemDivider>
-              <IonLabel>Societies:</IonLabel>
-            </IonItemDivider>
             {eventSocs.map(soc => (
-              <IonSelectOption value={parseInt(soc.id)} className="ion-text-wrap" key={soc.id}>{soc.name}</IonSelectOption>
+              <IonSelectOption value={parseInt(soc.id)} key={soc.id}>{soc.name}</IonSelectOption>
             ))}
           </IonSelect>
         </IonItem>
