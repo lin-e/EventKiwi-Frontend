@@ -33,34 +33,40 @@ export const FETCH_MORE_TAG_EVENT_CARDS = "FETCH_MORE_TAG_EVENT_CARDS";
 
 export interface FetchEventCardsAction {
    type: typeof FETCH_EVENTS_CARDS,
-   payload: EventCardDetails[]
+   payload: EventCardDetails[],
+   count: number
 }
 
 export interface FetchMoreEventCardsAction {
    type: typeof FETCH_MORE_EVENT_CARDS,
-   payload: EventCardDetails[]
+   payload: EventCardDetails[],
+   count: number
 }
 
 export interface FetchSearchEventCardsAction {
    type: typeof FETCH_SEARCH_EVENT_CARDS,
-   payload: EventCardDetails[]
+   payload: EventCardDetails[],
+   count: number
 }
 
 export interface FetchMoreSearchEventCardsAction {
    type: typeof FETCH_MORE_SEARCH_EVENT_CARDS,
-   payload: EventCardDetails[]
+   payload: EventCardDetails[],
+   count: number
 }
 
 export interface FetchTagEventCardsAction {
    type: typeof FETCH_TAG_EVENT_CARDS,
    payload: EventCardDetails[],
-   tag: string
+   tag: string,
+   count: number
 }
 
 export interface FetchMoreTagEventCardsAction {
    type: typeof FETCH_MORE_TAG_EVENT_CARDS,
    payload: EventCardDetails[],
-   tag: string
+   tag: string,
+   count: number
 }
 
 export type FetchEventType = FetchEventCardsAction | FetchMoreEventCardsAction | FetchSearchEventCardsAction | FetchMoreSearchEventCardsAction | FetchTagEventCardsAction | FetchMoreTagEventCardsAction;

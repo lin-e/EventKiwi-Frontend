@@ -100,7 +100,8 @@ export const fetchEventCards = (filters: SearchFilters, refresher: HTMLIonRefres
       }
       return (dispatch({
          type: FETCH_EVENTS_CARDS,
-         payload: (cards as resp_event_card_details[]).map(convertResToEventCard)
+         payload: (cards.events as resp_event_card_details[]).map(convertResToEventCard),
+         count: cards.count
       }))
    })
 }
@@ -126,7 +127,8 @@ export const fetchMoreEventCards = (filters: SearchFilters, offset: number, toke
    .then(cards => {
       return (dispatch({
          type: FETCH_MORE_EVENT_CARDS,
-         payload: (cards as resp_event_card_details[]).map(convertResToEventCard)
+         payload: (cards.events as resp_event_card_details[]).map(convertResToEventCard),
+         count: cards.count
       }))
    })
 }
@@ -158,7 +160,8 @@ export const fetchSearchEventCards = (searchTerm: string, filters: SearchFilters
          }
          return (dispatch({
             type: FETCH_SEARCH_EVENT_CARDS,
-            payload: (cards as resp_event_card_details[]).map(convertResToEventCard)
+            payload: (cards.events as resp_event_card_details[]).map(convertResToEventCard),
+            count: cards.count
          }))
       })
 }
@@ -185,7 +188,8 @@ export const fetchMoreSearchEventCards = (searchTerm: string, filters: SearchFil
    .then(cards => {
       return (dispatch({
          type: FETCH_MORE_SEARCH_EVENT_CARDS,
-         payload: (cards as resp_event_card_details[]).map(convertResToEventCard)
+         payload: (cards.events as resp_event_card_details[]).map(convertResToEventCard),
+         count: cards.count
       }))
    })
 }
@@ -217,8 +221,9 @@ export const fetchTagEventCards = (tag: string, filters: SearchFilters, refreshe
          }
          return (dispatch({
             type: FETCH_TAG_EVENT_CARDS,
-            payload: (cards as resp_event_card_details[]).map(convertResToEventCard),
-            tag: tag
+            payload: (cards.events as resp_event_card_details[]).map(convertResToEventCard),
+            tag: tag,
+            count: cards.count
          }))
       })
 }
@@ -247,8 +252,9 @@ export const fetchMoreTagEventCards = (tag: string, filters: SearchFilters, offs
       .then(cards => {
          return (dispatch({
             type: FETCH_MORE_TAG_EVENT_CARDS,
-            payload: (cards as resp_event_card_details[]).map(convertResToEventCard),
-            tag: tag
+            payload: (cards.events as resp_event_card_details[]).map(convertResToEventCard),
+            tag: tag,
+            count: cards.count
          }))
       })
 }
