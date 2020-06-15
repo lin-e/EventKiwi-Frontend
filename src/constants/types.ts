@@ -1,4 +1,5 @@
 import { resp_event_post_organiser, resp_event_posts, resp_post, resp_resource, resp_event_details, resp_event_card_details, resp_profile_details, resp_society, resp_society_basic, resp_society_card, resp_calendar_event, resp_society_cal, resp_search_interests } from "./RequestInterfaces"
+import { PRIVATE } from "./constants"
 
 
 export interface ProfileDetails {
@@ -81,7 +82,8 @@ export interface EventDetails {
    sameSocEvents: EventCardDetails[],
    similarEvents: EventCardDetails[],
    resources: Resource[],
-   goingStatus: number
+   goingStatus: number,
+   privacy: number
 }
 
 export interface CalendarEvent {
@@ -113,7 +115,8 @@ export const blankEventDetails = {
   similarEvents: [],
   resources: [],
   posts: [],
-  goingStatus: -1
+  goingStatus: -1,
+  privacy: PRIVATE
 }
 
 export interface SearchFilters {
@@ -219,7 +222,8 @@ export const convertResToEventDetails = (res: resp_event_details): EventDetails 
   sameSocEvents: res.same_society_events.map(convertResToEventCard),
   similarEvents: res.similar_events.map(convertResToEventCard),
   goingStatus: res.going_status,
-  resources: res.resources.map(convertResToResource)
+  resources: res.resources.map(convertResToResource),
+  privacy: res.privacy
  })
 
 

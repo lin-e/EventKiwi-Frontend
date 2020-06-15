@@ -32,7 +32,8 @@ export interface resp_event_details {
   similar_events: resp_event_card_details[],
   society: resp_society,
   resources: resp_resource[],
-  going_status: number
+  going_status: number,
+  privacy: number
 }
 
 export interface resp_profile_details {
