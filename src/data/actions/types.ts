@@ -13,7 +13,7 @@ export interface FetchSearchSocietyCardsAction {
 
 export interface followSocietyAction {
    type: typeof FOLLOW_SOCIETY,
-   payload: SocietyBasic
+   payload: string
 }
 
 export interface unfollowSocietyAction {
@@ -91,6 +91,7 @@ export const FETCH_PROFILE_DETAILS_FAILED = "FETCH_PROFILE_DETAILS_FAILED"
 export const RESET_PROFILE_INVALID_RESPONSE = "RESET_PROFILE_INVALID_RESPONSE"
 export const ADD_PROFILE_INTEREST = "ADD_PROFILE_INTEREST"
 export const REMOVE_PROFILE_INTEREST = "REMOVE_PROFILE_INTEREST"
+export const SOCIETY_UNFOLLOWED = "SOCIETY_UNFOLLOWED"
 
 export interface FetchProfileDetailsAction {
    type: typeof FETCH_PROFILE_DETAILS,
@@ -117,7 +118,18 @@ export interface RemoveProfileInterestAction {
    payload: string
 }
 
-export type FetchProfileType =  FetchProfileDetailsAction | FetchProfileDetailsFailedAction | ResetProfileInvalidResponseAction | FetchSearchInterestsAction | AddProfileInterestAction | RemoveProfileInterestAction;
+export interface SocietyUnollowedAction {
+   type: typeof SOCIETY_UNFOLLOWED,
+   payload: string
+}
+
+export type FetchProfileType =  FetchProfileDetailsAction 
+                             |  FetchProfileDetailsFailedAction 
+                             | ResetProfileInvalidResponseAction 
+                             | FetchSearchInterestsAction 
+                             | AddProfileInterestAction 
+                             | RemoveProfileInterestAction
+                             | SocietyUnollowedAction;
 
 
 export const FETCH_SEARCH_INTERESTS = "FETCH_SEARCH_INTERESTS"

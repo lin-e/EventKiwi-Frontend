@@ -1,5 +1,5 @@
 import { ProfileDetailsState } from '../types/stateTypes'
-import { FetchProfileType, REMOVE_PROFILE_INTEREST, FETCH_PROFILE_DETAILS, FETCH_PROFILE_DETAILS_FAILED, RESET_PROFILE_INVALID_RESPONSE, ADD_PROFILE_INTEREST, FETCH_SEARCH_INTERESTS, FOLLOW_SOCIETY, FetchSocietyType, UNFOLLOW_SOCIETY } from '../actions/types'
+import { FetchProfileType, REMOVE_PROFILE_INTEREST, FETCH_PROFILE_DETAILS, FETCH_PROFILE_DETAILS_FAILED, RESET_PROFILE_INVALID_RESPONSE, ADD_PROFILE_INTEREST, SOCIETY_UNFOLLOWED } from '../actions/types'
 
 const initialProfileDetailsState: ProfileDetailsState = {
   profileDetails: {
@@ -12,7 +12,7 @@ const initialProfileDetailsState: ProfileDetailsState = {
   invalidResponse: false
 };
 
-export const profileDetailsReducer = (state = initialProfileDetailsState, action: FetchProfileType | FetchSocietyType): ProfileDetailsState => {
+export const profileDetailsReducer = (state = initialProfileDetailsState, action: FetchProfileType): ProfileDetailsState => {
   switch(action.type) {
     case FETCH_PROFILE_DETAILS:
       return {
@@ -48,16 +48,7 @@ export const profileDetailsReducer = (state = initialProfileDetailsState, action
         }
       }
     
-    case FOLLOW_SOCIETY:
-      const profileDetailsWithFollowedSociety = state.profileDetails;
-      const socsWithFollowed = profileDetailsWithFollowedSociety.societies;
-      socsWithFollowed.unshift(action.payload);
-      profileDetailsWithFollowedSociety.societies = socsWithFollowed;
-      return {
-        ...state,
-        profileDetails: profileDetailsWithFollowedSociety
-      }
-    case UNFOLLOW_SOCIETY:
+    case SOCIETY_UNFOLLOWED:
       const profileDetailsWithUnfollowedSociety = state.profileDetails;
       const socsWithoutUnfollowed = profileDetailsWithUnfollowedSociety.societies.filter(soc => soc.id !== action.payload);
       profileDetailsWithUnfollowedSociety.societies = socsWithoutUnfollowed;
