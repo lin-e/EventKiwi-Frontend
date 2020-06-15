@@ -48,6 +48,7 @@ export const followSociety = (id: string, token: string): AppThunk => async disp
       }))
    })
    .then(() => dispatch(fetchProfileDetails(token)))
+   .then(() => dispatch(fetchCalEvents(null, token)))
 }
 
 export const unfollowSociety = (id: string, token: string): AppThunk => async dispatch => {
@@ -63,10 +64,8 @@ export const unfollowSociety = (id: string, token: string): AppThunk => async di
          payload: id
       }))
    })
-   .then(() => dispatch({
-      type: SOCIETY_UNFOLLOWED,
-      payload: id
-   }))
+   .then(() => dispatch(fetchProfileDetails(token)))
+   .then(() => dispatch(fetchCalEvents(null, token)))
 }
 
 export const fetchEventCards = (filters: SearchFilters, refresher: HTMLIonRefresherElement, token: string)
@@ -254,7 +253,7 @@ export const fetchMoreTagEventCards = (tag: string, filters: SearchFilters, offs
       })
 }
 
-export const fetchCalEvents = (refresher: HTMLIonRefresherElement, token: string): AppThunk => async dispatch => {
+export const fetchCalEvents = (refresher: HTMLIonRefresherElement | null, token: string): AppThunk => async dispatch => {
    if (token === "") {
       return(dispatch({
          type: FETCH_CAL_EVENTS,
