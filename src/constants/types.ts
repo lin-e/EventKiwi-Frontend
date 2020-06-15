@@ -23,7 +23,8 @@ export interface Society extends Profile {
 export interface SocietyBasic {
   imgSrc: string,
   shortName: string,
-  type: number
+  type: number,
+  id: string
 }
 
 export interface SocietyCal {
@@ -268,7 +269,8 @@ export const convertResToSoc = (res: resp_society): Society => ({
 export const convertResToSocBasic = (res: resp_society_basic): SocietyBasic => ({
   shortName: res.short_name,
   imgSrc: res.society_image_src,
-  type: res.type
+  type: res.type,
+  id: res.society_id
 })
 
 export const convertResToSocCard = (res: resp_society_card): SocietyCard => ({

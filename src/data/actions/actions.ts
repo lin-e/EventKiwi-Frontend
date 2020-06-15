@@ -267,6 +267,7 @@ export const fetchProfileDetails = (token: string): AppThunk => async dispatch =
    fetch(profileDetailsURL, options)
    .then(response => response.json())
    .then(details => {
+      console.log(details)
       return (dispatch({
          type: FETCH_PROFILE_DETAILS,
          payload: convertResToProfileDetails(details as resp_profile_details)
