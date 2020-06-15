@@ -3,7 +3,7 @@ import { RootState } from "../reducers"
 import { Action } from "redux"
 import { FETCH_EVENTS_CARDS, FETCH_SEARCH_EVENT_CARDS, FETCH_CAL_EVENTS, FETCH_PROFILE_DETAILS, REMOVE_PROFILE_INTEREST, FETCH_PROFILE_DETAILS_FAILED, RESET_PROFILE_INVALID_RESPONSE, ADD_PROFILE_INTEREST, FETCH_SEARCH_SOCIETY_CARDS, FOLLOW_SOCIETY, UNFOLLOW_SOCIETY, FETCH_SEARCH_INTERESTS, FETCH_MORE_SEARCH_EVENT_CARDS, FETCH_MORE_EVENT_CARDS, FETCH_TAG_EVENT_CARDS, FETCH_MORE_TAG_EVENT_CARDS, SOCIETY_UNFOLLOWED } from "./types"
 import { discoverEventCardURL, discoverSearchEventCardURL, profileDetailsURL, profileInterestDeleteURL, profileInterestAddURL, discoverSearchSocietyCardURL, followSocietyURL, unfollowSocietyURL, calendarEventsURL, profileInterestSearchURL } from "../../constants/endpoints"
-import { resp_event_card_details, resp_profile_details, resp_society_card, resp_calendar_event, resp_search_interests } from "../../constants/RequestInterfaces"
+import { resp_event_card_details, resp_profile_details, resp_society_card, resp_calendar_event, resp_search_interests, resp_search_response } from "../../constants/RequestInterfaces"
 import { convertResToEventCard, convertResToProfileDetails, convertResToInterest, convertResToSocCard, convertResToCalEvent, SearchFilters, SocietyBasic } from "../../constants/types"
 
 export type AppThunk<ReturnType = void> = ThunkAction<
@@ -94,10 +94,11 @@ export const fetchEventCards = (filters: SearchFilters, refresher: HTMLIonRefres
 
    fetch(url.toString(), options)
    .then(response => response.json())
-   .then(cards => {
+   .then(details => {
       if (refresher !== null) {
          refresher.complete();
       }
+      const cards = details as resp_search_response;
       return (dispatch({
          type: FETCH_EVENTS_CARDS,
          payload: (cards.events as resp_event_card_details[]).map(convertResToEventCard),
@@ -124,7 +125,8 @@ export const fetchMoreEventCards = (filters: SearchFilters, offset: number, toke
 
    fetch(url.toString(), options)
    .then(response => response.json())
-   .then(cards => {
+   .then(details => {
+      const cards = details as resp_search_response;
       return (dispatch({
          type: FETCH_MORE_EVENT_CARDS,
          payload: (cards.events as resp_event_card_details[]).map(convertResToEventCard),
@@ -154,10 +156,11 @@ export const fetchSearchEventCards = (searchTerm: string, filters: SearchFilters
       
       fetch(url.toString(), options)
       .then(response => response.json())
-      .then(cards => {
+      .then(details => {
          if (refresher !== null) {
             refresher.complete();
          }
+         const cards = details as resp_search_response;
          return (dispatch({
             type: FETCH_SEARCH_EVENT_CARDS,
             payload: (cards.events as resp_event_card_details[]).map(convertResToEventCard),
@@ -185,7 +188,8 @@ export const fetchMoreSearchEventCards = (searchTerm: string, filters: SearchFil
    
    fetch(url.toString(), options)
    .then(response => response.json())
-   .then(cards => {
+   .then(details => {
+      const cards = details as resp_search_response;
       return (dispatch({
          type: FETCH_MORE_SEARCH_EVENT_CARDS,
          payload: (cards.events as resp_event_card_details[]).map(convertResToEventCard),
@@ -215,10 +219,11 @@ export const fetchTagEventCards = (tag: string, filters: SearchFilters, refreshe
       
       fetch(url.toString(), options)
       .then(response => response.json())
-      .then(cards => {
+      .then(details => {
          if (refresher !== null) {
             refresher.complete();
          }
+         const cards = details as resp_search_response;
          return (dispatch({
             type: FETCH_TAG_EVENT_CARDS,
             payload: (cards.events as resp_event_card_details[]).map(convertResToEventCard),
@@ -249,7 +254,8 @@ export const fetchMoreTagEventCards = (tag: string, filters: SearchFilters, offs
       
       fetch(url.toString(), options)
       .then(response => response.json())
-      .then(cards => {
+      .then(details => {
+         const cards = details as resp_search_response;
          return (dispatch({
             type: FETCH_MORE_TAG_EVENT_CARDS,
             payload: (cards.events as resp_event_card_details[]).map(convertResToEventCard),
