@@ -1,7 +1,7 @@
 const stagingURL = "https://staging.drp.social";
 const productionURL = "https://endpoint.drp.social";
 
-export const endpointURL = stagingURL;
+export const endpointURL = productionURL;
 
 export const calendarEventsURL = `${endpointURL}/calendar`;
 
@@ -30,6 +30,7 @@ export const profileInterestDeleteURL = `${endpointURL}/profile/interests/delete
 export const authEndpoint = `${endpointURL}/auth/new/`;
 export const deAuthEndpoint = `${endpointURL}/auth/end/`;
 export const deAuthAllEndpoint = `${endpointURL}/auth/end/all`;
+export const validAuthEndpoint = `${endpointURL}/auth/valid`;
 
 export const goingToEventEndpoint = (id: string) => `${endpointURL}/events/going/${id}`;
 export const interestedInEventEndpoint = (id: string) => `${endpointURL}/events/interested/${id}`;
