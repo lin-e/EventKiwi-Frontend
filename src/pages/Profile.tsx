@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonGrid, IonRow, IonCol, IonButton, IonModal, IonToast, IonRefresher, IonRefresherContent, IonItem, IonCard, IonText, IonCardTitle } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonGrid, IonRow, IonCol, IonButton, IonModal, IonToast, IonText } from '@ionic/react';
 import './Profile.css';
-import ItemSlider from '../components/ItemSlider';
 import ProfileSocietyIcon from '../components/Profile/ProfileSocietyIcon';
-import { Container, Row, Col } from 'react-grid-system';
+import { Container } from 'react-grid-system';
 import InterestChip from '../components/Profile/InterestChip';
 import { fetchProfileDetails, resetInvalidProfileResponse } from '../data/actions/actions';
 import { loadSocResources } from '../data/actions/resourceManagement/resourceManagementActions';

@@ -1,4 +1,4 @@
-import React, { useState, MouseEvent } from 'react';
+import React, { MouseEvent } from 'react';
 import { IonGrid, IonCol, IonRow, IonLabel, IonItem, IonButton } from '@ionic/react';
 import { Row, Col } from 'react-grid-system';
 import "./ExploreSocietyCard.css"
@@ -32,7 +32,7 @@ const ExploreSocietyCard: React.FC<ExploreSocietyCardProps> = ({ soc, userToken,
     if (soc.following >= FOLLOWING) {
       unfollowSociety(soc.id, userToken);
     } else {
-      followSociety(soc.id, userToken)
+      followSociety(soc.id, userToken);
     }
     
   }
