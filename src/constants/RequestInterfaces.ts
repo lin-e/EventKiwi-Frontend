@@ -1,3 +1,8 @@
+export interface resp_search_response {
+  count: number,
+  events: resp_event_card_details[]
+}
+
 export interface resp_event_card_details {
   event_id: string,
   event_name: string,
