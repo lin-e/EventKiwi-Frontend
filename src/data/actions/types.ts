@@ -1,4 +1,4 @@
-import { EventCardDetails, ProfileDetails, EventDetails, Society, SocietyCard, Post, CalendarEvent, InterestDetails, SearchFilters } from "../../constants/types";
+import { EventCardDetails, ProfileDetails, EventDetails, Society, SocietyCard, Post, CalendarEvent, InterestDetails, SearchFilters, SocietyBasic } from "../../constants/types";
 import { AuthResponse } from "../types/dataInterfaces";
 import { UserState } from "../types/stateTypes";
 
@@ -33,34 +33,40 @@ export const FETCH_MORE_TAG_EVENT_CARDS = "FETCH_MORE_TAG_EVENT_CARDS";
 
 export interface FetchEventCardsAction {
    type: typeof FETCH_EVENTS_CARDS,
-   payload: EventCardDetails[]
+   payload: EventCardDetails[],
+   count: number
 }
 
 export interface FetchMoreEventCardsAction {
    type: typeof FETCH_MORE_EVENT_CARDS,
-   payload: EventCardDetails[]
+   payload: EventCardDetails[],
+   count: number
 }
 
 export interface FetchSearchEventCardsAction {
    type: typeof FETCH_SEARCH_EVENT_CARDS,
-   payload: EventCardDetails[]
+   payload: EventCardDetails[],
+   count: number
 }
 
 export interface FetchMoreSearchEventCardsAction {
    type: typeof FETCH_MORE_SEARCH_EVENT_CARDS,
-   payload: EventCardDetails[]
+   payload: EventCardDetails[],
+   count: number
 }
 
 export interface FetchTagEventCardsAction {
    type: typeof FETCH_TAG_EVENT_CARDS,
    payload: EventCardDetails[],
-   tag: string
+   tag: string,
+   count: number
 }
 
 export interface FetchMoreTagEventCardsAction {
    type: typeof FETCH_MORE_TAG_EVENT_CARDS,
    payload: EventCardDetails[],
-   tag: string
+   tag: string,
+   count: number
 }
 
 export type FetchEventType = FetchEventCardsAction | FetchMoreEventCardsAction | FetchSearchEventCardsAction | FetchMoreSearchEventCardsAction | FetchTagEventCardsAction | FetchMoreTagEventCardsAction;
@@ -91,6 +97,7 @@ export const FETCH_PROFILE_DETAILS_FAILED = "FETCH_PROFILE_DETAILS_FAILED"
 export const RESET_PROFILE_INVALID_RESPONSE = "RESET_PROFILE_INVALID_RESPONSE"
 export const ADD_PROFILE_INTEREST = "ADD_PROFILE_INTEREST"
 export const REMOVE_PROFILE_INTEREST = "REMOVE_PROFILE_INTEREST"
+export const SOCIETY_UNFOLLOWED = "SOCIETY_UNFOLLOWED"
 
 export interface FetchProfileDetailsAction {
    type: typeof FETCH_PROFILE_DETAILS,
@@ -117,7 +124,18 @@ export interface RemoveProfileInterestAction {
    payload: string
 }
 
-export type FetchProfileType =  FetchProfileDetailsAction | FetchProfileDetailsFailedAction | ResetProfileInvalidResponseAction | FetchSearchInterestsAction | AddProfileInterestAction | RemoveProfileInterestAction;
+export interface SocietyUnollowedAction {
+   type: typeof SOCIETY_UNFOLLOWED,
+   payload: string
+}
+
+export type FetchProfileType =  FetchProfileDetailsAction 
+                             |  FetchProfileDetailsFailedAction 
+                             | ResetProfileInvalidResponseAction 
+                             | FetchSearchInterestsAction 
+                             | AddProfileInterestAction 
+                             | RemoveProfileInterestAction
+                             | SocietyUnollowedAction;
 
 
 export const FETCH_SEARCH_INTERESTS = "FETCH_SEARCH_INTERESTS"

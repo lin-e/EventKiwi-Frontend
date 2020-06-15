@@ -83,4 +83,7 @@
 .socSliderInfo {
     display: inline-block;
     vertical-align: top; 
+    max-width: 120px;
+    min-width: 120px;
+    margin-bottom: 5px;
 }

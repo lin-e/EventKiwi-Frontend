@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './EventResourcesList.css';
-import { IonList, IonItem, IonItemSliding, IonItemOptions, IonItemOption, IonAlert } from '@ionic/react';
+import { IonList, IonItem, IonItemSliding, IonItemOptions, IonItemOption, IonAlert, IonToast } from '@ionic/react';
 import EventResource from './EventResource';
 import CentredTextContainer from '../CentredTextContainer';
 import { resourceDownloadURL } from '../../constants/endpoints';
@@ -11,7 +11,8 @@ import { removeResourceFromEvent } from '../../data/actions/resourceManagement/r
 import { Container } from 'react-grid-system';
 
 const mapStateToProps = (state: RootState) => ({
-   userToken: state.userDetails.userToken
+   userToken: state.userDetails.userToken,
+   isLoggedIn: state.userDetails.isLoggedIn
 })
 
 const connector = connect(mapStateToProps, { removeResourceFromEvent })
@@ -28,6 +29,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>
 type EventResourcesListProps = OwnProps & PropsFromRedux;
 const EventResourcesList: React.FC<EventResourcesListProps> = (props) => {
 
+   const [signInToast, showSignInToast] = useState<boolean>(false);
    const [deleteAlert, showDeleteAlert] = useState<boolean>(false);
    const [selectedResource, setSelectedResource] = useState<Resource>({ name: "", id: "" });
 
@@ -41,6 +43,12 @@ const EventResourcesList: React.FC<EventResourcesListProps> = (props) => {
       showDeleteAlert(false);
    }
 
+   const downloadClicked = () => {
+      if (!props.isLoggedIn) {
+         showSignInToast(true);
+      }
+   }
+
    return (
       <div style={props.hide ? { display: "none" } : {}}>
          {props.resources.length === 0 &&
@@ -52,8 +60,8 @@ const EventResourcesList: React.FC<EventResourcesListProps> = (props) => {
                <IonList>
                   {props.resources.map(resource => {
                      return (
-                        <IonItemSliding disabled={!props.isOwner} key={`event-resource-${resource.id}`}>
-                           <IonItem href={resourceDownloadURL(resource.id)} detail download={resource.name}>
+                        <IonItemSliding onClick={downloadClicked} disabled={!props.isOwner} key={`event-resource-${resource.id}`}>
+                           <IonItem disabled={!props.isLoggedIn} href={resourceDownloadURL(resource.id)} detail download={resource.name}>
                               <div className="restrictedWidth">
                                  <EventResource name={resource.name} />
                               </div>
@@ -82,6 +90,13 @@ const EventResourcesList: React.FC<EventResourcesListProps> = (props) => {
                text: 'Ok',
                handler: removeFile
             }]}
+         />
+
+         <IonToast
+            isOpen={signInToast}
+            onDidDismiss={() => { showSignInToast(false) }}
+            message="Please sign in to download a resource."
+            duration={3000}
          />
       </div>
    )
