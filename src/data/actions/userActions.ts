@@ -59,9 +59,9 @@ const getUserData = async () => {
       Storage.get({ key: PROFILE })]);
 
    const isLoggedin = await response[0].value === 'true';
-   const userToken = await response[1].value || undefined;
+   const userToken = await response[1].value || "";
    const profileString = await response[2].value;
-   let profile = profileString ? JSON.parse(profileString) : undefined;
+   let profile = profileString ? JSON.parse(profileString) : blankProfile;
 
    return {
       isLoggedIn: isLoggedin,
