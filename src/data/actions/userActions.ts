@@ -37,7 +37,6 @@ export const logIn = (msToken: string): AppThunk => async dispatch => {
 
 export const loadUserData = (): AppThunk => async dispatch => {
    const data = await getUserData();
-   console.log(data);
    fetch(validAuthEndpoint, {
       headers: { 'Authorization': `Bearer ${data.userToken}` }
    })
