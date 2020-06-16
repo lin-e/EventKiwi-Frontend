@@ -1,1 +1,1 @@
-web: npm install; ionic serve --port $PORT --nobrowser --nolivereload --noopen
+web: npm install; ionic serve --prod --port $PORT --nobrowser --nolivereload --noopen
