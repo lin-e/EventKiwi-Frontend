@@ -5,7 +5,7 @@ import './Discover.css';
 import { connect, ConnectedProps } from 'react-redux';
 import { fetchEventCards, fetchSearchEventCards, fetchMoreEventCards, fetchMoreSearchEventCards, fetchSearchSocietyCards, fetchTagEventCards, fetchMoreTagEventCards } from "../data/actions/actions";
 import { RootState } from '../data/reducers';
-import { Redirect, useHistory } from 'react-router';
+import { Redirect } from 'react-router';
 import { Container, Row, Col } from 'react-grid-system';
 import SkeletonTextEventCard from '../components/SkeletonTextEventCard';
 import ExploreEventCard from '../components/ExploreEventCard';
@@ -26,7 +26,8 @@ const mapStateToProps = (state: RootState) => {
     filters: state.searchFilters,
     isLoggedIn: state.userDetails.isLoggedIn,
     isLoading: state.userDetails.loading,
-    userToken: state.userDetails.userToken
+    userToken: state.userDetails.userToken,
+    interests: state.profileDetails.profileDetails.interests
   }
 }
 
@@ -49,8 +50,6 @@ const Discover: React.FC<DiscoverProps> = (props) => {
 
   const [isTagSearch, setIsTagSearch] = useState(props.tagSearch);
 
-  const history = useHistory();
-
   useEffect(() => {
     search("", props.tagSearch)
   }, [props.userToken]);
@@ -62,6 +61,10 @@ const Discover: React.FC<DiscoverProps> = (props) => {
   useEffect(() => {
     search(searchTerm, isTagSearch);
   }, [props.filters])
+
+  useEffect(() => {
+    search(searchTerm, isTagSearch);
+  }, [props.interests])
 
   const searchBarUpdate = (e: CustomEvent) => {
     const newTerm = (e.detail.value == undefined) ? "" : e.detail.value!.trim()
