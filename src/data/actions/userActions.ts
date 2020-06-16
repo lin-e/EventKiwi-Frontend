@@ -1,7 +1,7 @@
 import { USER_LOGIN, LOAD_USER_DATA, USER_LOGOUT, INVALID_USER } from "./types";
 import { AuthResponse, blankProfile, AppThunk } from "../types/dataInterfaces";
 import { Plugins } from '@capacitor/core';
-import { authEndpoint, deAuthEndpoint, deAuthAllEndpoint } from "../../constants/endpoints";
+import { authEndpoint, deAuthEndpoint, deAuthAllEndpoint, validAuthEndpoint } from "../../constants/endpoints";
 const { Storage } = Plugins;
 
 const IS_LOGGED_IN = 'isLoggedIn';
@@ -37,7 +37,7 @@ export const logIn = (msToken: string): AppThunk => async dispatch => {
 
 export const loadUserData = (): AppThunk => async dispatch => {
    const data = await getUserData();
-   fetch("https://staging.drp.social/auth/valid", {
+   fetch(validAuthEndpoint, {
       headers: { 'Authorization': `Bearer ${data.userToken}` }
    })
       .then(res => dispatch({
